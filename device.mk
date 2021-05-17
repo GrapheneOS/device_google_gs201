@@ -139,7 +139,7 @@ USES_GAUDIO := true
 endif
 
 # This should be the same value as BOARD_USES_SWIFTSHADER in BoardConfig.mk
-USE_SWIFTSHADER := false
+USE_SWIFTSHADER := true
 
 ifeq ($(USE_SWIFTSHADER),true)
 PRODUCT_PROPERTY_OVERRIDES += \
@@ -739,20 +739,22 @@ PRODUCT_PACKAGES += \
 PRODUCT_PACKAGES_DEBUG += \
 	init.gps_log.rc
 
+ifneq ($(DEVICE_USES_NO_TRUSTY), true)
 # Trusty (KM, GK, Storage)
-$(call inherit-product, system/core/trusty/trusty-storage.mk)
-$(call inherit-product, system/core/trusty/trusty-base.mk)
+#$(call inherit-product, system/core/trusty/trusty-storage.mk)
+#$(call inherit-product, system/core/trusty/trusty-base.mk)
 
 # Trusty unit test tool
-PRODUCT_PACKAGES_DEBUG += trusty-ut-ctrl
+#PRODUCT_PACKAGES_DEBUG += trusty-ut-ctrl
 
 # Trusty ConfirmationUI HAL
-PRODUCT_PACKAGES += \
+#PRODUCT_PACKAGES += \
 	android.hardware.confirmationui@1.0-service.trusty.vendor
 
 # Trusty Secure DPU Daemon
-PRODUCT_PACKAGES += \
+#PRODUCT_PACKAGES += \
 	securedpud.slider
+endif
 
 # Trusty Metrics Daemon
 PRODUCT_SOONG_NAMESPACES += \
