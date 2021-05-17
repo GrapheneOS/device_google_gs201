@@ -384,6 +384,9 @@ PRODUCT_COPY_FILES += \
 
 -include hardware/google/pixel/power-libperfmgr/aidl/device.mk
 
+# IRQ rebalancing.
+include hardware/google/pixel/rebalance_interrupts/rebalance_interrupts.mk
+
 # PowerStats HAL
 PRODUCT_PACKAGES += \
 	android.hardware.power.stats-service.pixel
