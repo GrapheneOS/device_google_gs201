@@ -84,6 +84,16 @@
       "ResetOnInit": true
     },
     {
+      "Name": "CPUUtilThreshold",
+      "Path": "/sys/kernel/vendor_sched/util_threshold",
+      "Values": [
+        "1280",
+        "1100"
+      ],
+      "DefaultIndex": 0,
+      "ResetOnInit": true
+    },
+    {
       "Name": "MIFTargetLoad",
       "Path": "/sys/class/devfreq/17000010.devfreq_mif/interactive/target_load",
       "Values": [
@@ -336,6 +346,12 @@
       "Node": "CPULittleClusterMinFreq",
       "Duration": 1000,
       "Value": "9999999"
+    },
+    {
+      "PowerHint": "CAMERA_STREAMING_HIGH",
+      "Node": "CPUUtilThreshold",
+      "Duration": 0,
+      "Value": "1100"
     },
     {
       "PowerHint": "CAMERA_STREAMING_HIGH",
