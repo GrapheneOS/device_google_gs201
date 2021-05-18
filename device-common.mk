@@ -33,7 +33,7 @@ PRODUCT_VENDOR_PROPERTIES += ro.soc.manufacturer=Google
 PRODUCT_VENDOR_PROPERTIES += ro.soc.model=GS201
 
 PRODUCT_PRODUCT_PROPERTIES += \
-    persist.vendor.testing_battery_profile=0
+    persist.vendor.testing_battery_profile=2
 
 # ZramWriteback
 -include hardware/google/pixel/mm/device_gki.mk
