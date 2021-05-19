@@ -25,6 +25,6 @@ LOCAL_PATH := $(call my-dir)
 # if some modules are built directly from this directory (not subdirectories),
 # their rules should be written here.
 
-ifeq ($(USES_DEVICE_GOOGLE_GS101),true)
+ifeq ($(USES_DEVICE_GOOGLE_GS201),true)
   include $(call first-makefiles-under,$(LOCAL_PATH))
 endif

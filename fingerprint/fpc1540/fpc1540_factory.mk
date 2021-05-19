@@ -1,5 +1,5 @@
 # Fingerprint
-include device/google/gs101/fingerprint/fpc1540/fingerprint_config_factory.mk
+include device/google/gs201/fingerprint/fpc1540/fingerprint_config_factory.mk
 
 PRODUCT_PACKAGES += \
     fpc_tee_test\

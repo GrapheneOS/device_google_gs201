@@ -36,7 +36,7 @@ PRODUCT_SOONG_NAMESPACES += \
 	hardware/google/graphics/gs101 \
 	hardware/google/interfaces \
 	hardware/google/pixel \
-	device/google/gs101 \
+	device/google/gs201 \
 	vendor/google/whitechapel/tools \
 	vendor/arm/mali/valhall \
 	vendor/arm/mali/valhall/cl \
@@ -152,31 +152,31 @@ endif
 # Device Manifest, Device Compatibility Matrix for Treble
 ifeq ($(DEVICE_USES_EXYNOS_GRALLOC_VERSION), 4)
 	DEVICE_MANIFEST_FILE := \
-		device/google/gs101/manifest$(LOCAL_64ONLY).xml
+		device/google/gs201/manifest$(LOCAL_64ONLY).xml
 else
 	DEVICE_MANIFEST_FILE := \
-		device/google/gs101/manifest$(LOCAL_64ONLY)-gralloc3.xml
+		device/google/gs201/manifest$(LOCAL_64ONLY)-gralloc3.xml
 endif
 
 ifneq (,$(filter aosp_%,$(TARGET_PRODUCT)))
 DEVICE_MANIFEST_FILE += \
-	device/google/gs101/manifest_media_aosp.xml
+	device/google/gs201/manifest_media_aosp.xml
 
 PRODUCT_COPY_FILES += \
-	device/google/gs101/media_codecs_aosp_c2.xml:$(TARGET_COPY_OUT_VENDOR)/etc/media_codecs_c2.xml
+	device/google/gs201/media_codecs_aosp_c2.xml:$(TARGET_COPY_OUT_VENDOR)/etc/media_codecs_c2.xml
 else
 DEVICE_MANIFEST_FILE += \
-	device/google/gs101/manifest_media.xml
+	device/google/gs201/manifest_media.xml
 
 PRODUCT_COPY_FILES += \
-	device/google/gs101/media_codecs_bo_c2.xml:$(TARGET_COPY_OUT_VENDOR)/etc/media_codecs_c2.xml \
-	device/google/gs101/media_codecs_aosp_c2.xml:$(TARGET_COPY_OUT_VENDOR)/etc/media_codecs_aosp_c2.xml
+	device/google/gs201/media_codecs_bo_c2.xml:$(TARGET_COPY_OUT_VENDOR)/etc/media_codecs_c2.xml \
+	device/google/gs201/media_codecs_aosp_c2.xml:$(TARGET_COPY_OUT_VENDOR)/etc/media_codecs_aosp_c2.xml
 endif
 
 DEVICE_MATRIX_FILE := \
-	device/google/gs101/compatibility_matrix.xml
+	device/google/gs201/compatibility_matrix.xml
 
-DEVICE_PACKAGE_OVERLAYS += device/google/gs101/overlay
+DEVICE_PACKAGE_OVERLAYS += device/google/gs201/overlay
 
 # This will be updated to 31 (Android S) for shipping
 PRODUCT_SHIPPING_API_LEVEL := 30
@@ -191,43 +191,43 @@ PRODUCT_ENFORCE_PRODUCT_PARTITION_INTERFACE := true
 # Init files
 PRODUCT_COPY_FILES += \
 	$(LOCAL_KERNEL):kernel \
-	device/google/gs101/conf/init.gs101.usb.rc:$(TARGET_COPY_OUT_VENDOR)/etc/init/init.gs101.usb.rc \
-	device/google/gs101/conf/ueventd.gs101.rc:$(TARGET_COPY_OUT_VENDOR)/ueventd.rc
+	device/google/gs201/conf/init.gs101.usb.rc:$(TARGET_COPY_OUT_VENDOR)/etc/init/init.gs101.usb.rc \
+	device/google/gs201/conf/ueventd.gs101.rc:$(TARGET_COPY_OUT_VENDOR)/ueventd.rc
 
 PRODUCT_COPY_FILES += \
-	device/google/gs101/conf/init.gs101.rc:$(TARGET_COPY_OUT_VENDOR)/etc/init/hw/init.gs101.rc
+	device/google/gs201/conf/init.gs101.rc:$(TARGET_COPY_OUT_VENDOR)/etc/init/hw/init.gs101.rc
 
 ifneq (,$(filter userdebug eng, $(TARGET_BUILD_VARIANT)))
 PRODUCT_COPY_FILES += \
-	device/google/gs101/conf/init.debug.rc:$(TARGET_COPY_OUT_VENDOR)/etc/init/init.debug.rc
+	device/google/gs201/conf/init.debug.rc:$(TARGET_COPY_OUT_VENDOR)/etc/init/init.debug.rc
 endif
 
 # If AoC Daemon is not present on this build, load firmware at boot via rc
 ifeq ($(wildcard vendor/google/whitechapel/aoc/aocd),)
 PRODUCT_COPY_FILES += \
-	device/google/gs101/conf/init.aoc.nodaemon.rc:$(TARGET_COPY_OUT_VENDOR)/etc/init/hw/init.aoc.rc
+	device/google/gs201/conf/init.aoc.nodaemon.rc:$(TARGET_COPY_OUT_VENDOR)/etc/init/hw/init.aoc.rc
 else
 PRODUCT_COPY_FILES += \
-	device/google/gs101/conf/init.aoc.daemon.rc:$(TARGET_COPY_OUT_VENDOR)/etc/init/hw/init.aoc.rc
+	device/google/gs201/conf/init.aoc.daemon.rc:$(TARGET_COPY_OUT_VENDOR)/etc/init/hw/init.aoc.rc
 endif
 
 # Recovery files
 PRODUCT_COPY_FILES += \
-	device/google/gs101/conf/init.recovery.device.rc:$(TARGET_COPY_OUT_RECOVERY)/root/init.recovery.gs101.rc
+	device/google/gs201/conf/init.recovery.device.rc:$(TARGET_COPY_OUT_RECOVERY)/root/init.recovery.gs101.rc
 
 # Fstab files
 PRODUCT_COPY_FILES += \
-	device/google/gs101/conf/fstab.gs101:$(TARGET_COPY_OUT_VENDOR)/etc/fstab.gs101 \
-	device/google/gs101/conf/fstab.persist:$(TARGET_COPY_OUT_VENDOR)/etc/fstab.persist \
-	device/google/gs101/conf/fstab.gs101:$(TARGET_COPY_OUT_VENDOR_RAMDISK)/first_stage_ramdisk/fstab.gs101
+	device/google/gs201/conf/fstab.gs101:$(TARGET_COPY_OUT_VENDOR)/etc/fstab.gs101 \
+	device/google/gs201/conf/fstab.persist:$(TARGET_COPY_OUT_VENDOR)/etc/fstab.persist \
+	device/google/gs201/conf/fstab.gs101:$(TARGET_COPY_OUT_VENDOR_RAMDISK)/first_stage_ramdisk/fstab.gs101
 
 # Shell scripts
 PRODUCT_COPY_FILES += \
-	device/google/gs101/init.insmod.sh:$(TARGET_COPY_OUT_VENDOR)/bin/init.insmod.sh \
+	device/google/gs201/init.insmod.sh:$(TARGET_COPY_OUT_VENDOR)/bin/init.insmod.sh \
 
 # insmod files
 PRODUCT_COPY_FILES += \
-	device/google/gs101/init.insmod.gs101.cfg:$(TARGET_COPY_OUT_VENDOR)/etc/init.insmod.gs101.cfg
+	device/google/gs201/init.insmod.gs101.cfg:$(TARGET_COPY_OUT_VENDOR)/etc/init.insmod.gs101.cfg
 
 # For creating dtbo image
 PRODUCT_HOST_PACKAGES += \
@@ -289,7 +289,7 @@ PRODUCT_PACKAGES += \
 
 # Touch firmware
 #PRODUCT_COPY_FILES += \
-	device/google/gs101/firmware/touch/s6sy761.bin:$(TARGET_COPY_OUT_VENDOR)/firmware/s6sy761.fw
+	device/google/gs201/firmware/touch/s6sy761.bin:$(TARGET_COPY_OUT_VENDOR)/firmware/s6sy761.fw
 # Touch
 PRODUCT_COPY_FILES += \
 	frameworks/native/data/etc/android.hardware.touchscreen.multitouch.jazzhand.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.touchscreen.multitouch.jazzhand.xml
@@ -325,7 +325,7 @@ endif
 
 # Power HAL
 PRODUCT_COPY_FILES += \
-	device/google/gs101/powerhint.json:$(TARGET_COPY_OUT_VENDOR)/etc/powerhint.json
+	device/google/gs201/powerhint.json:$(TARGET_COPY_OUT_VENDOR)/etc/powerhint.json
 # adpf 16ms update rate
 PRODUCT_PRODUCT_PROPERTIES += \
         vendor.powerhal.adpf.rate=16666666
@@ -334,13 +334,13 @@ PRODUCT_PRODUCT_PROPERTIES += \
 	vendor.powerhal.adpf.uclamp=0
 
 PRODUCT_COPY_FILES += \
-	device/google/gs101/task_profiles.json:$(TARGET_COPY_OUT_VENDOR)/etc/task_profiles.json
+	device/google/gs201/task_profiles.json:$(TARGET_COPY_OUT_VENDOR)/etc/task_profiles.json
 
 PRODUCT_COPY_FILES += \
-	device/google/gs101/powerhint_a0.json:$(TARGET_COPY_OUT_VENDOR)/etc/powerhint_a0.json
+	device/google/gs201/powerhint_a0.json:$(TARGET_COPY_OUT_VENDOR)/etc/powerhint_a0.json
 
 PRODUCT_COPY_FILES += \
-	device/google/gs101/powerhint_a1.json:$(TARGET_COPY_OUT_VENDOR)/etc/powerhint_a1.json
+	device/google/gs201/powerhint_a1.json:$(TARGET_COPY_OUT_VENDOR)/etc/powerhint_a1.json
 -include hardware/google/pixel/power-libperfmgr/aidl/device.mk
 
 # PowerStats HAL
@@ -379,11 +379,11 @@ PRODUCT_PROPERTY_OVERRIDES += aaudio.hw_burst_min_usec=2000
 
 # Calliope firmware overwrite
 #PRODUCT_COPY_FILES += \
-	device/google/gs101/firmware/calliope_dram.bin:$(TARGET_COPY_OUT_VENDOR)/firmware/calliope_dram.bin \
-	device/google/gs101/firmware/calliope_sram.bin:$(TARGET_COPY_OUT_VENDOR)/firmware/calliope_sram.bin \
-	device/google/gs101/firmware/calliope_dram_2.bin:$(TARGET_COPY_OUT_VENDOR)/firmware/calliope_dram_2.bin \
-	device/google/gs101/firmware/calliope_sram_2.bin:$(TARGET_COPY_OUT_VENDOR)/firmware/calliope_sram_2.bin \
-	device/google/gs101/firmware/calliope2.dt:$(TARGET_COPY_OUT_VENDOR)/firmware/calliope2.dt \
+	device/google/gs201/firmware/calliope_dram.bin:$(TARGET_COPY_OUT_VENDOR)/firmware/calliope_dram.bin \
+	device/google/gs201/firmware/calliope_sram.bin:$(TARGET_COPY_OUT_VENDOR)/firmware/calliope_sram.bin \
+	device/google/gs201/firmware/calliope_dram_2.bin:$(TARGET_COPY_OUT_VENDOR)/firmware/calliope_dram_2.bin \
+	device/google/gs201/firmware/calliope_sram_2.bin:$(TARGET_COPY_OUT_VENDOR)/firmware/calliope_sram_2.bin \
+	device/google/gs201/firmware/calliope2.dt:$(TARGET_COPY_OUT_VENDOR)/firmware/calliope2.dt \
 
 # Cannot reference variables defined in BoardConfig.mk, uncomment this if
 # BOARD_USE_OFFLOAD_AUDIO and BOARD_USE_OFFLOAD_EFFECT are true
@@ -514,10 +514,10 @@ PRODUCT_PACKAGES_DEBUG += \
 
 # Copy Camera HFD Setfiles
 #PRODUCT_COPY_FILES += \
-	device/google/gs101/firmware/camera/libhfd/default_configuration.hfd.cfg.json:$(TARGET_COPY_OUT_VENDOR)/firmware/default_configuration.hfd.cfg.json \
-	device/google/gs101/firmware/camera/libhfd/pp_cfg.json:$(TARGET_COPY_OUT_VENDOR)/firmware/pp_cfg.json \
-	device/google/gs101/firmware/camera/libhfd/tracker_cfg.json:$(TARGET_COPY_OUT_VENDOR)/firmware/tracker_cfg.json \
-	device/google/gs101/firmware/camera/libhfd/WithLightFixNoBN.SDNNmodel:$(TARGET_COPY_OUT_VENDOR)/firmware/WithLightFixNoBN.SDNNmodel
+	device/google/gs201/firmware/camera/libhfd/default_configuration.hfd.cfg.json:$(TARGET_COPY_OUT_VENDOR)/firmware/default_configuration.hfd.cfg.json \
+	device/google/gs201/firmware/camera/libhfd/pp_cfg.json:$(TARGET_COPY_OUT_VENDOR)/firmware/pp_cfg.json \
+	device/google/gs201/firmware/camera/libhfd/tracker_cfg.json:$(TARGET_COPY_OUT_VENDOR)/firmware/tracker_cfg.json \
+	device/google/gs201/firmware/camera/libhfd/WithLightFixNoBN.SDNNmodel:$(TARGET_COPY_OUT_VENDOR)/firmware/WithLightFixNoBN.SDNNmodel
 
 PRODUCT_COPY_FILES += \
 	frameworks/native/data/etc/android.hardware.wifi.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.wifi.xml \
@@ -604,7 +604,7 @@ PRODUCT_PROPERTY_OVERRIDES += \
 	persist.sys.sf.native_mode=2 \
 	persist.sys.sf.color_mode=9
 PRODUCT_COPY_FILES += \
-	device/google/gs101/display/display_colordata_cal0.pb:$(TARGET_COPY_OUT_VENDOR)/etc/display_colordata_cal0.pb
+	device/google/gs201/display/display_colordata_cal0.pb:$(TARGET_COPY_OUT_VENDOR)/etc/display_colordata_cal0.pb
 
 PRODUCT_PROPERTY_OVERRIDES += debug.renderengine.backend=skiaglthreaded
 
@@ -627,12 +627,12 @@ PRODUCT_CHARACTERISTICS := nosdcard
 
 # WPA SUPPLICANT
 PRODUCT_COPY_FILES += \
-	device/google/gs101/wifi/p2p_supplicant.conf:$(TARGET_COPY_OUT_VENDOR)/etc/wifi/p2p_supplicant.conf \
-	device/google/gs101/wifi/wpa_supplicant_overlay.conf:$(TARGET_COPY_OUT_VENDOR)/etc/wifi/wpa_supplicant_overlay.conf
+	device/google/gs201/wifi/p2p_supplicant.conf:$(TARGET_COPY_OUT_VENDOR)/etc/wifi/p2p_supplicant.conf \
+	device/google/gs201/wifi/wpa_supplicant_overlay.conf:$(TARGET_COPY_OUT_VENDOR)/etc/wifi/wpa_supplicant_overlay.conf
 
 # WIFI COEX
 PRODUCT_COPY_FILES += \
-	device/google/gs101/wifi/coex_table.xml:$(TARGET_COPY_OUT_VENDOR)/etc/wifi/coex_table.xml
+	device/google/gs201/wifi/coex_table.xml:$(TARGET_COPY_OUT_VENDOR)/etc/wifi/coex_table.xml
 
 PRODUCT_PACKAGES += hostapd
 PRODUCT_PACKAGES += wpa_supplicant
@@ -655,14 +655,14 @@ SOONG_CONFIG_bigo_soc := gs101
 
 # MFC firmware
 PRODUCT_COPY_FILES += \
-	device/google/gs101/firmware/mfc_fw_v14.2.bin:$(TARGET_COPY_OUT_VENDOR)/firmware/mfc_fw.bin
+	device/google/gs201/firmware/mfc_fw_v14.2.bin:$(TARGET_COPY_OUT_VENDOR)/firmware/mfc_fw.bin
 
 # 1. Codec 2.0
 # exynos service
 PRODUCT_SOONG_NAMESPACES += vendor/samsung_slsi/codec2
 
 PRODUCT_COPY_FILES += \
-	device/google/gs101/media_codecs_performance_c2.xml:$(TARGET_COPY_OUT_VENDOR)/etc/media_codecs_performance_c2.xml \
+	device/google/gs201/media_codecs_performance_c2.xml:$(TARGET_COPY_OUT_VENDOR)/etc/media_codecs_performance_c2.xml \
 
 PRODUCT_PACKAGES += \
 	samsung.hardware.media.c2@1.0-service \
@@ -689,8 +689,8 @@ PRODUCT_PROPERTY_OVERRIDES += \
 
 # 2. OpenMAX IL
 PRODUCT_COPY_FILES += \
-	device/google/gs101/media_codecs.xml:$(TARGET_COPY_OUT_VENDOR)/etc/media_codecs.xml \
-	device/google/gs101/media_codecs_performance.xml:$(TARGET_COPY_OUT_VENDOR)/etc/media_codecs_performance.xml
+	device/google/gs201/media_codecs.xml:$(TARGET_COPY_OUT_VENDOR)/etc/media_codecs.xml \
+	device/google/gs201/media_codecs_performance.xml:$(TARGET_COPY_OUT_VENDOR)/etc/media_codecs_performance.xml
 ####################################
 
 # Telephony
@@ -719,14 +719,14 @@ GPS_CHIPSET := 47765
 
 PRODUCT_COPY_FILES += \
 	frameworks/native/data/etc/android.hardware.location.gps.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.location.gps.xml \
-	device/google/gs101/gnss/${GPS_CHIPSET}/config/gps.xml:$(TARGET_COPY_OUT_VENDOR)/etc/gnss/gps.xml \
-	device/google/gs101/gnss/${GPS_CHIPSET}/config/lhd.conf:$(TARGET_COPY_OUT_VENDOR)/etc/gnss/lhd.conf \
-	device/google/gs101/gnss/${GPS_CHIPSET}/config/scd.conf:$(TARGET_COPY_OUT_VENDOR)/etc/gnss/scd.conf \
-	device/google/gs101/gnss/${GPS_CHIPSET}/config/gps.cer:$(TARGET_COPY_OUT_VENDOR)/etc/gnss/gps.cer \
-	device/google/gs101/gnss/${GPS_CHIPSET}/firmware/SensorHub.patch:$(TARGET_COPY_OUT_VENDOR)/firmware/SensorHub.patch
+	device/google/gs201/gnss/${GPS_CHIPSET}/config/gps.xml:$(TARGET_COPY_OUT_VENDOR)/etc/gnss/gps.xml \
+	device/google/gs201/gnss/${GPS_CHIPSET}/config/lhd.conf:$(TARGET_COPY_OUT_VENDOR)/etc/gnss/lhd.conf \
+	device/google/gs201/gnss/${GPS_CHIPSET}/config/scd.conf:$(TARGET_COPY_OUT_VENDOR)/etc/gnss/scd.conf \
+	device/google/gs201/gnss/${GPS_CHIPSET}/config/gps.cer:$(TARGET_COPY_OUT_VENDOR)/etc/gnss/gps.cer \
+	device/google/gs201/gnss/${GPS_CHIPSET}/firmware/SensorHub.patch:$(TARGET_COPY_OUT_VENDOR)/firmware/SensorHub.patch
 
 PRODUCT_SOONG_NAMESPACES += \
-	device/google/gs101/gnss/$(GPS_CHIPSET)
+	device/google/gs201/gnss/$(GPS_CHIPSET)
 
 PRODUCT_PACKAGES += \
 	android.hardware.gnss@2.1-impl-google \
@@ -814,7 +814,7 @@ PRODUCT_PRODUCT_PROPERTIES += \
 	ro.postinstall.fstab.prefix=/product
 
 PRODUCT_COPY_FILES += \
-	device/google/gs101/conf/fstab.postinstall:$(TARGET_COPY_OUT_PRODUCT)/etc/fstab.postinstall
+	device/google/gs201/conf/fstab.postinstall:$(TARGET_COPY_OUT_PRODUCT)/etc/fstab.postinstall
 
 # fastbootd
 PRODUCT_PACKAGES += \
@@ -898,7 +898,7 @@ SUPPORT_NR := true
 USE_RADIO_HAL_1_6 := true
 
 #$(call inherit-product, vendor/google_devices/telephony/common/device-vendor.mk)
-#$(call inherit-product, vendor/google_devices/gs101/proprietary/device-vendor.mk)
+#$(call inherit-product, vendor/google_devices/gs201/proprietary/device-vendor.mk)
 
 ifneq ($(BOARD_WITHOUT_RADIO),true)
 $(call inherit-product-if-exists, vendor/samsung_slsi/telephony/common/device-vendor.mk)
@@ -918,8 +918,8 @@ $(call inherit-product-if-exists, vendor/google/services/LyricCameraHAL/src/buil
 $(call inherit-product-if-exists, vendor/google/camera/devices/whi/device-vendor.mk)
 
 PRODUCT_COPY_FILES += \
-	device/google/gs101/default-permissions.xml:$(TARGET_COPY_OUT_PRODUCT)/etc/default-permissions/default-permissions.xml \
-	device/google/gs101/component-overrides.xml:$(TARGET_COPY_OUT_VENDOR)/etc/sysconfig/component-overrides.xml \
+	device/google/gs201/default-permissions.xml:$(TARGET_COPY_OUT_PRODUCT)/etc/default-permissions/default-permissions.xml \
+	device/google/gs201/component-overrides.xml:$(TARGET_COPY_OUT_VENDOR)/etc/sysconfig/component-overrides.xml \
 	frameworks/native/data/etc/handheld_core_hardware.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/handheld_core_hardware.xml \
 
 # modem_svc_sit daemon
@@ -929,7 +929,7 @@ PRODUCT_PACKAGES += modem_svc_sit
 PRODUCT_PACKAGES += modem_logging_control
 
 PRODUCT_COPY_FILES += \
-	device/google/gs101/radio/gnss_blanking.csv:$(TARGET_COPY_OUT_VENDOR)/etc/modem/gnss_blanking.csv
+	device/google/gs201/radio/gnss_blanking.csv:$(TARGET_COPY_OUT_VENDOR)/etc/modem/gnss_blanking.csv
 
 # ARM NN files
 ARM_COMPUTE_CL_ENABLE := 1
@@ -1156,4 +1156,4 @@ PRODUCT_PACKAGES_DEBUG += BatteryStatsViewer
 # Install product specific framework compatibility matrix
 # (TODO: b/169535506) This includes the FCM for system_ext and product partition.
 # It must be split into the FCM of each partition.
-DEVICE_PRODUCT_COMPATIBILITY_MATRIX_FILE := device/google/gs101/device_framework_matrix_product.xml
+DEVICE_PRODUCT_COMPATIBILITY_MATRIX_FILE := device/google/gs201/device_framework_matrix_product.xml

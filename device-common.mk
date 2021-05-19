@@ -14,7 +14,7 @@
 # limitations under the License.
 #
 
-include device/google/gs101/device.mk
+include device/google/gs201/device.mk
 
 # Telephony
 PRODUCT_COPY_FILES += \

@@ -1,5 +1,5 @@
 # Fingerprint
-include device/google/gs101/fingerprint/fpc1540/fingerprint_config.mk
+include device/google/gs201/fingerprint/fpc1540/fingerprint_config.mk
 
 PRODUCT_PACKAGES += \
     android.hardware.biometrics.fingerprint@2.1-service.fpc \

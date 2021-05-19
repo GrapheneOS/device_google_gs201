@@ -14,8 +14,8 @@
 # limitations under the License.
 #
 
-$(call inherit-product, device/google/gs101/aosp_common.mk)
-$(call inherit-product-if-exists, vendor/google_devices/gs101/factory/pixel/device-factory.mk)
+$(call inherit-product, device/google/gs201/aosp_common.mk)
+$(call inherit-product-if-exists, vendor/google_devices/gs201/factory/pixel/device-factory.mk)
 
 PRODUCT_PROPERTY_OVERRIDES += service.adb.root=1 \
                               ro.vendor.factory=1
@@ -54,10 +54,10 @@ BOARD_BOOTCONFIG += androidboot.selinux=permissive
 BOARD_KERNEL_CMDLINE += androidboot.selinux=permissive
 
 # Disable Bluetooth as default in factory build
-DEVICE_PACKAGE_OVERLAYS += device/google/gs101/overlay-factory
+DEVICE_PACKAGE_OVERLAYS += device/google/gs201/overlay-factory
 
 PRODUCT_COPY_FILES += \
-    device/google/gs101/conf/init.factory.rc:$(TARGET_COPY_OUT_VENDOR)/etc/init/hw/init.factory.rc
+    device/google/gs201/conf/init.factory.rc:$(TARGET_COPY_OUT_VENDOR)/etc/init/hw/init.factory.rc
 
 # Add factory-friendly changes
 PRODUCT_PACKAGES += \

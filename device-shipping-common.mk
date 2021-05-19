@@ -13,7 +13,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-include device/google/gs101/device-common.mk
+include device/google/gs201/device-common.mk
 
 PRODUCT_PROPERTY_OVERRIDES += \
     ro.bluetooth.a2dp_offload.supported=true \
@@ -26,5 +26,5 @@ PRODUCT_PACKAGES += \
     android.hardware.secure_element@1.2-service-gto-ese2
 
 PRODUCT_COPY_FILES += \
-    device/google/gs101/nfc/libse-gto-hal.conf:$(TARGET_COPY_OUT_VENDOR)/etc/libse-gto-hal.conf \
-    device/google/gs101/nfc/libse-gto-hal2.conf:$(TARGET_COPY_OUT_VENDOR)/etc/libse-gto-hal2.conf
+    device/google/gs201/nfc/libse-gto-hal.conf:$(TARGET_COPY_OUT_VENDOR)/etc/libse-gto-hal.conf \
+    device/google/gs201/nfc/libse-gto-hal2.conf:$(TARGET_COPY_OUT_VENDOR)/etc/libse-gto-hal2.conf
