@@ -127,7 +127,7 @@ on init
     # change permissions and default values for camera-daemon cpu controller
     chown system system /dev/cpuctl/camera-daemon/cpu.uclamp.min
     chown system system /dev/cpuctl/camera-daemon/cpu.uclamp.max
-    chown system system /dev/cpuctl/camera-daemon/cpu.uclamp.latency_sensitive
+    chown root root /dev/cpuctl/camera-daemon/cpu.uclamp.latency_sensitive
     chown system system /dev/cpuctl/camera-daemon/cgroup.procs
 
     write /dev/cpuctl/camera-daemon/cpu.uclamp.latency_sensitive 1
