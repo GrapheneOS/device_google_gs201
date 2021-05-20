@@ -20,7 +20,7 @@ include build/make/target/board/BoardConfigPixelCommon.mk
 PRODUCT_FULL_TREBLE_OVERRIDE := true
 
 # HACK : To fix up after bring up multimedia devices.
-TARGET_SOC := gs101
+TARGET_SOC := gs201
 
 TARGET_SOC_NAME := google
 
@@ -53,7 +53,7 @@ BOARD_USES_GENERIC_KERNEL_IMAGE := true
 BOARD_MOVE_RECOVERY_RESOURCES_TO_VENDOR_BOOT := true
 BOARD_MOVE_GSI_AVB_KEYS_TO_VENDOR_BOOT := true
 TARGET_RECOVERY_WIPE := device/google/gs201/conf/recovery.wipe
-TARGET_RECOVERY_FSTAB := device/google/gs201/conf/fstab.gs101
+TARGET_RECOVERY_FSTAB := device/google/gs201/conf/fstab.gs201
 TARGET_RECOVERY_PIXEL_FORMAT := ABGR_8888
 TARGET_RECOVERY_UI_MARGIN_HEIGHT := 165
 TARGET_RECOVERY_UI_LIB := \
@@ -238,7 +238,7 @@ HWC_SUPPORT_COLOR_TRANSFORM := true
 BOARD_USES_EXYNOS_AFBC_FEATURE := true
 #BOARD_USES_HDRUI_GLES_CONVERSION := true
 
-BOARD_LIBACRYL_DEFAULT_COMPOSITOR := fimg2d_gs101
+BOARD_LIBACRYL_DEFAULT_COMPOSITOR := fimg2d_gs201
 BOARD_LIBACRYL_G2D_HDR_PLUGIN := libacryl_hdr_plugin
 
 # HWCServices
@@ -398,8 +398,8 @@ BOARD_VENDOR_RAMDISK_KERNEL_MODULES += \
 # Using BUILD_COPY_HEADERS
 BUILD_BROKEN_USES_BUILD_COPY_HEADERS := true
 
-include device/google/gs101-sepolicy/gs101-sepolicy.mk
 include device/google/gs201-sepolicy/gs201-sepolicy.mk
+include device/google/gs101-sepolicy/gs101-sepolicy.mk
 
 # Battery options
 BOARD_KERNEL_CMDLINE += at24.write_timeout=100

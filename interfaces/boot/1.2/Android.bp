@@ -16,20 +16,20 @@
 package {
     // See: http://go/android-license-faq
     // A large-scale-change added 'default_applicable_licenses' to import
-    // all of the 'license_kinds' from "//device/google/gs201:device_google_gs101_license"
+    // all of the 'license_kinds' from "//device/google/gs201:device_google_gs201_license"
     // to get the below license kinds:
     //   SPDX-license-identifier-Apache-2.0
     default_applicable_licenses: [
-        "//device/google/gs201:device_google_gs101_license",
+        "//device/google/gs201:device_google_gs201_license",
     ],
 }
 
 cc_binary {
-    name: "android.hardware.boot@1.2-service-gs101",
+    name: "android.hardware.boot@1.2-service-gs201",
     defaults: ["hidl_defaults"],
     relative_install_path: "hw",
     vendor: true,
-    init_rc: ["android.hardware.boot@1.2-service-gs101.rc"],
+    init_rc: ["android.hardware.boot@1.2-service-gs201.rc"],
     srcs: [
         "BootControl.cpp",
         "GptUtils.cpp",
@@ -54,8 +54,8 @@ cc_binary {
 }
 
 cc_library {
-    name: "android.hardware.boot@1.2-impl-gs101",
-    stem: "android.hardware.boot@1.0-impl-1.2-impl-gs101",
+    name: "android.hardware.boot@1.2-impl-gs201",
+    stem: "android.hardware.boot@1.0-impl-1.2-impl-gs201",
     recovery: true,
     srcs: [
         "BootControl.cpp",

@@ -1,4 +1,4 @@
-import init.gs101.usb.rc
+import init.gs201.usb.rc
 import android.hardware.drm@1.2-service.widevine.rc
 import init.exynos.sensorhub.rc
 import /vendor/etc/init/hw/init.aoc.rc
@@ -249,7 +249,7 @@ on late-fs
     class_start animation
 
     # Mount RW partitions which need run fsck
-    mount_all /vendor/etc/fstab.gs101 --late
+    mount_all /vendor/etc/fstab.gs201 --late
 
 on post-fs-data
     # Log data folder
@@ -442,7 +442,7 @@ on property:persist.vendor.radio.no_modem_board=1
     setprop ro.radio.noril yes
 
 on fs
-    mount_all /vendor/etc/fstab.gs101 --early
+    mount_all /vendor/etc/fstab.gs201 --early
     restorecon_recursive /mnt/vendor/efs
     chown radio system /mnt/vendor/efs
     restorecon_recursive /mnt/vendor/efs_backup
@@ -739,7 +739,7 @@ on property:persist.vendor.charge.stop.level=*
 on property:persist.vendor.charge.start.level=*
     write /sys/devices/platform/google,charger/charge_start_level ${persist.vendor.charge.start.level}
 
-service insmod_sh_common /vendor/bin/init.insmod.sh /vendor/etc/init.insmod.gs101.cfg
+service insmod_sh_common /vendor/bin/init.insmod.sh /vendor/etc/init.insmod.gs201.cfg
     class main
     user root
     group root system

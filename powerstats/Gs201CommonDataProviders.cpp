@@ -15,7 +15,7 @@
  */
 
 #include <PowerStatsAidl.h>
-#include <Gs101CommonDataProviders.h>
+#include <Gs201CommonDataProviders.h>
 #include "AocStateResidencyDataProvider.h"
 #include "DevfreqStateResidencyDataProvider.h"
 #include "DvfsStateResidencyDataProvider.h"
@@ -683,7 +683,7 @@ void addPixelStateResidencyDataProvider(std::shared_ptr<PowerStats> p) {
     p->addStateResidencyDataProvider(std::move(pixelSdp));
 }
 
-void addGs101CommonDataProviders(std::shared_ptr<PowerStats> p) {
+void addGs201CommonDataProviders(std::shared_ptr<PowerStats> p) {
     setEnergyMeter(p);
 
     addPixelStateResidencyDataProvider(p);

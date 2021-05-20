@@ -26,5 +26,5 @@ include device/google/gs201/device-common.mk
 #    android.hardware.secure_element@1.2-service-gto-ese2
 
 #PRODUCT_COPY_FILES += \
-#    device/google/gs101/nfc/libse-gto-hal.conf:$(TARGET_COPY_OUT_VENDOR)/etc/libse-gto-hal.conf \
-#    device/google/gs101/nfc/libse-gto-hal2.conf:$(TARGET_COPY_OUT_VENDOR)/etc/libse-gto-hal2.conf
+#    device/google/gs201/nfc/libse-gto-hal.conf:$(TARGET_COPY_OUT_VENDOR)/etc/libse-gto-hal.conf \
+#    device/google/gs201/nfc/libse-gto-hal2.conf:$(TARGET_COPY_OUT_VENDOR)/etc/libse-gto-hal2.conf

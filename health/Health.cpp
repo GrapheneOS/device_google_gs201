@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-#define LOG_TAG "android.hardware.health@2.1-impl-gs101"
+#define LOG_TAG "android.hardware.health@2.1-impl-gs201"
 #include <android-base/logging.h>
 
 #include <android-base/file.h>

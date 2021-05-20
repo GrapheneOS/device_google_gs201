@@ -1,4 +1,4 @@
-service vendor.dumpstate-1-1 /vendor/bin/hw/android.hardware.dumpstate@1.1-service.gs101
+service vendor.dumpstate-1-1 /vendor/bin/hw/android.hardware.dumpstate@1.1-service.gs201
     class hal
     user system
     group system

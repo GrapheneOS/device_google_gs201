@@ -14,7 +14,7 @@
 # limitations under the License.
 #
 
-TARGET_BOARD_PLATFORM := gs101
+TARGET_BOARD_PLATFORM := gs201
 
 ifneq (,$(filter %_64,$(TARGET_PRODUCT)))
 LOCAL_64ONLY := _64
@@ -33,7 +33,7 @@ PRODUCT_SOONG_NAMESPACES += \
 	hardware/google/av \
 	hardware/google/gchips \
 	hardware/google/graphics/common \
-	hardware/google/graphics/gs101 \
+	hardware/google/graphics/gs201 \
 	hardware/google/interfaces \
 	hardware/google/pixel \
 	device/google/gs201 \
@@ -191,11 +191,11 @@ PRODUCT_ENFORCE_PRODUCT_PARTITION_INTERFACE := true
 # Init files
 PRODUCT_COPY_FILES += \
 	$(LOCAL_KERNEL):kernel \
-	device/google/gs201/conf/init.gs101.usb.rc:$(TARGET_COPY_OUT_VENDOR)/etc/init/init.gs101.usb.rc \
-	device/google/gs201/conf/ueventd.gs101.rc:$(TARGET_COPY_OUT_VENDOR)/ueventd.rc
+	device/google/gs201/conf/init.gs201.usb.rc:$(TARGET_COPY_OUT_VENDOR)/etc/init/init.gs201.usb.rc \
+	device/google/gs201/conf/ueventd.gs201.rc:$(TARGET_COPY_OUT_VENDOR)/ueventd.rc
 
 PRODUCT_COPY_FILES += \
-	device/google/gs201/conf/init.gs101.rc:$(TARGET_COPY_OUT_VENDOR)/etc/init/hw/init.gs101.rc
+	device/google/gs201/conf/init.gs201.rc:$(TARGET_COPY_OUT_VENDOR)/etc/init/hw/init.gs201.rc
 
 ifneq (,$(filter userdebug eng, $(TARGET_BUILD_VARIANT)))
 PRODUCT_COPY_FILES += \
@@ -213,13 +213,13 @@ endif
 
 # Recovery files
 PRODUCT_COPY_FILES += \
-	device/google/gs201/conf/init.recovery.device.rc:$(TARGET_COPY_OUT_RECOVERY)/root/init.recovery.gs101.rc
+	device/google/gs201/conf/init.recovery.device.rc:$(TARGET_COPY_OUT_RECOVERY)/root/init.recovery.gs201.rc
 
 # Fstab files
 PRODUCT_COPY_FILES += \
-	device/google/gs201/conf/fstab.gs101:$(TARGET_COPY_OUT_VENDOR)/etc/fstab.gs101 \
+	device/google/gs201/conf/fstab.gs201:$(TARGET_COPY_OUT_VENDOR)/etc/fstab.gs201 \
 	device/google/gs201/conf/fstab.persist:$(TARGET_COPY_OUT_VENDOR)/etc/fstab.persist \
-	device/google/gs201/conf/fstab.gs101:$(TARGET_COPY_OUT_VENDOR_RAMDISK)/first_stage_ramdisk/fstab.gs101
+	device/google/gs201/conf/fstab.gs201:$(TARGET_COPY_OUT_VENDOR_RAMDISK)/first_stage_ramdisk/fstab.gs201
 
 # Shell scripts
 PRODUCT_COPY_FILES += \
@@ -227,7 +227,7 @@ PRODUCT_COPY_FILES += \
 
 # insmod files
 PRODUCT_COPY_FILES += \
-	device/google/gs201/init.insmod.gs101.cfg:$(TARGET_COPY_OUT_VENDOR)/etc/init.insmod.gs101.cfg
+	device/google/gs201/init.insmod.gs201.cfg:$(TARGET_COPY_OUT_VENDOR)/etc/init.insmod.gs201.cfg
 
 # For creating dtbo image
 PRODUCT_HOST_PACKAGES += \
@@ -316,7 +316,7 @@ PRODUCT_PACKAGES += \
 
 # USB HAL
 PRODUCT_PACKAGES += \
-	android.hardware.usb@1.3-service.gs101
+	android.hardware.usb@1.3-service.gs201
 
 # MIDI feature
 PRODUCT_COPY_FILES += \
@@ -354,7 +354,7 @@ PRODUCT_PACKAGES += \
 
 # dumpstate HAL
 PRODUCT_PACKAGES += \
-	android.hardware.dumpstate@1.1-service.gs101
+	android.hardware.dumpstate@1.1-service.gs201
 
 # AoC support
 PRODUCT_PACKAGES += \
@@ -465,7 +465,7 @@ SOONG_CONFIG_google3a_config += \
 	ghawb_truetone \
 	target_device
 
-SOONG_CONFIG_google3a_config_soc := gs101
+SOONG_CONFIG_google3a_config_soc := gs201
 SOONG_CONFIG_google3a_config_gcam_awb := true
 SOONG_CONFIG_google3a_config_ghawb_truetone := true
 SOONG_CONFIG_google3a_config_target_device := $(LOCAL_TARGET_PRODUCT)
@@ -657,7 +657,7 @@ endif
 
 SOONG_CONFIG_NAMESPACES += bigo
 SOONG_CONFIG_bigo += soc
-SOONG_CONFIG_bigo_soc := gs101
+SOONG_CONFIG_bigo_soc := gs201
 
 # MFC firmware
 PRODUCT_COPY_FILES += \
@@ -846,7 +846,7 @@ PRODUCT_PACKAGES += \
 	libbccArm32 \
 	libmalicore32 \
 	libOpenCL32 \
-	vulkan.gs10132
+	vulkan.gs20132
 endif
 
 PRODUCT_PACKAGES += \
@@ -856,7 +856,7 @@ PRODUCT_PACKAGES += \
 	libbccArm \
 	libmalicore \
 	libOpenCL \
-	vulkan.gs101 \
+	vulkan.gs201 \
 	whitelist \
 	libstagefright_hdcp \
 	libskia_opt
@@ -891,8 +891,8 @@ PRODUCT_PACKAGES += ShannonRcs
 
 # Boot Control HAL
 PRODUCT_PACKAGES += \
-	android.hardware.boot@1.2-impl-gs101 \
-	android.hardware.boot@1.2-service-gs101
+	android.hardware.boot@1.2-impl-gs201 \
+	android.hardware.boot@1.2-service-gs201
 
 # Exynos RIL and telephony
 # Multi SIM(DSDS)
@@ -916,7 +916,7 @@ else
 $(call inherit-product, $(SRC_TARGET_DIR)/product/core_64_bit_only.mk)
 endif
 #$(call inherit-product, hardware/google_devices/exynos5/exynos5.mk)
-#$(call inherit-product-if-exists, hardware/google_devices/gs101/gs101.mk)
+#$(call inherit-product-if-exists, hardware/google_devices/gs201/gs201.mk)
 #$(call inherit-product-if-exists, vendor/google_devices/common/exynos-vendor.mk)
 #$(call inherit-product-if-exists, hardware/broadcom/wlan/bcmdhd/firmware/bcm4375/device-bcm.mk)
 #$(call inherit-product-if-exists, vendor/google/sensors/usf/android/usf_efw_product.mk)
@@ -967,7 +967,7 @@ PRODUCT_COPY_FILES += \
 	frameworks/native/data/etc/android.hardware.se.omapi.uicc.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.se.omapi.uicc.xml
 
 PRODUCT_PACKAGES += \
-	android.hardware.health@2.1-impl-gs101 \
+	android.hardware.health@2.1-impl-gs201 \
 	android.hardware.health@2.1-service
 
 # Audio

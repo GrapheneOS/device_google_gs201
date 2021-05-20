@@ -23,7 +23,7 @@ include $(CLEAR_VARS)
 LOCAL_MODULE_RELATIVE_PATH := hw
 LOCAL_SHARED_LIBRARIES := liblog libcutils libhardware
 LOCAL_SRC_FILES := sensors_dummy.c
-LOCAL_MODULE := sensors.gs101
+LOCAL_MODULE := sensors.gs201
 LOCAL_LICENSE_KINDS := SPDX-license-identifier-Apache-2.0
 LOCAL_LICENSE_CONDITIONS := notice
 LOCAL_NOTICE_FILE := $(LOCAL_PATH)/../NOTICE

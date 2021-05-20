@@ -17,17 +17,17 @@
 package {
     // See: http://go/android-license-faq
     // A large-scale-change added 'default_applicable_licenses' to import
-    // all of the 'license_kinds' from "//device/google/gs201:device_google_gs101_license"
+    // all of the 'license_kinds' from "//device/google/gs201:device_google_gs201_license"
     // to get the below license kinds:
     //   SPDX-license-identifier-Apache-2.0
     default_applicable_licenses: [
-        "//device/google/gs201:device_google_gs101_license",
+        "//device/google/gs201:device_google_gs201_license",
     ],
 }
 
 cc_library_shared {
-    name: "android.hardware.health@2.1-impl-gs101",
-    stem: "android.hardware.health@2.0-impl-2.1-gs101",
+    name: "android.hardware.health@2.1-impl-gs201",
+    stem: "android.hardware.health@2.0-impl-2.1-gs201",
 
     proprietary: true,
     relative_install_path: "hw",
