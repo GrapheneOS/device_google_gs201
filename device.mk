@@ -42,12 +42,12 @@ PRODUCT_SOONG_NAMESPACES += \
 	vendor/arm/mali/valhall/cl \
 	vendor/arm/mali/valhall/libmali \
 	vendor/arm/mali/valhall/cinstr/production/gpu-hwc-reader \
-	vendor/broadcom/bluetooth \
-	vendor/google/camera \
 	vendor/google/interfaces \
 	vendor/google_devices/common/proprietary/confirmatioui_hal \
 	vendor/google_nos/host/android \
 	vendor/google_nos/test/system-test-harness
+#vendor/broadcom/bluetooth \
+#vendor/google/camera
 
 DEVICE_USES_EXYNOS_GRALLOC_VERSION := 4
 
@@ -117,8 +117,8 @@ PRODUCT_PROPERTY_OVERRIDES += \
 
 # GPU profiling
 PRODUCT_PRODUCT_PROPERTIES += graphics.gpu.profiler.support=true
-PRODUCT_PACKAGES += \
-	android.hardware.neuralnetworks@1.2-service-armnn
+#PRODUCT_PACKAGES += \
+#	android.hardware.neuralnetworks@1.2-service-armnn
 
 PRODUCT_PROPERTY_OVERRIDES += \
 	telephony.active_modems.max_count=2
@@ -237,24 +237,24 @@ PRODUCT_PACKAGES += \
 	messaging
 
 # Contexthub HAL
-PRODUCT_PACKAGES += \
-	android.hardware.contexthub@1.2-service.generic
+#PRODUCT_PACKAGES += \
+#	android.hardware.contexthub@1.2-service.generic
 
 # CHRE tools
-ifneq (,$(filter userdebug eng, $(TARGET_BUILD_VARIANT)))
-PRODUCT_PACKAGES += \
-	chre_power_test_client \
-	chre_test_client
-endif
+#ifneq (,$(filter userdebug eng, $(TARGET_BUILD_VARIANT)))
+#PRODUCT_PACKAGES += \
+#	chre_power_test_client \
+#	chre_test_client
+#endif
 
-PRODUCT_COPY_FILES += \
-	frameworks/native/data/etc/android.hardware.context_hub.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.context_hub.xml
+#PRODUCT_COPY_FILES += \
+#	frameworks/native/data/etc/android.hardware.context_hub.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.context_hub.xml
 
-# Enable the CHRE Daemon
-CHRE_USF_DAEMON_ENABLED := true
-PRODUCT_PACKAGES += \
-	chre \
-	preloaded_nanoapps.json
+## Enable the CHRE Daemon
+#CHRE_USF_DAEMON_ENABLED := true
+#PRODUCT_PACKAGES += \
+#	chre \
+#	preloaded_nanoapps.json
 
 # Filesystem management tools
 PRODUCT_PACKAGES += \
@@ -295,19 +295,24 @@ PRODUCT_COPY_FILES += \
 	frameworks/native/data/etc/android.hardware.touchscreen.multitouch.jazzhand.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.touchscreen.multitouch.jazzhand.xml
 
 # Sensors
-PRODUCT_COPY_FILES += \
-	frameworks/native/data/etc/android.hardware.sensor.accelerometer.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.sensor.accelerometer.xml \
-	frameworks/native/data/etc/android.hardware.sensor.barometer.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.sensor.barometer.xml \
-	frameworks/native/data/etc/android.hardware.sensor.compass.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.sensor.compass.xml \
-	frameworks/native/data/etc/android.hardware.sensor.gyroscope.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.sensor.gyroscope.xml \
-	frameworks/native/data/etc/android.hardware.sensor.hifi_sensors.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.sensor.hifi_sensors.xml \
-	frameworks/native/data/etc/android.hardware.sensor.light.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.sensor.light.xml\
-	frameworks/native/data/etc/android.hardware.sensor.proximity.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.sensor.proximity.xml \
-	frameworks/native/data/etc/android.hardware.sensor.stepcounter.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.sensor.stepcounter.xml \
-	frameworks/native/data/etc/android.hardware.sensor.stepdetector.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.sensor.stepdetector.xml
+#PRODUCT_COPY_FILES += \
+#	frameworks/native/data/etc/android.hardware.sensor.accelerometer.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.sensor.accelerometer.xml \
+#	frameworks/native/data/etc/android.hardware.sensor.barometer.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.sensor.barometer.xml \
+#	frameworks/native/data/etc/android.hardware.sensor.compass.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.sensor.compass.xml \
+#	frameworks/native/data/etc/android.hardware.sensor.gyroscope.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.sensor.gyroscope.xml \
+#	frameworks/native/data/etc/android.hardware.sensor.hifi_sensors.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.sensor.hifi_sensors.xml \
+#	frameworks/native/data/etc/android.hardware.sensor.light.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.sensor.light.xml\
+#	frameworks/native/data/etc/android.hardware.sensor.proximity.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.sensor.proximity.xml \
+#	frameworks/native/data/etc/android.hardware.sensor.stepcounter.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.sensor.stepcounter.xml \
+#	frameworks/native/data/etc/android.hardware.sensor.stepdetector.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.sensor.stepdetector.xml
 
 # Add sensor HAL 2.1 product packages
-PRODUCT_PACKAGES += android.hardware.sensors@2.1-service.multihal
+#PRODUCT_PACKAGES += android.hardware.sensors@2.1-service.multihal
+# Add sensor HAL 1.0 product packages.
+PRODUCT_PACKAGES += \
+	android.hardware.sensors@1.0-impl \
+	android.hardware.sensors@1.0-service \
+	sensors.cloudripper
 
 # USB HAL
 PRODUCT_PACKAGES += \
@@ -372,10 +377,10 @@ endif
 USE_LEGACY_LOCAL_AUDIO_HAL := false
 USE_XML_AUDIO_POLICY_CONF := 1
 
-# Enable AAudio MMAP/NOIRQ data path.
-PRODUCT_PROPERTY_OVERRIDES += aaudio.mmap_policy=2
-PRODUCT_PROPERTY_OVERRIDES += aaudio.mmap_exclusive_policy=2
-PRODUCT_PROPERTY_OVERRIDES += aaudio.hw_burst_min_usec=2000
+## Enable AAudio MMAP/NOIRQ data path.
+#PRODUCT_PROPERTY_OVERRIDES += aaudio.mmap_policy=2
+#PRODUCT_PROPERTY_OVERRIDES += aaudio.mmap_exclusive_policy=2
+#PRODUCT_PROPERTY_OVERRIDES += aaudio.hw_burst_min_usec=2000
 
 # Calliope firmware overwrite
 #PRODUCT_COPY_FILES += \
@@ -519,7 +524,7 @@ PRODUCT_PACKAGES_DEBUG += \
 	device/google/gs201/firmware/camera/libhfd/tracker_cfg.json:$(TARGET_COPY_OUT_VENDOR)/firmware/tracker_cfg.json \
 	device/google/gs201/firmware/camera/libhfd/WithLightFixNoBN.SDNNmodel:$(TARGET_COPY_OUT_VENDOR)/firmware/WithLightFixNoBN.SDNNmodel
 
-PRODUCT_COPY_FILES += \
+#PRODUCT_COPY_FILES += \
 	frameworks/native/data/etc/android.hardware.wifi.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.wifi.xml \
 	frameworks/native/data/etc/android.hardware.wifi.direct.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.wifi.direct.xml \
 	frameworks/native/data/etc/android.hardware.wifi.aware.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.wifi.aware.xml \
@@ -528,7 +533,7 @@ PRODUCT_COPY_FILES += \
 	frameworks/native/data/etc/android.hardware.usb.host.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.usb.host.xml \
 	frameworks/native/data/etc/android.hardware.usb.accessory.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.usb.accessory.xml
 
-PRODUCT_COPY_FILES += \
+#PRODUCT_COPY_FILES += \
 	frameworks/native/data/etc/android.hardware.camera.flash-autofocus.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.camera.flash-autofocus.xml \
 	frameworks/native/data/etc/android.hardware.camera.front.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.camera.front.xml \
 	frameworks/native/data/etc/android.hardware.camera.concurrent.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.camera.concurrent.xml \
@@ -560,7 +565,7 @@ PRODUCT_PROPERTY_OVERRIDES += \
 	debug.hwc.winupdate=1
 
 # HWUI
-TARGET_USES_VULKAN = true
+TARGET_USES_VULKAN = false
 
 # hw composer HAL
 PRODUCT_PACKAGES += \
@@ -606,7 +611,8 @@ PRODUCT_PROPERTY_OVERRIDES += \
 PRODUCT_COPY_FILES += \
 	device/google/gs201/display/display_colordata_cal0.pb:$(TARGET_COPY_OUT_VENDOR)/etc/display_colordata_cal0.pb
 
-PRODUCT_PROPERTY_OVERRIDES += debug.renderengine.backend=skiaglthreaded
+#PRODUCT_PROPERTY_OVERRIDES += debug.renderengine.backend=skiaglthreaded
+PRODUCT_PROPERTY_OVERRIDES += debug.renderengine.backend=gles
 
 # limit DPP downscale ratio
 PRODUCT_DEFAULT_PROPERTY_OVERRIDES += vendor.hwc.dpp.downscale=2
@@ -715,31 +721,30 @@ PRODUCT_PACKAGES += \
 	libopenvx-opencl
 endif
 
-GPS_CHIPSET := 47765
+#GPS_CHIPSET := 47765
+#
+#PRODUCT_COPY_FILES += \
+#	frameworks/native/data/etc/android.hardware.location.gps.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.location.gps.xml \
+#	device/google/gs201/gnss/${GPS_CHIPSET}/config/gps.xml:$(TARGET_COPY_OUT_VENDOR)/etc/gnss/gps.xml \
+#	device/google/gs201/gnss/${GPS_CHIPSET}/config/lhd.conf:$(TARGET_COPY_OUT_VENDOR)/etc/gnss/lhd.conf \
+#	device/google/gs201/gnss/${GPS_CHIPSET}/config/scd.conf:$(TARGET_COPY_OUT_VENDOR)/etc/gnss/scd.conf \
+#	device/google/gs201/gnss/${GPS_CHIPSET}/config/gps.cer:$(TARGET_COPY_OUT_VENDOR)/etc/gnss/gps.cer \
+#	device/google/gs201/gnss/${GPS_CHIPSET}/firmware/SensorHub.patch:$(TARGET_COPY_OUT_VENDOR)/firmware/SensorHub.patch
+#
+#PRODUCT_SOONG_NAMESPACES += \
+#	device/google/gs201/gnss/$(GPS_CHIPSET)
+#
+#PRODUCT_PACKAGES += \
+#	android.hardware.gnss@2.1-impl-google \
+#	gps.default \
+#	flp.default \
+#	gpsd \
+#	lhd \
+#	scd \
+#	android.hardware.gnss@2.1-service-brcm
+#PRODUCT_PACKAGES_DEBUG += \
+#	init.gps_log.rc
 
-PRODUCT_COPY_FILES += \
-	frameworks/native/data/etc/android.hardware.location.gps.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.location.gps.xml \
-	device/google/gs201/gnss/${GPS_CHIPSET}/config/gps.xml:$(TARGET_COPY_OUT_VENDOR)/etc/gnss/gps.xml \
-	device/google/gs201/gnss/${GPS_CHIPSET}/config/lhd.conf:$(TARGET_COPY_OUT_VENDOR)/etc/gnss/lhd.conf \
-	device/google/gs201/gnss/${GPS_CHIPSET}/config/scd.conf:$(TARGET_COPY_OUT_VENDOR)/etc/gnss/scd.conf \
-	device/google/gs201/gnss/${GPS_CHIPSET}/config/gps.cer:$(TARGET_COPY_OUT_VENDOR)/etc/gnss/gps.cer \
-	device/google/gs201/gnss/${GPS_CHIPSET}/firmware/SensorHub.patch:$(TARGET_COPY_OUT_VENDOR)/firmware/SensorHub.patch
-
-PRODUCT_SOONG_NAMESPACES += \
-	device/google/gs201/gnss/$(GPS_CHIPSET)
-
-PRODUCT_PACKAGES += \
-	android.hardware.gnss@2.1-impl-google \
-	gps.default \
-	flp.default \
-	gpsd \
-	lhd \
-	scd \
-	android.hardware.gnss@2.1-service-brcm
-PRODUCT_PACKAGES_DEBUG += \
-	init.gps_log.rc
-
-ifneq ($(DEVICE_USES_NO_TRUSTY), true)
 # Trusty (KM, GK, Storage)
 #$(call inherit-product, system/core/trusty/trusty-storage.mk)
 #$(call inherit-product, system/core/trusty/trusty-base.mk)
@@ -749,19 +754,18 @@ ifneq ($(DEVICE_USES_NO_TRUSTY), true)
 
 # Trusty ConfirmationUI HAL
 #PRODUCT_PACKAGES += \
-	android.hardware.confirmationui@1.0-service.trusty.vendor
+#	android.hardware.confirmationui@1.0-service.trusty.vendor
 
 # Trusty Secure DPU Daemon
 #PRODUCT_PACKAGES += \
-	securedpud.slider
-endif
+#	securedpud.slider
 
 # Trusty Metrics Daemon
-PRODUCT_SOONG_NAMESPACES += \
-	vendor/google/trusty/common
-
-PRODUCT_PACKAGES += \
-	trusty_metricsd
+#PRODUCT_SOONG_NAMESPACES += \
+#	vendor/google/trusty/common
+#
+#PRODUCT_PACKAGES += \
+#	trusty_metricsd
 
 PRODUCT_PACKAGES += \
 	android.hardware.graphics.composer@2.4-impl \
@@ -781,21 +785,21 @@ PRODUCT_PACKAGES += \
 # Bluetooth HAL
 PRODUCT_PACKAGES += \
 	android.hardware.bluetooth@1.1-service.bcmbtlinux \
-	bt_vendor.conf
+#	bt_vendor.conf
 PRODUCT_COPY_FILES += \
 	frameworks/native/data/etc/android.hardware.bluetooth.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.bluetooth.xml \
 	frameworks/native/data/etc/android.hardware.bluetooth_le.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.bluetooth_le.xml
 
 # System props to enable Bluetooth Quality Report (BQR) feature
-ifneq (,$(filter userdebug eng, $(TARGET_BUILD_VARIANT)))
-PRODUCT_PRODUCT_PROPERTIES += \
-	persist.bluetooth.bqr.event_mask=262174 \
-	persist.bluetooth.bqr.min_interval_ms=500
-else
-PRODUCT_PRODUCT_PROPERTIES += \
-	persist.bluetooth.bqr.event_mask=30 \
-	persist.bluetooth.bqr.min_interval_ms=500
-endif
+#ifneq (,$(filter userdebug eng, $(TARGET_BUILD_VARIANT)))
+#PRODUCT_PRODUCT_PROPERTIES += \
+#	persist.bluetooth.bqr.event_mask=262174 \
+#	persist.bluetooth.bqr.min_interval_ms=500
+#else
+#PRODUCT_PRODUCT_PROPERTIES += \
+#	persist.bluetooth.bqr.event_mask=30 \
+#	persist.bluetooth.bqr.min_interval_ms=500
+#endif
 
 #VNDK
 PRODUCT_PACKAGES += \
@@ -915,9 +919,9 @@ endif
 #$(call inherit-product-if-exists, hardware/google_devices/gs101/gs101.mk)
 #$(call inherit-product-if-exists, vendor/google_devices/common/exynos-vendor.mk)
 #$(call inherit-product-if-exists, hardware/broadcom/wlan/bcmdhd/firmware/bcm4375/device-bcm.mk)
-$(call inherit-product-if-exists, vendor/google/sensors/usf/android/usf_efw_product.mk)
-$(call inherit-product-if-exists, vendor/google/services/LyricCameraHAL/src/build/device-vendor.mk)
-$(call inherit-product-if-exists, vendor/google/camera/devices/whi/device-vendor.mk)
+#$(call inherit-product-if-exists, vendor/google/sensors/usf/android/usf_efw_product.mk)
+#$(call inherit-product-if-exists, vendor/google/services/LyricCameraHAL/src/build/device-vendor.mk)
+#$(call inherit-product-if-exists, vendor/google/camera/devices/whi/device-vendor.mk)
 
 PRODUCT_COPY_FILES += \
 	device/google/gs201/default-permissions.xml:$(TARGET_COPY_OUT_PRODUCT)/etc/default-permissions/default-permissions.xml \
@@ -972,89 +976,89 @@ PRODUCT_PACKAGES += \
 	android.hardware.audio.service \
 	android.hardware.audio@7.0-impl \
 	android.hardware.audio.effect@7.0-impl \
-	android.hardware.bluetooth.audio@2.1-impl \
 	android.hardware.soundtrigger@2.3-impl \
-	vendor.google.whitechapel.audio.audioext@2.0-impl
-
-#Audio HAL libraries
-PRODUCT_PACKAGES += \
-	audio.primary.$(TARGET_BOARD_PLATFORM) \
-	audio.platform.aoc \
-	sound_trigger.primary.$(TARGET_BOARD_PLATFORM) \
-	audio_bt_aoc \
-	audio_tunnel_aoc \
-	aoc_aud_ext \
-	libaoctuningdecoder \
-	libaoc_waves \
-	liboffloadeffect \
-	audio_waves_aoc \
-	audio_fortemedia_aoc \
-	audio_bluenote_aoc \
-	audio_usb_aoc \
-	audio_spk_35l41 \
-	audio.usb.default \
-	audio.a2dp.default \
-	audio.bluetooth.default \
-	audio.r_submix.default \
-	libamcsextfile \
-	audio_amcs_ext \
-
-
-#Audio Vendor libraries
-PRODUCT_PACKAGES += \
-	libfvsam_prm_parser \
-	libmahalcontroller \
-	libAlgFx_HiFi3z
-
-# AudioHAL Configurations
+#	android.hardware.bluetooth.audio@2.1-impl \
+#	vendor.google.whitechapel.audio.audioext@2.0-impl
+#
+##Audio HAL libraries
+#PRODUCT_PACKAGES += \
+#	audio.primary.$(TARGET_BOARD_PLATFORM) \
+#	audio.platform.aoc \
+#	sound_trigger.primary.$(TARGET_BOARD_PLATFORM) \
+#	audio_bt_aoc \
+#	audio_tunnel_aoc \
+#	aoc_aud_ext \
+#	libaoctuningdecoder \
+#	libaoc_waves \
+#	liboffloadeffect \
+#	audio_waves_aoc \
+#	audio_fortemedia_aoc \
+#	audio_bluenote_aoc \
+#	audio_usb_aoc \
+#	audio_spk_35l41 \
+#	audio.usb.default \
+#	audio.a2dp.default \
+#	audio.bluetooth.default \
+#	audio.r_submix.default \
+#	libamcsextfile \
+#	audio_amcs_ext \
+#
+#
+##Audio Vendor libraries
+#PRODUCT_PACKAGES += \
+#	libfvsam_prm_parser \
+#	libmahalcontroller \
+#	libAlgFx_HiFi3z
+#
+## AudioHAL Configurations
 PRODUCT_COPY_FILES += \
 	frameworks/av/services/audiopolicy/config/a2dp_audio_policy_configuration_7_0.xml:$(TARGET_COPY_OUT_VENDOR)/etc/a2dp_audio_policy_configuration_7_0.xml \
 	frameworks/av/services/audiopolicy/config/a2dp_in_audio_policy_configuration_7_0.xml:$(TARGET_COPY_OUT_VENDOR)/etc/a2dp_in_audio_policy_configuration_7_0.xml \
-	frameworks/av/services/audiopolicy/config/bluetooth_audio_policy_configuration_7_0.xml:$(TARGET_COPY_OUT_VENDOR)/etc/bluetooth_audio_policy_configuration_7_0.xml \
 	frameworks/av/services/audiopolicy/config/hearing_aid_audio_policy_configuration_7_0.xml:$(TARGET_COPY_OUT_VENDOR)/etc/hearing_aid_audio_policy_configuration_7_0.xml \
 	frameworks/av/services/audiopolicy/config/r_submix_audio_policy_configuration.xml:$(TARGET_COPY_OUT_VENDOR)/etc/r_submix_audio_policy_configuration.xml \
 	frameworks/av/services/audiopolicy/config/usb_audio_policy_configuration.xml:$(TARGET_COPY_OUT_VENDOR)/etc/usb_audio_policy_configuration.xml \
-	frameworks/av/services/audiopolicy/config/audio_policy_volumes.xml:$(TARGET_COPY_OUT_VENDOR)/etc/audio_policy_volumes.xml \
+        frameworks/av/services/audiopolicy/config/audio_policy_volumes.xml:$(TARGET_COPY_OUT_VENDOR)/etc/audio_policy_volumes.xml \
 	frameworks/av/services/audiopolicy/config/default_volume_tables.xml:$(TARGET_COPY_OUT_VENDOR)/etc/default_volume_tables.xml \
 
-#Audio soong
-PRODUCT_SOONG_NAMESPACES += \
-	vendor/google/whitechapel/audio/hal \
-	vendor/google/whitechapel/audio/interfaces
-
-SOONG_CONFIG_NAMESPACES += aoc_audio_board
-SOONG_CONFIG_aoc_audio_board += \
-	platform
-
-SOONG_CONFIG_aoc_audio_board_platform := $(TARGET_BOARD_PLATFORM)
-
-# Audio properties
-PRODUCT_PROPERTY_OVERRIDES += \
-	ro.config.vc_call_vol_steps=7 \
-	ro.config.media_vol_steps=25 \
-	ro.audio.monitorRotation = true \
-	ro.audio.offload_wakelock=false
+#        frameworks/av/services/audiopolicy/config/bluetooth_audio_policy_configuration_7_0.xml:$(TARGET_COPY_OUT_VENDOR)/etc/bluetooth_audio_policy_configuration_7_0.xml \
+##Audio soong
+#PRODUCT_SOONG_NAMESPACES += \
+#	vendor/google/whitechapel/audio/hal \
+#	vendor/google/whitechapel/audio/interfaces
+#
+#SOONG_CONFIG_NAMESPACES += aoc_audio_board
+#SOONG_CONFIG_aoc_audio_board += \
+#	platform
+#
+#SOONG_CONFIG_aoc_audio_board_platform := $(TARGET_BOARD_PLATFORM)
+#
+## Audio properties
+#PRODUCT_PROPERTY_OVERRIDES += \
+#	ro.config.vc_call_vol_steps=7 \
+#	ro.config.media_vol_steps=25 \
+#	ro.audio.monitorRotation = true \
+#	ro.audio.offload_wakelock=false
 
 # vndservicemanager and vndservice no longer included in API 30+, however needed by vendor code.
 # See b/148807371 for reference
 PRODUCT_PACKAGES += vndservicemanager
 PRODUCT_PACKAGES += vndservice
 
-# TinyTools, debug tool and cs35l41 speaker calibration tool for Audio
-ifneq (,$(filter userdebug eng, $(TARGET_BUILD_VARIANT)))
-PRODUCT_PACKAGES += \
-	tinyplay \
-	tinycap \
-	tinymix \
-	tinypcminfo \
-	tinyhostless \
-	cplay \
-	aoc_hal \
-	aoc_tuning_inft \
-	crus_sp_cal \
-	mahal_test \
-	ma_aoc_tuning_test
-endif
+## TinyTools, debug tool and cs35l41 speaker calibration tool for Audio
+#ifneq (,$(filter userdebug eng, $(TARGET_BUILD_VARIANT)))
+#PRODUCT_PACKAGES += \
+#	tinyplay \
+#	tinycap \
+#	tinymix \
+#	tinypcminfo \
+#	tinyhostless \
+#	cplay \
+#	aoc_hal \
+#	aoc_tuning_inft \
+#	crus_sp_cal \
+#	mahal_test \
+#	ma_aoc_tuning_test
+#endif
 
 PRODUCT_PACKAGES += \
 	google.hardware.media.c2@1.0-service \
@@ -1065,44 +1069,44 @@ PRODUCT_PACKAGES += \
 	libgc2_cwl \
 	libgc2_utils
 
-# Start packet router
-PRODUCT_PROPERTY_OVERRIDES += vendor.pktrouter=1
+## Start packet router
+#PRODUCT_PROPERTY_OVERRIDES += vendor.pktrouter=1
 
 # Thermal HAL
 include hardware/google/pixel/thermal/device.mk
 PRODUCT_PROPERTY_OVERRIDES += persist.vendor.enable.thermal.genl=true
 
-# TPU firmware
-PRODUCT_PACKAGES += \
-	edgetpu-abrolhos.fw
-
-# TPU NN HAL
-PRODUCT_PACKAGES += \
-	android.hardware.neuralnetworks@1.3-service-darwinn
-
-# TPU NN AIDL HAL
-PRODUCT_PACKAGES += \
-	android.hardware.neuralnetworks@service-darwinn-aidl
-
-# TPU logging service
-PRODUCT_PACKAGES += \
-	android.hardware.edgetpu.logging@service-edgetpu-logging
-
-# TPU application service
-PRODUCT_PACKAGES += \
-	vendor.google.edgetpu@1.0-service
-
-# TPU vendor service
-PRODUCT_PACKAGES += \
-	vendor.google.edgetpu_vendor_service@1.0-service
-
-# TPU HAL client library
-PRODUCT_PACKAGES += \
-	libedgetpu_client.google
-
-# TPU metrics logger library
-PRODUCT_PACKAGES += \
-	libmetrics_logger
+## TPU firmware
+#PRODUCT_PACKAGES += \
+#	edgetpu-abrolhos.fw
+#
+## TPU NN HAL
+#PRODUCT_PACKAGES += \
+#	android.hardware.neuralnetworks@1.3-service-darwinn
+#
+## TPU NN AIDL HAL
+#PRODUCT_PACKAGES += \
+#	android.hardware.neuralnetworks@service-darwinn-aidl
+#
+## TPU logging service
+#PRODUCT_PACKAGES += \
+#	android.hardware.edgetpu.logging@service-edgetpu-logging
+#
+## TPU application service
+#PRODUCT_PACKAGES += \
+#	vendor.google.edgetpu@1.0-service
+#
+## TPU vendor service
+#PRODUCT_PACKAGES += \
+#	vendor.google.edgetpu_vendor_service@1.0-service
+#
+## TPU HAL client library
+#PRODUCT_PACKAGES += \
+#	libedgetpu_client.google
+#
+## TPU metrics logger library
+#PRODUCT_PACKAGES += \
+#	libmetrics_logger
 
 # Connectivity Thermal Power Manager
 PRODUCT_PACKAGES += \
