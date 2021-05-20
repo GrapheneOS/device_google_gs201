@@ -379,6 +379,18 @@
       "Node": "DisplayWakeup",
       "Duration": 50,
       "Value": "1"
-    }
+    },
+    {
+      "PowerHint": "FP_BOOST",
+      "Node": "CPUBigClusterMaxFreq",
+      "Duration": 1000,
+      "Value": "9999999"
+    },
+    {
+      "PowerHint": "FP_BOOST",
+      "Node": "CPUBigClusterMinFreq",
+      "Duration": 1000,
+      "Value": "9999999"
+     }
   ]
 }
