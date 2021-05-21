@@ -296,11 +296,11 @@ on post-fs-data
     setprop wifi.direct.interface p2p-dev-wlan0
     setprop wifi.aware.interface aware_nmi0
 
-# IPSEC PIDDIR for VoWiFi
+    # IPSEC PIDDIR for VoWiFi
     mkdir /data/vendor/misc 0771 root system
     mkdir /data/vendor/misc/vpn 0771 root system
 
-# Permissions Camera
+    # Permissions Camera
     mkdir /data/vendor/camera 0770 system camera
     chmod 0755 /sys/kernel/debug/tracing
     restorecon /sys/kernel/debug/tracing/trace_marker
@@ -315,14 +315,18 @@ on post-fs-data
     chmod 0771 /mnt/vendor/persist/camera/pdaf_calibration_data
     chmod 0771 /mnt/vendor/persist/camera/rear
 
-# Audio dump and debug
+    # Audio dump and debug
     mkdir /data/vendor/audio 0770 audio audio
 
-# Create the directories for Darwinn HAL.
+    # Create the directories for Darwinn HAL.
     mkdir /data/vendor/hal_neuralnetworks_darwinn 0770 system system
     mkdir /data/vendor/hal_neuralnetworks_darwinn/checksum_cache 0770 system system
     mkdir /data/vendor/edgetpu 0770 system system
     mkdir /data/vendor/edgetpu/cache 0770 system system
+
+    # DELETE ME PREVENT SLEEP b/188796118
+    write /sys/power/wake_lock b188796118
+
 
 on zygote-start
     # For PixelLogger configuration file.
