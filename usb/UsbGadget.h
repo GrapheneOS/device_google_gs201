@@ -70,9 +70,9 @@ using ::android::hardware::usb::gadget::V1_2::IUsbGadget;
 using ::android::hardware::usb::gadget::V1_2::GadgetFunction;
 using ::std::string;
 
-constexpr char kGadgetName[] = "11110000.dwc3";
+constexpr char kGadgetName[] = "11210000.dwc3";
 #ifndef UDC_PATH
-#define UDC_PATH "/sys/class/udc/11110000.dwc3/"
+#define UDC_PATH "/sys/class/udc/11210000.dwc3/"
 #endif
 constexpr char kExtconUsbState[] = "/sys/class/extcon/extcon0/cable.0/state";
 static MonitorFfs monitorFfs(kGadgetName, kExtconUsbState);
