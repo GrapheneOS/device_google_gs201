@@ -38,10 +38,6 @@ PRODUCT_SOONG_NAMESPACES += \
 	hardware/google/pixel \
 	device/google/gs201 \
 	vendor/google/whitechapel/tools \
-	vendor/arm/mali/valhall \
-	vendor/arm/mali/valhall/cl \
-	vendor/arm/mali/valhall/libmali \
-	vendor/arm/mali/valhall/cinstr/production/gpu-hwc-reader \
 	vendor/google/interfaces \
 	vendor/google_devices/common/proprietary/confirmatioui_hal \
 	vendor/google_nos/host/android \
@@ -115,11 +111,6 @@ PRODUCT_PRODUCT_PROPERTIES += \
 PRODUCT_PROPERTY_OVERRIDES += \
 	persist.vendor.radio.config.carrier_config_dir=/mnt/vendor/modem_img/images/default/confpack
 
-# GPU profiling
-PRODUCT_PRODUCT_PROPERTIES += graphics.gpu.profiler.support=true
-#PRODUCT_PACKAGES += \
-#	android.hardware.neuralnetworks@1.2-service-armnn
-
 PRODUCT_PROPERTY_OVERRIDES += \
 	telephony.active_modems.max_count=2
 
@@ -138,16 +129,57 @@ ifeq (,$(filter aosp_%,$(TARGET_PRODUCT)))
 #USES_GAUDIO := true
 endif
 
-# This should be the same value as BOARD_USES_SWIFTSHADER in BoardConfig.mk
+# ######################
+# GRAPHICS - GPU (begin)
+
+# Must match BOARD_USES_SWIFTSHADER in BoardConfig.mk
 USE_SWIFTSHADER := true
 
+# HWUI
+TARGET_USES_VULKAN = false
+
+PRODUCT_SOONG_NAMESPACES += \
+       vendor/arm/mali/valhall \
+       vendor/arm/mali/valhall/cl \
+       vendor/arm/mali/valhall/libmali \
+       vendor/arm/mali/valhall/cinstr/production/gpu-hwc-reader
+
+PRODUCT_PACKAGES += \
+       libGLES_mali \
+       vulkan.gs101 \
+       libOpenCL \
+       libgpudataproducer
+#        android.hardware.neuralnetworks@1.3-service-armnn \
+
 ifeq ($(USE_SWIFTSHADER),true)
-PRODUCT_PROPERTY_OVERRIDES += \
-	ro.hardware.egl = swiftshader
-else
-PRODUCT_PROPERTY_OVERRIDES += \
-	ro.hardware.egl = mali
+PRODUCT_PACKAGES += \
+       libGLESv1_CM_swiftshader \
+       libEGL_swiftshader \
+       libGLESv2_swiftshader
 endif
+
+PRODUCT_COPY_FILES += \
+       frameworks/native/data/etc/android.hardware.opengles.aep.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.opengles.aep.xml \
+       frameworks/native/data/etc/android.hardware.vulkan.version-1_1.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.vulkan.version.xml \
+       frameworks/native/data/etc/android.hardware.vulkan.level-1.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.vulkan.level.xml \
+       frameworks/native/data/etc/android.hardware.vulkan.compute-0.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.vulkan.compute.xml \
+       frameworks/native/data/etc/android.software.vulkan.deqp.level-2021-03-01.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.software.vulkan.deqp.level.xml \
+       frameworks/native/data/etc/android.software.opengles.deqp.level-2021-03-01.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.software.opengles.deqp.level.xml
+
+ifeq ($(USE_SWIFTSHADER),true)
+PRODUCT_VENDOR_PROPERTIES += \
+       ro.hardware.egl = swiftshader
+else
+PRODUCT_VENDOR_PROPERTIES += \
+       ro.hardware.egl = mali
+endif
+PRODUCT_VENDOR_PROPERTIES += \
+       ro.opengles.version=196610 \
+       graphics.gpu.profiler.support=true \
+       debug.renderengine.backend=gles
+
+# GRAPHICS - GPU (end)
+# ####################
 
 # Device Manifest, Device Compatibility Matrix for Treble
 ifeq ($(DEVICE_USES_EXYNOS_GRALLOC_VERSION), 4)
@@ -551,21 +583,11 @@ PRODUCT_PACKAGES_DEBUG += \
 	frameworks/native/data/etc/android.hardware.audio.pro.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.audio.pro.xml \
 
 PRODUCT_COPY_FILES += \
-	frameworks/native/data/etc/android.hardware.opengles.aep.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.opengles.aep.xml \
-	frameworks/native/data/etc/android.hardware.vulkan.version-1_1.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.vulkan.version.xml \
-	frameworks/native/data/etc/android.hardware.vulkan.level-1.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.vulkan.level.xml \
-	frameworks/native/data/etc/android.hardware.vulkan.compute-0.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.vulkan.compute.xml \
-	frameworks/native/data/etc/android.software.vulkan.deqp.level-2021-03-01.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.software.vulkan.deqp.level.xml \
-	frameworks/native/data/etc/android.software.opengles.deqp.level-2021-03-01.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.software.opengles.deqp.level.xml \
 	frameworks/native/data/etc/android.software.ipsec_tunnels.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.software.ipsec_tunnels.xml \
 
 PRODUCT_PROPERTY_OVERRIDES += \
-	ro.opengles.version=196610 \
 	debug.slsi_platform=1 \
 	debug.hwc.winupdate=1
-
-# HWUI
-TARGET_USES_VULKAN = false
 
 # hw composer HAL
 PRODUCT_PACKAGES += \
@@ -610,9 +632,6 @@ PRODUCT_PROPERTY_OVERRIDES += \
 	persist.sys.sf.color_mode=9
 PRODUCT_COPY_FILES += \
 	device/google/gs201/display/display_colordata_cal0.pb:$(TARGET_COPY_OUT_VENDOR)/etc/display_colordata_cal0.pb
-
-#PRODUCT_PROPERTY_OVERRIDES += debug.renderengine.backend=skiaglthreaded
-PRODUCT_PROPERTY_OVERRIDES += debug.renderengine.backend=gles
 
 # limit DPP downscale ratio
 PRODUCT_DEFAULT_PROPERTY_OVERRIDES += vendor.hwc.dpp.downscale=2
@@ -771,16 +790,9 @@ PRODUCT_PACKAGES += \
 	android.hardware.graphics.composer@2.4-impl \
 	android.hardware.graphics.composer@2.4-service
 
-PRODUCT_PACKAGES += \
-	android.hardware.renderscript@1.0-impl
-
 # Storage: for factory reset protection feature
 PRODUCT_PROPERTY_OVERRIDES += \
 	ro.frp.pst=/dev/block/by-name/frp
-
-# RenderScript HAL
-PRODUCT_PACKAGES += \
-	android.hardware.renderscript@1.0-impl
 
 # Bluetooth HAL
 PRODUCT_PACKAGES += \
@@ -837,36 +849,10 @@ PRODUCT_PACKAGES += \
 	IwlanTestApp
 endif
 
-#vendor directory packages
-ifeq (,$(filter %_64,$(TARGET_PRODUCT)))
 PRODUCT_PACKAGES += \
-	libGLES_mali32 \
-	libgpudataproducer32 \
-	libRSDriverArm32 \
-	libbccArm32 \
-	libmalicore32 \
-	libOpenCL32 \
-	vulkan.gs20132
-endif
-
-PRODUCT_PACKAGES += \
-	libGLES_mali \
-	libgpudataproducer \
-	libRSDriverArm \
-	libbccArm \
-	libmalicore \
-	libOpenCL \
-	vulkan.gs201 \
 	whitelist \
 	libstagefright_hdcp \
 	libskia_opt
-
-ifeq ($(USE_SWIFTSHADER),true)
-PRODUCT_PACKAGES += \
-	libGLESv1_CM_swiftshader \
-	libEGL_swiftshader \
-	libGLESv2_swiftshader
-endif
 
 #PRODUCT_PACKAGES += \
 	mfc_fw.bin \
