@@ -385,6 +385,78 @@
       "Value": "9999999"
     },
     {
+      "PowerHint": "GCA_CAMERA_SHOT_BIGCPU",
+      "Node": "CPUBigClusterMaxFreq",
+      "Duration": 3000,
+      "Value": "9999999"
+    },
+    {
+      "PowerHint": "GCA_CAMERA_SHOT_BIGCPU",
+      "Node": "CPUBigClusterMinFreq",
+      "Duration": 3000,
+      "Value": "9999999"
+    },
+    {
+      "PowerHint": "GCA_CAMERA_SHOT_BIGMIDCPU",
+      "Node": "CPUBigClusterMaxFreq",
+      "Duration": 3000,
+      "Value": "9999999"
+    },
+    {
+      "PowerHint": "GCA_CAMERA_SHOT_BIGMIDCPU",
+      "Node": "CPUBigClusterMinFreq",
+      "Duration": 3000,
+      "Value": "9999999"
+    },
+    {
+      "PowerHint": "GCA_CAMERA_SHOT_BIGMIDCPU",
+      "Node": "CPUMidClusterMaxFreq",
+      "Duration": 3000,
+      "Value": "9999999"
+    },
+    {
+      "PowerHint": "GCA_CAMERA_SHOT_BIGMIDCPU",
+      "Node": "CPUMidClusterMinFreq",
+      "Duration": 3000,
+      "Value": "9999999"
+    },
+    {
+      "PowerHint": "GCA_CAMERA_SHOT_ALLCPU",
+      "Node": "CPUBigClusterMaxFreq",
+      "Duration": 3000,
+      "Value": "9999999"
+    },
+    {
+      "PowerHint": "GCA_CAMERA_SHOT_ALLCPU",
+      "Node": "CPUBigClusterMinFreq",
+      "Duration": 3000,
+      "Value": "9999999"
+    },
+    {
+      "PowerHint": "GCA_CAMERA_SHOT_ALLCPU",
+      "Node": "CPUMidClusterMaxFreq",
+      "Duration": 3000,
+      "Value": "9999999"
+    },
+    {
+      "PowerHint": "GCA_CAMERA_SHOT_ALLCPU",
+      "Node": "CPUMidClusterMinFreq",
+      "Duration": 3000,
+      "Value": "9999999"
+    },
+    {
+      "PowerHint": "GCA_CAMERA_SHOT_ALLCPU",
+      "Node": "CPULittleClusterMaxFreq",
+      "Duration": 3000,
+      "Value": "9999999"
+    },
+    {
+      "PowerHint": "GCA_CAMERA_SHOT_ALLCPU",
+      "Node": "CPULittleClusterMinFreq",
+      "Duration": 3000,
+      "Value": "9999999"
+    },
+    {
       "PowerHint": "CAMERA_STREAMING_EXTREME",
       "Node": "CPULittleClusterMaxFreq",
       "Duration": 0,
