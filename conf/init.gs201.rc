@@ -223,6 +223,11 @@ on init
     write /sys/class/devfreq/gs_memlat_devfreq:devfreq_mif_cl1_memlat@17000010/mem_latency/ratio_ceil 400
     write /sys/class/devfreq/gs_memlat_devfreq:devfreq_mif_cl2_memlat@17000010/mem_latency/ratio_ceil 800
 
+    # DELETE ME USB BRINGUP b/188672439
+    setprop sys.usb.configfs 1
+    write /sys/devices/platform/11210000.usb/dwc3_exynos_otg_b_sess 1
+
+
 # For GKI kernel, no device specific modules
 on init
     setprop vendor.device.modules.ready 1
