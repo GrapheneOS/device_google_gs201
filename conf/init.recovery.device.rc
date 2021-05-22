@@ -1,5 +1,5 @@
 on init
-    setprop sys.usb.controller "11110000.dwc3"
+    setprop sys.usb.controller "11210000.dwc3"
     setprop sys.usb.configfs 1
 
 on init && property:ro.debuggable=1 && property:ro.boot.mode=recovery

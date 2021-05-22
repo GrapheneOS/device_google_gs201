@@ -66,8 +66,8 @@ enum class HALVersion{
     V1_3
 };
 
-constexpr char kGadgetName[] = "11110000.dwc3";
-#define UDC_PATH "/sys/class/udc/11110000.dwc3/"
+constexpr char kGadgetName[] = "11210000.dwc3";
+#define UDC_PATH "/sys/class/udc/11210000.dwc3/"
 
 #define ID_PATH UDC_PATH "device/id"
 #define VBUS_PATH UDC_PATH "device/b_sess"
