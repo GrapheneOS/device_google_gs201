@@ -133,7 +133,7 @@ endif
 # GRAPHICS - GPU (begin)
 
 # Must match BOARD_USES_SWIFTSHADER in BoardConfig.mk
-USE_SWIFTSHADER := true
+USE_SWIFTSHADER := false
 
 # HWUI
 TARGET_USES_VULKAN = false
@@ -145,11 +145,12 @@ PRODUCT_SOONG_NAMESPACES += \
        vendor/arm/mali/valhall/cinstr/production/gpu-hwc-reader
 
 PRODUCT_PACKAGES += \
-       libGLES_mali \
-       vulkan.gs101 \
-       libOpenCL \
-       libgpudataproducer
+       libGLES_mali-prebuilt-gs201 \
+       mali_csffw.bin-ramdisk \
+#        vulkan.gs101 \
+#        libOpenCL \
 #        android.hardware.neuralnetworks@1.3-service-armnn \
+#        libgpudataproducer
 
 ifeq ($(USE_SWIFTSHADER),true)
 PRODUCT_PACKAGES += \
@@ -171,12 +172,12 @@ PRODUCT_VENDOR_PROPERTIES += \
        ro.hardware.egl = swiftshader
 else
 PRODUCT_VENDOR_PROPERTIES += \
-       ro.hardware.egl = mali
+       ro.hardware.egl = mali_gs201
 endif
 PRODUCT_VENDOR_PROPERTIES += \
        ro.opengles.version=196610 \
-       graphics.gpu.profiler.support=true \
        debug.renderengine.backend=gles
+#       graphics.gpu.profiler.support=true \
 
 # GRAPHICS - GPU (end)
 # ####################
