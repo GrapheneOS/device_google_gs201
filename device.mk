@@ -45,9 +45,9 @@ PRODUCT_SOONG_NAMESPACES += \
 	vendor/google/interfaces \
 	vendor/google_devices/common/proprietary/confirmatioui_hal \
 	vendor/google_nos/host/android \
-	vendor/google_nos/test/system-test-harness
+	vendor/google_nos/test/system-test-harness \
+	vendor/google/camera
 #vendor/broadcom/bluetooth \
-#vendor/google/camera
 
 DEVICE_USES_EXYNOS_GRALLOC_VERSION := 4
 
@@ -920,8 +920,8 @@ endif
 #$(call inherit-product-if-exists, vendor/google_devices/common/exynos-vendor.mk)
 #$(call inherit-product-if-exists, hardware/broadcom/wlan/bcmdhd/firmware/bcm4375/device-bcm.mk)
 #$(call inherit-product-if-exists, vendor/google/sensors/usf/android/usf_efw_product.mk)
-#$(call inherit-product-if-exists, vendor/google/services/LyricCameraHAL/src/build/device-vendor.mk)
-#$(call inherit-product-if-exists, vendor/google/camera/devices/whi/device-vendor.mk)
+$(call inherit-product-if-exists, vendor/google/services/LyricCameraHAL/src/build/device-vendor.mk)
+$(call inherit-product-if-exists, vendor/google/camera/devices/whi/device-vendor.mk)
 
 PRODUCT_COPY_FILES += \
 	device/google/gs201/default-permissions.xml:$(TARGET_COPY_OUT_PRODUCT)/etc/default-permissions/default-permissions.xml \
