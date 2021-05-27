@@ -133,7 +133,7 @@ endif
 # GRAPHICS - GPU (begin)
 
 # Must match BOARD_USES_SWIFTSHADER in BoardConfig.mk
-USE_SWIFTSHADER := true
+USE_SWIFTSHADER := false
 
 # HWUI
 TARGET_USES_VULKAN = false
