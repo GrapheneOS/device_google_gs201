@@ -93,7 +93,7 @@ BOARD_USES_ALIGN_RESTRICTION := false
 BOARD_USES_GRALLOC_ION_SYNC := true
 
 # This should be the same value as USE_SWIFTSHADER in device.mk
-BOARD_USES_SWIFTSHADER := true
+BOARD_USES_SWIFTSHADER := false
 
 # Gralloc4
 ifeq ($(BOARD_USES_EXYNOS_GRALLOC_VERSION),4)
