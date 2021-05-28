@@ -145,7 +145,7 @@ PRODUCT_SOONG_NAMESPACES += \
        vendor/arm/mali/valhall/cinstr/production/gpu-hwc-reader
 
 PRODUCT_PACKAGES += \
-       mali_csffw.bin-ramdisk \
+       mali_csffw.bin \
        libGLES_mali-gs201-prebuilt \
        vulkan.gs201-prebuilt \
 #        libOpenCL \

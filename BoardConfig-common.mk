@@ -378,6 +378,7 @@ BOARD_VENDOR_RAMDISK_KERNEL_MODULES_FILTER += \
     $(TARGET_KERNEL_DIR)/bcmdhd43752.ko \
     $(TARGET_KERNEL_DIR)/bcmdhd4389.ko \
     $(TARGET_KERNEL_DIR)/lwis.ko \
+    $(TARGET_KERNEL_DIR)/mali_kbase.ko \
     $(TARGET_KERNEL_DIR)/pinctrl-slg51000.ko \
     $(TARGET_KERNEL_DIR)/pktgen.ko \
     $(TARGET_KERNEL_DIR)/slg51000-core.ko \
