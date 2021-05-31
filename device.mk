@@ -42,8 +42,8 @@ PRODUCT_SOONG_NAMESPACES += \
 	vendor/google_devices/common/proprietary/confirmatioui_hal \
 	vendor/google_nos/host/android \
 	vendor/google_nos/test/system-test-harness \
-	vendor/google/camera
-#vendor/broadcom/bluetooth \
+	vendor/google/camera \
+	vendor/broadcom/bluetooth
 
 DEVICE_USES_EXYNOS_GRALLOC_VERSION := 4
 
@@ -801,21 +801,21 @@ PRODUCT_PROPERTY_OVERRIDES += \
 # Bluetooth HAL
 PRODUCT_PACKAGES += \
 	android.hardware.bluetooth@1.1-service.bcmbtlinux \
-#	bt_vendor.conf
+	bt_vendor.conf
 PRODUCT_COPY_FILES += \
 	frameworks/native/data/etc/android.hardware.bluetooth.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.bluetooth.xml \
 	frameworks/native/data/etc/android.hardware.bluetooth_le.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.bluetooth_le.xml
 
 # System props to enable Bluetooth Quality Report (BQR) feature
-#ifneq (,$(filter userdebug eng, $(TARGET_BUILD_VARIANT)))
-#PRODUCT_PRODUCT_PROPERTIES += \
-#	persist.bluetooth.bqr.event_mask=262174 \
-#	persist.bluetooth.bqr.min_interval_ms=500
-#else
-#PRODUCT_PRODUCT_PROPERTIES += \
-#	persist.bluetooth.bqr.event_mask=30 \
-#	persist.bluetooth.bqr.min_interval_ms=500
-#endif
+ifneq (,$(filter userdebug eng, $(TARGET_BUILD_VARIANT)))
+PRODUCT_PRODUCT_PROPERTIES += \
+	persist.bluetooth.bqr.event_mask=262174 \
+	persist.bluetooth.bqr.min_interval_ms=500
+else
+PRODUCT_PRODUCT_PROPERTIES += \
+	persist.bluetooth.bqr.event_mask=30 \
+	persist.bluetooth.bqr.min_interval_ms=500
+endif
 
 #VNDK
 PRODUCT_PACKAGES += \
