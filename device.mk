@@ -804,7 +804,8 @@ PRODUCT_PACKAGES += \
 	bt_vendor.conf
 PRODUCT_COPY_FILES += \
 	frameworks/native/data/etc/android.hardware.bluetooth.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.bluetooth.xml \
-	frameworks/native/data/etc/android.hardware.bluetooth_le.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.bluetooth_le.xml
+	frameworks/native/data/etc/android.hardware.bluetooth_le.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.bluetooth_le.xml \
+	device/google/gs201/bluetooth/bt_vendor_overlay.conf:$(TARGET_COPY_OUT_VENDOR)/etc/bluetooth/bt_vendor_overlay.conf
 
 # System props to enable Bluetooth Quality Report (BQR) feature
 ifneq (,$(filter userdebug eng, $(TARGET_BUILD_VARIANT)))
