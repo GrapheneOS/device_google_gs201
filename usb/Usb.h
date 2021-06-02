@@ -67,11 +67,11 @@ enum class HALVersion{
 };
 
 constexpr char kGadgetName[] = "11210000.dwc3";
-#define UDC_PATH "/sys/class/udc/11210000.dwc3/"
+#define NEW_UDC_PATH "/sys/devices/platform/11210000.usb/"
 
-#define ID_PATH UDC_PATH "device/id"
-#define VBUS_PATH UDC_PATH "device/b_sess"
-#define USB_DATA_PATH UDC_PATH "device/usb_data_enabled"
+#define ID_PATH NEW_UDC_PATH "dwc3_exynos_otg_id"
+#define VBUS_PATH NEW_UDC_PATH "dwc3_exynos_otg_b_sess"
+#define USB_DATA_PATH NEW_UDC_PATH "usb_data_enabled"
 
 struct Usb : public IUsb {
     Usb();
