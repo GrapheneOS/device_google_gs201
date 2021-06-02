@@ -174,7 +174,7 @@
 /dev/dit2                 0660   radio      radio
 
 # Bluetooth
-/dev/ttySAC16             0660   bluetooth   system
+/dev/ttySAC18             0660   bluetooth   system
 
 # BT Wifi Coexistence
 /dev/wbrc                 0660   system      system
