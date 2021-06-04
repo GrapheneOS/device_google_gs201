@@ -188,6 +188,24 @@
         ""
       ],
       "Type": "Property"
+    },
+    {
+      "Name": "INTCAMFreq",
+      "Path": "/sys/devices/platform/17000030.devfreq_intcam/devfreq/17000030.devfreq_intcam/min_freq",
+      "Values": [
+        "664000",
+        "67000"
+      ],
+      "ResetOnInit": true
+    },
+    {
+      "Name": "TNRFreq",
+      "Path": "/sys/devices/platform/17000060.devfreq_tnr/devfreq/17000060.devfreq_tnr/min_freq",
+      "Values": [
+        "664000",
+        "67000"
+      ],
+      "ResetOnInit": true
     }
   ],
   "Actions": [
@@ -332,6 +350,24 @@
       "Node": "F2fsRecessModeEnable",
       "Duration": 0,
       "Value": "2"
+    },
+    {
+      "PowerHint": "CAMERA_LAUNCH",
+      "Node": "MemFreq",
+      "Duration": 1000,
+      "Value": "3172000"
+    },
+    {
+      "PowerHint": "CAMERA_LAUNCH",
+      "Node": "INTCAMFreq",
+      "Duration": 1000,
+      "Value": "664000"
+    },
+    {
+      "PowerHint": "CAMERA_LAUNCH",
+      "Node": "TNRFreq",
+      "Duration": 1000,
+      "Value": "664000"
     },
     {
       "PowerHint": "CAMERA_LAUNCH",
