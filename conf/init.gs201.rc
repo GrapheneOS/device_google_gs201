@@ -29,24 +29,6 @@ on init
     write /dev/sys/fs/by-name/userdata/data_io_flag 56
     write /dev/sys/fs/by-name/userdata/node_io_flag 56
 
-    chown system system /sys/kernel/vendor_sched/set_task_group_bg
-    chown system system /sys/kernel/vendor_sched/set_task_group_cam
-    chown system system /sys/kernel/vendor_sched/set_task_group_fg
-    chown system system /sys/kernel/vendor_sched/set_task_group_nnapi
-    chown system system /sys/kernel/vendor_sched/set_task_group_sys
-    chown system system /sys/kernel/vendor_sched/set_task_group_sysbg
-    chown system system /sys/kernel/vendor_sched/set_task_group_ta
-    chown system system /sys/kernel/vendor_sched/clear_group
-
-    chmod 0220 /sys/kernel/vendor_sched/set_task_group_bg
-    chmod 0220 /sys/kernel/vendor_sched/set_task_group_cam
-    chmod 0220 /sys/kernel/vendor_sched/set_task_group_fg
-    chmod 0220 /sys/kernel/vendor_sched/set_task_group_nnapi
-    chmod 0220 /sys/kernel/vendor_sched/set_task_group_sys
-    chmod 0220 /sys/kernel/vendor_sched/set_task_group_sysbg
-    chmod 0220 /sys/kernel/vendor_sched/set_task_group_ta
-    chmod 0220 /sys/kernel/vendor_sched/clear_group
-
     wait /dev/block/platform/${ro.boot.boot_devices}
     symlink /dev/block/platform/${ro.boot.boot_devices} /dev/block/bootdevice
 
@@ -56,7 +38,7 @@ on init
     # Disable UFS powersaving
     write /dev/sys/block/bootdevice/clkgate_enable 0
 
-    # start vendor.keymaster-3-0
+    start vendor.keymaster-4-0
 
     # ZRAM setup
     write /sys/block/zram0/comp_algorithm lz77eh
@@ -111,6 +93,11 @@ on init
     mkdir /dev/socket/pdx/system/vr/sensors 0775 system system
 
     # Boot time 183626384
+    write /dev/cpuctl/top-app/cpu.uclamp.min 30
+    write /dev/cpuctl/top-app/cpu.uclamp.latency_sensitive 1
+    write /dev/cpuctl/foreground/cpu.uclamp.min 30
+    write /dev/cpuctl/foreground/cpu.uclamp.latency_sensitive 1
+
     write /sys/kernel/vendor_sched/ta_uclamp_min 308
     write /sys/kernel/vendor_sched/ta_prefer_idle 1
     write /sys/kernel/vendor_sched/fg_uclamp_min 308
@@ -133,9 +120,11 @@ on init
     # change permissions and default values for camera-daemon cpu controller
     chown system system /dev/cpuctl/camera-daemon/cpu.uclamp.min
     chown system system /dev/cpuctl/camera-daemon/cpu.uclamp.max
-    chown root root /dev/cpuctl/camera-daemon/cpu.uclamp.latency_sensitive
+    chown system system /dev/cpuctl/camera-daemon/cpu.uclamp.latency_sensitive
     chown system system /dev/cpuctl/camera-daemon/cgroup.procs
 
+    write /dev/cpuctl/camera-daemon/cpu.uclamp.latency_sensitive 1
+    write /dev/cpuctl/camera-daemon/cpu.uclamp.min 1
     write /sys/kernel/vendor_sched/cam_prefer_idle 1
     write /sys/kernel/vendor_sched/cam_uclamp_min 10
 
@@ -213,6 +202,7 @@ on init
     start watchdogd
 
     # Add a boost for NNAPI HAL
+    write /dev/cpuctl/nnapi-hal/cpu.uclamp.min 15
     write /sys/kernel/vendor_sched/nnapi_uclamp_min 154
 
     # Add memlat governor settings
@@ -222,6 +212,11 @@ on init
     write /sys/class/devfreq/gs_memlat_devfreq:devfreq_mif_cl0_memlat@17000010/mem_latency/ratio_ceil 400
     write /sys/class/devfreq/gs_memlat_devfreq:devfreq_mif_cl1_memlat@17000010/mem_latency/ratio_ceil 400
     write /sys/class/devfreq/gs_memlat_devfreq:devfreq_mif_cl2_memlat@17000010/mem_latency/ratio_ceil 800
+
+    # DELETE ME USB BRINGUP b/188672439
+    setprop sys.usb.configfs 1
+    write /sys/devices/platform/11210000.usb/dwc3_exynos_otg_b_sess 1
+
 
 # For GKI kernel, no device specific modules
 on init
@@ -243,7 +238,7 @@ on init && property:ro.boot.hw.soc.rev=1
 
 on late-fs
     # Wait for keymaster HALs
-    # exec_start wait_for_keymaster
+    exec_start wait_for_keymaster
 
     # Start bootanimation class before mount
     class_start animation
@@ -296,11 +291,11 @@ on post-fs-data
     setprop wifi.direct.interface p2p-dev-wlan0
     setprop wifi.aware.interface aware_nmi0
 
-# IPSEC PIDDIR for VoWiFi
+    # IPSEC PIDDIR for VoWiFi
     mkdir /data/vendor/misc 0771 root system
     mkdir /data/vendor/misc/vpn 0771 root system
 
-# Permissions Camera
+    # Permissions Camera
     mkdir /data/vendor/camera 0770 system camera
     chmod 0755 /sys/kernel/debug/tracing
     restorecon /sys/kernel/debug/tracing/trace_marker
@@ -315,14 +310,18 @@ on post-fs-data
     chmod 0771 /mnt/vendor/persist/camera/pdaf_calibration_data
     chmod 0771 /mnt/vendor/persist/camera/rear
 
-# Audio dump and debug
+    # Audio dump and debug
     mkdir /data/vendor/audio 0770 audio audio
 
-# Create the directories for Darwinn HAL.
+    # Create the directories for Darwinn HAL.
     mkdir /data/vendor/hal_neuralnetworks_darwinn 0770 system system
     mkdir /data/vendor/hal_neuralnetworks_darwinn/checksum_cache 0770 system system
     mkdir /data/vendor/edgetpu 0770 system system
     mkdir /data/vendor/edgetpu/cache 0770 system system
+
+    # DELETE ME PREVENT SLEEP b/188796118
+    write /sys/power/wake_lock b188796118
+
 
 on zygote-start
     # For PixelLogger configuration file.
@@ -587,7 +586,7 @@ on property:debug.touch_sensitivity_mode=1
     setprop persist.vendor.touch_sensitivity_mode 1
 
 on property:init.svc.vendor.charger=running
-    # stop keymaster-4-0
+    stop keymaster-4-0
 
     setprop sys.usb.configfs 1
     setprop vendor.setup.power 1
@@ -639,23 +638,10 @@ on property:sys.boot_completed=1
     setprop vendor.powerhal.init 1
 
     # Setup final cpu.uclamp
+    write /dev/cpuctl/top-app/cpu.uclamp.min 10
+    write /dev/cpuctl/foreground/cpu.uclamp.min 0
     write /sys/kernel/vendor_sched/ta_uclamp_min 103
     write /sys/kernel/vendor_sched/fg_uclamp_min 0
-    write /sys/kernel/vendor_sched/bg_uclamp_max 103
-    # cfs_rq clamp is using tg->uclamp setting
-    # align it with the vendor_group setting
-    write /dev/cpuctl/background/cpu.uclamp.max 10
-
-    # Setup cpu.shares to throttle background group at 5%
-    write /dev/cpuctl/background/cpu.shares 1024
-    write /dev/cpuctl/system/cpu.shares 20480
-    # We only have system and background groups holding tasks and the groups below are empty
-    write /dev/cpuctl/camera-daemon/cpu.shares 20480
-    write /dev/cpuctl/foreground/cpu.shares 20480
-    write /dev/cpuctl/nnapi-hal/cpu.shares 20480
-    write /dev/cpuctl/rt/cpu.shares 20480
-    write /dev/cpuctl/system-background/cpu.shares 20480
-    write /dev/cpuctl/top-app/cpu.shares 20480
 
     # gvotables for dumpstate
     chown system system /sys/kernel/debug/gvotables
@@ -762,7 +748,6 @@ service bugreport /system/bin/dumpstate -d -p -z
 # Proxy for Secure Storage
 on post-fs-data
     mkdir /data/vendor/rebootescrow 0770 hsm hsm
-    start vendor.rebootescrow-citadel
     mkdir /data/vendor/ss 0770 root system
     mkdir /mnt/vendor/persist/ss 0770 root system
     restorecon_recursive /mnt/vendor/persist/ss
@@ -794,8 +779,8 @@ on post-fs-data
 
 # ODPM
 on fs
-    chown system system /sys/devices/platform/acpm_mfd_bus@17500000/i2c-6/i2c-s2mpg10mfd/s2mpg10-meter/s2mpg10-odpm/iio:device0/enabled_rails
-    chown system system /sys/devices/platform/acpm_mfd_bus@17510000/i2c-7/i2c-s2mpg11mfd/s2mpg11-meter/s2mpg11-odpm/iio:device1/enabled_rails
+    chown system system /sys/devices/platform/acpm_mfd_bus@17500000/i2c-6/6-001f/s2mpg10-meter/s2mpg10-odpm/iio:device0/enabled_rails
+    chown system system /sys/devices/platform/acpm_mfd_bus@17510000/i2c-7/7-002f/s2mpg11-meter/s2mpg11-odpm/iio:device1/enabled_rails
 
-    chown system system /sys/devices/platform/acpm_mfd_bus@17500000/i2c-7/i2c-s2mpg10mfd/s2mpg10-meter/s2mpg10-odpm/iio:device0/enabled_rails
-    chown system system /sys/devices/platform/acpm_mfd_bus@17510000/i2c-8/i2c-s2mpg11mfd/s2mpg11-meter/s2mpg11-odpm/iio:device1/enabled_rails
+    chown system system /sys/devices/platform/acpm_mfd_bus@17500000/i2c-7/7-001f/s2mpg10-meter/s2mpg10-odpm/iio:device0/enabled_rails
+    chown system system /sys/devices/platform/acpm_mfd_bus@17510000/i2c-8/8-002f/s2mpg11-meter/s2mpg11-odpm/iio:device1/enabled_rails
