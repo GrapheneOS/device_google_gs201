@@ -90,8 +90,8 @@ Return<bool> Usb::enableUsbDataSignal(bool enable) {
 volatile bool destroyThread;
 
 std::string enabledPath;
-constexpr char kHsi2cPath[] = "/sys/devices/platform/10d50000.hsi2c";
-constexpr char kI2CPath[] = "/sys/devices/platform/10d50000.hsi2c/i2c-";
+constexpr char kHsi2cPath[] = "/sys/devices/platform/10d60000.hsi2c";
+constexpr char kI2CPath[] = "/sys/devices/platform/10d60000.hsi2c/i2c-";
 constexpr char kContaminantDetectionPath[] = "i2c-max77759tcpc/contaminant_detection";
 constexpr char kStatusPath[] = "i2c-max77759tcpc/contaminant_detection_status";
 constexpr char kTypecPath[] = "/sys/class/typec";
