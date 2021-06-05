@@ -487,6 +487,7 @@ else
         LOCAL_TARGET_PRODUCT := slider
 endif
 
+#ifneq ($(wildcard vendor/google/camera),)
 SOONG_CONFIG_NAMESPACES += lyric
 SOONG_CONFIG_lyric += use_lyric_camera_hal
 SOONG_CONFIG_lyric_use_lyric_camera_hal := true
@@ -505,9 +506,9 @@ SOONG_CONFIG_google3a_config_target_device := $(LOCAL_TARGET_PRODUCT)
 
 
 SOONG_CONFIG_NAMESPACES += gch
-SOONG_CONFIG_gch += feature
-# Disable Legacy common hal modules for whi
-SOONG_CONFIG_gch_feature := use_lyric_hal
+SOONG_CONFIG_gch += hwl_library
+SOONG_CONFIG_gch_hwl_library := lyric
+#endif
 
 # WiFi
 PRODUCT_PACKAGES += \
