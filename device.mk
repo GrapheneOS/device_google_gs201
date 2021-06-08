@@ -681,7 +681,7 @@ SOONG_CONFIG_bigo_soc := gs201
 
 # MFC firmware
 PRODUCT_COPY_FILES += \
-	device/google/gs201/firmware/mfc_fw_v14.2.bin:$(TARGET_COPY_OUT_VENDOR)/firmware/mfc_fw.bin
+	device/google/gs201/firmware/mfc_fw_v15.6.bin:$(TARGET_COPY_OUT_VENDOR)/firmware/mfc_fw.bin
 
 # 1. Codec 2.0
 # exynos service
@@ -711,7 +711,8 @@ PRODUCT_PACKAGES += \
 PRODUCT_PROPERTY_OVERRIDES += \
        debug.c2.use_dmabufheaps=1 \
        media.c2.dmabuf.padding=512 \
-       debug.stagefright.ccodec_delayed_params=1
+       debug.stagefright.ccodec_delayed_params=1 \
+       ro.vendor.gpu.dataspace=1
 
 # 2. OpenMAX IL
 PRODUCT_COPY_FILES += \
