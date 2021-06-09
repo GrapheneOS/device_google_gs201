@@ -1115,9 +1115,7 @@ PRODUCT_PACKAGES += \
 	vendor.samsung_slsi.hardware.tetheroffload@1.0-service
 
 # pKVM
-ifeq ($(TARGET_PKVM_ENABLED),true)
-    $(call inherit-product, packages/modules/Virtualization/apex/product_packages.mk)
-endif
+$(call inherit-product, packages/modules/Virtualization/apex/product_packages.mk)
 
 # Enable watchdog timeout loop breaker.
 PRODUCT_PROPERTY_OVERRIDES += \
