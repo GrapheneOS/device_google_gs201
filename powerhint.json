@@ -362,24 +362,6 @@
     },
     {
       "PowerHint": "CAMERA_LAUNCH",
-      "Node": "MemFreq",
-      "Duration": 1000,
-      "Value": "3172000"
-    },
-    {
-      "PowerHint": "CAMERA_LAUNCH",
-      "Node": "INTCAMFreq",
-      "Duration": 1000,
-      "Value": "664000"
-    },
-    {
-      "PowerHint": "CAMERA_LAUNCH",
-      "Node": "TNRFreq",
-      "Duration": 1000,
-      "Value": "664000"
-    },
-    {
-      "PowerHint": "CAMERA_LAUNCH",
       "Node": "CPUBigClusterMaxFreq",
       "Duration": 1000,
       "Value": "9999999"
