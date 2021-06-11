@@ -138,17 +138,18 @@ USE_SWIFTSHADER := false
 # HWUI
 TARGET_USES_VULKAN = false
 
-PRODUCT_SOONG_NAMESPACES += \
-       vendor/arm/mali/valhall \
-       vendor/arm/mali/valhall/cl \
-       vendor/arm/mali/valhall/libmali \
-       vendor/arm/mali/valhall/cinstr/production/gpu-hwc-reader
+# TODO(b/185349920)
+# PRODUCT_SOONG_NAMESPACES += \
+#        vendor/arm/mali/valhall \
+#        vendor/arm/mali/valhall/cl \
+#        vendor/arm/mali/valhall/libmali \
+#        vendor/arm/mali/valhall/cinstr/production/gpu-hwc-reader
 
 PRODUCT_PACKAGES += \
        mali_csffw.bin \
        libGLES_mali-gs201-prebuilt \
        vulkan.gs201-prebuilt \
-#        libOpenCL \
+       libOpenCL \
 #        android.hardware.neuralnetworks@1.3-service-armnn \
 #        libgpudataproducer
 
