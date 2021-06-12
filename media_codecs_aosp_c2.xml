@@ -29,6 +29,7 @@
             <Limit name="performance-point-3840x2160" range="120" />
             <Limit name="concurrent-instances" max="16" />
             <Feature name="adaptive-playback" />
+            <Feature name="can-swap-width-height" value="1" />
         </MediaCodec>
         <MediaCodec name="c2.exynos.h264.decoder.secure" type="video/avc">
             <Limit name="size" min="32x32" max="3840x2160" />
@@ -41,6 +42,7 @@
             <Limit name="concurrent-instances" max="2" />
             <Feature name="adaptive-playback" />
             <Feature name="secure-playback" required="true" />
+            <Feature name="can-swap-width-height" value="1" />
         </MediaCodec>
         <MediaCodec name="c2.exynos.hevc.decoder" type="video/hevc" >
             <Limit name="size" min="64x64" max="3840x2160" />
@@ -52,6 +54,7 @@
             <Limit name="performance-point-3840x2160" range="120" />
             <Limit name="concurrent-instances" max="16" />
             <Feature name="adaptive-playback" />
+            <Feature name="can-swap-width-height" value="1" />
         </MediaCodec>
         <MediaCodec name="c2.exynos.hevc.decoder.secure" type="video/hevc" >
             <Limit name="size" min="64x64" max="3840x2160" />
@@ -64,6 +67,7 @@
             <Limit name="concurrent-instances" max="2" />
             <Feature name="adaptive-playback" />
             <Feature name="secure-playback" required="true" />
+            <Feature name="can-swap-width-height" value="1" />
         </MediaCodec>
         <MediaCodec name="c2.exynos.mpeg4.decoder" type="video/mp4v-es">
             <Limit name="size" min="32x32" max="2048x2048" />
@@ -75,6 +79,7 @@
             <Limit name="performance-point-1920x1080" range="120" />
             <Limit name="concurrent-instances" max="16" />
             <Feature name="adaptive-playback" />
+            <Feature name="can-swap-width-height" value="1" />
         </MediaCodec>
         <MediaCodec name="c2.exynos.h263.decoder" type="video/3gpp">
             <Limit name="size" min="32x32" max="2048x1152" />
@@ -97,6 +102,7 @@
             <Limit name="performance-point-3840x2160" range="120" />
             <Limit name="concurrent-instances" max="16" />
             <Feature name="adaptive-playback" />
+            <Feature name="can-swap-width-height" value="1" />
         </MediaCodec>
         <MediaCodec name="c2.exynos.vp9.decoder" type="video/x-vnd.on2.vp9" >
             <Limit name="size" min="64x64" max="3840x2176" />
@@ -108,6 +114,7 @@
             <Limit name="performance-point-3840x2160" range="120" />
             <Limit name="concurrent-instances" max="16" />
             <Feature name="adaptive-playback" />
+            <Feature name="can-swap-width-height" value="1" />
         </MediaCodec>
         <MediaCodec name="c2.exynos.vp9.decoder.secure" type="video/x-vnd.on2.vp9" >
             <Limit name="size" min="64x64" max="3840x2176" />
@@ -120,6 +127,7 @@
             <Limit name="concurrent-instances" max="2" />
             <Feature name="adaptive-playback" />
             <Feature name="secure-playback" required="true" />
+            <Feature name="can-swap-width-height" value="1" />
         </MediaCodec>
     </Decoders>
 
@@ -133,6 +141,7 @@
             <Limit name="bitrate" range="1-120000000" />
             <Limit name="performance-point-3840x2160" range="120" />
             <Limit name="concurrent-instances" max="16" />
+            <Feature name="can-swap-width-height" value="1" />
         </MediaCodec>
         <MediaCodec name="c2.exynos.hevc.encoder" type="video/hevc" >
             <Limit name="size" min="64x64" max="3840x2176" />
@@ -143,6 +152,7 @@
             <Limit name="bitrate" range="1-120000000" />
             <Limit name="performance-point-3840x2160" range="120" />
             <Limit name="concurrent-instances" max="16" />
+            <Feature name="can-swap-width-height" value="1" />
         </MediaCodec>
         <MediaCodec name="c2.exynos.mpeg4.encoder" type="video/mp4v-es">
             <Limit name="size" min="32x32" max="2048x2048" />
@@ -153,6 +163,7 @@
             <Limit name="bitrate" range="1-80000000" />
             <Limit name="performance-point-1920x1080" range="120" />
             <Limit name="concurrent-instances" max="16" />
+            <Feature name="can-swap-width-height" value="1" />
         </MediaCodec>
         <MediaCodec name="c2.exynos.h263.encoder" type="video/3gpp">
             <Limit name="size" min="32x32" max="2048x1152" />
@@ -173,6 +184,7 @@
             <Limit name="bitrate" range="1-80000000" />
             <Limit name="performance-point-3840x2160" range="120" />
             <Limit name="concurrent-instances" max="16" />
+            <Feature name="can-swap-width-height" value="1" />
         </MediaCodec>
         <MediaCodec name="c2.exynos.vp9.encoder" type="video/x-vnd.on2.vp9" >
             <Limit name="size" min="64x64" max="3840x2176" />
@@ -183,6 +195,7 @@
             <Limit name="bitrate" range="1-80000000" />
             <Limit name="performance-point-3840x2160" range="120" />
             <Limit name="concurrent-instances" max="16" />
+            <Feature name="can-swap-width-height" value="1" />
         </MediaCodec>
     </Encoders>
 </MediaCodecs>
