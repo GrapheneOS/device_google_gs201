@@ -168,7 +168,7 @@
 /dev/block/by-name/frp   0660   system     system
 
 # TPU
-/dev/abrolhos            0660   system     system
+/dev/janeiro            0660   system     system
 
 # TOE
 /dev/dit2                 0660   radio      radio
