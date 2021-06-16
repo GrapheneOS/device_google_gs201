@@ -365,6 +365,9 @@ endif
 # Power HAL
 PRODUCT_COPY_FILES += \
 	device/google/gs201/powerhint.json:$(TARGET_COPY_OUT_VENDOR)/etc/powerhint.json
+# adpf 16ms update rate
+PRODUCT_PRODUCT_PROPERTIES += \
+        vendor.powerhal.adpf.rate=16666666
 
 PRODUCT_COPY_FILES += \
 	device/google/gs201/task_profiles.json:$(TARGET_COPY_OUT_VENDOR)/etc/task_profiles.json
