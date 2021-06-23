@@ -956,38 +956,40 @@ PRODUCT_PACKAGES += \
 	android.hardware.audio@7.0-impl \
 	android.hardware.audio.effect@7.0-impl \
 	android.hardware.soundtrigger@2.3-impl \
+	vendor.google.whitechapel.audio.audioext@2.0-impl
 #	android.hardware.bluetooth.audio@2.1-impl \
-#	vendor.google.whitechapel.audio.audioext@2.0-impl
+
 #
 ##Audio HAL libraries
-#PRODUCT_PACKAGES += \
-#	audio.primary.$(TARGET_BOARD_PLATFORM) \
-#	audio.platform.aoc \
+PRODUCT_PACKAGES += \
+	audio.primary.$(TARGET_BOARD_PLATFORM) \
+	audio.platform.aoc \
+	audio_tunnel_aoc \
+	aoc_aud_ext \
+	libaoctuningdecoder \
+	liboffloadeffect \
+	audio_bt_aoc \
+	audio_waves_aoc \
+	audio_fortemedia_aoc \
+	audio_bluenote_aoc \
+	audio_usb_aoc \
+	libamcsextfile \
+	audio_amcs_ext \
+	audio.usb.default \
+	audio.usbv2.default \
+	audio.a2dp.default \
+	audio.bluetooth.default \
+	audio.r_submix.default
 #	sound_trigger.primary.$(TARGET_BOARD_PLATFORM) \
-#	audio_bt_aoc \
-#	audio_tunnel_aoc \
-#	aoc_aud_ext \
-#	libaoctuningdecoder \
 #	libaoc_waves \
-#	liboffloadeffect \
-#	audio_waves_aoc \
-#	audio_fortemedia_aoc \
-#	audio_bluenote_aoc \
-#	audio_usb_aoc \
 #	audio_spk_35l41 \
-#	audio.usb.default \
-#	audio.a2dp.default \
-#	audio.bluetooth.default \
-#	audio.r_submix.default \
-#	libamcsextfile \
-#	audio_amcs_ext \
 #
-#
+
 ##Audio Vendor libraries
-#PRODUCT_PACKAGES += \
-#	libfvsam_prm_parser \
-#	libmahalcontroller \
-#	libAlgFx_HiFi3z
+PRODUCT_PACKAGES += \
+	libfvsam_prm_parser \
+	libmahalcontroller \
+	libAlgFx_HiFi3z
 #
 ## AudioHAL Configurations
 PRODUCT_COPY_FILES += \
@@ -1001,22 +1003,22 @@ PRODUCT_COPY_FILES += \
 
 #        frameworks/av/services/audiopolicy/config/bluetooth_audio_policy_configuration_7_0.xml:$(TARGET_COPY_OUT_VENDOR)/etc/bluetooth_audio_policy_configuration_7_0.xml \
 ##Audio soong
-#PRODUCT_SOONG_NAMESPACES += \
-#	vendor/google/whitechapel/audio/hal \
-#	vendor/google/whitechapel/audio/interfaces
-#
-#SOONG_CONFIG_NAMESPACES += aoc_audio_board
-#SOONG_CONFIG_aoc_audio_board += \
-#	platform
-#
-#SOONG_CONFIG_aoc_audio_board_platform := $(TARGET_BOARD_PLATFORM)
+PRODUCT_SOONG_NAMESPACES += \
+	vendor/google/whitechapel/audio/hal \
+	vendor/google/whitechapel/audio/interfaces
+
+SOONG_CONFIG_NAMESPACES += aoc_audio_board
+SOONG_CONFIG_aoc_audio_board += \
+	platform
+
+SOONG_CONFIG_aoc_audio_board_platform := $(TARGET_BOARD_PLATFORM)
 #
 ## Audio properties
-#PRODUCT_PROPERTY_OVERRIDES += \
-#	ro.config.vc_call_vol_steps=7 \
-#	ro.config.media_vol_steps=25 \
-#	ro.audio.monitorRotation = true \
-#	ro.audio.offload_wakelock=false
+PRODUCT_PROPERTY_OVERRIDES += \
+	ro.config.vc_call_vol_steps=7 \
+	ro.config.media_vol_steps=25 \
+	ro.audio.monitorRotation = true \
+	ro.audio.offload_wakelock=false
 
 # vndservicemanager and vndservice no longer included in API 30+, however needed by vendor code.
 # See b/148807371 for reference
@@ -1024,20 +1026,21 @@ PRODUCT_PACKAGES += vndservicemanager
 PRODUCT_PACKAGES += vndservice
 
 ## TinyTools, debug tool and cs35l41 speaker calibration tool for Audio
-#ifneq (,$(filter userdebug eng, $(TARGET_BUILD_VARIANT)))
-#PRODUCT_PACKAGES += \
-#	tinyplay \
-#	tinycap \
-#	tinymix \
-#	tinypcminfo \
-#	tinyhostless \
-#	cplay \
-#	aoc_hal \
-#	aoc_tuning_inft \
+ifneq (,$(filter userdebug eng, $(TARGET_BUILD_VARIANT)))
+PRODUCT_PACKAGES += \
+	tinyplay \
+	tinycap \
+	tinymix \
+	tinypcminfo \
+	tinyhostless \
+	cplay \
+	aoc_hal \
+	aoc_tuning_inft \
+	mahal_test \
+	ma_aoc_tuning_test
 #	crus_sp_cal \
-#	mahal_test \
-#	ma_aoc_tuning_test
-#endif
+
+endif
 
 PRODUCT_PACKAGES += \
 	google.hardware.media.c2@1.0-service \

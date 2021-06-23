@@ -213,6 +213,12 @@ SOONG_CONFIG_aoc_audio_func_hal_socket_control := true
 SOONG_CONFIG_aoc_audio_func_record_tunning_keys := true
 endif
 
+ifneq (,$(filter aosp_%,$(TARGET_PRODUCT)))
+SOONG_CONFIG_aoc_audio_func += aosp_build
+
+SOONG_CONFIG_aoc_audio_func_aosp_build := true
+endif
+
 # Primary AudioHAL Configuration
 #BOARD_USE_COMMON_AUDIOHAL := true
 #BOARD_USE_CALLIOPE_AUDIOHAL := false
