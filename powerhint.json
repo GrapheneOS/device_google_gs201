@@ -362,6 +362,12 @@
     },
     {
       "PowerHint": "CAMERA_LAUNCH",
+      "Node": "MemFreq",
+      "Duration": 1000,
+      "Value": "3172000"
+    },
+    {
+      "PowerHint": "CAMERA_LAUNCH",
       "Node": "CPUBigClusterMaxFreq",
       "Duration": 1000,
       "Value": "9999999"
@@ -369,6 +375,18 @@
     {
       "PowerHint": "CAMERA_LAUNCH",
       "Node": "CPUBigClusterMinFreq",
+      "Duration": 1000,
+      "Value": "9999999"
+    },
+    {
+      "PowerHint": "CAMERA_LAUNCH",
+      "Node": "CPUMidClusterMaxFreq",
+      "Duration": 1000,
+      "Value": "9999999"
+    },
+    {
+      "PowerHint": "CAMERA_LAUNCH",
+      "Node": "CPUMidClusterMinFreq",
       "Duration": 1000,
       "Value": "9999999"
     },
@@ -383,6 +401,18 @@
       "Node": "CPULittleClusterMinFreq",
       "Duration": 1000,
       "Value": "9999999"
+    },
+    {
+      "PowerHint": "CAMERA_BACKEND_BOOST",
+      "Node": "INTCAMFreq",
+      "Duration": 1000,
+      "Value": "664000"
+    },
+    {
+      "PowerHint": "CAMERA_BACKEND_BOOST",
+      "Node": "TNRFreq",
+      "Duration": 1000,
+      "Value": "664000"
     },
     {
       "PowerHint": "GCA_CAMERA_SHOT_BIGCPU",
