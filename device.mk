@@ -745,12 +745,12 @@ endif
 #PRODUCT_PACKAGES_DEBUG += trusty-ut-ctrl
 
 # Trusty ConfirmationUI HAL
-#PRODUCT_PACKAGES += \
-#	android.hardware.confirmationui@1.0-service.trusty.vendor
+PRODUCT_PACKAGES += \
+	android.hardware.confirmationui@1.0-service.trusty.vendor
 
 # Trusty Secure DPU Daemon
-#PRODUCT_PACKAGES += \
-#	securedpud.slider
+PRODUCT_PACKAGES += \
+	securedpud.slider
 
 # Trusty Metrics Daemon
 #PRODUCT_SOONG_NAMESPACES += \
