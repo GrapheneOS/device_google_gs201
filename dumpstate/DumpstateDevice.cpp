@@ -247,6 +247,7 @@ DumpstateDevice::DumpstateDevice()
         { "ramdump", [this](int fd) { dumpRamdumpSection(fd); } },
         { "misc", [this](int fd) { dumpMiscSection(fd); } },
         { "gsc", [this](int fd) { dumpGscSection(fd); } },
+        { "trusty", [this](int fd) { dumpTrustySection(fd); } },
     } {
 }
 
@@ -844,6 +845,10 @@ void DumpstateDevice::dumpMiscSection(int fd) {
 void DumpstateDevice::dumpGscSection(int fd) {
     RunCommandToFd(fd, "Citadel VERSION", {"vendor/bin/hw/citadel_updater", "-lv"});
     RunCommandToFd(fd, "Citadel STATS", {"vendor/bin/hw/citadel_updater", "--stats"});
+}
+
+void DumpstateDevice::dumpTrustySection(int fd) {
+    DumpFileToFd(fd, "Trusty TEE0 Logs", "/dev/trusty-log0");
 }
 
 void DumpstateDevice::dumpModem(int fd, int fdModem)

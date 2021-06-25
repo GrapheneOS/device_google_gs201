@@ -160,6 +160,7 @@
 
 # Trusty
 /dev/trusty-ipc-dev0     0660   system     drmrpc
+/dev/trusty-log0         0660   system     system
 
 # Citadel
 /dev/gsc0                0660   hsm        hsm
