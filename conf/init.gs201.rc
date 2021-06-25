@@ -319,10 +319,6 @@ on post-fs-data
     mkdir /data/vendor/edgetpu 0770 system system
     mkdir /data/vendor/edgetpu/cache 0770 system system
 
-    # DELETE ME PREVENT SLEEP b/188796118
-    write /sys/power/wake_lock b188796118
-
-
 on zygote-start
     # For PixelLogger configuration file.
     chmod 0771 /data/vendor/wifi
