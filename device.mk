@@ -742,7 +742,7 @@ endif
 #$(call inherit-product, system/core/trusty/trusty-base.mk)
 
 # Trusty unit test tool
-#PRODUCT_PACKAGES_DEBUG += trusty-ut-ctrl
+PRODUCT_PACKAGES_DEBUG += trusty-ut-ctrl
 
 # Trusty ConfirmationUI HAL
 #PRODUCT_PACKAGES += \

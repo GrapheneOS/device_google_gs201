@@ -82,6 +82,7 @@ struct DumpstateDevice : public IDumpstateDevice {
     void dumpRamdumpSection(int fd);
     void dumpMiscSection(int fd);
     void dumpGscSection(int fd);
+    void dumpTrustySection(int fd);
 
     // Hybrid and binary sections that require an additional file descriptor
     void dumpModem(int fd, int fdModem);
