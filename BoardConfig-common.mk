@@ -43,8 +43,8 @@ endif
 
 BOARD_KERNEL_CMDLINE += dyndbg=\"func alloc_contig_dump_pages +p\"
 BOARD_KERNEL_CMDLINE += earlycon=exynos4210,0x10A00000 console=ttySAC0,115200 androidboot.console=ttySAC0 printk.devkmsg=on
-BOARD_KERNEL_CMDLINE += androidboot.boot_devices=14700000.ufs
 BOARD_KERNEL_CMDLINE += cma_sysfs.experimental=Y
+BOARD_BOOTCONFIG += androidboot.boot_devices=14700000.ufs
 
 TARGET_NO_BOOTLOADER := true
 TARGET_NO_KERNEL := false
@@ -355,8 +355,11 @@ BOARD_RAMDISK_USE_LZ4     := true
 #BOARD_KERNEL_PAGESIZE    := 2048
 #BOARD_KERNEL_OFFSET      := 0x80000
 #BOARD_RAMDISK_OFFSET     := 0x4000000
-BOARD_BOOT_HEADER_VERSION := 3
+BOARD_BOOT_HEADER_VERSION := 4
 BOARD_MKBOOTIMG_ARGS += --header_version $(BOARD_BOOT_HEADER_VERSION)
+
+BOARD_VENDOR_RAMDISK_FRAGMENTS := dlkm
+BOARD_VENDOR_RAMDISK_FRAGMENT.dlkm.KERNEL_MODULE_DIRS := top
 
 # Enable AVB2.0
 BOARD_AVB_ENABLE := true
