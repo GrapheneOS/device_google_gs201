@@ -228,14 +228,6 @@ on init && property:ro.boot.hw.soc.rev=0
 on init && property:ro.boot.hw.soc.rev=1
     setprop vendor.powerhal.config powerhint_a1.json
 
-on init && property:ro.boot.hw.soc.rev=0
-    # STOPSHIP b/177967147 disable SICD
-    write /sys/devices/platform/cpupm/cpupm/sicd 0
-
-on init && property:ro.boot.hw.soc.rev=1
-    # STOPSHIP b/177967147 disable SICD
-    write /sys/devices/platform/cpupm/cpupm/sicd 0
-
 on late-fs
     # Wait for keymaster HALs
     exec_start wait_for_keymaster
