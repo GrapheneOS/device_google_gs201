@@ -11,6 +11,15 @@
       "ResetOnInit": true
     },
     {
+      "Name": "IntFreq",
+      "Path": "/sys/devices/platform/17000020.devfreq_int/devfreq/17000020.devfreq_int/min_freq",
+      "Values": [
+        "533000",
+        "100000"
+      ],
+      "ResetOnInit": true
+    },
+    {
       "Name": "CPULittleClusterMaxFreq",
       "Path": "/sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq",
       "Values": [
@@ -401,6 +410,18 @@
       "Node": "CPULittleClusterMinFreq",
       "Duration": 1000,
       "Value": "9999999"
+    },
+    {
+      "PowerHint": "CAMERA_BACKEND_BOOST",
+      "Node": "MemFreq",
+      "Duration": 1000,
+      "Value": "3172000"
+    },
+    {
+      "PowerHint": "CAMERA_BACKEND_BOOST",
+      "Node": "IntFreq",
+      "Duration": 1000,
+      "Value": "533000"
     },
     {
       "PowerHint": "CAMERA_BACKEND_BOOST",
