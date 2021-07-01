@@ -61,7 +61,14 @@ if [ -f $cfg_file ]; then
       "insmod") insmod $arg ;;
       "setprop") setprop $arg 1 ;;
       "enable") echo 1 > $arg ;;
-      "modprobe") modprobe -a -d "${modules_dir}" $arg ;;
+      "modprobe")
+        case ${arg} in
+          "-b *" | "-b")
+            arg="-b --all=${modules_dir}/modules.load" ;;
+          "*" | "")
+            arg="--all=${modules_dir}/modules.load" ;;
+        esac
+        modprobe -a -d "${modules_dir}" $arg ;;
       "wait") wait_for_file $arg ;;
       "install_display_drivers") install_display_drivers ;;
     esac
