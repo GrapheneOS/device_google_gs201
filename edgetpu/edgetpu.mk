@@ -1,5 +1,11 @@
 # Edgetpu packages
 
+# Config variables for TPU chip on device.
+SOONG_CONFIG_NAMESPACES += edgetpu_config
+SOONG_CONFIG_edgetpu_config += chip
+
+SOONG_CONFIG_edgetpu_config_chip := janeiro
+
 # TPU logging service
 #PRODUCT_PACKAGES += \
 #	android.hardware.edgetpu.logging@service-edgetpu-logging
