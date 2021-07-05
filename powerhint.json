@@ -437,6 +437,12 @@
     },
     {
       "PowerHint": "GCA_CAMERA_SHOT_BIGCPU",
+      "Node": "TAPreferHighCap",
+      "Duration": 3000,
+      "Value": "1"
+    },
+    {
+      "PowerHint": "GCA_CAMERA_SHOT_BIGCPU",
       "Node": "CPUBigClusterMaxFreq",
       "Duration": 3000,
       "Value": "9999999"
@@ -446,6 +452,12 @@
       "Node": "CPUBigClusterMinFreq",
       "Duration": 3000,
       "Value": "9999999"
+    },
+    {
+      "PowerHint": "GCA_CAMERA_SHOT_BIGMIDCPU",
+      "Node": "TAPreferHighCap",
+      "Duration": 3000,
+      "Value": "1"
     },
     {
       "PowerHint": "GCA_CAMERA_SHOT_BIGMIDCPU",
@@ -470,6 +482,12 @@
       "Node": "CPUMidClusterMinFreq",
       "Duration": 3000,
       "Value": "9999999"
+    },
+    {
+      "PowerHint": "GCA_CAMERA_SHOT_ALLCPU",
+      "Node": "TAPreferHighCap",
+      "Duration": 3000,
+      "Value": "1"
     },
     {
       "PowerHint": "GCA_CAMERA_SHOT_ALLCPU",
@@ -644,12 +662,6 @@
       "Node": "TAPreferHighCap",
       "Duration": 0,
       "Value": "1"
-    },
-    {
-      "PowerHint": "CAMERA_STREAMING_STANDARD",
-      "Node": "HighCapacityStartCpu",
-      "Duration": 0,
-      "Value": "4"
     },
     {
       "PowerHint": "CAMERA_STREAMING_STANDARD",
