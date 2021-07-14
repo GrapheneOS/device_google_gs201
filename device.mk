@@ -750,7 +750,7 @@ endif
 
 # Trusty (KM, GK, Storage)
 $(call inherit-product, system/core/trusty/trusty-storage.mk)
-#$(call inherit-product, system/core/trusty/trusty-base.mk)
+$(call inherit-product, system/core/trusty/trusty-base.mk)
 
 # Trusty unit test tool
 PRODUCT_PACKAGES_DEBUG += trusty-ut-ctrl
