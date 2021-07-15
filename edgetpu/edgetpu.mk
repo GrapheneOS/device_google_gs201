@@ -13,8 +13,8 @@ PRODUCT_PACKAGES += \
 PRODUCT_PACKAGES += \
 	edgetpu-janeiro.fw
 # TPU NN AIDL HAL
-#PRODUCT_PACKAGES += \
-#	android.hardware.neuralnetworks@service-darwinn-aidl
+PRODUCT_PACKAGES += \
+	android.hardware.neuralnetworks@service-darwinn-aidl
 # TPU application service
 PRODUCT_PACKAGES += \
 	vendor.google.edgetpu_app_service@1.0-service
