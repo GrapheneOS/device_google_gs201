@@ -45,6 +45,45 @@
       ]
     },
     {
+      "Name": "CameraServiceHighCapacity",
+      "Actions": [
+        {
+          "Name": "JoinCgroup",
+          "Params":
+          {
+            "Controller": "cpuset",
+            "Path": "camera-daemon-high-group"
+          }
+        }
+      ]
+    },
+    {
+      "Name": "CameraServiceMidCapacity",
+      "Actions": [
+        {
+          "Name": "JoinCgroup",
+          "Params":
+          {
+            "Controller": "cpuset",
+            "Path": "camera-daemon-mid-group"
+          }
+        }
+      ]
+    },
+    {
+      "Name": "CameraServiceMidHighCapacity",
+      "Actions": [
+        {
+          "Name": "JoinCgroup",
+          "Params":
+          {
+            "Controller": "cpuset",
+            "Path": "camera-daemon-mid-high-group"
+          }
+        }
+      ]
+    },
+    {
       "Name": "HighEnergySaving",
       "Actions": [
         {
