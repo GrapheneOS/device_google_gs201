@@ -24,6 +24,7 @@
       "Path": "/sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq",
       "Values": [
         "9999999",
+        "1098000",
         "1401000",
         "1197000"
       ],
@@ -45,6 +46,7 @@
       "Path": "/sys/devices/system/cpu/cpu4/cpufreq/scaling_max_freq",
       "Values": [
         "9999999",
+        "1024000",
         "1999000",
         "1491000"
       ],
@@ -66,6 +68,7 @@
       "Path": "/sys/devices/system/cpu/cpu6/cpufreq/scaling_max_freq",
       "Values": [
         "9999999",
+        "984000",
         "1826000"
       ],
       "DefaultIndex": 0,
@@ -452,6 +455,24 @@
       "Node": "CDCpuset",
       "Duration": 1000,
       "Value": "4-7"
+    },
+    {
+      "PowerHint": "CAMERA_CPU_THROTTLE",
+      "Node": "CPUBigClusterMaxFreq",
+      "Duration": 1000,
+      "Value": "984000"
+    },
+    {
+      "PowerHint": "CAMERA_CPU_THROTTLE",
+      "Node": "CPUMidClusterMaxFreq",
+      "Duration": 1000,
+      "Value": "1024000"
+    },
+    {
+      "PowerHint": "CAMERA_CPU_THROTTLE",
+      "Node": "CPULittleClusterMaxFreq",
+      "Duration": 1000,
+      "Value": "1098000"
     },
     {
       "PowerHint": "CAMERA_SHOT",
