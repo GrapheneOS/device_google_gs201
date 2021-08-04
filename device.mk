@@ -687,7 +687,7 @@ SOONG_CONFIG_bigo_soc := gs201
 
 # MFC firmware
 PRODUCT_COPY_FILES += \
-	device/google/gs201/firmware/mfc_fw_v15.6.bin:$(TARGET_COPY_OUT_VENDOR)/firmware/mfc_fw.bin
+	device/google/gs201/firmware/mfc/signed/mfc_fw.bin:$(TARGET_COPY_OUT_VENDOR)/firmware/mfc_fw.bin
 
 # 1. Codec 2.0
 # exynos service
