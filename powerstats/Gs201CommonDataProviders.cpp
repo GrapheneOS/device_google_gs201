@@ -662,7 +662,7 @@ void addTPU(std::shared_ptr<PowerStats> p) {
 
     p->addEnergyConsumer(PowerStatsEnergyConsumer::createMeterAndAttrConsumer(p,
             EnergyConsumerType::OTHER, "TPU", {"S10M_VDD_TPU"},
-            {{UID_TIME_IN_STATE, "/sys/class/edgetpu/abrolhos/device/tpu_usage"}},
+            {{UID_TIME_IN_STATE, "/sys/class/edgetpu/edgetpu-soc/device/tpu_usage"}},
             stateCoeffs));
 }
 
