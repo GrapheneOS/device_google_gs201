@@ -163,6 +163,9 @@ on init
     chown system system /dev/logbuffer_maxfg
     chown system system /dev/logbuffer_maxfg_base
     chown system system /dev/logbuffer_maxfg_flip
+    chown system system /dev/logbuffer_maxfg_monitor
+    chown system system /dev/logbuffer_maxfg_base_monitor
+    chown system system /dev/logbuffer_maxfg_flip_monitor
     chown system system /dev/logbuffer_maxq
     chown system system /dev/logbuffer_google,cpm
     chown system system /dev/logbuffer_rtx

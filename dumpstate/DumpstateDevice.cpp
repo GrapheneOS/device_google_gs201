@@ -334,12 +334,15 @@ void DumpstateDevice::dumpPowerSection(int fd) {
         DumpFileToFd(fd, "Power supply property maxfg", "/sys/class/power_supply/maxfg/uevent");
         DumpFileToFd(fd, "m5_state", "/sys/class/power_supply/maxfg/m5_model_state");
         DumpFileToFd(fd, "maxfg", "/dev/logbuffer_maxfg");
+        DumpFileToFd(fd, "maxfg", "/dev/logbuffer_maxfg_monitor");
     } else {
         DumpFileToFd(fd, "Power supply property maxfg_base", "/sys/class/power_supply/maxfg_base/uevent");
         DumpFileToFd(fd, "Power supply property maxfg_flip", "/sys/class/power_supply/maxfg_flip/uevent");
         DumpFileToFd(fd, "m5_state", "/sys/class/power_supply/maxfg_base/m5_model_state");
         DumpFileToFd(fd, "maxfg_base", "/dev/logbuffer_maxfg_base");
         DumpFileToFd(fd, "maxfg_flip", "/dev/logbuffer_maxfg_flip");
+        DumpFileToFd(fd, "maxfg_base", "/dev/logbuffer_maxfg_base_monitor");
+        DumpFileToFd(fd, "maxfg_flip", "/dev/logbuffer_maxfg_flip_monitor");
     }
 
     if (!stat("/dev/logbuffer_tcpm", &buffer)) {
