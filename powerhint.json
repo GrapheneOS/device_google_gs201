@@ -860,6 +860,12 @@
     },
     {
       "PowerHint": "CAMERA_STREAMING_LOW",
+      "Node": "CDPreferIdle",
+      "Duration": 0,
+      "Value": "0"
+    },
+    {
+      "PowerHint": "CAMERA_STREAMING_LOW",
       "Node": "HighCapacityStartCpu",
       "Duration": 0,
       "Value": "4"
