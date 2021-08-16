@@ -199,6 +199,17 @@ void DumpstateDevice::dumpGpsLogs(int fd, std::string destDir) {
     dumpLogs(fd, gpsLogDir, destDir, maxFileNum, GPS_LOG_PREFIX);
 }
 
+void DumpstateDevice::dumpCameraLogs(int fd, const std::string &destDir) {
+    static const std::string kCameraLogDir = "/data/vendor/camera/profiler";
+    const std::string cameraDestDir = destDir + "/camera";
+    RunCommandToFd(fd, "MKDIR CAMERA LOG", {"/vendor/bin/mkdir", "-p", cameraDestDir.c_str()},
+                   CommandOptions::WithTimeout(2).Build());
+    // Attach multiple latest sessions (in case the user is running concurrent
+    // sessions or starts a new session after the one with performance issues).
+    dumpLogs(fd, kCameraLogDir, cameraDestDir, 10, "session-ended-");
+    dumpLogs(fd, kCameraLogDir, cameraDestDir, 5, "high-drop-rate-");
+}
+
 timepoint_t startSection(int fd, const std::string &sectionName) {
     android::base::WriteStringToFd(
             "\n"
@@ -877,6 +888,8 @@ void DumpstateDevice::dumpModem(int fd, int fdModem)
         bool modemLogEnabled = android::base::GetBoolProperty(MODEM_LOGGING_PERSIST_PROPERTY, false);
         bool gpsLogEnabled = android::base::GetBoolProperty(GPS_LOGGING_STATUS_PROPERTY, false);
         bool tcpdumpEnabled = android::base::GetBoolProperty(TCPDUMP_PERSIST_PROPERTY, false);
+        bool cameraLogsEnabled = android::base::GetBoolProperty(
+                "vendor.camera.debug.camera_performance_analyzer.attach_to_bugreport", true);
         int maxFileNum = android::base::GetIntProperty(MODEM_LOGGING_NUMBER_BUGREPORT_PROPERTY, 100);
 
         if (tcpdumpEnabled) {
@@ -914,6 +927,10 @@ void DumpstateDevice::dumpModem(int fd, int fdModem)
             dumpGpsLogs(fd, modemLogAllDir);
         } else {
             ALOGD("gps logging is not running\n");
+        }
+
+        if (cameraLogsEnabled) {
+            dumpCameraLogs(STDOUT_FILENO, modemLogAllDir);
         }
 
         dumpLogs(fd, extendedLogDir, modemLogAllDir, maxFileNum, EXTENDED_LOG_PREFIX);
