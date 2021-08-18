@@ -756,9 +756,7 @@ $(call inherit-product, system/core/trusty/trusty-base.mk)
 PRODUCT_PACKAGES_DEBUG += trusty-ut-ctrl \
    tipc-test
 
-# Trusty ConfirmationUI HAL
-PRODUCT_PACKAGES += \
-	android.hardware.confirmationui@1.0-service.trusty.vendor
+include device/google/gs101/confirmationui/confirmationui.mk
 
 # Trusty Secure DPU Daemon
 PRODUCT_PACKAGES += \
