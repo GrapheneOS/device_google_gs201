@@ -30,13 +30,10 @@ namespace implementation {
 using ::android::hardware::dumpstate::V1_1::DumpstateMode;
 using ::android::hardware::dumpstate::V1_1::DumpstateStatus;
 using ::android::hardware::dumpstate::V1_1::IDumpstateDevice;
-using ::android::hardware::hidl_array;
 using ::android::hardware::hidl_handle;
 using ::android::hardware::hidl_string;
 using ::android::hardware::hidl_vec;
 using ::android::hardware::Return;
-using ::android::hardware::Void;
-using ::android::sp;
 
 struct DumpstateDevice : public IDumpstateDevice {
   public:
@@ -88,6 +85,7 @@ struct DumpstateDevice : public IDumpstateDevice {
     void dumpModem(int fd, int fdModem);
     void dumpRilLogs(int fd, std::string destDir);
     void dumpGpsLogs(int fd, std::string destDir);
+    void dumpCameraLogs(int fd, const std::string &destDir);
 };
 
 }  // namespace implementation
