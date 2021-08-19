@@ -15,11 +15,11 @@
 
 include device/google/gs201/device-common.mk
 
-#PRODUCT_PROPERTY_OVERRIDES += \
-#    ro.bluetooth.a2dp_offload.supported=true \
-#    persist.bluetooth.a2dp_offload.disabled=false \
-#    persist.bluetooth.a2dp_offload.cap=sbc-aac-aptx-aptxhd-ldac
-#
+PRODUCT_PROPERTY_OVERRIDES += \
+    ro.bluetooth.a2dp_offload.supported=true \
+    persist.bluetooth.a2dp_offload.disabled=true \
+    persist.bluetooth.a2dp_offload.cap=sbc-aac-aptx-aptxhd-ldac
+
 # SecureElement
 #PRODUCT_PACKAGES += \
 #    android.hardware.secure_element@1.2-service-gto \
