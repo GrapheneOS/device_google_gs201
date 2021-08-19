@@ -274,24 +274,24 @@ PRODUCT_PACKAGES += \
 	messaging
 
 # Contexthub HAL
-#PRODUCT_PACKAGES += \
-#	android.hardware.contexthub@1.2-service.generic
+PRODUCT_PACKAGES += \
+	android.hardware.contexthub@1.2-service.generic
 
 # CHRE tools
-#ifneq (,$(filter userdebug eng, $(TARGET_BUILD_VARIANT)))
-#PRODUCT_PACKAGES += \
-#	chre_power_test_client \
-#	chre_test_client
-#endif
+ifneq (,$(filter userdebug eng, $(TARGET_BUILD_VARIANT)))
+PRODUCT_PACKAGES += \
+	chre_power_test_client \
+	chre_test_client
+endif
 
-#PRODUCT_COPY_FILES += \
-#	frameworks/native/data/etc/android.hardware.context_hub.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.context_hub.xml
+PRODUCT_COPY_FILES += \
+	frameworks/native/data/etc/android.hardware.context_hub.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.context_hub.xml
 
 ## Enable the CHRE Daemon
-#CHRE_USF_DAEMON_ENABLED := true
-#PRODUCT_PACKAGES += \
-#	chre \
-#	preloaded_nanoapps.json
+CHRE_USF_DAEMON_ENABLED := true
+PRODUCT_PACKAGES += \
+	chre \
+	preloaded_nanoapps.json
 
 # Filesystem management tools
 PRODUCT_PACKAGES += \
