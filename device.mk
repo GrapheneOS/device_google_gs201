@@ -853,7 +853,6 @@ $(call inherit-product-if-exists, vendor/samsung_slsi/telephony/shannon-ims/devi
 PRODUCT_PACKAGES += ShannonIms
 
 $(call inherit-product-if-exists, vendor/samsung_slsi/telephony/shannon-iwlan/device-vendor.mk)
-$(call inherit-product-if-exists, vendor/samsung_slsi/telephony/packetrouter/device-vendor.mk)
 
 #RCS Test Messaging App
 PRODUCT_PACKAGES_DEBUG += \
@@ -1049,7 +1048,7 @@ PRODUCT_PACKAGES += \
 	libgc2_utils
 
 ## Start packet router
-#PRODUCT_PROPERTY_OVERRIDES += vendor.pktrouter=1
+include device/google/gs101/telephony/pktrouter.mk
 
 # Thermal HAL
 include hardware/google/pixel/thermal/device.mk
