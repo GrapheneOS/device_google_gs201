@@ -756,9 +756,7 @@ $(call inherit-product, system/core/trusty/trusty-base.mk)
 PRODUCT_PACKAGES_DEBUG += trusty-ut-ctrl \
    tipc-test
 
-# Trusty ConfirmationUI HAL
-PRODUCT_PACKAGES += \
-	android.hardware.confirmationui@1.0-service.trusty.vendor
+include device/google/gs101/confirmationui/confirmationui.mk
 
 # Trusty Secure DPU Daemon
 PRODUCT_PACKAGES += \
@@ -853,7 +851,6 @@ $(call inherit-product-if-exists, vendor/samsung_slsi/telephony/shannon-ims/devi
 PRODUCT_PACKAGES += ShannonIms
 
 $(call inherit-product-if-exists, vendor/samsung_slsi/telephony/shannon-iwlan/device-vendor.mk)
-$(call inherit-product-if-exists, vendor/samsung_slsi/telephony/packetrouter/device-vendor.mk)
 
 #RCS Test Messaging App
 PRODUCT_PACKAGES_DEBUG += \
@@ -953,8 +950,8 @@ PRODUCT_PACKAGES += \
 	android.hardware.audio@7.0-impl \
 	android.hardware.audio.effect@7.0-impl \
 	android.hardware.soundtrigger@2.3-impl \
-	vendor.google.whitechapel.audio.audioext@2.0-impl
-#	android.hardware.bluetooth.audio@2.1-impl \
+	vendor.google.whitechapel.audio.audioext@2.0-impl \
+	android.hardware.bluetooth.audio@2.1-impl
 
 #
 ##Audio HAL libraries
@@ -997,8 +994,8 @@ PRODUCT_COPY_FILES += \
 	frameworks/av/services/audiopolicy/config/usb_audio_policy_configuration.xml:$(TARGET_COPY_OUT_VENDOR)/etc/usb_audio_policy_configuration.xml \
         frameworks/av/services/audiopolicy/config/audio_policy_volumes.xml:$(TARGET_COPY_OUT_VENDOR)/etc/audio_policy_volumes.xml \
 	frameworks/av/services/audiopolicy/config/default_volume_tables.xml:$(TARGET_COPY_OUT_VENDOR)/etc/default_volume_tables.xml \
+	frameworks/av/services/audiopolicy/config/bluetooth_audio_policy_configuration_7_0.xml:$(TARGET_COPY_OUT_VENDOR)/etc/bluetooth_audio_policy_configuration_7_0.xml
 
-#        frameworks/av/services/audiopolicy/config/bluetooth_audio_policy_configuration_7_0.xml:$(TARGET_COPY_OUT_VENDOR)/etc/bluetooth_audio_policy_configuration_7_0.xml \
 ##Audio soong
 PRODUCT_SOONG_NAMESPACES += \
 	vendor/google/whitechapel/audio/hal \
@@ -1049,7 +1046,7 @@ PRODUCT_PACKAGES += \
 	libgc2_utils
 
 ## Start packet router
-#PRODUCT_PROPERTY_OVERRIDES += vendor.pktrouter=1
+include device/google/gs101/telephony/pktrouter.mk
 
 # Thermal HAL
 include hardware/google/pixel/thermal/device.mk
