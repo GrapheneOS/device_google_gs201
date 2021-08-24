@@ -1,7 +1,6 @@
 import /vendor/etc/init/hw/init.gs201.usb.rc
 import android.hardware.drm@1.2-service.widevine.rc
 import init.exynos.sensorhub.rc
-import /vendor/etc/init/hw/init.aoc.rc
 
 service vendor.charger /system/bin/charger
     class charger

@@ -239,15 +239,6 @@ PRODUCT_COPY_FILES += \
 	device/google/gs201/conf/init.debug.rc:$(TARGET_COPY_OUT_VENDOR)/etc/init/init.debug.rc
 endif
 
-# If AoC Daemon is not present on this build, load firmware at boot via rc
-ifeq ($(wildcard vendor/google/whitechapel/aoc/aocd),)
-PRODUCT_COPY_FILES += \
-	device/google/gs201/conf/init.aoc.nodaemon.rc:$(TARGET_COPY_OUT_VENDOR)/etc/init/hw/init.aoc.rc
-else
-PRODUCT_COPY_FILES += \
-	device/google/gs201/conf/init.aoc.daemon.rc:$(TARGET_COPY_OUT_VENDOR)/etc/init/hw/init.aoc.rc
-endif
-
 # Recovery files
 PRODUCT_COPY_FILES += \
 	device/google/gs201/conf/init.recovery.device.rc:$(TARGET_COPY_OUT_RECOVERY)/root/init.recovery.gs201.rc
@@ -394,17 +385,7 @@ PRODUCT_PACKAGES += \
 	android.hardware.dumpstate@1.1-service.gs201
 
 # AoC support
-PRODUCT_PACKAGES += \
-	aocd \
-	aocutil \
-	aoc_audio_cfg \
-	vp_util
-
-# AoC debug support
-ifneq (,$(filter userdebug eng, $(TARGET_BUILD_VARIANT)))
-PRODUCT_PACKAGES += \
-	aocdump
-endif
+include device/google/gs201/aoc/device.mk
 
 #
 # Audio HALs
