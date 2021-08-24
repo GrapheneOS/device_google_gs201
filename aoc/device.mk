@@ -3,6 +3,12 @@ PRODUCT_PACKAGES += \
 
 BOARD_VENDOR_SEPOLICY_DIRS += device/google/gs201-sepolicy/aoc
 
+ifeq (,$(filter aosp_%,$(TARGET_PRODUCT)))
+# IAudioMetricExt HIDL
+PRODUCT_PACKAGES += \
+    vendor.google.audiometricext@1.0-service-vendor
+endif
+
 # If AoC Daemon is not present on this build, load firmware at boot via rc
 ifeq ($(wildcard vendor/google/whitechapel/aoc/aocd),)
 PRODUCT_COPY_FILES += \
