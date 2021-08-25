@@ -97,7 +97,7 @@ std::unordered_map<std::string, std::vector<State>> DevfreqStateResidencyDataPro
     int32_t id = 0;
     std::vector<State> states;
     for (const auto[frequencyHz, totalTimeMs] : timeInState) {
-        State s = {.id = id++, .name = std::to_string(frequencyHz / 1000) + "KHz"};
+        State s = {.id = id++, .name = std::to_string(frequencyHz / 1000) + "MHz"};
         states.push_back(s);
     }
 
