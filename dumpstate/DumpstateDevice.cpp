@@ -1014,26 +1014,6 @@ Return<DumpstateStatus> DumpstateDevice::dumpstateBoard_1_1(const hidl_handle& h
         dumpModem(fd, fdModem);
     }
 
-    // Keep this at the end as very long on not for humans
-
-    static const char* kBcmdhd43752Path =
-            "/sys/module/bcmdhd43752/parameters/info_string";
-    static const char* kBcmdhd4389Path =
-            "/sys/module/bcmdhd4389/parameters/info_string";
-
-    std::string chip_info;
-    if (android::base::ReadFileToString(kBcmdhd43752Path, &chip_info) &&
-        (chip_info.find("Chip: aae8") != std::string::npos)) {
-        RunCommandToFd(fd, "WLAN FW Log Symbol Table",
-                {"/vendor/bin/base64",
-                 "/vendor/etc/wifi/logstrs_43752.bin"});
-    } else if (android::base::ReadFileToString(kBcmdhd4389Path, &chip_info) &&
-        (chip_info.find("Chip: 4389") != std::string::npos)) {
-        RunCommandToFd(fd, "WLAN FW Log Symbol Table",
-                {"/vendor/bin/base64",
-                 "/vendor/firmware/logstrs.bin"});
-    }
-
     return DumpstateStatus::OK;
 }
 
