@@ -860,8 +860,9 @@ ifneq ($(BOARD_WITHOUT_RADIO),true)
 $(call inherit-product-if-exists, vendor/samsung_slsi/telephony/common/device-vendor.mk)
 PRODUCT_COPY_FILES += frameworks/native/data/etc/android.hardware.telephony.cdma.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.telephony.cdma.xml
 #GPS HAL
-#TODO(b/191417802)
+#TODO(b/197914244)
 include device/google/gs101/gnss/device-gnss.mk
+BOARD_VENDOR_SEPOLICY_DIRS += device/google/gs201-sepolicy/gps
 endif
 
 ifeq (,$(filter %_64,$(TARGET_PRODUCT)))
