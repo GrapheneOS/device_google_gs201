@@ -1079,6 +1079,9 @@ include hardware/google/pixel/common/pixel-common-device.mk
 # Pixel Logger
 include hardware/google/pixel/PixelLogger/PixelLogger.mk
 
+# sscoredump
+include hardware/google/pixel/sscoredump/device.mk
+
 # Battery Stats Viewer
 PRODUCT_PACKAGES_DEBUG += BatteryStatsViewer
 
