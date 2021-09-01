@@ -862,8 +862,8 @@ PRODUCT_COPY_FILES += frameworks/native/data/etc/android.hardware.telephony.cdma
 #GPS HAL
 #TODO(b/197914244)
 include device/google/gs101/gnss/device-gnss.mk
-BOARD_VENDOR_SEPOLICY_DIRS += device/google/gs201-sepolicy/gps
 endif
+BOARD_VENDOR_SEPOLICY_DIRS += device/google/gs201-sepolicy/gps
 
 ifeq (,$(filter %_64,$(TARGET_PRODUCT)))
 $(call inherit-product, $(SRC_TARGET_DIR)/product/core_64_bit.mk)
