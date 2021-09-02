@@ -955,10 +955,10 @@ PRODUCT_PACKAGES += \
 	audio.usbv2.default \
 	audio.a2dp.default \
 	audio.bluetooth.default \
-	audio.r_submix.default
+	audio.r_submix.default \
+	audio_spk_35l41
 #	sound_trigger.primary.$(TARGET_BOARD_PLATFORM) \
 #	libaoc_waves \
-#	audio_spk_35l41 \
 #
 
 ##Audio Vendor libraries
@@ -1013,9 +1013,8 @@ PRODUCT_PACKAGES += \
 	aoc_hal \
 	aoc_tuning_inft \
 	mahal_test \
-	ma_aoc_tuning_test
-#	crus_sp_cal \
-
+	ma_aoc_tuning_test \
+	crus_sp_cal
 endif
 
 PRODUCT_PACKAGES += \
