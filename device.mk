@@ -47,11 +47,7 @@ PRODUCT_SOONG_NAMESPACES += \
 
 DEVICE_USES_EXYNOS_GRALLOC_VERSION := 4
 
-ifeq ($(TARGET_PREBUILT_KERNEL),)
 LOCAL_KERNEL := $(TARGET_KERNEL_DIR)/Image.lz4
-else
-LOCAL_KERNEL := $(TARGET_PREBUILT_KERNEL)
-endif
 
 # OEM Unlock reporting
 PRODUCT_DEFAULT_PROPERTY_OVERRIDES += \
@@ -1077,6 +1073,9 @@ include hardware/google/pixel/common/pixel-common-device.mk
 
 # Pixel Logger
 include hardware/google/pixel/PixelLogger/PixelLogger.mk
+
+# sscoredump
+include hardware/google/pixel/sscoredump/device.mk
 
 # Battery Stats Viewer
 PRODUCT_PACKAGES_DEBUG += BatteryStatsViewer
