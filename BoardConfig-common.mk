@@ -347,7 +347,7 @@ WIFI_FEATURE_HOSTAPD_11AX := true
 # NeuralNetworks
 GPU_SOURCE_PRESENT := $(wildcard vendor/arm/mali/valhall)
 GPU_PREBUILD_PRESENT := $(wildcard vendor/google_devices/zebu/prebuilts/libs)
-ifneq "$(or $(GPU_SOURCE_PRESENT),$(GPU_PREBUILD_PRESENT))" ""
+ifneq (,$(strip $(GPU_SOURCE_PRESENT) $(GPU_PREBUILD_PRESENT)))
 ARMNN_COMPUTE_CL_ENABLE := 1
 else
 ARMNN_COMPUTE_CL_ENABLE := 0
