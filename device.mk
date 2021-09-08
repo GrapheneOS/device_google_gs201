@@ -452,9 +452,8 @@ PRODUCT_PACKAGES += \
 	VideoEditorGoogle
 
 # WideVine modules
+include device/google/gs201/widevine/device.mk
 PRODUCT_PACKAGES += \
-	android.hardware.drm@1.4-service.clearkey \
-	android.hardware.drm@1.4-service.widevine \
 	liboemcrypto \
 
 ORIOLE_PRODUCT := %oriole
