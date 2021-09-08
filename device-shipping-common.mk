@@ -19,12 +19,3 @@ PRODUCT_PROPERTY_OVERRIDES += \
     ro.bluetooth.a2dp_offload.supported=true \
     persist.bluetooth.a2dp_offload.disabled=true \
     persist.bluetooth.a2dp_offload.cap=sbc-aac-aptx-aptxhd-ldac
-
-# SecureElement
-#PRODUCT_PACKAGES += \
-#    android.hardware.secure_element@1.2-service-gto \
-#    android.hardware.secure_element@1.2-service-gto-ese2
-
-#PRODUCT_COPY_FILES += \
-#    device/google/gs201/nfc/libse-gto-hal.conf:$(TARGET_COPY_OUT_VENDOR)/etc/libse-gto-hal.conf \
-#    device/google/gs201/nfc/libse-gto-hal2.conf:$(TARGET_COPY_OUT_VENDOR)/etc/libse-gto-hal2.conf
