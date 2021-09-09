@@ -73,7 +73,7 @@
     },
     {
       "Name": "GPUMinFreq",
-      "Path": "/sys/devices/platform/1c500000.mali/scaling_min_freq",
+      "Path": "/sys/devices/platform/28000000.mali/scaling_min_freq",
       "Values": [
         "762000",
         "471000",
