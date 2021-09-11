@@ -42,8 +42,7 @@ PRODUCT_SOONG_NAMESPACES += \
 	vendor/google_devices/common/proprietary/confirmatioui_hal \
 	vendor/google_nos/host/android \
 	vendor/google_nos/test/system-test-harness \
-	vendor/google/camera \
-	vendor/broadcom/bluetooth
+	vendor/google/camera
 
 DEVICE_USES_EXYNOS_GRALLOC_VERSION := 4
 
@@ -453,9 +452,8 @@ PRODUCT_PACKAGES += \
 	VideoEditorGoogle
 
 # WideVine modules
+include device/google/gs201/widevine/device.mk
 PRODUCT_PACKAGES += \
-	android.hardware.drm@1.4-service.clearkey \
-	android.hardware.drm@1.4-service.widevine \
 	liboemcrypto \
 
 ORIOLE_PRODUCT := %oriole
@@ -754,14 +752,10 @@ PRODUCT_PACKAGES += \
 PRODUCT_PROPERTY_OVERRIDES += \
 	ro.frp.pst=/dev/block/by-name/frp
 
-# Bluetooth HAL
-PRODUCT_PACKAGES += \
-	android.hardware.bluetooth@1.1-service.bcmbtlinux \
-	bt_vendor.conf
+# Bluetooth
 PRODUCT_COPY_FILES += \
 	frameworks/native/data/etc/android.hardware.bluetooth.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.bluetooth.xml \
-	frameworks/native/data/etc/android.hardware.bluetooth_le.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.bluetooth_le.xml \
-	device/google/gs201/bluetooth/bt_vendor_overlay.conf:$(TARGET_COPY_OUT_VENDOR)/etc/bluetooth/bt_vendor_overlay.conf
+	frameworks/native/data/etc/android.hardware.bluetooth_le.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.bluetooth_le.xml
 
 # System props to enable Bluetooth Quality Report (BQR) feature
 ifneq (,$(filter userdebug eng, $(TARGET_BUILD_VARIANT)))
