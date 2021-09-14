@@ -53,10 +53,6 @@ on init
     # Property used by NFC for sku specific configurations
     setprop ro.boot.product.hardware.sku ${ro.boot.hardware.sku}
 
-    # NFC streset tool name
-    setprop persist.vendor.nfc.streset libstreset21
-    setprop persist.vendor.se.streset libstreset21
-
     # Support legacy paths
     symlink /data/app /factory
 
