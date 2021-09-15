@@ -26,6 +26,7 @@ using android::hardware::google::pixel::SysfsCollector;
 using android::hardware::google::pixel::UeventListener;
 
 #define UFSHC_PATH(filename) "/dev/sys/block/bootdevice/" #filename
+#define UFS_ERR_PATH(err_type) UFSHC_PATH(err_stats/) #err_type
 const struct SysfsCollector::SysfsPaths sysfs_paths = {
     .SlowioReadCntPath = UFSHC_PATH(slowio_read_cnt),
     .SlowioWriteCntPath = UFSHC_PATH(slowio_write_cnt),
@@ -34,10 +35,18 @@ const struct SysfsCollector::SysfsPaths sysfs_paths = {
     .UFSLifetimeA = UFSHC_PATH(health_descriptor/life_time_estimation_a),
     .UFSLifetimeB = UFSHC_PATH(health_descriptor/life_time_estimation_b),
     .UFSLifetimeC = UFSHC_PATH(health_descriptor/life_time_estimation_c),
-    .UFSHostResetPath = UFSHC_PATH(err_stats/dev_reset_count),
     .F2fsStatsPath = "/sys/fs/f2fs/",
     .ImpedancePath = "/sys/devices/platform/audiometrics/speaker_impedance",
     .CodecPath =     "/sys/devices/platform/audiometrics/codec_state",
+    .UFSErrStatsPath = {
+        UFS_ERR_PATH(pa_err_count),
+        UFS_ERR_PATH(dl_err_count),
+        UFS_ERR_PATH(nl_err_count),
+        UFS_ERR_PATH(tl_err_count),
+        UFS_ERR_PATH(dme_err_count),
+        UFS_ERR_PATH(fatal_err_count),
+        UFS_ERR_PATH(auto_hibern8_err_count)
+    },
 };
 
 const char *const kAudioUevent = "/devices/virtual/amcs/amcs";
