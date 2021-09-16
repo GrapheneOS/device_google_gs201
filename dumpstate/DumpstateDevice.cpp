@@ -322,8 +322,12 @@ void DumpstateDevice::dumpPowerSection(int fd) {
     DumpFileToFd(fd, "Power supply property gcpm", "/sys/class/power_supply/gcpm/uevent");
     DumpFileToFd(fd, "Power supply property gcpm_pps", "/sys/class/power_supply/gcpm_pps/uevent");
     DumpFileToFd(fd, "Power supply property main-charger", "/sys/class/power_supply/main-charger/uevent");
-    DumpFileToFd(fd, "Power supply property pca9486-mains", "/sys/class/power_supply/pca9468-mains/uevent");
-    DumpFileToFd(fd, "Power supply property tcpm", "/sys/class/power_supply/tcpm-source-psy-5-0025/uevent");
+    if (!stat("/sys/class/power_supply/pca9468-mains/uevent", &buffer)) {
+        DumpFileToFd(fd, "Power supply property pca9486-mains", "/sys/class/power_supply/pca9468-mains/uevent");
+    } else {
+        DumpFileToFd(fd, "Power supply property pca9486-mains", "/sys/class/power_supply/pca94xx-mains/uevent");
+    }
+    DumpFileToFd(fd, "Power supply property tcpm", "/sys/class/power_supply/tcpm-source-psy-i2c-max77759tcpc/uevent");
     DumpFileToFd(fd, "Power supply property usb", "/sys/class/power_supply/usb/uevent");
     DumpFileToFd(fd, "Power supply property wireless", "/sys/class/power_supply/wireless/uevent");
     if (!stat("/sys/class/power_supply/maxfg", &buffer)) {
@@ -349,16 +353,14 @@ void DumpstateDevice::dumpPowerSection(int fd) {
     }
 
     DumpFileToFd(fd, "PD Engine", "/dev/logbuffer_usbpd");
-    DumpFileToFd(fd, "PPS-google_cpm", "/dev/logbuffer_google,cpm");
-    DumpFileToFd(fd, "PPS-dc", "/dev/logbuffer_pca9468_tcpm");
+    DumpFileToFd(fd, "PPS-google_cpm", "/dev/logbuffer_cpm");
+    DumpFileToFd(fd, "PPS-dc", "/dev/logbuffer_pca9468");
 
     DumpFileToFd(fd, "BMS", "/dev/logbuffer_ssoc");
     DumpFileToFd(fd, "TTF", "/dev/logbuffer_ttf");
     DumpFileToFd(fd, "TTF details", "/sys/class/power_supply/battery/ttf_details");
     DumpFileToFd(fd, "TTF stats", "/sys/class/power_supply/battery/ttf_stats");
     DumpFileToFd(fd, "maxq", "/dev/logbuffer_maxq");
-    DumpFileToFd(fd, "RTX", "/dev/logbuffer_rtx");
-    DumpFileToFd(fd, "WIRELESS", "/dev/logbuffer_wireless");
 
     RunCommandToFd(fd, "TRICKLE-DEFEND Config", {"/vendor/bin/sh", "-c",
                         " cd /sys/devices/platform/google,battery/power_supply/battery/;"
@@ -372,29 +374,30 @@ void DumpstateDevice::dumpPowerSection(int fd) {
                         " cd /sys/devices/platform/google,charger/;"
                         " for f in `ls bd_*` ; do echo \"$f: `cat $f`\" ; done"});
 
-    RunCommandToFd(fd, "DC_registers dump", {"/vendor/bin/sh", "-c", "cat /d/regmap/*-0057-pca9468-mains/registers"});
+    if (!PropertiesHelper::IsUserBuild()) {
+        DumpFileToFd(fd, "DC_registers dump", "/sys/class/power_supply/pca94xx-mains/device/registers_dump");
 
-    RunCommandToFd(fd, "fg_model", {"/vendor/bin/sh", "-c",
-                        "for f in /d/maxfg* ; do "
-                        "regs=`cat $f/fg_model`; echo $f: ;"
-                        "echo \"$regs\"; done"});
+        RunCommandToFd(fd, "fg_model", {"/vendor/bin/sh", "-c",
+                            "for f in /d/maxfg* ; do "
+                            "regs=`cat $f/fg_model`; echo $f: ;"
+                            "echo \"$regs\"; done"});
 
-    RunCommandToFd(fd, "fg_alo_ver", {"/vendor/bin/sh", "-c",
-                        "for f in /d/maxfg* ; do "
-                        "regs=`cat $f/algo_ver`; echo $f: ;"
-                        "echo \"$regs\"; done"});
+        RunCommandToFd(fd, "fg_alo_ver", {"/vendor/bin/sh", "-c",
+                            "for f in /d/maxfg* ; do "
+                            "regs=`cat $f/algo_ver`; echo $f: ;"
+                            "echo \"$regs\"; done"});
 
-    RunCommandToFd(fd, "fg_model_ok", {"/vendor/bin/sh", "-c",
-                        "for f in /d/maxfg* ; do "
-                        "regs=`cat $f/model_ok`; echo $f: ;"
-                        "echo \"$regs\"; done"});
+        RunCommandToFd(fd, "fg_model_ok", {"/vendor/bin/sh", "-c",
+                            "for f in /d/maxfg* ; do "
+                            "regs=`cat $f/model_ok`; echo $f: ;"
+                            "echo \"$regs\"; done"});
 
-
-    /* FG Registers */
-    RunCommandToFd(fd, "fg registers", {"/vendor/bin/sh", "-c",
-                        "for f in /d/regmap/*-0036 ; do "
-                        "regs=`cat $f/registers`; echo $f: ;"
-                        "echo \"$regs\"; done"});
+        /* FG Registers */
+        RunCommandToFd(fd, "fg registers", {"/vendor/bin/sh", "-c",
+                            "for f in /d/maxfg* ; do "
+                            "regs=`cat $f/registers`; echo $f: ;"
+                            "echo \"$regs\"; done"});
+    }
 
     /* EEPROM State */
     if (!stat("/sys/devices/platform/10970000.hsi2c/i2c-4/4-0050/eeprom", &buffer)) {
@@ -404,19 +407,56 @@ void DumpstateDevice::dumpPowerSection(int fd) {
     }
 
     DumpFileToFd(fd, "Charger Stats", "/sys/class/power_supply/battery/charge_details");
-    RunCommandToFd(fd, "Google Charger", {"/vendor/bin/sh", "-c", "cd /sys/kernel/debug/google_charger/; "
-                        "for f in `ls pps_*` ; do echo \"$f: `cat $f`\" ; done"});
-    RunCommandToFd(fd, "Google Battery", {"/vendor/bin/sh", "-c", "cd /sys/kernel/debug/google_battery/; "
-                        "for f in `ls ssoc_*` ; do echo \"$f: `cat $f`\" ; done"});
+    if (!PropertiesHelper::IsUserBuild()) {
+        RunCommandToFd(fd, "Google Charger", {"/vendor/bin/sh", "-c", "cd /sys/kernel/debug/google_charger/; "
+                            "for f in `ls pps_*` ; do echo \"$f: `cat $f`\" ; done"});
+        RunCommandToFd(fd, "Google Battery", {"/vendor/bin/sh", "-c", "cd /sys/kernel/debug/google_battery/; "
+                            "for f in `ls ssoc_*` ; do echo \"$f: `cat $f`\" ; done"});
+    }
 
     DumpFileToFd(fd, "WLC logs", "/dev/logbuffer_wireless");
     DumpFileToFd(fd, "WLC VER", "/sys/class/power_supply/wireless/device/version");
     DumpFileToFd(fd, "WLC STATUS", "/sys/class/power_supply/wireless/device/status");
+    DumpFileToFd(fd, "WLC FW Version", "/sys/class/power_supply/wireless/device/fw_rev");
     DumpFileToFd(fd, "RTX", "/dev/logbuffer_rtx");
 
-    RunCommandToFd(fd, "gvotables", {"/vendor/bin/sh", "-c", "cat /sys/kernel/debug/gvotables/*/status"});
-    DumpFileToFd(fd, "BCL", "/sys/devices/virtual/pmic/mitigation/triggered_stats");
-    DumpFileToFd(fd, "IF PMIC", "/sys/devices/virtual/pmic/max77759-mitigation/triggered_stats");
+    if (!PropertiesHelper::IsUserBuild()) {
+        RunCommandToFd(fd, "gvotables", {"/vendor/bin/sh", "-c", "cat /sys/kernel/debug/gvotables/*/status"});
+    }
+    RunCommandToFd(fd, "Mitigation Stats", {"/vendor/bin/sh", "-c", "echo \"Source\\t\\tCount\\tSOC\\tTime\\tVoltage\"; "
+                        "for f in `ls /sys/devices/virtual/pmic/mitigation/last_triggered_count/*` ; "
+                        "do count=`cat $f`; "
+                        "a=${f/\\/sys\\/devices\\/virtual\\/pmic\\/mitigation\\/last_triggered_count\\//}; "
+                        "b=${f/last_triggered_count/last_triggered_capacity}; "
+                        "c=${f/last_triggered_count/last_triggered_timestamp/}; "
+                        "d=${f/last_triggered_count/last_triggered_voltage/}; "
+                        "cnt=`cat $f`; "
+                        "cap=`cat ${b/count/cap}`; "
+                        "ti=`cat ${c/count/time}`; "
+                        "volt=`cat ${d/count/volt}`; "
+                        "echo \"${a/_count/} "
+                        "\\t$cnt\\t$cap\\t$ti\\t$volt\" ; done"});
+    RunCommandToFd(fd, "Clock Divider Ratio", {"/vendor/bin/sh", "-c", "echo \"Source\\t\\tRatio\"; "
+                        "for f in `ls /sys/devices/virtual/pmic/mitigation/clock_ratio/*` ; "
+                        "do ratio=`cat $f`; "
+                        "a=${f/\\/sys\\/devices\\/virtual\\/pmic\\/mitigation\\/clock_ratio\\//}; "
+                        "echo \"${a/_ratio/} \\t$ratio\" ; done"});
+    RunCommandToFd(fd, "Clock Stats", {"/vendor/bin/sh", "-c", "echo \"Source\\t\\tStats\"; "
+                        "for f in `ls /sys/devices/virtual/pmic/mitigation/clock_stats/*` ; "
+                        "do stats=`cat $f`; "
+                        "a=${f/\\/sys\\/devices\\/virtual\\/pmic\\/mitigation\\/clock_stats\\//}; "
+                        "echo \"${a/_stats/} \\t$stats\" ; done"});
+    RunCommandToFd(fd, "Triggered Level", {"/vendor/bin/sh", "-c", "echo \"Source\\t\\tLevel\"; "
+                        "for f in `ls /sys/devices/virtual/pmic/mitigation/triggered_lvl/*` ; "
+                        "do lvl=`cat $f`; "
+                        "a=${f/\\/sys\\/devices\\/virtual\\/pmic\\/mitigation\\/triggered_lvl\\//}; "
+                        "echo \"${a/_lvl/} \\t$lvl\" ; done"});
+    RunCommandToFd(fd, "Instruction", {"/vendor/bin/sh", "-c",
+                        "for f in `ls /sys/devices/virtual/pmic/mitigation/instruction/*` ; "
+                        "do val=`cat $f` ; "
+                        "a=${f/\\/sys\\/devices\\/virtual\\/pmic\\/mitigation\\/instruction\\//}; "
+                        "echo \"$a=$val\" ; done"});
+
 
 }
 
