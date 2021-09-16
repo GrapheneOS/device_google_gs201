@@ -42,13 +42,13 @@
     },
     {
       "Name": "GPUMinFreq",
-      "Path": "/sys/devices/platform/28000000.mali/scaling_min_freq",
+      "Path": "/sys/devices/platform/28000000.mali/hint_min_freq",
       "Values": [
         "151000",
         "302000",
-        "455000",
+        "510000",
         "572000",
-        "670000"
+        "762000"
       ],
       "DefaultIndex": 0,
       "ResetOnInit": true
@@ -289,7 +289,7 @@
       "PowerHint": "CAMERA_STREAMING_STANDARD",
       "Node": "GPUMinFreq",
       "Duration": 0,
-      "Value": "670000"
+      "Value": "762000"
     },
     {
       "PowerHint": "FIXED_PERFORMANCE",
@@ -325,7 +325,7 @@
       "PowerHint": "EXPENSIVE_RENDERING",
       "Node": "GPUMinFreq",
       "Duration": 0,
-      "Value": "455000"
+      "Value": "510000"
     },
     {
       "PowerHint": "REFRESH_120FPS",
