@@ -47,6 +47,7 @@
       "Values": [
         "9999999",
         "1024000",
+        "1197000",
         "1999000",
         "1491000"
       ],
@@ -69,6 +70,7 @@
       "Values": [
         "9999999",
         "984000",
+        "1426000",
         "1826000"
       ],
       "DefaultIndex": 0,
@@ -457,22 +459,40 @@
       "Value": "4-7"
     },
     {
-      "PowerHint": "CAMERA_CPU_THROTTLE",
+      "PowerHint": "CAMERA_THERMAL_CPU_THROTTLE",
       "Node": "CPUBigClusterMaxFreq",
       "Duration": 1000,
       "Value": "984000"
     },
     {
-      "PowerHint": "CAMERA_CPU_THROTTLE",
+      "PowerHint": "CAMERA_THERMAL_CPU_THROTTLE",
       "Node": "CPUMidClusterMaxFreq",
       "Duration": 1000,
       "Value": "1024000"
     },
     {
-      "PowerHint": "CAMERA_CPU_THROTTLE",
+      "PowerHint": "CAMERA_THERMAL_CPU_THROTTLE",
       "Node": "CPULittleClusterMaxFreq",
       "Duration": 1000,
       "Value": "1098000"
+    },
+    {
+      "PowerHint": "CAMERA_CAPTURE_CPU_THROTTLE",
+      "Node": "CPUBigClusterMaxFreq",
+      "Duration": 1000,
+      "Value": "1426000"
+    },
+    {
+      "PowerHint": "CAMERA_CAPTURE_CPU_THROTTLE",
+      "Node": "CPUMidClusterMaxFreq",
+      "Duration": 1000,
+      "Value": "1197000"
+    },
+    {
+      "PowerHint": "CAMERA_CAPTURE_CPU_THROTTLE",
+      "Node": "CPULittleClusterMaxFreq",
+      "Duration": 1000,
+      "Value": "1401000"
     },
     {
       "PowerHint": "CAMERA_SHOT",
