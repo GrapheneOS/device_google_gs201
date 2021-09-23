@@ -223,14 +223,12 @@ static V1_0::Status validateAndSetVidPid(uint64_t functions) {
         case static_cast<uint64_t>(GadgetFunction::NCM):
             if (!(vendorFunctions == "user" || vendorFunctions == ""))
                 ALOGE("Invalid vendorFunctions set: %s", vendorFunctions.c_str());
-            // TODO(b/170953147): need to request a new PID. Sharing PID of rndis now.
-            ret = setVidPid("0x18d1", "0x4ee3");
+            ret = setVidPid("0x18d1", "0x4eeb");
             break;
         case GadgetFunction::ADB | GadgetFunction::NCM:
             if (!(vendorFunctions == "user" || vendorFunctions == ""))
                 ALOGE("Invalid vendorFunctions set: %s", vendorFunctions.c_str());
-            // TODO(b/170953147): need to request a new PID. Sharing PID of rndis+adb now.
-            ret = setVidPid("0x18d1", "0x4ee4");
+            ret = setVidPid("0x18d1", "0x4eec");
             break;
         default:
             ALOGE("Combination not supported");
