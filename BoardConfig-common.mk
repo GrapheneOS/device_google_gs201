@@ -166,6 +166,9 @@ TARGET_COPY_OUT_PRODUCT := product
 BOARD_SYSTEM_EXTIMAGE_FILE_SYSTEM_TYPE := ext4
 TARGET_COPY_OUT_SYSTEM_EXT := system_ext
 
+# persist.img
+BOARD_PERSISTIMAGE_FILE_SYSTEM_TYPE := f2fs
+
 ########################
 # Video Codec
 ########################
