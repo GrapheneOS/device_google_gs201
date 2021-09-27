@@ -17,6 +17,9 @@
 #define LOG_TAG "pixelstats"
 
 #include <android-base/logging.h>
+#include <pixelstats/SysfsCollector.h>
+#include <pixelstats/UeventListener.h>
+
 #include <thread>
 
 #include <pixelstats/SysfsCollector.h>
@@ -38,6 +41,9 @@ const struct SysfsCollector::SysfsPaths sysfs_paths = {
     .F2fsStatsPath = "/sys/fs/f2fs/",
     .ImpedancePath = "/sys/devices/platform/audiometrics/speaker_impedance",
     .CodecPath =     "/sys/devices/platform/audiometrics/codec_state",
+    .SpeakerTemperaturePath = "/sys/devices/platform/audiometrics/speaker_temp",
+    .SpeakerExcursionPath = "/sys/devices/platform/audiometrics/speaker_excursion",
+    .SpeakerHeartBeatPath = "/sys/devices/platform/audiometrics/speaker_heartbeat",
     .UFSErrStatsPath = {
         UFS_ERR_PATH(pa_err_count),
         UFS_ERR_PATH(dl_err_count),
@@ -49,12 +55,14 @@ const struct SysfsCollector::SysfsPaths sysfs_paths = {
     },
 };
 
-const char *const kAudioUevent = "/devices/virtual/amcs/amcs";
+const struct UeventListener::UeventPaths ueventPaths = {
+        .AudioUevent = "/devices/virtual/amcs/amcs",
+};
 
 int main() {
     LOG(INFO) << "starting PixelStats";
 
-    UeventListener ueventListener(kAudioUevent);
+    UeventListener ueventListener(ueventPaths);
     std::thread listenThread(&UeventListener::ListenForever, &ueventListener);
     listenThread.detach();
 
