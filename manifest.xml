@@ -179,6 +179,15 @@
        </interface>
     </hal>
     <hal format="hidl">
+       <name>vendor.google.audiometricext</name>
+       <transport>hwbinder</transport>
+       <version>1.0</version>
+       <interface>
+           <name>IAudioMetricExt</name>
+           <instance>default</instance>
+       </interface>
+    </hal>
+    <hal format="hidl">
         <name>android.hardware.sensors</name>
         <transport>hwbinder</transport>
         <version>1.0</version>
