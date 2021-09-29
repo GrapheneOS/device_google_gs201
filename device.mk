@@ -148,8 +148,9 @@ PRODUCT_PACKAGES += \
        libGLES_mali-gs201-prebuilt \
        vulkan.gs201-prebuilt \
        libOpenCL \
-       android.hardware.neuralnetworks@1.3-service-armnn
 #        libgpudataproducer
+
+include device/google/gs101/neuralnetwork/neuralnetwork.mk
 
 ifeq ($(USE_SWIFTSHADER),true)
 PRODUCT_PACKAGES += \
