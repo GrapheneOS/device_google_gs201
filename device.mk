@@ -1053,6 +1053,9 @@ include hardware/google/pixel/PixelLogger/PixelLogger.mk
 # sscoredump
 include hardware/google/pixel/sscoredump/device.mk
 
+# Wifi ext
+include hardware/google/pixel/wifi_ext/device.mk
+
 # Battery Stats Viewer
 PRODUCT_PACKAGES_DEBUG += BatteryStatsViewer
 
