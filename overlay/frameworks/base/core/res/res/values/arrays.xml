@@ -30,8 +30,7 @@
          This is used to differentiate between removable eUICCs and built in eUICCs, and should
          be set by OEMs for devices which use eUICCs. -->
     <integer-array name="non_removable_euicc_slots">
-        <item>1</item>
-        <item>2</item>
+        <item>0</item>
     </integer-array>
 </resources>
 
