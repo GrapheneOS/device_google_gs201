@@ -255,7 +255,7 @@ on late-fs
     class_start animation
 
     # Mount RW partitions which need run fsck
-    mount_all /vendor/etc/fstab.gs201 --late
+    mount_all --late
 
 on post-fs-data
     # Log data folder
@@ -449,7 +449,7 @@ on property:persist.vendor.radio.no_modem_board=1
     setprop ro.radio.noril yes
 
 on fs
-    mount_all /vendor/etc/fstab.gs201 --early
+    mount_all --early
     restorecon_recursive /mnt/vendor/efs
     chown radio system /mnt/vendor/efs
     restorecon_recursive /mnt/vendor/efs_backup
