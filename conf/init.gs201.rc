@@ -14,6 +14,8 @@ service vendor.charger /system/bin/charger
     file /proc/last_kmsg r
 
 on early-init
+    # Convert /dev/block/by-name/persist to f2fs
+    exec -- /vendor/bin/convert_to_f2fs.sh /dev/block/by-name/persist false
     mount_all /vendor/etc/fstab.persist --early
 
 on init
