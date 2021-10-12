@@ -16,6 +16,9 @@ service vendor.charger /system/bin/charger
 on early-init
     # Convert /dev/block/by-name/persist to f2fs
     exec -- /vendor/bin/convert_to_f2fs.sh /dev/block/by-name/persist false
+
+    # Format /efs to f2fs, if it's ext4
+    exec -- /vendor/bin/convert_to_f2fs.sh /dev/block/by-name/efs true
     mount_all /vendor/etc/fstab.persist --early
 
 on init
