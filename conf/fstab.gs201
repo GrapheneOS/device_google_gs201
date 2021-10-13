@@ -10,7 +10,7 @@ product                                                  /product               
 vendor                                                   /vendor                     ext4    ro,barrier=1             wait,slotselect,avb=vbmeta_vendor,logical,first_stage_mount
 vendor_dlkm                                              /vendor_dlkm                ext4    ro,barrier=1             wait,slotselect,avb=vbmeta,logical,first_stage_mount
 /dev/block/platform/14700000.ufs/by-name/boot            /boot                       emmc    defaults                 slotselect,avb=boot,first_stage_mount
-/dev/block/platform/14700000.ufs/by-name/efs             /mnt/vendor/efs             ext4    defaults,noatime,rw      wait,check,formattable
+/dev/block/platform/14700000.ufs/by-name/efs             /mnt/vendor/efs             f2fs    noatime,sync             wait,check,formattable
 /dev/block/platform/14700000.ufs/by-name/efs_backup      /mnt/vendor/efs_backup      ext4    defaults,noatime,rw      wait,check,formattable
 /dev/block/platform/14700000.ufs/by-name/modem_userdata  /mnt/vendor/modem_userdata  ext4    defaults,noatime,rw      wait,check,formattable
 /dev/block/platform/14700000.ufs/by-name/modem           /mnt/vendor/modem_img       ext4    ro,defaults,context=u:object_r:modem_img_file:s0,barrier=1    wait,slotselect
