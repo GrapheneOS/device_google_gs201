@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <glgps xmlns="http://www.glpals.com/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.glpals.com/ glconfig.xsd" >
-  <hal 
+  <hal
        PortName="/dev/ttyBCM"
        BaudRate="921600"
        GpioNStdbyPath="/sys/devices/platform/10940000.spi/spi_master/spi5/spi5.0/nstandby"
-       GpioDelayMs="130"
+       CustGpioDelayMs="250"
        LogEnabled="true"
        Log="JAVA"
-       SecondaryConfigPath="/data/vendor/gps/gps2.xml"
+       SecondaryConfigPath="/data/vendor/gps/overlay/gps_overlay.xml"
        LogDirectory="/sdcard/gps/broadcom/storage/"
        CtrlPipe="/data/vendor/gps/glgpsctrl"
        NmeaOutName="/data/vendor/gps/nmea_out"
@@ -21,6 +21,7 @@
        SuplSslMethod="SSLv23_NO_TLSv1_2"
        SuplEnable="true"
        SuplUseApn="true"
+       SuplTlsCertDirPath="/etc/security/cacerts"
        SuplTlsCertPath="/vendor/etc/gnss/gps.cer"
        SuplUT1Seconds="20"
        SuplUT2Seconds="20"
@@ -37,13 +38,8 @@
        SuplMgpsCapable = "true"
 
        RtoEnable="true"
-       RtoConfig="gllto.glpals.com/rto/v1/latest/rto.dat"
-
        RtiEnable="true"
-       RtiConfig="gllto.glpals.com:80/rtistatus4.dat"
-
        HttpSyncLto="true"
-       LtoConfig="gllto2.glpals.com/4day/v5/latest/lto2.dat"
        LtoFileName="lto2.dat"
        LtoDir="/data/vendor/gps/"
        LtoSyncThresholdDays="1"
@@ -54,8 +50,8 @@
        IgnoreInjectedSystemTime="true"
 
        AttributionAppPkgName="com.google.android.carrierlocation"
-       CpResetInvalidateSec="15"
 
+       AssertEnabled="true"
   />
 
   <gll
@@ -64,13 +60,12 @@
        FrqPlan="FRQ_PLAN_26MHZ_2PPM_49_152MHZ_300PPB"
        MultiCarrRFMode="GL_MULTI_CARR_RF_MODE_L1_L5"
        MultiCarrLnaMask="L1_EXT_ON|L5_EXT_ON"
-       GpsCarrierType="3,1,3,1,2,3,2,3,3,3,1,2,1,1,2,1,2,1,1,1,1,1,1,3,3,3,3,1,2,3,2,3"
        RfType="GL_RF_4776_BRCM"
-       ExtL5Bias="17.6"
+       ExtL5Bias="13.0"
        EnableFilteringForLTEB13="true"
 
        WarmStandbyTimeout1Seconds="10"
-       WarmStandbyTimeout2Seconds="20"
+       WarmStandbyTimeout2Seconds="15"
 
        EnableGnssPropagateInStandby="true"
 
@@ -78,11 +73,13 @@
        RfPathLossDb_Cp="3.5"
        RfPathLossDb_Ap_L5="3.5"
        RfPathLossDb_Cp_L5="3.5"
+       OnChipGpsCarrierType="3,2,3,3,2,3,2,3,3,3,1,2,1,3,2,1,2,3,1,1,1,1,3,3,3,3,3,1,2,3,2,3"
 
+       EnableOnChipStopNotification="2"
+       PowerMode="3"
   />
 
   <gll_features
-       EnableLowPowerPmm="true"
        EnableNicAutoSwitch="true"
        EnableNavic="true"
   />
