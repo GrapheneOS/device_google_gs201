@@ -600,6 +600,8 @@ on property:sys.boot_completed=1
     chown system system /dev/sys/fs/by-name/userdata/compr_written_block
     chown system system /dev/sys/fs/by-name/userdata/compr_saved_block
     chown system system /dev/sys/fs/by-name/userdata/compr_new_inode
+    chown system system /dev/sys/fs/by-name/userdata/gc_segment_mode
+    chown system system /dev/sys/fs/by-name/userdata/gc_reclaimed_segments
 
     # Block layer tuning: discard chunk size up to 128MB
     # Otherwise, contiguous discards can be merged
