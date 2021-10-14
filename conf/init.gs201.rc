@@ -22,6 +22,10 @@ on early-init
 
     # Format /efs_backup to f2fs, if it's ext4
     exec -- /vendor/bin/convert_to_f2fs.sh /dev/block/by-name/efs_backup true
+
+    # Format /modem_userdata to f2fs, if it's ext4
+    exec -- /vendor/bin/convert_to_f2fs.sh /dev/block/by-name/modem_userdata true
+
     mount_all /vendor/etc/fstab.persist --early
 
 on init
