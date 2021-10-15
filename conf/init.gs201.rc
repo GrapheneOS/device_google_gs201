@@ -14,6 +14,18 @@ service vendor.charger /system/bin/charger
     file /proc/last_kmsg r
 
 on early-init
+    # Convert /dev/block/by-name/persist to f2fs
+    exec -- /vendor/bin/convert_to_f2fs.sh /dev/block/by-name/persist false
+
+    # Format /efs to f2fs, if it's ext4
+    exec -- /vendor/bin/convert_to_f2fs.sh /dev/block/by-name/efs true
+
+    # Format /efs_backup to f2fs, if it's ext4
+    exec -- /vendor/bin/convert_to_f2fs.sh /dev/block/by-name/efs_backup true
+
+    # Format /modem_userdata to f2fs, if it's ext4
+    exec -- /vendor/bin/convert_to_f2fs.sh /dev/block/by-name/modem_userdata true
+
     mount_all /vendor/etc/fstab.persist --early
 
 on init
@@ -595,6 +607,8 @@ on property:sys.boot_completed=1
     chown system system /dev/sys/fs/by-name/userdata/compr_written_block
     chown system system /dev/sys/fs/by-name/userdata/compr_saved_block
     chown system system /dev/sys/fs/by-name/userdata/compr_new_inode
+    chown system system /dev/sys/fs/by-name/userdata/gc_segment_mode
+    chown system system /dev/sys/fs/by-name/userdata/gc_reclaimed_segments
 
     # Block layer tuning: discard chunk size up to 128MB
     # Otherwise, contiguous discards can be merged
