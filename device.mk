@@ -595,11 +595,6 @@ PRODUCT_PROPERTY_OVERRIDES += \
 	debug.slsi_platform=1 \
 	debug.hwc.winupdate=1
 
-# hw composer HAL
-PRODUCT_PACKAGES += \
-	libdisplaycolor \
-	hwcomposer.$(TARGET_BOARD_PLATFORM)
-
 ifneq (,$(filter userdebug eng, $(TARGET_BUILD_VARIANT)))
 PRODUCT_PACKAGES += displaycolor_service
 endif
@@ -769,8 +764,8 @@ PRODUCT_PACKAGES += \
 #	trusty_metricsd
 
 PRODUCT_PACKAGES += \
-	android.hardware.graphics.composer@2.4-impl \
-	android.hardware.graphics.composer@2.4-service
+	android.hardware.composer.hwc3-service.pixel \
+	libdisplaycolor
 
 # Storage: for factory reset protection feature
 PRODUCT_PROPERTY_OVERRIDES += \
