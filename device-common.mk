@@ -21,7 +21,7 @@ PRODUCT_COPY_FILES += \
     frameworks/native/data/etc/android.hardware.telephony.carrierlock.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.telephony.carrierlock.xml
 
 # Factory OTA
--include vendor/google/factoryota/client/factoryota.mk
+-include vendor/unbundled_google/packages/FactoryOtaPrebuilt/factoryota.mk
 
 # Set system properties identifying the chipset
 PRODUCT_VENDOR_PROPERTIES += ro.soc.manufacturer=Google
