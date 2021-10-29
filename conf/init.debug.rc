@@ -1,6 +1,23 @@
 on early-init
     mount debugfs /sys/kernel/debug /sys/kernel/debug
 
+# SJTAG
+on init
+    chown system system /sys/devices/platform/sjtag_ap/interface/access_lvl
+    chown system system /sys/devices/platform/sjtag_ap/interface/auth
+    chown system system /sys/devices/platform/sjtag_ap/interface/begin
+    chown system system /sys/devices/platform/sjtag_ap/interface/dbg_domain
+    chown system system /sys/devices/platform/sjtag_ap/interface/dbg_itvl
+    chown system system /sys/devices/platform/sjtag_ap/interface/end
+    chown system system /sys/devices/platform/sjtag_ap/interface/pubkey
+    chown system system /sys/devices/platform/sjtag_gsa/interface/access_lvl
+    chown system system /sys/devices/platform/sjtag_gsa/interface/auth
+    chown system system /sys/devices/platform/sjtag_gsa/interface/begin
+    chown system system /sys/devices/platform/sjtag_gsa/interface/dbg_domain
+    chown system system /sys/devices/platform/sjtag_gsa/interface/dbg_itvl
+    chown system system /sys/devices/platform/sjtag_gsa/interface/end
+    chown system system /sys/devices/platform/sjtag_gsa/interface/pubkey
+
 on property:vendor.debug.ramdump.force_crash=true
     write /sys/kernel/pixel_debug/trigger "null"
 

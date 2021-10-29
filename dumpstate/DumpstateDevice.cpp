@@ -796,6 +796,14 @@ void DumpstateDevice::dumpAoCSection(int fd) {
     DumpFileToFd(fd, "AoC Service Status", "/sys/devices/platform/19000000.aoc/services");
     DumpFileToFd(fd, "AoC Restarts", "/sys/devices/platform/19000000.aoc/restart_count");
     DumpFileToFd(fd, "AoC Coredumps", "/sys/devices/platform/19000000.aoc/coredump_count");
+    DumpFileToFd(fd, "AoC ring buf wake", "/sys/devices/platform/19000000.aoc/control/ring_buffer_wakeup");
+    DumpFileToFd(fd, "AoC host ipc wake", "/sys/devices/platform/19000000.aoc/control/host_ipc_wakeup");
+    DumpFileToFd(fd, "AoC usf wake", "/sys/devices/platform/19000000.aoc/control/usf_wakeup");
+    DumpFileToFd(fd, "AoC audio wake", "/sys/devices/platform/19000000.aoc/control/audio_wakeup");
+    DumpFileToFd(fd, "AoC logging wake", "/sys/devices/platform/19000000.aoc/control/logging_wakeup");
+    DumpFileToFd(fd, "AoC hotword wake", "/sys/devices/platform/19000000.aoc/control/hotword_wakeup");
+    DumpFileToFd(fd, "AoC memory exception wake", "/sys/devices/platform/19000000.aoc/control/memory_exception");
+    DumpFileToFd(fd, "AoC memory votes", "/sys/devices/platform/19000000.aoc/control/memory_votes");
 }
 
 // Dump items related to sensors usf.
