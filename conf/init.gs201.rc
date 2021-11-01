@@ -828,3 +828,13 @@ on post-fs-data && property:ro.vendor.factory=1
     chmod 666 /sys/class/backlight/panel0-backlight/local_hbm_max_timeout
     chmod 666 /sys/class/backlight/panel0-backlight/local_hbm_mode
     chmod 666 /sys/class/backlight/panel0-backlight/hbm_mode
+
+# Persistent Soft Max Freq overrides
+on property:persist.vendor.softmaxfreq.cl0=*
+    write /sys/devices/platform/exynos-acme/freq_qos_max "0 ${persist.vendor.softmaxfreq.cl0}"
+
+on property:persist.vendor.softmaxfreq.cl1=*
+    write /sys/devices/platform/exynos-acme/freq_qos_max "4 ${persist.vendor.softmaxfreq.cl1}"
+
+on property:persist.vendor.softmaxfreq.cl2=*
+    write /sys/devices/platform/exynos-acme/freq_qos_max "6 ${persist.vendor.softmaxfreq.cl2}"
