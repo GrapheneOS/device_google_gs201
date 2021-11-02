@@ -208,6 +208,7 @@ void DumpstateDevice::dumpCameraLogs(int fd, const std::string &destDir) {
     // sessions or starts a new session after the one with performance issues).
     dumpLogs(fd, kCameraLogDir, cameraDestDir, 10, "session-ended-");
     dumpLogs(fd, kCameraLogDir, cameraDestDir, 5, "high-drop-rate-");
+    dumpLogs(fd, kCameraLogDir, cameraDestDir, 5, "watchdog-");
 }
 
 timepoint_t startSection(int fd, const std::string &sectionName) {
