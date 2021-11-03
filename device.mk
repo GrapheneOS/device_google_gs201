@@ -483,9 +483,13 @@ endif
 SOONG_CONFIG_NAMESPACES += lyric
 SOONG_CONFIG_lyric += \
 	use_lyric_camera_hal \
-	soc
-SOONG_CONFIG_lyric_use_lyric_camera_hal := true
+	soc \
+	tuning_product
+
 SOONG_CONFIG_lyric_soc := gs201
+SOONG_CONFIG_lyric_use_lyric_camera_hal := true
+# SOONG_CONFIG_lyric_tuning_product is set in device-specific makefiles,
+# such as device/google/cloudripper/device-cloudripper.mk
 
 SOONG_CONFIG_NAMESPACES += google3a_config
 SOONG_CONFIG_google3a_config += \
@@ -497,7 +501,6 @@ SOONG_CONFIG_google3a_config += \
 SOONG_CONFIG_google3a_config_soc := gs201
 SOONG_CONFIG_google3a_config_gcam_awb := true
 SOONG_CONFIG_google3a_config_ghawb_truetone := true
-SOONG_CONFIG_google3a_config_target_device := $(LOCAL_TARGET_PRODUCT)
 
 
 SOONG_CONFIG_NAMESPACES += gch
