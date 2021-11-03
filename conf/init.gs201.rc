@@ -368,9 +368,6 @@ on early-boot
     setprop vendor.all.modules.ready 1
     setprop vendor.all.devices.ready 1
 
-    # Update dm-verity state and set partition.*.verified properties
-    verity_update_state
-
     # Permission for Health Storage HAL
     chown system system /dev/sys/block/bootdevice/manual_gc
 
