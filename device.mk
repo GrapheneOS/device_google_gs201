@@ -466,12 +466,17 @@ PRODUCT_PACKAGES += \
 
 PANTHER_PRODUCT := %panther
 CHEETAH_PRODUCT := %cheetah
+CLOUDRIPPER_PRODUCT := %cloudripper
 ifneq (,$(filter $(PANTHER_PRODUCT), $(TARGET_PRODUCT)))
         LOCAL_TARGET_PRODUCT := panther
 else ifneq (,$(filter $(CHEETAH_PRODUCT), $(TARGET_PRODUCT)))
         LOCAL_TARGET_PRODUCT := cheetah
-else
+else ifneq (,$(filter $(CLOUDRIPPER_PRODUCT), $(TARGET_PRODUCT)))
         LOCAL_TARGET_PRODUCT := cloudripper
+else
+        # WAR: continue defaulting to slider build on gs201 to not
+        # break dev targets such as ravenclaw
+        LOCAL_TARGET_PRODUCT := slider
 endif
 
 #ifneq ($(wildcard vendor/google/camera),)
