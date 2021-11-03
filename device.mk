@@ -478,9 +478,9 @@ endif
 SOONG_CONFIG_NAMESPACES += lyric
 SOONG_CONFIG_lyric += \
 	use_lyric_camera_hal \
-	device
+	soc
 SOONG_CONFIG_lyric_use_lyric_camera_hal := true
-SOONG_CONFIG_lyric_device := gs201
+SOONG_CONFIG_lyric_soc := gs201
 
 SOONG_CONFIG_NAMESPACES += google3a_config
 SOONG_CONFIG_google3a_config += \
