@@ -464,14 +464,14 @@ include device/google/gs201/widevine/device.mk
 PRODUCT_PACKAGES += \
 	liboemcrypto \
 
-ORIOLE_PRODUCT := %oriole
-RAVEN_PRODUCT := %raven
-ifneq (,$(filter $(ORIOLE_PRODUCT), $(TARGET_PRODUCT)))
-        LOCAL_TARGET_PRODUCT := oriole
-else ifneq (,$(filter $(RAVEN_PRODUCT), $(TARGET_PRODUCT)))
-        LOCAL_TARGET_PRODUCT := raven
+PANTHER_PRODUCT := %panther
+CHEETAH_PRODUCT := %cheetah
+ifneq (,$(filter $(PANTHER_PRODUCT), $(TARGET_PRODUCT)))
+        LOCAL_TARGET_PRODUCT := panther
+else ifneq (,$(filter $(CHEETAH_PRODUCT), $(TARGET_PRODUCT)))
+        LOCAL_TARGET_PRODUCT := cheetah
 else
-        LOCAL_TARGET_PRODUCT := slider
+        LOCAL_TARGET_PRODUCT := cloudripper
 endif
 
 #ifneq ($(wildcard vendor/google/camera),)
