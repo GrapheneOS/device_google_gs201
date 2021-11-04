@@ -466,21 +466,26 @@ PRODUCT_PACKAGES += \
 
 PANTHER_PRODUCT := %panther
 CHEETAH_PRODUCT := %cheetah
+CLOUDRIPPER_PRODUCT := %cloudripper
 ifneq (,$(filter $(PANTHER_PRODUCT), $(TARGET_PRODUCT)))
         LOCAL_TARGET_PRODUCT := panther
 else ifneq (,$(filter $(CHEETAH_PRODUCT), $(TARGET_PRODUCT)))
         LOCAL_TARGET_PRODUCT := cheetah
-else
+else ifneq (,$(filter $(CLOUDRIPPER_PRODUCT), $(TARGET_PRODUCT)))
         LOCAL_TARGET_PRODUCT := cloudripper
+else
+        # WAR: continue defaulting to slider build on gs201 to not
+        # break dev targets such as ravenclaw
+        LOCAL_TARGET_PRODUCT := slider
 endif
 
 #ifneq ($(wildcard vendor/google/camera),)
 SOONG_CONFIG_NAMESPACES += lyric
 SOONG_CONFIG_lyric += \
 	use_lyric_camera_hal \
-	device
+	soc
 SOONG_CONFIG_lyric_use_lyric_camera_hal := true
-SOONG_CONFIG_lyric_device := gs201
+SOONG_CONFIG_lyric_soc := gs201
 
 SOONG_CONFIG_NAMESPACES += google3a_config
 SOONG_CONFIG_google3a_config += \
