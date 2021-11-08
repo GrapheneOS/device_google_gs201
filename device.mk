@@ -127,7 +127,7 @@ endif
 
 ifeq (,$(filter aosp_%,$(TARGET_PRODUCT)))
 # Audio client implementation for RIL
-#USES_GAUDIO := true
+USES_GAUDIO := true
 endif
 
 # ######################
