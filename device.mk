@@ -512,8 +512,7 @@ SOONG_CONFIG_gch_hwl_library := lyric
 PRODUCT_PACKAGES += \
 	android.hardware.wifi@1.0-service \
 	wificond \
-	libwpa_client \
-	WifiOverlay \
+	libwpa_client
 
 # Connectivity
 PRODUCT_PACKAGES += \
