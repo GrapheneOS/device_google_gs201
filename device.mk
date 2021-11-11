@@ -179,7 +179,7 @@ PRODUCT_VENDOR_PROPERTIES += \
 endif
 PRODUCT_VENDOR_PROPERTIES += \
        ro.opengles.version=196610 \
-       debug.renderengine.backend=gles
+       debug.renderengine.backend=skiaglthreaded
 #       graphics.gpu.profiler.support=true \
 
 # GRAPHICS - GPU (end)
