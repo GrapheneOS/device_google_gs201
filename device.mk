@@ -127,7 +127,7 @@ endif
 
 ifeq (,$(filter aosp_%,$(TARGET_PRODUCT)))
 # Audio client implementation for RIL
-#USES_GAUDIO := true
+USES_GAUDIO := true
 endif
 
 # ######################
@@ -179,7 +179,7 @@ PRODUCT_VENDOR_PROPERTIES += \
 endif
 PRODUCT_VENDOR_PROPERTIES += \
        ro.opengles.version=196610 \
-       debug.renderengine.backend=gles
+       debug.renderengine.backend=skiaglthreaded
 #       graphics.gpu.profiler.support=true \
 
 # GRAPHICS - GPU (end)
@@ -243,10 +243,13 @@ PRODUCT_COPY_FILES += \
 	device/google/gs201/conf/init.recovery.device.rc:$(TARGET_COPY_OUT_RECOVERY)/root/init.recovery.gs201.rc
 
 # Fstab files
+PRODUCT_PACKAGES += \
+	fstab.gs201 \
+	fstab.gs201.vendor_ramdisk \
+	fstab.gs201-fips \
+	fstab.gs201-fips.vendor_ramdisk
 PRODUCT_COPY_FILES += \
-	device/google/gs201/conf/fstab.gs201:$(TARGET_COPY_OUT_VENDOR)/etc/fstab.gs201 \
-	device/google/gs201/conf/fstab.persist:$(TARGET_COPY_OUT_VENDOR)/etc/fstab.persist \
-	device/google/gs201/conf/fstab.gs201:$(TARGET_COPY_OUT_VENDOR_RAMDISK)/first_stage_ramdisk/fstab.gs201
+	device/google/gs201/conf/fstab.persist:$(TARGET_COPY_OUT_VENDOR)/etc/fstab.persist
 
 # Shell scripts
 PRODUCT_COPY_FILES += \
@@ -312,7 +315,8 @@ PRODUCT_PROPERTY_OVERRIDES += \
 	persist.vendor.sys.silentlog.tcp = "On" \
 	ro.vendor.cbd.modem_removable = "1" \
 	ro.vendor.cbd.modem_type = "s5100sit" \
-	persist.vendor.sys.modem.logging.br_num=5
+	persist.vendor.sys.modem.logging.br_num=5 \
+	persist.vendor.sys.modem.logging.enable=true
 
 # Enable silent CP crash handling
 PRODUCT_PROPERTY_OVERRIDES += \

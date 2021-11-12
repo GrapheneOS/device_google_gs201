@@ -163,6 +163,9 @@ on init
     chown system system /dev/logbuffer_maxfg
     chown system system /dev/logbuffer_maxfg_base
     chown system system /dev/logbuffer_maxfg_flip
+    chown system system /dev/logbuffer_maxfg_monitor
+    chown system system /dev/logbuffer_maxfg_base_monitor
+    chown system system /dev/logbuffer_maxfg_flip_monitor
     chown system system /dev/logbuffer_maxq
     chown system system /dev/logbuffer_google,cpm
     chown system system /dev/logbuffer_rtx
@@ -171,6 +174,8 @@ on init
     chown system system /dev/logbuffer_tcpm
     chown system system /dev/logbuffer_usbpd
     chown system system /dev/logbuffer_wireless
+    chown system system /dev/logbuffer_pca9468
+    chown system system /dev/logbuffer_cpm
 
     # Dump maxfg
     chown system system /sys/class/power_supply/maxfg/m5_model_state
@@ -185,6 +190,7 @@ on init
     # Dump eeprom
     chown system system /sys/devices/platform/10970000.hsi2c/i2c-5/5-0050/eeprom
     chown system system /sys/devices/platform/10970000.hsi2c/i2c-4/4-0050/eeprom
+    chown system system /sys/devices/platform/10da0000.hsi2c/i2c-6/6-0050/eeprom
 
     # Modem temperature driver
     chown radio system /sys/devices/platform/cp-tm1/cp_temp
@@ -255,7 +261,7 @@ on late-fs
     class_start animation
 
     # Mount RW partitions which need run fsck
-    mount_all /vendor/etc/fstab.gs201 --late
+    mount_all --late
 
 on post-fs-data
     # Log data folder
@@ -449,7 +455,7 @@ on property:persist.vendor.radio.no_modem_board=1
     setprop ro.radio.noril yes
 
 on fs
-    mount_all /vendor/etc/fstab.gs201 --early
+    mount_all --early
     restorecon_recursive /mnt/vendor/efs
     chown radio system /mnt/vendor/efs
     restorecon_recursive /mnt/vendor/efs_backup
