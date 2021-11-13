@@ -24,6 +24,15 @@
 // identical with the exception of the encryption settings, so to keep them in
 // sync the rules below generate them from a template file.
 
+package {
+    // See: http://go/android-license-faq
+    // A large-scale-change added 'default_applicable_licenses' to import
+    // all of the 'license_kinds' from "device_google_gs201_license"
+    // to get the below license kinds:
+    //   SPDX-license-identifier-Apache-2.0
+    default_applicable_licenses: ["device_google_gs201_license"],
+}
+
 genrule {
     name: "gen_fstab.gs201",
     srcs: ["fstab.gs201.in"],
