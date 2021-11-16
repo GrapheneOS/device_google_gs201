@@ -501,6 +501,7 @@ on fs
     chown system system /sys/class/backlight/panel0-backlight/brightness
     chown system system /sys/class/backlight/panel0-backlight/dimming_on
     chown system system /sys/class/backlight/panel0-backlight/hbm_mode
+    chown system system /sys/class/backlight/panel0-backlight/local_hbm_mode
     chown system system /sys/devices/platform/exynos-drm/primary-panel/gamma
     chown system system /sys/module/drm/parameters/vblankoffdelay
     chown system system /sys/class/dqe/atc/ambient_light
