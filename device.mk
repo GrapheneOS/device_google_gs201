@@ -936,8 +936,8 @@ PRODUCT_PACKAGES += \
 	audio.a2dp.default \
 	audio.bluetooth.default \
 	audio.r_submix.default \
-	audio_spk_35l41
-#	sound_trigger.primary.$(TARGET_BOARD_PLATFORM) \
+	audio_spk_35l41 \
+	sound_trigger.primary.$(TARGET_BOARD_PLATFORM)
 #	libaoc_waves \
 #
 
