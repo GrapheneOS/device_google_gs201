@@ -323,9 +323,9 @@ void DumpstateDevice::dumpPowerSection(int fd) {
     DumpFileToFd(fd, "Power supply property gcpm_pps", "/sys/class/power_supply/gcpm_pps/uevent");
     DumpFileToFd(fd, "Power supply property main-charger", "/sys/class/power_supply/main-charger/uevent");
     if (!stat("/sys/class/power_supply/pca9468-mains/uevent", &buffer)) {
-        DumpFileToFd(fd, "Power supply property pca9486-mains", "/sys/class/power_supply/pca9468-mains/uevent");
+        DumpFileToFd(fd, "Power supply property pca9468-mains", "/sys/class/power_supply/pca9468-mains/uevent");
     } else {
-        DumpFileToFd(fd, "Power supply property pca9486-mains", "/sys/class/power_supply/pca94xx-mains/uevent");
+        DumpFileToFd(fd, "Power supply property pca94xx-mains", "/sys/class/power_supply/pca94xx-mains/uevent");
     }
     DumpFileToFd(fd, "Power supply property tcpm", "/sys/class/power_supply/tcpm-source-psy-i2c-max77759tcpc/uevent");
     DumpFileToFd(fd, "Power supply property usb", "/sys/class/power_supply/usb/uevent");
@@ -345,6 +345,10 @@ void DumpstateDevice::dumpPowerSection(int fd) {
         DumpFileToFd(fd, "maxfg_flip", "/dev/logbuffer_maxfg_flip_monitor");
     }
 
+    if (!stat("/sys/class/power_supply/dock", &buffer)) {
+        DumpFileToFd(fd, "Power supply property dock", "/sys/class/power_supply/dock/uevent");
+    }
+
     if (!stat("/dev/logbuffer_tcpm", &buffer)) {
         DumpFileToFd(fd, "Logbuffer TCPM", "/dev/logbuffer_tcpm");
     } else if (!PropertiesHelper::IsUserBuild()) {
@@ -354,6 +358,16 @@ void DumpstateDevice::dumpPowerSection(int fd) {
             RunCommandToFd(fd, "TCPM logs", {"/vendor/bin/sh", "-c", "cat /sys/kernel/debug/usb/tcpm*"});
         }
     }
+
+    RunCommandToFd(fd, "TCPC", {"/vendor/bin/sh", "-c",
+		       "for f in /sys/devices/platform/10d60000.hsi2c/i2c-*/i2c-max77759tcpc;"
+		       "do echo \"registers:\"; cat $f/registers;"
+		       "echo \"frs:\"; cat $f/frs;"
+		       "echo \"auto_discharge:\"; cat $f/auto_discharge;"
+		       "echo \"bc12_enabled:\"; cat $f/bc12_enabled;"
+		       "echo \"cc_toggle_enable:\"; cat $f/cc_toggle_enable;"
+		       "echo \"contaminant_detection:\"; cat $f/contaminant_detection;"
+		       "echo \"contaminant_detection_status:\"; cat $f/contaminant_detection_status;  done"});
 
     DumpFileToFd(fd, "PD Engine", "/dev/logbuffer_usbpd");
     DumpFileToFd(fd, "PPS-google_cpm", "/dev/logbuffer_cpm");
@@ -463,6 +477,8 @@ void DumpstateDevice::dumpPowerSection(int fd) {
                         "a=${f/\\/sys\\/devices\\/virtual\\/pmic\\/mitigation\\/instruction\\//}; "
                         "echo \"$a=$val\" ; done"});
 
+    DumpFileToFd(fd, "BCL", "/sys/devices/virtual/pmic/mitigation/triggered_stats");
+    DumpFileToFd(fd, "IF PMIC", "/sys/devices/virtual/pmic/max77759-mitigation/triggered_stats");
 
 }
 

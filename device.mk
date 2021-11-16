@@ -651,11 +651,6 @@ PRODUCT_PROPERTY_OVERRIDES += \
 
 PRODUCT_CHARACTERISTICS := nosdcard
 
-# WPA SUPPLICANT
-PRODUCT_COPY_FILES += \
-	device/google/gs201/wifi/p2p_supplicant.conf:$(TARGET_COPY_OUT_VENDOR)/etc/wifi/p2p_supplicant.conf \
-	device/google/gs201/wifi/wpa_supplicant_overlay.conf:$(TARGET_COPY_OUT_VENDOR)/etc/wifi/wpa_supplicant_overlay.conf
-
 # WIFI COEX
 PRODUCT_COPY_FILES += \
 	device/google/gs201/wifi/coex_table.xml:$(TARGET_COPY_OUT_VENDOR)/etc/wifi/coex_table.xml
