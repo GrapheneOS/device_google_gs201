@@ -67,7 +67,8 @@ on early-boot
     # etr_miu function
     mkdir /config/usb_gadget/g1/functions/etr_miu.gs11
 
-    setprop vendor.usb.functions.ready 1
+    # disable permission change. TODO (b/206902205): add back later
+    # setprop vendor.usb.functions.ready 1
 
 on boot
     write /config/usb_gadget/g1/bcdDevice 0x0510
