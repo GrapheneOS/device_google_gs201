@@ -918,7 +918,7 @@ PRODUCT_PACKAGES += \
 	android.hardware.audio@7.1-impl \
 	android.hardware.audio.effect@7.0-impl \
 	android.hardware.soundtrigger@2.3-impl \
-	vendor.google.whitechapel.audio.audioext@2.0-impl \
+	vendor.google.whitechapel.audio.audioext@3.0-impl \
 	android.hardware.bluetooth.audio@2.1-impl
 
 #
