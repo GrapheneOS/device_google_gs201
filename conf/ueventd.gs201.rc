@@ -176,6 +176,7 @@
 
 # Bluetooth
 /dev/ttySAC18             0660   bluetooth   system
+/dev/btpower              0660   bluetooth   system
 
 # BT Wifi Coexistence
 /dev/wbrc                 0660   system      system
