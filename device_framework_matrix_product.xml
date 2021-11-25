@@ -1,4 +1,20 @@
-<compatibility-matrix version="1.0" type="framework" level="5">
+<compatibility-matrix version="1.0" type="framework" level="6">
+    <hal format="aidl">
+        <name>android.hardware.contexthub</name>
+        <version>1</version>
+        <interface>
+            <name>IContextHub</name>
+            <instance>default</instance>
+        </interface>
+    </hal>
+    <hal format="aidl">
+        <name>android.hardware.graphics.composer3</name>
+        <version>1</version>
+        <interface>
+            <name>IComposer</name>
+            <instance>default</instance>
+        </interface>
+    </hal>
     <hal format="hidl" optional="true">
         <name>android.hardware.radio</name>
         <version>1.2</version>
@@ -13,6 +29,14 @@
         <interface>
             <name>IVibrator</name>
             <instance>dual</instance>
+        </interface>
+    </hal>
+    <hal format="aidl">
+        <name>android.hardware.wifi.hostapd</name>
+        <version>1</version>
+        <interface>
+            <name>IHostapd</name>
+            <instance>default</instance>
         </interface>
     </hal>
     <hal format="hidl" optional="true">
