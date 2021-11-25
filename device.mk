@@ -493,7 +493,7 @@ SOONG_CONFIG_lyric += \
 SOONG_CONFIG_lyric_soc := gs201
 SOONG_CONFIG_lyric_use_lyric_camera_hal := true
 # SOONG_CONFIG_lyric_tuning_product is set in device-specific makefiles,
-# such as device/google/cloudripper/device-cloudripper.mk
+# such as device/google/${DEVICE}/device-${DEVICE}.mk
 
 SOONG_CONFIG_NAMESPACES += google3a_config
 SOONG_CONFIG_google3a_config += \
