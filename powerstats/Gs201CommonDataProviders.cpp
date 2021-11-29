@@ -253,6 +253,7 @@ void addSoC(std::shared_ptr<PowerStats> p) {
     const std::vector<std::pair<std::string, std::string>> mifReqStateHeaders = {
             std::make_pair("AOC", "AOC"),
             std::make_pair("GSA", "GSA"),
+            std::make_pair("TPU", "TPU"),
     };
     const std::vector<std::pair<std::string, std::string>> slcReqStateHeaders = {
             std::make_pair("AOC", "AOC"),
