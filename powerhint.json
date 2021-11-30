@@ -223,7 +223,7 @@
     },
     {
       "Name": "DisplayWakeup",
-      "Path": "/sys/devices/platform/1c300000.drmdecon/early_wakeup",
+      "Path": "/sys/devices/platform/1c240000.drmdecon/early_wakeup",
       "Values": [
         "1",
         "0"

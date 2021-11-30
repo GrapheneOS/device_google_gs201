@@ -535,6 +535,10 @@ on fs
     chown system system /sys/class/dqe/atc/threshold_3
     chown system system /sys/class/dqe/atc/gain_limit
     chown system system /sys/class/dqe/atc/lt_calc_ab_shift
+    chown system system /sys/devices/platform/1c240000.drmdecon/early_wakeup
+    chmod 0220 /sys/devices/platform/1c240000.drmdecon/early_wakeup
+    chown system system /sys/devices/platform/1c242000.drmdecon/early_wakeup
+    chmod 0220 /sys/devices/platform/1c242000.drmdecon/early_wakeup
 
 # Copy DRM Key
 #    copy /system/app/wv.keys /factory/wv.keys
