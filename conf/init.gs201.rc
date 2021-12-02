@@ -597,6 +597,8 @@ on property:ro.debuggable=1
 
 # Touch
 on property:vendor.device.modules.ready=1
+    chown system system /sys/class/spi_master/spi0/spi0.0/synaptics_tcm.0/sysfs/get_raw_data
+    chown system system /sys/class/spi_master/spi0/spi0.0/synaptics_tcm.0/sysfs/force_active
     chown system system /sys/class/spi_master/spi11/spi11.0/stm_fts_cmd
     chown system system /sys/class/spi_master/spi11/spi11.0/glove_mode
     chown system system /sys/class/spi_master/spi6/spi6.0/stm_fts_cmd
