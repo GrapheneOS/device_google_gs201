@@ -534,6 +534,16 @@ void addPowerDomains(std::shared_ptr<PowerStats> p) {
 void addDevfreq(std::shared_ptr<PowerStats> p) {
     p->addStateResidencyDataProvider(std::make_unique<DevfreqStateResidencyDataProvider>(
             "INT", "/sys/devices/platform/17000020.devfreq_int/devfreq/17000020.devfreq_int"));
+
+    p->addStateResidencyDataProvider(std::make_unique<DevfreqStateResidencyDataProvider>(
+            "INTCAM",
+            "/sys/devices/platform/17000030.devfreq_intcam/devfreq/17000030.devfreq_intcam"));
+
+    p->addStateResidencyDataProvider(std::make_unique<DevfreqStateResidencyDataProvider>(
+            "CAM", "/sys/devices/platform/17000050.devfreq_cam/devfreq/17000050.devfreq_cam"));
+
+    p->addStateResidencyDataProvider(std::make_unique<DevfreqStateResidencyDataProvider>(
+            "TNR", "/sys/devices/platform/17000060.devfreq_tnr/devfreq/17000060.devfreq_tnr"));
 }
 
 void addTPU(std::shared_ptr<PowerStats> p) {
