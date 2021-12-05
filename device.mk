@@ -674,10 +674,6 @@ SOONG_CONFIG_NAMESPACES += bigo
 SOONG_CONFIG_bigo += soc
 SOONG_CONFIG_bigo_soc := gs201
 
-# MFC firmware
-PRODUCT_COPY_FILES += \
-	vendor/google_devices/gs201/prebuilts/misc_bins/bootloader/mfc/mfc_fw.bin:$(TARGET_COPY_OUT_VENDOR)/firmware/mfc_fw.bin
-
 # 1. Codec 2.0
 # exynos service
 PRODUCT_SOONG_NAMESPACES += vendor/samsung_slsi/codec2
