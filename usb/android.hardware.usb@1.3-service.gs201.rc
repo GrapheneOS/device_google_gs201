@@ -38,6 +38,8 @@ on property:vendor.usb.functions.ready=1
     chown system system /config/usb_gadget/g1/functions/accessory.gs2
     chown system system /config/usb_gadget/g1/functions/acm.gs6
     chown system system /config/usb_gadget/g1/functions/acm.gs6/port_num
+    chown system system /config/usb_gadget/g1/functions/acm.uwb0
+    chown system system /config/usb_gadget/g1/functions/acm.uwb0/port_num
     chown system system /config/usb_gadget/g1/functions/audio_source.gs3
     chown system system /config/usb_gadget/g1/functions/dm.gs7
     chown system system /config/usb_gadget/g1/functions/ffs.adb

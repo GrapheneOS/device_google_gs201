@@ -165,6 +165,8 @@ static V1_0::Status validateAndSetVidPid(uint64_t functions) {
                 ret = setVidPid("0x04e8", "0x6862");
             } else if (vendorFunctions == "etr_miu") {
                 ret = setVidPid("0x18d1", "0x4ee2");
+            } else if (vendorFunctions == "uwb_acm") {
+                ret = setVidPid("0x18d1", "0x4ee2");
             } else {
                 if (!(vendorFunctions == "user" || vendorFunctions == "")) {
                     ALOGE("Invalid vendorFunctions set: %s", vendorFunctions.c_str());
@@ -298,6 +300,10 @@ V1_0::Status UsbGadget::setupFunctions(uint64_t functions,
     } else if (vendorFunctions == "etr_miu") {
         ALOGI("enable etr_miu functions");
         if (linkFunction("etr_miu.gs11", i++))
+            return Status::ERROR;
+    } else if (vendorFunctions == "uwb_acm") {
+        ALOGI("enable uwb acm function");
+        if (linkFunction("acm.uwb0", i++))
             return Status::ERROR;
     }
 
