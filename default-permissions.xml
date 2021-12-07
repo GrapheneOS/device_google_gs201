@@ -64,7 +64,7 @@
     </exception>
 
     <exception
-            package="com.google.android.apps.pixelmigrate">
+            package="com.google.android.apps.restore">
         <!-- External storage -->
         <permission name="android.permission.READ_EXTERNAL_STORAGE" fixed="false"/>
         <permission name="android.permission.WRITE_EXTERNAL_STORAGE" fixed="false"/>
@@ -74,9 +74,8 @@
         <!-- Call logs -->
         <permission name="android.permission.READ_CALL_LOG" fixed="false"/>
         <permission name="android.permission.WRITE_CALL_LOG" fixed="false"/>
-        <!-- SMS -->
-        <permission name="android.permission.RECEIVE_SMS" fixed="false"/>
-        <permission name="android.permission.READ_PHONE_NUMBERS" fixed="false"/>
+        <!-- Used to set up a Wi-Fi P2P network -->
+        <permission name="android.permission.ACCESS_FINE_LOCATION" fixed="false"/>
     </exception>
 
     <exception

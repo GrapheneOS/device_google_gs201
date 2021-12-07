@@ -315,8 +315,7 @@ PRODUCT_PROPERTY_OVERRIDES += \
 	persist.vendor.sys.silentlog.tcp = "On" \
 	ro.vendor.cbd.modem_removable = "1" \
 	ro.vendor.cbd.modem_type = "s5100sit" \
-	persist.vendor.sys.modem.logging.br_num=5 \
-	persist.vendor.sys.modem.logging.enable=true
+	persist.vendor.sys.modem.logging.br_num=5
 
 # Enable silent CP crash handling
 PRODUCT_PROPERTY_OVERRIDES += \
@@ -858,7 +857,6 @@ USE_RADIO_HAL_1_6 := true
 
 ifneq ($(BOARD_WITHOUT_RADIO),true)
 $(call inherit-product-if-exists, vendor/samsung_slsi/telephony/common/device-vendor.mk)
-PRODUCT_COPY_FILES += frameworks/native/data/etc/android.hardware.telephony.cdma.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.telephony.cdma.xml
 endif
 
 #GPS HAL
