@@ -152,7 +152,7 @@ PRODUCT_PACKAGES += \
        libGLES_mali-gs201-prebuilt \
        vulkan.gs201-prebuilt \
        libOpenCL \
-#        libgpudataproducer
+       libgpudataproducer-gs201-prebuilt \
 
 include device/google/gs101/neuralnetwork/neuralnetwork.mk
 
