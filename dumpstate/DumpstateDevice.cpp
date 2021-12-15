@@ -298,6 +298,9 @@ void DumpstateDevice::dumpTextSection(int fd, const std::string &sectionName) {
 void DumpstateDevice::dumpWlanSection(int fd) {
     RunCommandToFd(fd, "WLAN Debug Dump", {"/vendor/bin/sh", "-c",
                    "cat /sys/wifi/dump_start"});
+
+    // Dump firmware symbol table for firmware log decryption
+    DumpFileToFd(fd, "WLAN FW Log Symbol Table", "/vendor/firmware/Data.msc");
 }
 
 // Dump items related to power and battery
