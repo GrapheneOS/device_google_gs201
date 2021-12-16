@@ -89,6 +89,9 @@ endif
 ifneq ($(PRODUCT_BUILD_VBMETA_IMAGE),false)
 AB_OTA_PARTITIONS += vbmeta
 endif
+ifneq ($(PRODUCT_BUILD_PVMFW_IMAGE),false)
+AB_OTA_PARTITIONS += pvmfw
+endif
 
 # EMULATOR common modules
 BOARD_EMULATOR_COMMON_MODULES := liblight
