@@ -480,9 +480,6 @@ void DumpstateDevice::dumpPowerSection(int fd) {
                         "a=${f/\\/sys\\/devices\\/virtual\\/pmic\\/mitigation\\/instruction\\//}; "
                         "echo \"$a=$val\" ; done"});
 
-    DumpFileToFd(fd, "BCL", "/sys/devices/virtual/pmic/mitigation/triggered_stats");
-    DumpFileToFd(fd, "IF PMIC", "/sys/devices/virtual/pmic/max77759-mitigation/triggered_stats");
-
 }
 
 // Dump items related to thermal
