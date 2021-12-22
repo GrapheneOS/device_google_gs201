@@ -485,32 +485,16 @@ else
 endif
 
 #ifneq ($(wildcard vendor/google/camera),)
-SOONG_CONFIG_NAMESPACES += lyric
-SOONG_CONFIG_lyric += \
-	use_lyric_camera_hal \
-	soc \
-	tuning_product
-
-SOONG_CONFIG_lyric_soc := gs201
-SOONG_CONFIG_lyric_use_lyric_camera_hal := true
-# SOONG_CONFIG_lyric_tuning_product is set in device-specific makefiles,
+$(call soong_config_set,lyric,soc,gs201)
+$(call soong_config_set,lyric,use_lyric_camera_hal,true)
+# lyric::tuning_product is set in device-specific makefiles,
 # such as device/google/${DEVICE}/device-${DEVICE}.mk
 
-SOONG_CONFIG_NAMESPACES += google3a_config
-SOONG_CONFIG_google3a_config += \
-	soc \
-	gcam_awb \
-	ghawb_truetone \
-	target_device
+$(call soong_config_set,google3a_config,soc,gs201)
+$(call soong_config_set,google3a_config,gcam_awb,true)
+$(call soong_config_set,google3a_config,ghawb_truetone,true)
 
-SOONG_CONFIG_google3a_config_soc := gs201
-SOONG_CONFIG_google3a_config_gcam_awb := true
-SOONG_CONFIG_google3a_config_ghawb_truetone := true
-
-
-SOONG_CONFIG_NAMESPACES += gch
-SOONG_CONFIG_gch += hwl_library
-SOONG_CONFIG_gch_hwl_library := lyric
+$(call soong_config_set,gch,hwl_library,lyric)
 #endif
 
 # WiFi
@@ -671,9 +655,7 @@ endif
 ## VIDEO
 ####################################
 
-SOONG_CONFIG_NAMESPACES += bigo
-SOONG_CONFIG_bigo += soc
-SOONG_CONFIG_bigo_soc := gs201
+$(call soong_config_set,bigo,soc,gs201)
 
 # 1. Codec 2.0
 # exynos service
@@ -964,11 +946,7 @@ PRODUCT_SOONG_NAMESPACES += \
 	vendor/google/whitechapel/audio/hal \
 	vendor/google/whitechapel/audio/interfaces
 
-SOONG_CONFIG_NAMESPACES += aoc_audio_board
-SOONG_CONFIG_aoc_audio_board += \
-	platform
-
-SOONG_CONFIG_aoc_audio_board_platform := $(TARGET_BOARD_PLATFORM)
+$(call soong_config_set,aoc_audio_board,platform,$(TARGET_BOARD_PLATFORM))
 #
 ## Audio properties
 PRODUCT_PROPERTY_OVERRIDES += \

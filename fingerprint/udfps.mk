@@ -21,9 +21,7 @@ PRODUCT_COPY_FILES += \
 PRODUCT_SOONG_NAMESPACES += vendor/goodix/udfps/g6_trusty
 PRODUCT_SOONG_NAMESPACES += vendor/goodix/udfps/g6_aidl_trusty
 
-SOONG_CONFIG_NAMESPACES += fp_hal_feature
-SOONG_CONFIG_fp_hal_feature += biometric_suez_support
-SOONG_CONFIG_fp_hal_feature_biometric_suez_support := true
+$(call soong_config_set,fp_hal_feature,biometric_suez_support,true)
 
 PRODUCT_PACKAGES += \
     android.hardware.biometrics.fingerprint@2.1-service.goodix \
