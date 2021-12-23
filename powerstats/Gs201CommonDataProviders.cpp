@@ -376,7 +376,8 @@ void addMobileRadio(std::shared_ptr<PowerStats> p)
             "/sys/devices/platform/cpif/modem/power_stats", cfgs));
 
     p->addEnergyConsumer(PowerStatsEnergyConsumer::createMeterConsumer(p,
-            EnergyConsumerType::MOBILE_RADIO, "MODEM", {"VSYS_PWR_MODEM", "VSYS_PWR_RFFE"}));
+            EnergyConsumerType::MOBILE_RADIO, "MODEM",
+            {"VSYS_PWR_MODEM", "VSYS_PWR_RFFE", "VSYS_PWR_MMWAVE"}));
 }
 
 void addGNSS(std::shared_ptr<PowerStats> p)

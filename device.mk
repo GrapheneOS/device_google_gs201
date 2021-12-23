@@ -14,6 +14,8 @@
 # limitations under the License.
 #
 
+include device/google/gs-common/device.mk
+
 TARGET_BOARD_PLATFORM := gs201
 
 ifneq (,$(filter %_64,$(TARGET_PRODUCT)))
