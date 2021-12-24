@@ -88,7 +88,6 @@ endif
 
 # From system.property
 PRODUCT_PROPERTY_OVERRIDES += \
-	dev.usbsetting.embedded=on \
 	ro.telephony.default_network=27 \
 	persist.vendor.ril.use.iccid_to_plmn=1 \
 	persist.vendor.ril.emergencynumber.mode=5
@@ -181,8 +180,8 @@ PRODUCT_VENDOR_PROPERTIES += \
 endif
 PRODUCT_VENDOR_PROPERTIES += \
        ro.opengles.version=196610 \
-       debug.renderengine.backend=skiaglthreaded
-#       graphics.gpu.profiler.support=true \
+       debug.renderengine.backend=skiaglthreaded \
+       graphics.gpu.profiler.support=true \
 
 # GRAPHICS - GPU (end)
 # ####################
