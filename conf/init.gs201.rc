@@ -485,27 +485,28 @@ on fs
     chown system system /sys/class/backlight/panel0-backlight/local_hbm_mode
     chown system system /sys/devices/platform/exynos-drm/primary-panel/gamma
     chown system system /sys/module/drm/parameters/vblankoffdelay
-    chown system system /sys/class/dqe/atc/ambient_light
-    chown system system /sys/class/dqe/atc/st
-    chown system system /sys/class/dqe/atc/en
-    chown system system /sys/class/dqe/atc/lt
-    chown system system /sys/class/dqe/atc/ns
-    chown system system /sys/class/dqe/atc/dither
-    chown system system /sys/class/dqe/atc/pl_w1
-    chown system system /sys/class/dqe/atc/pl_w2
-    chown system system /sys/class/dqe/atc/ctmode
-    chown system system /sys/class/dqe/atc/pp_en
-    chown system system /sys/class/dqe/atc/upgrade_on
-    chown system system /sys/class/dqe/atc/tdr_max
-    chown system system /sys/class/dqe/atc/tdr_min
-    chown system system /sys/class/dqe/atc/back_light
-    chown system system /sys/class/dqe/atc/dstep
-    chown system system /sys/class/dqe/atc/scale_mode
-    chown system system /sys/class/dqe/atc/threshold_1
-    chown system system /sys/class/dqe/atc/threshold_2
-    chown system system /sys/class/dqe/atc/threshold_3
-    chown system system /sys/class/dqe/atc/gain_limit
-    chown system system /sys/class/dqe/atc/lt_calc_ab_shift
+    chown system system /sys/class/dqe0/atc/ambient_light
+    chown system system /sys/class/dqe0/atc/st
+    chown system system /sys/class/dqe0/atc/en
+    chown system system /sys/class/dqe0/atc/lt
+    chown system system /sys/class/dqe0/atc/ns
+    chown system system /sys/class/dqe0/atc/dither
+    chown system system /sys/class/dqe0/atc/pl_w1
+    chown system system /sys/class/dqe0/atc/pl_w2
+    chown system system /sys/class/dqe0/atc/ctmode
+    chown system system /sys/class/dqe0/atc/pp_en
+    chown system system /sys/class/dqe0/atc/upgrade_on
+    chown system system /sys/class/dqe0/atc/tdr_max
+    chown system system /sys/class/dqe0/atc/tdr_min
+    chown system system /sys/class/dqe0/atc/back_light
+    chown system system /sys/class/dqe0/atc/dstep
+    chown system system /sys/class/dqe0/atc/scale_mode
+    chown system system /sys/class/dqe0/atc/threshold_1
+    chown system system /sys/class/dqe0/atc/threshold_2
+    chown system system /sys/class/dqe0/atc/threshold_3
+    chown system system /sys/class/dqe0/atc/gain_limit
+    chown system system /sys/class/dqe0/atc/lt_calc_ab_shift
+
     chown system system /sys/devices/platform/1c240000.drmdecon/early_wakeup
     chmod 0220 /sys/devices/platform/1c240000.drmdecon/early_wakeup
     chown system system /sys/devices/platform/1c242000.drmdecon/early_wakeup
