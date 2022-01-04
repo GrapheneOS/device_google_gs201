@@ -14,7 +14,6 @@
 # limitations under the License.
 #
 
--include vendor/google_devices/gs201/proprietary/telephony/device-vendor.mk
 include device/google/gs201/device.mk
 
 # Telephony
