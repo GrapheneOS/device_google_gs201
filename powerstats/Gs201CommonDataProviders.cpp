@@ -16,10 +16,10 @@
 
 #include <PowerStatsAidl.h>
 #include <Gs201CommonDataProviders.h>
-#include "AocStateResidencyDataProvider.h"
-#include "DevfreqStateResidencyDataProvider.h"
-#include "DvfsStateResidencyDataProvider.h"
-#include "UfsStateResidencyDataProvider.h"
+#include <AocStateResidencyDataProvider.h>
+#include <DevfreqStateResidencyDataProvider.h>
+#include <DvfsStateResidencyDataProvider.h>
+#include <UfsStateResidencyDataProvider.h>
 #include <dataproviders/GenericStateResidencyDataProvider.h>
 #include <dataproviders/IioEnergyMeterDataProvider.h>
 #include <dataproviders/PowerStatsEnergyConsumer.h>
