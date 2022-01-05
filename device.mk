@@ -881,8 +881,8 @@ PRODUCT_PACKAGES_DEBUG += \
 	$(NULL)
 
 PRODUCT_PACKAGES += \
-	android.hardware.health@2.1-impl-gs201 \
-	android.hardware.health@2.1-service
+	android.hardware.health-service.gs201 \
+	android.hardware.health-service.gs201_recovery \
 
 # Audio
 # Audio HAL Server & Default Implementations
