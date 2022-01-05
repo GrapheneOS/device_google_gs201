@@ -49,12 +49,7 @@ TARGET_RECOVERY_WIPE := device/google/gs201/conf/recovery.wipe
 # This is the fstab file that will be included in the recovery image.  Note that
 # recovery doesn't care about the encryption settings, so it doesn't matter
 # whether we use the normal or the fips fstab here.
-#
-# Since this is a generated file, it's necessary to use intermediates-dir-for in
-# order to refer to it correctly.  And since intermediates-dir-for isn't defined
-# yet when this file is included, it's necessary to use a deferred variable
-# assignment ( = ) rather than an immediate variable assignment ( := ).
-TARGET_RECOVERY_FSTAB = $(call intermediates-dir-for,ETC,fstab.gs201)/fstab.gs201
+TARGET_RECOVERY_FSTAB_GENRULE := gen_fstab.gs201
 
 TARGET_RECOVERY_PIXEL_FORMAT := ABGR_8888
 TARGET_RECOVERY_UI_MARGIN_HEIGHT := 165
