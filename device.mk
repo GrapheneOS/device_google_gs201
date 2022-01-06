@@ -294,10 +294,6 @@ PRODUCT_PACKAGES += \
 	tune2fs.vendor_ramdisk \
 	resize2fs.vendor_ramdisk
 
-# Filesystem: convert /dev/block/by-name/persist to f2fs
-PRODUCT_COPY_FILES += \
-	device/google/gs201/convert_to_f2fs.sh:$(TARGET_COPY_OUT_VENDOR)/bin/convert_to_f2fs.sh \
-
 # Userdata Checkpointing OTA GC
 PRODUCT_PACKAGES += \
 	checkpoint_gc
