@@ -65,6 +65,7 @@
     </hal>
     <hal format="aidl" optional="true">
       <name>com.google.edgetpu</name>
+        <version>2</version>
         <interface>
             <name>IEdgeTpuVendorService</name>
             <instance>default</instance>
