@@ -34,6 +34,14 @@ VENDOR_SECURITY_PATCH = $(PLATFORM_SECURITY_PATCH)
 # Set boot SPL
 BOOT_SECURITY_PATCH = $(PLATFORM_SECURITY_PATCH)
 
+# TODO(b/207450311): Remove this flag once implemented
+USE_PIXEL_GRALLOC := false
+ifeq ($(USE_PIXEL_GRALLOC),true)
+	PRODUCT_SOONG_NAMESPACES += hardware/google/gchips/GrallocHAL
+else
+	PRODUCT_SOONG_NAMESPACES += hardware/google/gchips/gralloc4
+endif
+
 PRODUCT_SOONG_NAMESPACES += \
 	hardware/google/av \
 	hardware/google/gchips \
@@ -293,10 +301,6 @@ PRODUCT_PACKAGES += \
 	linker.vendor_ramdisk \
 	tune2fs.vendor_ramdisk \
 	resize2fs.vendor_ramdisk
-
-# Filesystem: convert /dev/block/by-name/persist to f2fs
-PRODUCT_COPY_FILES += \
-	device/google/gs201/convert_to_f2fs.sh:$(TARGET_COPY_OUT_VENDOR)/bin/convert_to_f2fs.sh \
 
 # Userdata Checkpointing OTA GC
 PRODUCT_PACKAGES += \
