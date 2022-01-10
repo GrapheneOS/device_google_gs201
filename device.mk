@@ -18,10 +18,6 @@ include device/google/gs-common/device.mk
 
 TARGET_BOARD_PLATFORM := gs201
 
-ifneq (,$(filter %_64,$(TARGET_PRODUCT)))
-LOCAL_64ONLY := _64
-endif
-
 AB_OTA_POSTINSTALL_CONFIG += \
 	RUN_POSTINSTALL_system=true \
 	POSTINSTALL_PATH_system=system/bin/otapreopt_script \
@@ -202,10 +198,10 @@ PRODUCT_VENDOR_PROPERTIES += \
 # Device Manifest, Device Compatibility Matrix for Treble
 ifeq ($(DEVICE_USES_EXYNOS_GRALLOC_VERSION), 4)
 	DEVICE_MANIFEST_FILE := \
-		device/google/gs201/manifest$(LOCAL_64ONLY).xml
+		device/google/gs201/manifest.xml
 else
 	DEVICE_MANIFEST_FILE := \
-		device/google/gs201/manifest$(LOCAL_64ONLY)-gralloc3.xml
+		device/google/gs201/manifest-gralloc3.xml
 endif
 
 ifneq (,$(filter aosp_%,$(TARGET_PRODUCT)))
@@ -852,11 +848,7 @@ endif
 include device/google/gs201/gnss/device-gnss.mk
 BOARD_VENDOR_SEPOLICY_DIRS += device/google/gs201-sepolicy/gps
 
-ifeq (,$(filter %_64,$(TARGET_PRODUCT)))
-$(call inherit-product, $(SRC_TARGET_DIR)/product/core_64_bit.mk)
-else
 $(call inherit-product, $(SRC_TARGET_DIR)/product/core_64_bit_only.mk)
-endif
 #$(call inherit-product, hardware/google_devices/exynos5/exynos5.mk)
 #$(call inherit-product-if-exists, hardware/google_devices/gs201/gs201.mk)
 #$(call inherit-product-if-exists, vendor/google_devices/common/exynos-vendor.mk)
