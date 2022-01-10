@@ -34,14 +34,6 @@ VENDOR_SECURITY_PATCH = $(PLATFORM_SECURITY_PATCH)
 # Set boot SPL
 BOOT_SECURITY_PATCH = $(PLATFORM_SECURITY_PATCH)
 
-# TODO(b/207450311): Remove this flag once implemented
-USE_PIXEL_GRALLOC := false
-ifeq ($(USE_PIXEL_GRALLOC),true)
-	PRODUCT_SOONG_NAMESPACES += hardware/google/gchips/GrallocHAL
-else
-	PRODUCT_SOONG_NAMESPACES += hardware/google/gchips/gralloc4
-endif
-
 PRODUCT_SOONG_NAMESPACES += \
 	hardware/google/av \
 	hardware/google/gchips \
