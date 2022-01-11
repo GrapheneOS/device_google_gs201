@@ -153,9 +153,10 @@ USE_SWIFTSHADER := false
 # HWUI
 TARGET_USES_VULKAN = false
 
-# TODO(b/185349920)
 # PRODUCT_SOONG_NAMESPACES += \
 #        vendor/arm/mali/valhall
+
+$(call soong_config_set,pixel_mali,soc,$(TARGET_BOARD_PLATFORM))
 
 PRODUCT_PACKAGES += \
        csffw_image_prebuilt__firmware_prebuilt_todx_mali_csffw.bin \
