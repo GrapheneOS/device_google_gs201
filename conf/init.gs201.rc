@@ -268,12 +268,6 @@ on init
 on init
     setprop vendor.device.modules.ready 1
 
-on init && property:ro.boot.hw.soc.rev=0
-    setprop vendor.powerhal.config powerhint_a0.json
-
-on init && property:ro.boot.hw.soc.rev=1
-    setprop vendor.powerhal.config powerhint_a1.json
-
 on late-fs
     # Wait for keymaster HALs
     exec_start wait_for_keymaster
