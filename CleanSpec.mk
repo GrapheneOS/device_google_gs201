@@ -77,3 +77,9 @@ $(call add-clean-step, rm -rf $(PRODUCT_OUT)/vendor/etc/vintf/manifest/android.h
 $(call add-clean-step, rm -f $(PRODUCT_OUT)/vendor/bin/hw/android.hardware.power.stats@1.0-service.gs201)
 $(call add-clean-step, rm -f $(PRODUCT_OUT)/vendor/etc/init/android.hardware.power.stats@1.0-service.gs201.rc)
 $(call add-clean-step, rm -f $(PRODUCT_OUT)/vendor/etc/vintf/manifest/android.hardware.power.stats@1.0-service.gs201.xml)
+
+# Health HAL to AIDL
+$(call add-clean-step, find $(PRODUCT_OUT)/system -type f -name "*charger*" -print0 | xargs -0 rm -f)
+$(call add-clean-step, find $(PRODUCT_OUT)/vendor -type f -name "*health@*" -print0 | xargs -0 rm -f)
+$(call add-clean-step, find $(PRODUCT_OUT)/recovery/root -type f -name "*charger*" -print0 | xargs -0 rm -f)
+$(call add-clean-step, find $(PRODUCT_OUT)/recovery/root -type f -name "*health@*" -print0 | xargs -0 rm -f)

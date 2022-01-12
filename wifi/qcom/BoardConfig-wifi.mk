@@ -38,13 +38,11 @@ WIFI_HIDL_UNIFIED_SUPPLICANT_SERVICE_RC_ENTRY := true
 # Avoid Wifi reset on MAC Address change
 # WIFI_AVOID_IFACE_RESET_MAC_CHANGE := true
 # WIFI_FEATURE_HOSTAPD_11AX := true
+WIFI_DRIVER_STATE_CTRL_PARAM := "/dev/wlan"
+WIFI_DRIVER_STATE_ON := "ON"
+WIFI_DRIVER_STATE_OFF := "OFF"
 
 # WLAN driver configuration files
 PRODUCT_COPY_FILES += \
     $(LOCAL_WIFI_PATH)/wpa_supplicant_overlay.conf:$(TARGET_COPY_OUT_VENDOR)/etc/wifi/wpa_supplicant_overlay.conf \
     $(LOCAL_WIFI_PATH)/p2p_supplicant_overlay.conf:$(TARGET_COPY_OUT_VENDOR)/etc/wifi/p2p_supplicant_overlay.conf
-
-
-
-
-

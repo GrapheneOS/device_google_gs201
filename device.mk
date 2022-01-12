@@ -58,6 +58,10 @@ LOCAL_KERNEL := $(TARGET_KERNEL_DIR)/Image.lz4
 PRODUCT_DEFAULT_PROPERTY_OVERRIDES += \
 	ro.oem_unlock_supported=1
 
+# Include vendor telephony soong namespace
+PRODUCT_SOONG_NAMESPACES += \
+	vendor/samsung_slsi/telephony/$(BOARD_USES_SHARED_VENDOR_TELEPHONY)
+
 ifneq (,$(filter userdebug eng, $(TARGET_BUILD_VARIANT)))
 #Set IKE logs to verbose for WFC
 PRODUCT_PROPERTY_OVERRIDES += log.tag.IKE=VERBOSE
@@ -374,11 +378,6 @@ PRODUCT_PRODUCT_PROPERTIES += \
 PRODUCT_COPY_FILES += \
 	device/google/gs201/task_profiles.json:$(TARGET_COPY_OUT_VENDOR)/etc/task_profiles.json
 
-PRODUCT_COPY_FILES += \
-	device/google/gs201/powerhint_a0.json:$(TARGET_COPY_OUT_VENDOR)/etc/powerhint_a0.json
-
-PRODUCT_COPY_FILES += \
-	device/google/gs201/powerhint_a1.json:$(TARGET_COPY_OUT_VENDOR)/etc/powerhint_a1.json
 -include hardware/google/pixel/power-libperfmgr/aidl/device.mk
 
 # PowerStats HAL
@@ -553,7 +552,7 @@ PRODUCT_COPY_FILES += \
 	frameworks/native/data/etc/android.hardware.usb.host.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.usb.host.xml \
 	frameworks/native/data/etc/android.hardware.usb.accessory.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.usb.accessory.xml
 
-#PRODUCT_COPY_FILES += \
+PRODUCT_COPY_FILES += \
 	frameworks/native/data/etc/android.hardware.camera.flash-autofocus.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.camera.flash-autofocus.xml \
 	frameworks/native/data/etc/android.hardware.camera.front.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.camera.front.xml \
 	frameworks/native/data/etc/android.hardware.camera.concurrent.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.camera.concurrent.xml \
@@ -807,11 +806,11 @@ PRODUCT_PACKAGES += \
 	vts.bin
 
 # This will be called only if IMSService is building with source code for dev branches.
-$(call inherit-product-if-exists, vendor/samsung_slsi/telephony/shannon-ims/device-vendor.mk)
+$(call inherit-product-if-exists, vendor/samsung_slsi/telephony/$(BOARD_USES_SHARED_VENDOR_TELEPHONY)/shannon-ims/device-vendor.mk)
 
 PRODUCT_PACKAGES += ShannonIms
 
-$(call inherit-product-if-exists, vendor/samsung_slsi/telephony/shannon-iwlan/device-vendor.mk)
+$(call inherit-product-if-exists, vendor/samsung_slsi/telephony/$(BOARD_USES_SHARED_VENDOR_TELEPHONY)/shannon-iwlan/device-vendor.mk)
 
 #RCS Test Messaging App
 PRODUCT_PACKAGES_DEBUG += \
@@ -837,7 +836,7 @@ USE_RADIO_HAL_1_6 := true
 #$(call inherit-product, vendor/google_devices/gs201/proprietary/device-vendor.mk)
 
 ifneq ($(BOARD_WITHOUT_RADIO),true)
-$(call inherit-product-if-exists, vendor/samsung_slsi/telephony/common/device-vendor.mk)
+$(call inherit-product-if-exists, vendor/samsung_slsi/telephony/$(BOARD_USES_SHARED_VENDOR_TELEPHONY)/common/device-vendor.mk)
 endif
 
 #GPS HAL
@@ -882,8 +881,8 @@ PRODUCT_PACKAGES_DEBUG += \
 	$(NULL)
 
 PRODUCT_PACKAGES += \
-	android.hardware.health@2.1-impl-gs201 \
-	android.hardware.health@2.1-service
+	android.hardware.health-service.gs201 \
+	android.hardware.health-service.gs201_recovery \
 
 # Audio
 # Audio HAL Server & Default Implementations
