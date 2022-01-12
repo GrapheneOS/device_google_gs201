@@ -262,6 +262,7 @@ on late-fs
     exec_start wait_for_keymaster
 
     # Start bootanimation class before mount
+    start bootanim
     class_start animation
 
     # Mount RW partitions which need run fsck
