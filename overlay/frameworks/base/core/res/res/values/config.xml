@@ -146,7 +146,6 @@
     <string name="config_wlan_data_service_package">com.google.android.iwlan</string>
     <string name="config_wlan_network_service_package">com.google.android.iwlan</string>
     <bool name="config_wlan_data_service_conn_persistence_on_restart">false</bool>
-    <string name="config_qualified_networks_service_package">com.shannon.qualifiednetworksservice</string>
 
     <!-- Boolean indicating USSD over IMS is allowed.
      If it is not supported due to modem limitations, USSD send over the CS pipe instead.-->
