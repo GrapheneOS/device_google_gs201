@@ -534,7 +534,7 @@ $(call inherit-product, $(SRC_TARGET_DIR)/product/virtual_ab_ota/launch_with_ven
 $(call inherit-product, $(SRC_TARGET_DIR)/product/generic_ramdisk.mk)
 
 # Titan-M
-ifneq (,$(BOARD_HAS_DTLS))
+ifeq (,$(filter true, $(BOARD_WITHOUT_DTLS)))
 include hardware/google/pixel/dauntless/dauntless.mk
 endif
 
