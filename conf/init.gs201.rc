@@ -179,8 +179,6 @@ on init
     # Dump maxfg
     chown system system /sys/class/power_supply/maxfg/m5_model_state
     chown system system /sys/class/power_supply/maxfg_base/m5_model_state
-    chown system system /d/maxfg/fg_model
-    chown system system /d/maxfg_base/fg_model
 
     # pca9468 : slider+77729: 6-0057; slider+MW A1: 5-0057
     chown system system /d/regmap/5-0057-pca9468-mains/registers
