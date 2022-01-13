@@ -34,6 +34,14 @@ VENDOR_SECURITY_PATCH = $(PLATFORM_SECURITY_PATCH)
 # Set boot SPL
 BOOT_SECURITY_PATCH = $(PLATFORM_SECURITY_PATCH)
 
+# TODO(b/207450311): Remove this flag once implemented
+USE_PIXEL_GRALLOC := false
+ifeq ($(USE_PIXEL_GRALLOC),true)
+	PRODUCT_SOONG_NAMESPACES += hardware/google/gchips/GrallocHAL
+else
+	PRODUCT_SOONG_NAMESPACES += hardware/google/gchips/gralloc4
+endif
+
 PRODUCT_SOONG_NAMESPACES += \
 	hardware/google/av \
 	hardware/google/gchips \
@@ -526,7 +534,7 @@ $(call inherit-product, $(SRC_TARGET_DIR)/product/virtual_ab_ota/launch_with_ven
 $(call inherit-product, $(SRC_TARGET_DIR)/product/generic_ramdisk.mk)
 
 # Titan-M
-ifeq (,$(filter true, $(BOARD_WITHOUT_DTLS)))
+ifneq (,$(BOARD_HAS_DTLS))
 include hardware/google/pixel/dauntless/dauntless.mk
 endif
 
@@ -582,7 +590,8 @@ endif
 
 PRODUCT_PROPERTY_OVERRIDES += \
 	debug.sf.disable_backpressure=0 \
-	debug.sf.enable_gl_backpressure=1
+	debug.sf.enable_gl_backpressure=1 \
+	debug.sf.enable_sdr_dimming=1
 
 PRODUCT_DEFAULT_PROPERTY_OVERRIDES += debug.sf.use_phase_offsets_as_durations=1
 PRODUCT_DEFAULT_PROPERTY_OVERRIDES += debug.sf.late.sf.duration=8300000
