@@ -18,10 +18,6 @@ include device/google/gs-common/device.mk
 
 TARGET_BOARD_PLATFORM := gs201
 
-ifneq (,$(filter %_64,$(TARGET_PRODUCT)))
-LOCAL_64ONLY := _64
-endif
-
 AB_OTA_POSTINSTALL_CONFIG += \
 	RUN_POSTINSTALL_system=true \
 	POSTINSTALL_PATH_system=system/bin/otapreopt_script \
@@ -202,10 +198,10 @@ PRODUCT_VENDOR_PROPERTIES += \
 # Device Manifest, Device Compatibility Matrix for Treble
 ifeq ($(DEVICE_USES_EXYNOS_GRALLOC_VERSION), 4)
 	DEVICE_MANIFEST_FILE := \
-		device/google/gs201/manifest$(LOCAL_64ONLY).xml
+		device/google/gs201/manifest.xml
 else
 	DEVICE_MANIFEST_FILE := \
-		device/google/gs201/manifest$(LOCAL_64ONLY)-gralloc3.xml
+		device/google/gs201/manifest-gralloc3.xml
 endif
 
 ifneq (,$(filter aosp_%,$(TARGET_PRODUCT)))
@@ -329,8 +325,13 @@ PRODUCT_PROPERTY_OVERRIDES += \
 	persist.vendor.sys.modem.logging.enable=true
 
 # Enable silent CP crash handling
+ifneq (,$(filter userdebug eng, $(TARGET_BUILD_VARIANT)))
 PRODUCT_PROPERTY_OVERRIDES += \
 	persist.vendor.ril.crash_handling_mode=1
+else
+PRODUCT_PROPERTY_OVERRIDES += \
+	persist.vendor.ril.crash_handling_mode=2
+endif
 
 # Add support dual SIM mode
 PRODUCT_PROPERTY_OVERRIDES += \
@@ -387,6 +388,9 @@ PRODUCT_COPY_FILES += \
 	device/google/gs201/task_profiles.json:$(TARGET_COPY_OUT_VENDOR)/etc/task_profiles.json
 
 -include hardware/google/pixel/power-libperfmgr/aidl/device.mk
+
+# IRQ rebalancing.
+include hardware/google/pixel/rebalance_interrupts/rebalance_interrupts.mk
 
 # PowerStats HAL
 PRODUCT_PACKAGES += \
@@ -534,7 +538,7 @@ $(call inherit-product, $(SRC_TARGET_DIR)/product/virtual_ab_ota/launch_with_ven
 $(call inherit-product, $(SRC_TARGET_DIR)/product/generic_ramdisk.mk)
 
 # Titan-M
-ifeq (,$(filter true, $(BOARD_WITHOUT_DTLS)))
+ifneq (,$(BOARD_HAS_DTLS))
 include hardware/google/pixel/dauntless/dauntless.mk
 endif
 
@@ -692,6 +696,10 @@ PRODUCT_PROPERTY_OVERRIDES += \
        media.c2.dmabuf.padding=512 \
        debug.stagefright.ccodec_delayed_params=1 \
        ro.vendor.gpu.dataspace=1
+
+# Create input surface on the framework side
+PRODUCT_PROPERTY_OVERRIDES += \
+	debug.stagefright.c2inputsurface=-1 \
 
 # 2. OpenMAX IL
 PRODUCT_COPY_FILES += \
@@ -852,11 +860,7 @@ endif
 include device/google/gs201/gnss/device-gnss.mk
 BOARD_VENDOR_SEPOLICY_DIRS += device/google/gs201-sepolicy/gps
 
-ifeq (,$(filter %_64,$(TARGET_PRODUCT)))
-$(call inherit-product, $(SRC_TARGET_DIR)/product/core_64_bit.mk)
-else
 $(call inherit-product, $(SRC_TARGET_DIR)/product/core_64_bit_only.mk)
-endif
 #$(call inherit-product, hardware/google_devices/exynos5/exynos5.mk)
 #$(call inherit-product-if-exists, hardware/google_devices/gs201/gs201.mk)
 #$(call inherit-product-if-exists, vendor/google_devices/common/exynos-vendor.mk)
