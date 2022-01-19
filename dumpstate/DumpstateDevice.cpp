@@ -209,6 +209,7 @@ void DumpstateDevice::dumpCameraLogs(int fd, const std::string &destDir) {
     dumpLogs(fd, kCameraLogDir, cameraDestDir, 10, "session-ended-");
     dumpLogs(fd, kCameraLogDir, cameraDestDir, 5, "high-drop-rate-");
     dumpLogs(fd, kCameraLogDir, cameraDestDir, 5, "watchdog-");
+    dumpLogs(fd, kCameraLogDir, cameraDestDir, 5, "camera-ended-");
 }
 
 timepoint_t startSection(int fd, const std::string &sectionName) {
