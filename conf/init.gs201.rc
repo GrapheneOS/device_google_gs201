@@ -796,6 +796,14 @@ on property:vendor.thermal.link_ready=1
     write /dev/thermal/tz-by-name/soft_ocp_tpu/policy user_space
     write /dev/thermal/tz-by-name/soft_ocp_gpu/policy user_space
     write /dev/thermal/tz-by-name/soc/policy user_space
+    write /dev/thermal/tz-by-name/batoilo/policy user_space
+    write /sys/devices/virtual/pmic/mitigation/triggered_lvl/smpl_lvl 3100
+    write /sys/devices/virtual/pmic/mitigation/triggered_lvl/soft_ocp_cpu2_lvl 9000
+    write /sys/devices/virtual/pmic/mitigation/triggered_lvl/soft_ocp_gpu_lvl 9000
+    write /sys/devices/virtual/pmic/mitigation/triggered_lvl/soft_ocp_tpu_lvl 8500
+    write /sys/devices/virtual/pmic/mitigation/clock_div/tpu_clk_div 0x201
+    write /sys/devices/virtual/pmic/mitigation/clock_div/gpu_clk_div 0x801
+    write /sys/devices/virtual/pmic/mitigation/clock_div/cpu2_clk_div 0x801
     chown system system /dev/thermal/tz-by-name/soc/mode
     chown system system /dev/thermal/tz-by-name/vdroop2/trip_point_0_temp
     chown system system /dev/thermal/tz-by-name/vdroop2/trip_point_0_hyst
