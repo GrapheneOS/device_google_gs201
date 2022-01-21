@@ -963,6 +963,13 @@ PRODUCT_SOONG_NAMESPACES += \
 	vendor/google/whitechapel/audio/interfaces
 
 $(call soong_config_set,aoc_audio_board,platform,$(TARGET_BOARD_PLATFORM))
+
+## AoC soong
+PRODUCT_SOONG_NAMESPACES += \
+        vendor/google/whitechapel/aoc
+
+$(call soong_config_set,aoc,target_soc,$(TARGET_BOARD_PLATFORM))
+
 #
 ## Audio properties
 PRODUCT_PROPERTY_OVERRIDES += \
