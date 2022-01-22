@@ -878,6 +878,13 @@ PRODUCT_PACKAGES += modem_svc_sit
 # modem logging binary/configs
 PRODUCT_PACKAGES += modem_logging_control
 
+# modem logging configs
+PRODUCT_COPY_FILES += \
+	device/google/gs201/radio/config/logging.conf:$(TARGET_COPY_OUT_VENDOR)/etc/modem/logging.conf \
+	device/google/gs201/radio/config/default.cfg:$(TARGET_COPY_OUT_VENDOR)/etc/modem/default.cfg \
+	device/google/gs201/radio/config/default.nprf:$(TARGET_COPY_OUT_VENDOR)/etc/modem/default.nprf \
+	device/google/gs201/radio/config/default_metrics.xml:$(TARGET_COPY_OUT_VENDOR)/etc/modem/default_metrics.xml
+
 PRODUCT_COPY_FILES += \
 	device/google/gs201/radio/gnss_blanking.csv:$(TARGET_COPY_OUT_VENDOR)/etc/modem/gnss_blanking.csv
 
