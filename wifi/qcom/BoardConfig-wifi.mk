@@ -27,11 +27,9 @@ CONFIG_IEEE80211AX := true
 # BOARD_HAS_QCOM_WLAN := true
 # CONFIG_ACS := true
 
-# Wifi interface combination - {1 STA + 1 AP (bridged or single)} or {2 STA + 1 of (P2P or NAN)}
-# WIFI_HAL_INTERFACE_COMBINATIONS := {{{STA}, 1}, {{AP}, 1}}, {{{STA}, 2}, {{P2P, NAN}, 1}}
+# Wifi interface combination - {1 STA + 1 of (P2P or NAN)} or {1 AP}
+WIFI_HAL_INTERFACE_COMBINATIONS := {{{STA}, 1}, {{P2P, NAN}, 1}}, {{{AP}, 1}}
 WIFI_HIDL_FEATURE_AWARE := true
-#Enable STA + SAP Concurrency.
-WIFI_HIDL_FEATURE_DUAL_INTERFACE:= true
 WIFI_FEATURE_WIFI_EXT_HAL := true
 WIFI_FEATURE_IMU_DETECTION := true
 WIFI_HIDL_UNIFIED_SUPPLICANT_SERVICE_RC_ENTRY := true
