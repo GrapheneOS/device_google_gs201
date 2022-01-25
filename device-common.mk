@@ -21,6 +21,10 @@ include device/google/gs201/device.mk
 PRODUCT_COPY_FILES += \
     frameworks/native/data/etc/android.hardware.telephony.carrierlock.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.telephony.carrierlock.xml
 
+# Android Verified Boot
+PRODUCT_COPY_FILES += \
+    frameworks/native/data/etc/android.software.verified_boot.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.software.verified_boot.xml
+
 # Factory OTA
 -include vendor/unbundled_google/packages/FactoryOtaPrebuilt/factoryota.mk
 
