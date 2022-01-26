@@ -493,18 +493,18 @@ else
         LOCAL_TARGET_PRODUCT := slider
 endif
 
-#ifneq ($(wildcard vendor/google/camera),)
+$(call soong_config_set,google3a_config,soc,gs201)
+$(call soong_config_set,google3a_config,gcam_awb,true)
+$(call soong_config_set,google3a_config,ghawb_truetone,true)
+
+ifneq ($(wildcard vendor/google/services/LyricCameraHAL/src),)
 $(call soong_config_set,lyric,soc,gs201)
 $(call soong_config_set,lyric,use_lyric_camera_hal,true)
 # lyric::tuning_product is set in device-specific makefiles,
 # such as device/google/${DEVICE}/device-${DEVICE}.mk
 
-$(call soong_config_set,google3a_config,soc,gs201)
-$(call soong_config_set,google3a_config,gcam_awb,true)
-$(call soong_config_set,google3a_config,ghawb_truetone,true)
-
 $(call soong_config_set,gch,hwl_library,lyric)
-#endif
+endif
 
 # WiFi
 PRODUCT_PACKAGES += \
