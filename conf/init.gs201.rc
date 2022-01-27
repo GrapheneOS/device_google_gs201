@@ -53,7 +53,7 @@ on init
     write /proc/sys/net/core/optmem_max 20480
     write /proc/sys/net/core/netdev_max_backlog 10000
     write /proc/sys/net/ipv4/tcp_rmem "2097152 4194304 8388608"
-    write /proc/sys/net/ipv4/tcp_wmem "262144 524288 1048576"
+    write /proc/sys/net/ipv4/tcp_wmem "262144 524288 8388608"
     write /proc/sys/net/ipv4/tcp_mem "44259 59012 88518"
     write /proc/sys/net/ipv4/udp_mem "88518 118025 177036"
 
@@ -782,19 +782,6 @@ on fs
 
 on property:vendor.thermal.link_ready=1
     # BCL
-    write /dev/thermal/tz-by-name/smpl_gm/policy user_space
-    write /dev/thermal/tz-by-name/vdroop1/policy user_space
-    write /dev/thermal/tz-by-name/vdroop2/policy user_space
-    write /dev/thermal/tz-by-name/ocp_cpu1/policy user_space
-    write /dev/thermal/tz-by-name/ocp_cpu2/policy user_space
-    write /dev/thermal/tz-by-name/ocp_tpu/policy user_space
-    write /dev/thermal/tz-by-name/ocp_gpu/policy user_space
-    write /dev/thermal/tz-by-name/soft_ocp_cpu1/policy user_space
-    write /dev/thermal/tz-by-name/soft_ocp_cpu2/policy user_space
-    write /dev/thermal/tz-by-name/soft_ocp_tpu/policy user_space
-    write /dev/thermal/tz-by-name/soft_ocp_gpu/policy user_space
-    write /dev/thermal/tz-by-name/soc/policy user_space
-    write /dev/thermal/tz-by-name/batoilo/policy user_space
     write /sys/devices/virtual/pmic/mitigation/triggered_lvl/smpl_lvl 3100
     write /sys/devices/virtual/pmic/mitigation/triggered_lvl/soft_ocp_cpu2_lvl 9000
     write /sys/devices/virtual/pmic/mitigation/triggered_lvl/soft_ocp_gpu_lvl 9000
@@ -828,6 +815,8 @@ on property:vendor.thermal.link_ready=1
     chown system system /dev/thermal/tz-by-name/soc/trip_point_0_temp
     chown system system /dev/thermal/tz-by-name/soc/trip_point_0_hyst
     # Thermal
+    chown system system /dev/thermal/tz-by-name/quiet_therm/trip_point_0_temp
+    chown system system /dev/thermal/tz-by-name/quiet_therm/trip_point_0_hyst
     chown system system /dev/thermal/cdev-by-name/thermal-cpufreq-0/user_vote
     chown system system /dev/thermal/cdev-by-name/thermal-cpufreq-1/user_vote
     chown system system /dev/thermal/cdev-by-name/thermal-cpufreq-2/user_vote

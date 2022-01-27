@@ -493,18 +493,18 @@ else
         LOCAL_TARGET_PRODUCT := slider
 endif
 
-#ifneq ($(wildcard vendor/google/camera),)
+$(call soong_config_set,google3a_config,soc,gs201)
+$(call soong_config_set,google3a_config,gcam_awb,true)
+$(call soong_config_set,google3a_config,ghawb_truetone,true)
+
+ifneq ($(wildcard vendor/google/services/LyricCameraHAL/src),)
 $(call soong_config_set,lyric,soc,gs201)
 $(call soong_config_set,lyric,use_lyric_camera_hal,true)
 # lyric::tuning_product is set in device-specific makefiles,
 # such as device/google/${DEVICE}/device-${DEVICE}.mk
 
-$(call soong_config_set,google3a_config,soc,gs201)
-$(call soong_config_set,google3a_config,gcam_awb,true)
-$(call soong_config_set,google3a_config,ghawb_truetone,true)
-
 $(call soong_config_set,gch,hwl_library,lyric)
-#endif
+endif
 
 # WiFi
 PRODUCT_PACKAGES += \
@@ -599,12 +599,12 @@ PRODUCT_PROPERTY_OVERRIDES += \
 	debug.sf.enable_sdr_dimming=1
 
 PRODUCT_DEFAULT_PROPERTY_OVERRIDES += debug.sf.use_phase_offsets_as_durations=1
-PRODUCT_DEFAULT_PROPERTY_OVERRIDES += debug.sf.late.sf.duration=8300000
-PRODUCT_DEFAULT_PROPERTY_OVERRIDES += debug.sf.late.app.duration=20500000
-PRODUCT_DEFAULT_PROPERTY_OVERRIDES += debug.sf.early.sf.duration=16000000
-PRODUCT_DEFAULT_PROPERTY_OVERRIDES += debug.sf.early.app.duration=16500000
-PRODUCT_DEFAULT_PROPERTY_OVERRIDES += debug.sf.earlyGl.sf.duration=13500000
-PRODUCT_DEFAULT_PROPERTY_OVERRIDES += debug.sf.earlyGl.app.duration=21000000
+PRODUCT_DEFAULT_PROPERTY_OVERRIDES += debug.sf.late.sf.duration=10500000
+PRODUCT_DEFAULT_PROPERTY_OVERRIDES += debug.sf.late.app.duration=16600000
+PRODUCT_DEFAULT_PROPERTY_OVERRIDES += debug.sf.early.sf.duration=16600000
+PRODUCT_DEFAULT_PROPERTY_OVERRIDES += debug.sf.early.app.duration=16600000
+PRODUCT_DEFAULT_PROPERTY_OVERRIDES += debug.sf.earlyGl.sf.duration=16600000
+PRODUCT_DEFAULT_PROPERTY_OVERRIDES += debug.sf.earlyGl.app.duration=16600000
 
 PRODUCT_DEFAULT_PROPERTY_OVERRIDES += ro.surface_flinger.enable_layer_caching=true
 PRODUCT_DEFAULT_PROPERTY_OVERRIDES += ro.surface_flinger.set_idle_timer_ms?=80
@@ -963,6 +963,13 @@ PRODUCT_SOONG_NAMESPACES += \
 	vendor/google/whitechapel/audio/interfaces
 
 $(call soong_config_set,aoc_audio_board,platform,$(TARGET_BOARD_PLATFORM))
+
+## AoC soong
+PRODUCT_SOONG_NAMESPACES += \
+        vendor/google/whitechapel/aoc
+
+$(call soong_config_set,aoc,target_soc,$(TARGET_BOARD_PLATFORM))
+
 #
 ## Audio properties
 PRODUCT_PROPERTY_OVERRIDES += \
