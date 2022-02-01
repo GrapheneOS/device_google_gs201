@@ -213,15 +213,6 @@
       "ResetOnInit": true
     },
     {
-      "Name": "HighCapacityStartCpu",
-      "Path": "/sys/kernel/vendor_sched/high_capacity_start_cpu",
-      "Values": [
-        "4",
-        "6"
-      ],
-      "ResetOnInit": true
-    },
-    {
       "Name": "DisplayWakeup",
       "Path": "/sys/devices/platform/1c240000.drmdecon/early_wakeup",
       "Values": [
@@ -664,12 +655,6 @@
     },
     {
       "PowerHint": "CAMERA_STREAMING_EXTREME",
-      "Node": "HighCapacityStartCpu",
-      "Duration": 0,
-      "Value": "4"
-    },
-    {
-      "PowerHint": "CAMERA_STREAMING_EXTREME",
       "Node": "GPUMinFreq",
       "Duration": 0,
       "Value": "302000"
@@ -739,12 +724,6 @@
       "Node": "CDPreferHighCap",
       "Duration": 0,
       "Value": "1"
-    },
-    {
-      "PowerHint": "CAMERA_STREAMING_HIGH",
-      "Node": "HighCapacityStartCpu",
-      "Duration": 0,
-      "Value": "4"
     },
     {
       "PowerHint": "CAMERA_STREAMING_HIGH",
@@ -883,12 +862,6 @@
       "Node": "CDPreferIdle",
       "Duration": 0,
       "Value": "0"
-    },
-    {
-      "PowerHint": "CAMERA_STREAMING_LOW",
-      "Node": "HighCapacityStartCpu",
-      "Duration": 0,
-      "Value": "4"
     },
     {
       "PowerHint": "CAMERA_STREAMING_LOW",
