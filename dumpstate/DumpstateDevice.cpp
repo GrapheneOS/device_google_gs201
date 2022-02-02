@@ -1005,6 +1005,7 @@ void DumpstateDevice::dumpModem(int fd, int fdModem)
         bool tcpdumpEnabled = android::base::GetBoolProperty(TCPDUMP_PERSIST_PROPERTY, false);
         bool cameraLogsEnabled = android::base::GetBoolProperty(
                 "vendor.camera.debug.camera_performance_analyzer.attach_to_bugreport", true);
+        bool gxpDumpEnabled = android::base::GetBoolProperty("vendor.gxp.attach_to_bugreport", false);
         int maxFileNum = android::base::GetIntProperty(MODEM_LOGGING_NUMBER_BUGREPORT_PROPERTY, 100);
 
         if (tcpdumpEnabled) {
@@ -1046,6 +1047,18 @@ void DumpstateDevice::dumpModem(int fd, int fdModem)
 
         if (cameraLogsEnabled) {
             dumpCameraLogs(STDOUT_FILENO, modemLogAllDir);
+        }
+
+        if (gxpDumpEnabled) {
+            const int maxGxpDebugDumps = 8;
+            const std::string gxpCoredumpOutputDir = modemLogAllDir + "/gxp_ssrdump";
+            const std::string gxpCoredumpInputDir = "/data/vendor/ssrdump";
+
+            RunCommandToFd(fd, "MKDIR GXP COREDUMP", {"/vendor/bin/mkdir", "-p", gxpCoredumpOutputDir}, CommandOptions::WithTimeout(2).Build());
+
+            // Copy GXP coredumps and crashinfo to the output directory.
+            dumpLogs(fd, gxpCoredumpInputDir + "/coredump", gxpCoredumpOutputDir, maxGxpDebugDumps, "coredump_gxp_platform");
+            dumpLogs(fd, gxpCoredumpInputDir, gxpCoredumpOutputDir, maxGxpDebugDumps, "crashinfo_gxp_platform");
         }
 
         dumpLogs(fd, extendedLogDir, modemLogAllDir, maxFileNum, EXTENDED_LOG_PREFIX);
