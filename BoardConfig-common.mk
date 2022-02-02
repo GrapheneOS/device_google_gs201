@@ -373,5 +373,4 @@ BOARD_KERNEL_CMDLINE += at24.write_timeout=100
 BOARD_KERNEL_CMDLINE += log_buf_len=1024K
 
 # Protected VM firmware
-BOARD_PREBUILT_PVMFWIMAGE := packages/modules/Virtualization/pvmfw/pvmfw.img
 BOARD_PVMFWIMAGE_PARTITION_SIZE := 0x00100000
