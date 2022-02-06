@@ -185,7 +185,7 @@ PRODUCT_VENDOR_PROPERTIES += \
        ro.hardware.egl = swiftshader
 else
 PRODUCT_VENDOR_PROPERTIES += \
-       ro.hardware.egl = mali_gs201
+       ro.hardware.egl = mali
 endif
 PRODUCT_VENDOR_PROPERTIES += \
        ro.opengles.version=196610 \
