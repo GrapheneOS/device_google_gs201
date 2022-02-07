@@ -163,9 +163,12 @@ TARGET_USES_VULKAN = false
 PRODUCT_PACKAGES += \
        mali_csffw.bin \
        libGLES_mali-gs201-prebuilt \
-       vulkan.gs201-prebuilt \
+       vulkan.mali \
        libOpenCL \
        libgpudataproducer-gs201-prebuilt \
+
+PRODUCT_VENDOR_PROPERTIES += \
+       ro.hardware.vulkan=mali
 
 include device/google/gs101/neuralnetwork/neuralnetwork.mk
 
