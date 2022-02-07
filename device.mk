@@ -155,10 +155,7 @@ TARGET_USES_VULKAN = false
 
 # TODO(b/185349920)
 # PRODUCT_SOONG_NAMESPACES += \
-#        vendor/arm/mali/valhall \
-#        vendor/arm/mali/valhall/cl \
-#        vendor/arm/mali/valhall/libmali \
-#        vendor/arm/mali/valhall/cinstr/production/gpu-hwc-reader
+#        vendor/arm/mali/valhall
 
 PRODUCT_PACKAGES += \
        csffw_image_prebuilt__firmware_prebuilt_todx_mali_csffw.bin \
