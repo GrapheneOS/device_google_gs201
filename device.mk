@@ -161,7 +161,7 @@ TARGET_USES_VULKAN = false
 #        vendor/arm/mali/valhall/cinstr/production/gpu-hwc-reader
 
 PRODUCT_PACKAGES += \
-       mali_csffw.bin \
+       csffw_image_prebuilt__firmware_prebuilt_todx_mali_csffw.bin \
        libGLES_mali-gs201-prebuilt \
        vulkan.mali \
        libOpenCL \
