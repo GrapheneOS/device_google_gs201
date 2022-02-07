@@ -162,10 +162,10 @@ TARGET_USES_VULKAN = false
 
 PRODUCT_PACKAGES += \
        csffw_image_prebuilt__firmware_prebuilt_todx_mali_csffw.bin \
-       libGLES_mali-gs201-prebuilt \
+       libGLES_mali \
        vulkan.mali \
        libOpenCL \
-       libgpudataproducer-gs201-prebuilt \
+       libgpudataproducer \
 
 PRODUCT_VENDOR_PROPERTIES += \
        ro.hardware.vulkan=mali
