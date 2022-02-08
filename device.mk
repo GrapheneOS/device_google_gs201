@@ -114,6 +114,10 @@ PRODUCT_PROPERTY_OVERRIDES += \
 PRODUCT_PRODUCT_PROPERTIES += \
 	persist.radio.reboot_on_modem_change=false
 
+# Configure DSDS by default
+PRODUCT_PRODUCT_PROPERTIES += \
+	persist.radio.multisim.config=dsds
+
 # Enable Early Camping
 PRODUCT_PRODUCT_PROPERTIES += \
 	persist.vendor.ril.camp_on_earlier=1
