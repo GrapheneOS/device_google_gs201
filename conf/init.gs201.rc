@@ -17,6 +17,30 @@ on init
     write /dev/sys/fs/by-name/userdata/data_io_flag 56
     write /dev/sys/fs/by-name/userdata/node_io_flag 56
 
+    chown system system /sys/kernel/vendor_sched/set_task_group_bg
+    chown system system /sys/kernel/vendor_sched/set_task_group_cam
+    chown system system /sys/kernel/vendor_sched/set_task_group_fg
+    chown system system /sys/kernel/vendor_sched/set_task_group_nnapi
+    chown system system /sys/kernel/vendor_sched/set_task_group_sys
+    chown system system /sys/kernel/vendor_sched/set_task_group_sysbg
+    chown system system /sys/kernel/vendor_sched/set_task_group_ta
+    chown system system /sys/kernel/vendor_sched/set_task_group_rt
+    chown system system /sys/kernel/vendor_sched/set_task_group_sf
+    chown system system /sys/kernel/vendor_sched/set_task_group_dex2oat
+    chown system system /sys/kernel/vendor_sched/clear_group
+
+    chmod 0220 /sys/kernel/vendor_sched/set_task_group_bg
+    chmod 0220 /sys/kernel/vendor_sched/set_task_group_cam
+    chmod 0220 /sys/kernel/vendor_sched/set_task_group_fg
+    chmod 0220 /sys/kernel/vendor_sched/set_task_group_nnapi
+    chmod 0220 /sys/kernel/vendor_sched/set_task_group_sys
+    chmod 0220 /sys/kernel/vendor_sched/set_task_group_sysbg
+    chmod 0220 /sys/kernel/vendor_sched/set_task_group_ta
+    chmod 0220 /sys/kernel/vendor_sched/set_task_group_rt
+    chmod 0220 /sys/kernel/vendor_sched/set_task_group_sf
+    chmod 0220 /sys/kernel/vendor_sched/set_task_group_dex2oat
+    chmod 0220 /sys/kernel/vendor_sched/clear_group
+
     wait /dev/block/platform/${ro.boot.boot_devices}
     symlink /dev/block/platform/${ro.boot.boot_devices} /dev/block/bootdevice
 
@@ -77,20 +101,18 @@ on init
     mkdir /dev/socket/pdx/system/vr/sensors 0775 system system
 
     # Boot time 183626384
-    write /dev/cpuctl/top-app/cpu.uclamp.min 30
-    write /dev/cpuctl/top-app/cpu.uclamp.latency_sensitive 1
-    write /dev/cpuctl/foreground/cpu.uclamp.min 30
-    write /dev/cpuctl/foreground/cpu.uclamp.latency_sensitive 1
-
-    write /sys/kernel/vendor_sched/ta_uclamp_min 308
+    write /sys/kernel/vendor_sched/ta_uclamp_min 1024
     write /sys/kernel/vendor_sched/ta_prefer_idle 1
-    write /sys/kernel/vendor_sched/fg_uclamp_min 308
+    write /sys/kernel/vendor_sched/fg_uclamp_min 1024
     write /sys/kernel/vendor_sched/fg_prefer_idle 1
+    write /sys/kernel/vendor_sched/sys_uclamp_min 1024
+    write /sys/kernel/vendor_sched/sys_prefer_idle 1
 
     # governor setting
     write /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor sched_pixel
     write /sys/devices/system/cpu/cpu0/cpufreq/sched_pixel/up_rate_limit_us 500
-    write /sys/devices/system/cpu/cpu0/cpufreq/sched_pixel/down_rate_limit_us 2000
+    write /sys/devices/system/cpu/cpu0/cpufreq/sched_pixel/down_rate_limit_us 5000
+    write /sys/devices/system/cpu/cpu0/cpufreq/sched_pixel/down_rate_limit_scale_pow 2
     write /sys/devices/system/cpu/cpu4/cpufreq/scaling_governor sched_pixel
     write /sys/devices/system/cpu/cpu4/cpufreq/sched_pixel/up_rate_limit_us 500
     write /sys/devices/system/cpu/cpu4/cpufreq/sched_pixel/down_rate_limit_us 20000
@@ -126,7 +148,7 @@ on init
     chmod 0664 /dev/cpuset/camera-daemon-mid-high-group/tasks
 
     write /sys/kernel/vendor_sched/cam_prefer_idle 1
-    write /sys/kernel/vendor_sched/cam_uclamp_min 10
+    write /sys/kernel/vendor_sched/cam_uclamp_min 1
 
     chown system system /dev/cpuset/cgroup.procs
 
@@ -232,8 +254,8 @@ on init
     start watchdogd
 
     # Add a boost for NNAPI HAL
-    write /dev/cpuctl/nnapi-hal/cpu.uclamp.min 15
-    write /sys/kernel/vendor_sched/nnapi_uclamp_min 154
+    write /sys/kernel/vendor_sched/nnapi_prefer_idle 0
+    write /sys/kernel/vendor_sched/nnapi_uclamp_min 512
 
     # Add memlat governor settings
     write /sys/class/devfreq/gs_memlat_devfreq:devfreq_mif_cpu0_memlat@17000010/polling_interval 10
@@ -346,6 +368,7 @@ on post-fs-data
 on zygote-start
     # For PixelLogger configuration file.
     chmod 0771 /data/vendor/wifi
+    write /sys/kernel/vendor_sched/sys_uclamp_min 0
 
 on post-fs-data
     # Create the directories used by the Wireless subsystem
@@ -648,10 +671,40 @@ on property:sys.boot_completed=1
     setprop vendor.powerhal.init 1
 
     # Setup final cpu.uclamp
-    write /dev/cpuctl/top-app/cpu.uclamp.min 10
-    write /dev/cpuctl/foreground/cpu.uclamp.min 0
-    write /sys/kernel/vendor_sched/ta_uclamp_min 103
+    write /sys/kernel/vendor_sched/ta_uclamp_min 1
     write /sys/kernel/vendor_sched/fg_uclamp_min 0
+    write /sys/kernel/vendor_sched/sys_prefer_idle 0
+    # cfs_rq clamp is using tg->uclamp setting
+    # align it with the vendor_group setting
+    write /sys/kernel/vendor_sched/bg_uclamp_max 512
+    write /dev/cpuctl/background/cpu.uclamp.max 50
+    write /sys/kernel/vendor_sched/bg_group_throttle 512
+    write /sys/kernel/vendor_sched/sysbg_uclamp_max 512
+    write /dev/cpuctl/system-background/cpu.uclamp.max 50
+    write /sys/kernel/vendor_sched/sysbg_group_throttle 512
+    write /sys/kernel/vendor_sched/dex2oat_uclamp_max 615
+    write /dev/cpuctl/dex2oat/cpu.uclamp.max 60
+    write /sys/kernel/vendor_sched/dex2oat_group_throttle 615
+    write /sys/kernel/vendor_sched/ota_uclamp_max 410
+    write /sys/kernel/vendor_sched/ota_group_throttle 410
+
+    # Setup groups for SF (RT used for SF RE, SF used for SF main)
+    write /sys/kernel/vendor_sched/rt_uclamp_min 125
+    write /sys/kernel/vendor_sched/rt_prefer_idle 1
+    write /sys/kernel/vendor_sched/sf_uclamp_min 30
+    write /sys/kernel/vendor_sched/sf_prefer_idle 1
+
+    # Setup cpu.shares to throttle background groups (bg ~ 5% sysbg ~ 5% dex2oat ~2.5%)
+    write /dev/cpuctl/background/cpu.shares 1024
+    write /dev/cpuctl/system-background/cpu.shares 1024
+    write /dev/cpuctl/dex2oat/cpu.shares 512
+    write /dev/cpuctl/system/cpu.shares 20480
+    # We only have system and background groups holding tasks and the groups below are empty
+    write /dev/cpuctl/camera-daemon/cpu.shares 20480
+    write /dev/cpuctl/foreground/cpu.shares 20480
+    write /dev/cpuctl/nnapi-hal/cpu.shares 20480
+    write /dev/cpuctl/rt/cpu.shares 20480
+    write /dev/cpuctl/top-app/cpu.shares 20480
 
     # gvotables for dumpstate
     chown system system /sys/kernel/debug/gvotables
