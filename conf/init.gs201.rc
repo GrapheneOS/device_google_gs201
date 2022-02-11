@@ -884,6 +884,8 @@ on property:vendor.thermal.link_ready=1
     chown system system /dev/thermal/cdev-by-name/thermal-gpufreq-0/user_vote
     chown system system /dev/thermal/cdev-by-name/tpu_cooling/user_vote
     chown system system /dev/thermal/cdev-by-name/fcc/cur_state
+    chown system system /dev/thermal/cdev-by-name/dc_icl/cur_state
+    chown system system /dev/thermal/cdev-by-name/wlc_fcc/cur_state
 
 on property:vendor.disable.bcl.control=1
     write /sys/devices/virtual/pmic/mitigation/instruction/enable_mitigation 0
