@@ -155,17 +155,17 @@ TARGET_USES_VULKAN = false
 
 # TODO(b/185349920)
 # PRODUCT_SOONG_NAMESPACES += \
-#        vendor/arm/mali/valhall \
-#        vendor/arm/mali/valhall/cl \
-#        vendor/arm/mali/valhall/libmali \
-#        vendor/arm/mali/valhall/cinstr/production/gpu-hwc-reader
+#        vendor/arm/mali/valhall
 
 PRODUCT_PACKAGES += \
-       mali_csffw.bin \
-       libGLES_mali-gs201-prebuilt \
-       vulkan.gs201-prebuilt \
+       csffw_image_prebuilt__firmware_prebuilt_todx_mali_csffw.bin \
+       libGLES_mali \
+       vulkan.mali \
        libOpenCL \
-       libgpudataproducer-gs201-prebuilt \
+       libgpudataproducer \
+
+PRODUCT_VENDOR_PROPERTIES += \
+       ro.hardware.vulkan=mali
 
 include device/google/gs101/neuralnetwork/neuralnetwork.mk
 
@@ -722,7 +722,7 @@ CBD_USE_V2 := true
 CBD_PROTOCOL_SIT := true
 
 # setup dalvik vm configs.
-$(call inherit-product, frameworks/native/build/phone-xhdpi-2048-dalvik-heap.mk)
+$(call inherit-product, frameworks/native/build/phone-xhdpi-6144-dalvik-heap.mk)
 
 PRODUCT_TAGS += dalvik.gc.type-precise
 

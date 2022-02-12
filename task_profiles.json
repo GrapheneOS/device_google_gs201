@@ -4,14 +4,6 @@
       "Name": "MaxPerformance",
       "Actions": [
         {
-          "Name": "JoinCgroup",
-          "Params":
-          {
-            "Controller": "cpu",
-            "Path": "system"
-          }
-        },
-        {
           "Name": "WriteFile",
           "Params":
           {
@@ -26,18 +18,52 @@
       "Name": "CameraServicePerformance",
       "Actions": [
         {
-          "Name": "JoinCgroup",
-          "Params":
-          {
-            "Controller": "cpu",
-            "Path": "system"
-          }
-        },
-        {
           "Name": "WriteFile",
           "Params":
           {
             "FilePath": "/sys/kernel/vendor_sched/set_task_group_cam",
+            "Value": "<pid>",
+            "LogFailures": "false"
+          }
+        }
+      ]
+    },
+    {
+      "Name": "CameraServicePower",
+      "Actions": [
+        {
+          "Name": "WriteFile",
+          "Params":
+          {
+            "FilePath": "/sys/kernel/vendor_sched/set_task_group_cam_power",
+            "Value": "<pid>",
+            "LogFailures": "false"
+          }
+        }
+      ]
+    },
+    {
+      "Name": "Dex2oatPerformance",
+      "Actions": [
+        {
+          "Name": "WriteFile",
+          "Params":
+          {
+            "FilePath": "/sys/kernel/vendor_sched/set_task_group_dex2oat",
+            "Value": "<pid>",
+            "LogFailures": "false"
+          }
+        }
+      ]
+    },
+    {
+      "Name": "OtaPerformance",
+      "Actions": [
+        {
+          "Name": "WriteFile",
+          "Params":
+          {
+            "FilePath": "/sys/kernel/vendor_sched/set_task_group_ota",
             "Value": "<pid>",
             "LogFailures": "false"
           }
@@ -87,14 +113,6 @@
       "Name": "HighEnergySaving",
       "Actions": [
         {
-          "Name": "JoinCgroup",
-          "Params":
-          {
-            "Controller": "cpu",
-            "Path": "background"
-          }
-        },
-        {
           "Name": "WriteFile",
           "Params":
           {
@@ -109,18 +127,10 @@
       "Name": "NormalPerformance",
       "Actions": [
         {
-          "Name": "JoinCgroup",
-          "Params":
-          {
-            "Controller": "cpu",
-            "Path": "system"
-          }
-        },
-        {
           "Name": "WriteFile",
           "Params":
           {
-            "FilePath": "/sys/kernel/vendor_sched/clear_group",
+            "FilePath": "/sys/kernel/vendor_sched/set_task_group_sys",
             "Value": "<pid>",
             "LogFailures": "false"
           }
@@ -130,14 +140,6 @@
     {
       "Name": "HighPerformance",
       "Actions": [
-        {
-          "Name": "JoinCgroup",
-          "Params":
-          {
-            "Controller": "cpu",
-            "Path": "system"
-          }
-        },
         {
           "Name": "WriteFile",
           "Params":
@@ -153,14 +155,6 @@
       "Name": "RealtimePerformance",
       "Actions": [
         {
-          "Name": "JoinCgroup",
-          "Params":
-          {
-            "Controller": "cpu",
-            "Path": "system"
-          }
-        },
-        {
           "Name": "WriteFile",
           "Params":
           {
@@ -175,14 +169,6 @@
       "Name": "NNApiHALPerformance",
       "Actions": [
         {
-          "Name": "JoinCgroup",
-          "Params":
-          {
-            "Controller": "cpu",
-            "Path": "system"
-          }
-        },
-        {
           "Name": "WriteFile",
           "Params":
           {
@@ -194,16 +180,8 @@
       ]
     },
     {
-      "Name": "SystemBGPerformance",
+      "Name": "ServicePerformance",
       "Actions": [
-        {
-          "Name": "JoinCgroup",
-          "Params":
-          {
-            "Controller": "cpu",
-            "Path": "system"
-          }
-        },
         {
           "Name": "WriteFile",
           "Params":
@@ -214,6 +192,89 @@
           }
         }
       ]
+    },
+    {
+      "Name": "SFMainPolicy",
+      "Actions": [
+        {
+          "Name": "JoinCgroup",
+          "Params":
+          {
+            "Controller": "cpuset",
+            "Path": "top-app"
+          }
+        },
+        {
+          "Name": "WriteFile",
+          "Params":
+          {
+            "FilePath": "/sys/kernel/vendor_sched/set_task_group_sf",
+            "Value": "<pid>",
+            "LogFailures": "false"
+          }
+        }
+      ]
+    },
+    {
+      "Name": "SFRenderEnginePolicy",
+      "Actions": [
+        {
+          "Name": "JoinCgroup",
+          "Params":
+          {
+            "Controller": "cpuset",
+            "Path": "top-app"
+          }
+        },
+        {
+          "Name": "WriteFile",
+          "Params":
+          {
+            "FilePath": "/sys/kernel/vendor_sched/set_task_group_rt",
+            "Value": "<pid>",
+            "LogFailures": "false"
+          }
+        }
+      ]
+    },
+    {
+      "Name": "ResetUclampGrp",
+      "Actions": [
+        {
+          "Name": "WriteFile",
+          "Params":
+          {
+            "FilePath": "/sys/kernel/vendor_sched/uclamp_fork_reset_set",
+            "Value": "<pid>",
+            "LogFailures": "false"
+          }
+        }
+      ]
+    },
+    {
+      "Name": "NoResetUclampGrp",
+      "Actions": [
+        {
+          "Name": "WriteFile",
+          "Params":
+          {
+            "FilePath": "/sys/kernel/vendor_sched/uclamp_fork_reset_clear",
+            "Value": "<pid>",
+            "LogFailures": "false"
+          }
+        }
+      ]
+    }
+  ],
+
+  "AggregateProfiles": [
+    {
+      "Name": "Dex2OatBootComplete",
+      "Profiles": [ "Dex2oatPerformance", "ProcessCapacityNormal", "LowIoPriority", "TimerSlackHigh" ]
+    },
+    {
+      "Name": "OtaProfiles",
+      "Profiles": [ "OtaPerformance", "ServiceCapacityLow", "LowIoPriority", "TimerSlackHigh" ]
     }
   ]
 }
