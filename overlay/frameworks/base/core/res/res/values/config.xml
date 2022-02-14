@@ -241,6 +241,7 @@
         <item>"/apex/com.android.art/javalib/core-libart.jar"</item>
         <item>"/system/framework/framework.jar"</item>
         <item>"/system/framework/services.jar"</item>
+        <item>"/system/bin/surfaceflinger"</item>
         <item>"/system_ext/priv-app/SystemUIGoogle/SystemUIGoogle.apk"</item>
     </string-array>
 
