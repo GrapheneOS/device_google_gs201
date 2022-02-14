@@ -851,6 +851,8 @@ SIM_COUNT := 2
 SUPPORT_MULTI_SIM := true
 # Support NR
 SUPPORT_NR := true
+# Support 5G on both stacks
+SUPPORT_NR_DS := true
 # Using IRadio 1.6
 USE_RADIO_HAL_1_6 := true
 
