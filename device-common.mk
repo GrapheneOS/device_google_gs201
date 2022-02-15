@@ -14,11 +14,16 @@
 # limitations under the License.
 #
 
+-include vendor/google_devices/gs201/proprietary/telephony/device-vendor.mk
 include device/google/gs201/device.mk
 
 # Telephony
 PRODUCT_COPY_FILES += \
     frameworks/native/data/etc/android.hardware.telephony.carrierlock.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.telephony.carrierlock.xml
+
+# Android Verified Boot
+PRODUCT_COPY_FILES += \
+    frameworks/native/data/etc/android.software.verified_boot.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.software.verified_boot.xml
 
 # Factory OTA
 -include vendor/unbundled_google/packages/FactoryOtaPrebuilt/factoryota.mk
@@ -29,3 +34,6 @@ PRODUCT_VENDOR_PROPERTIES += ro.soc.model=GS201
 
 PRODUCT_PRODUCT_PROPERTIES += \
     persist.vendor.testing_battery_profile=0
+
+# ZramWriteback
+-include hardware/google/pixel/mm/device_gki.mk

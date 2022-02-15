@@ -209,6 +209,7 @@ void DumpstateDevice::dumpCameraLogs(int fd, const std::string &destDir) {
     dumpLogs(fd, kCameraLogDir, cameraDestDir, 10, "session-ended-");
     dumpLogs(fd, kCameraLogDir, cameraDestDir, 5, "high-drop-rate-");
     dumpLogs(fd, kCameraLogDir, cameraDestDir, 5, "watchdog-");
+    dumpLogs(fd, kCameraLogDir, cameraDestDir, 5, "camera-ended-");
 }
 
 timepoint_t startSection(int fd, const std::string &sectionName) {
@@ -479,9 +480,6 @@ void DumpstateDevice::dumpPowerSection(int fd) {
                         "do val=`cat $f` ; "
                         "a=${f/\\/sys\\/devices\\/virtual\\/pmic\\/mitigation\\/instruction\\//}; "
                         "echo \"$a=$val\" ; done"});
-
-    DumpFileToFd(fd, "BCL", "/sys/devices/virtual/pmic/mitigation/triggered_stats");
-    DumpFileToFd(fd, "IF PMIC", "/sys/devices/virtual/pmic/max77759-mitigation/triggered_stats");
 
 }
 
@@ -965,6 +963,7 @@ void DumpstateDevice::dumpRamdumpSection(int fd) {
 // Dump items that don't fit well into any other section
 void DumpstateDevice::dumpMiscSection(int fd) {
     RunCommandToFd(fd, "VENDOR PROPERTIES", {"/vendor/bin/getprop"});
+    DumpFileToFd(fd, "VENDOR PROC DUMP", "/proc/vendor_sched/dump_task");
 }
 
 // Dump items related to GSC

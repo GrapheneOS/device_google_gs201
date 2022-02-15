@@ -390,6 +390,12 @@ Return<void> UsbGadget::setCurrentUsbFunctions(uint64_t functions,
         goto error;
     }
 
+    if (functions & GadgetFunction::NCM) {
+        SetProperty("vendor.usb.dwc3_irq", "big");
+    } else {
+        SetProperty("vendor.usb.dwc3_irq", "medium");
+    }
+
     ALOGI("Usb Gadget setcurrent functions called successfully");
     return Void();
 

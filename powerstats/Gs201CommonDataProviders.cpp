@@ -16,10 +16,10 @@
 
 #include <PowerStatsAidl.h>
 #include <Gs201CommonDataProviders.h>
-#include "AocStateResidencyDataProvider.h"
-#include "DevfreqStateResidencyDataProvider.h"
-#include "DvfsStateResidencyDataProvider.h"
-#include "UfsStateResidencyDataProvider.h"
+#include <AocStateResidencyDataProvider.h>
+#include <DevfreqStateResidencyDataProvider.h>
+#include <DvfsStateResidencyDataProvider.h>
+#include <UfsStateResidencyDataProvider.h>
 #include <dataproviders/GenericStateResidencyDataProvider.h>
 #include <dataproviders/IioEnergyMeterDataProvider.h>
 #include <dataproviders/PowerStatsEnergyConsumer.h>
@@ -161,7 +161,13 @@ void addDvfsStats(std::shared_ptr<PowerStats> p) {
     }});
 
     cfgs.push_back({"CL0", {
+        std::make_pair("2024MHz", "2024000"),
+        std::make_pair("1950MHz", "1950000"),
+        std::make_pair("1803MHz", "1803000"),
+        std::make_pair("1704MHz", "1704000"),
         std::make_pair("1598MHz", "1598000"),
+        std::make_pair("1401MHz", "1401000"),
+        std::make_pair("1328MHz", "1328000"),
         std::make_pair("1197MHz", "1197000"),
         std::make_pair("1098MHz", "1098000"),
         std::make_pair("930MHz", "930000"),
@@ -172,15 +178,40 @@ void addDvfsStats(std::shared_ptr<PowerStats> p) {
     }});
 
     cfgs.push_back({"CL1", {
+        std::make_pair("2348MHz", "2348000"),
+        std::make_pair("2253MHz", "2253000"),
+        std::make_pair("2130MHz", "2130000"),
+        std::make_pair("1999MHz", "1999000"),
+        std::make_pair("1836MHz", "1836000"),
+        std::make_pair("1663MHz", "1663000"),
+        std::make_pair("1491MHz", "1491000"),
+        std::make_pair("1328MHz", "1328000"),
+        std::make_pair("1197MHz", "1197000"),
+        std::make_pair("1024MHz", "1024000"),
         std::make_pair("910MHz", "910000"),
         std::make_pair("799MHz", "799000"),
         std::make_pair("696MHz", "696000"),
-        std::make_pair("533MHz", "533000"),
+        std::make_pair("553MHz", "553000"),
         std::make_pair("400MHz", "400000"),
         std::make_pair("0MHz", "0"),
     }});
 
     cfgs.push_back({"CL2", {
+        std::make_pair("2850MHz", "2850000"),
+        std::make_pair("2802MHz", "2802000"),
+        std::make_pair("2704MHz", "2704000"),
+        std::make_pair("2630MHz", "2630000"),
+        std::make_pair("2507MHz", "2507000"),
+        std::make_pair("2401MHz", "2401000"),
+        std::make_pair("2252MHz", "2252000"),
+        std::make_pair("2188MHz", "2188000"),
+        std::make_pair("2048MHz", "2048000"),
+        std::make_pair("1826MHz", "1826000"),
+        std::make_pair("1745MHz", "1745000"),
+        std::make_pair("1582MHz", "1582000"),
+        std::make_pair("1426MHz", "1426000"),
+        std::make_pair("1277MHz", "1277000"),
+        std::make_pair("1106MHz", "1106000"),
         std::make_pair("984MHz", "984000"),
         std::make_pair("851MHz", "851000"),
         std::make_pair("500MHz", "500000"),
@@ -376,7 +407,8 @@ void addMobileRadio(std::shared_ptr<PowerStats> p)
             "/sys/devices/platform/cpif/modem/power_stats", cfgs));
 
     p->addEnergyConsumer(PowerStatsEnergyConsumer::createMeterConsumer(p,
-            EnergyConsumerType::MOBILE_RADIO, "MODEM", {"VSYS_PWR_MODEM", "VSYS_PWR_RFFE"}));
+            EnergyConsumerType::MOBILE_RADIO, "MODEM",
+            {"VSYS_PWR_MODEM", "VSYS_PWR_RFFE", "VSYS_PWR_MMWAVE"}));
 }
 
 void addGNSS(std::shared_ptr<PowerStats> p)
@@ -533,17 +565,28 @@ void addPowerDomains(std::shared_ptr<PowerStats> p) {
 
 void addDevfreq(std::shared_ptr<PowerStats> p) {
     p->addStateResidencyDataProvider(std::make_unique<DevfreqStateResidencyDataProvider>(
-            "INT", "/sys/devices/platform/17000020.devfreq_int/devfreq/17000020.devfreq_int"));
+            "INT",
+            "/sys/devices/platform/17000020.devfreq_int/devfreq/17000020.devfreq_int"));
 
     p->addStateResidencyDataProvider(std::make_unique<DevfreqStateResidencyDataProvider>(
             "INTCAM",
             "/sys/devices/platform/17000030.devfreq_intcam/devfreq/17000030.devfreq_intcam"));
 
     p->addStateResidencyDataProvider(std::make_unique<DevfreqStateResidencyDataProvider>(
-            "CAM", "/sys/devices/platform/17000050.devfreq_cam/devfreq/17000050.devfreq_cam"));
+            "DISP",
+            "/sys/devices/platform/17000040.devfreq_disp/devfreq/17000040.devfreq_disp"));
 
     p->addStateResidencyDataProvider(std::make_unique<DevfreqStateResidencyDataProvider>(
-            "TNR", "/sys/devices/platform/17000060.devfreq_tnr/devfreq/17000060.devfreq_tnr"));
+            "CAM",
+            "/sys/devices/platform/17000050.devfreq_cam/devfreq/17000050.devfreq_cam"));
+
+    p->addStateResidencyDataProvider(std::make_unique<DevfreqStateResidencyDataProvider>(
+            "TNR",
+            "/sys/devices/platform/17000060.devfreq_tnr/devfreq/17000060.devfreq_tnr"));
+
+    p->addStateResidencyDataProvider(std::make_unique<DevfreqStateResidencyDataProvider>(
+            "MFC",
+            "/sys/devices/platform/17000070.devfreq_mfc/devfreq/17000070.devfreq_mfc"));
 }
 
 void addTPU(std::shared_ptr<PowerStats> p) {

@@ -2,30 +2,7 @@ import /vendor/etc/init/hw/init.gs201.usb.rc
 import android.hardware.drm@1.2-service.widevine.rc
 import init.exynos.sensorhub.rc
 
-service vendor.charger /system/bin/charger
-    class charger
-    seclabel u:r:charger:s0
-    user system
-    group system wakelock input
-    capabilities SYS_BOOT
-    file /dev/kmsg w
-    file /sys/fs/pstore/console-ramoops-0 r
-    file /sys/fs/pstore/console-ramoops r
-    file /proc/last_kmsg r
-
 on early-init
-    # Convert /dev/block/by-name/persist to f2fs
-    exec -- /vendor/bin/convert_to_f2fs.sh /dev/block/by-name/persist false
-
-    # Format /efs to f2fs, if it's ext4
-    exec -- /vendor/bin/convert_to_f2fs.sh /dev/block/by-name/efs true
-
-    # Format /efs_backup to f2fs, if it's ext4
-    exec -- /vendor/bin/convert_to_f2fs.sh /dev/block/by-name/efs_backup true
-
-    # Format /modem_userdata to f2fs, if it's ext4
-    exec -- /vendor/bin/convert_to_f2fs.sh /dev/block/by-name/modem_userdata true
-
     mount_all /vendor/etc/fstab.persist --early
 
 on init
@@ -39,6 +16,30 @@ on init
     write /sys/block/sda/queue/nr_requests 256
     write /dev/sys/fs/by-name/userdata/data_io_flag 56
     write /dev/sys/fs/by-name/userdata/node_io_flag 56
+
+    chown system system /sys/kernel/vendor_sched/set_task_group_bg
+    chown system system /sys/kernel/vendor_sched/set_task_group_cam
+    chown system system /sys/kernel/vendor_sched/set_task_group_fg
+    chown system system /sys/kernel/vendor_sched/set_task_group_nnapi
+    chown system system /sys/kernel/vendor_sched/set_task_group_sys
+    chown system system /sys/kernel/vendor_sched/set_task_group_sysbg
+    chown system system /sys/kernel/vendor_sched/set_task_group_ta
+    chown system system /sys/kernel/vendor_sched/set_task_group_rt
+    chown system system /sys/kernel/vendor_sched/set_task_group_sf
+    chown system system /sys/kernel/vendor_sched/set_task_group_dex2oat
+    chown system system /sys/kernel/vendor_sched/clear_group
+
+    chmod 0220 /sys/kernel/vendor_sched/set_task_group_bg
+    chmod 0220 /sys/kernel/vendor_sched/set_task_group_cam
+    chmod 0220 /sys/kernel/vendor_sched/set_task_group_fg
+    chmod 0220 /sys/kernel/vendor_sched/set_task_group_nnapi
+    chmod 0220 /sys/kernel/vendor_sched/set_task_group_sys
+    chmod 0220 /sys/kernel/vendor_sched/set_task_group_sysbg
+    chmod 0220 /sys/kernel/vendor_sched/set_task_group_ta
+    chmod 0220 /sys/kernel/vendor_sched/set_task_group_rt
+    chmod 0220 /sys/kernel/vendor_sched/set_task_group_sf
+    chmod 0220 /sys/kernel/vendor_sched/set_task_group_dex2oat
+    chmod 0220 /sys/kernel/vendor_sched/clear_group
 
     wait /dev/block/platform/${ro.boot.boot_devices}
     symlink /dev/block/platform/${ro.boot.boot_devices} /dev/block/bootdevice
@@ -76,7 +77,7 @@ on init
     write /proc/sys/net/core/optmem_max 20480
     write /proc/sys/net/core/netdev_max_backlog 10000
     write /proc/sys/net/ipv4/tcp_rmem "2097152 4194304 8388608"
-    write /proc/sys/net/ipv4/tcp_wmem "262144 524288 1048576"
+    write /proc/sys/net/ipv4/tcp_wmem "262144 524288 8388608"
     write /proc/sys/net/ipv4/tcp_mem "44259 59012 88518"
     write /proc/sys/net/ipv4/udp_mem "88518 118025 177036"
 
@@ -100,20 +101,18 @@ on init
     mkdir /dev/socket/pdx/system/vr/sensors 0775 system system
 
     # Boot time 183626384
-    write /dev/cpuctl/top-app/cpu.uclamp.min 30
-    write /dev/cpuctl/top-app/cpu.uclamp.latency_sensitive 1
-    write /dev/cpuctl/foreground/cpu.uclamp.min 30
-    write /dev/cpuctl/foreground/cpu.uclamp.latency_sensitive 1
-
-    write /sys/kernel/vendor_sched/ta_uclamp_min 308
+    write /sys/kernel/vendor_sched/ta_uclamp_min 1024
     write /sys/kernel/vendor_sched/ta_prefer_idle 1
-    write /sys/kernel/vendor_sched/fg_uclamp_min 308
+    write /sys/kernel/vendor_sched/fg_uclamp_min 1024
     write /sys/kernel/vendor_sched/fg_prefer_idle 1
+    write /sys/kernel/vendor_sched/sys_uclamp_min 1024
+    write /sys/kernel/vendor_sched/sys_prefer_idle 1
 
     # governor setting
     write /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor sched_pixel
     write /sys/devices/system/cpu/cpu0/cpufreq/sched_pixel/up_rate_limit_us 500
-    write /sys/devices/system/cpu/cpu0/cpufreq/sched_pixel/down_rate_limit_us 2000
+    write /sys/devices/system/cpu/cpu0/cpufreq/sched_pixel/down_rate_limit_us 5000
+    write /sys/devices/system/cpu/cpu0/cpufreq/sched_pixel/down_rate_limit_scale_pow 2
     write /sys/devices/system/cpu/cpu4/cpufreq/scaling_governor sched_pixel
     write /sys/devices/system/cpu/cpu4/cpufreq/sched_pixel/up_rate_limit_us 500
     write /sys/devices/system/cpu/cpu4/cpufreq/sched_pixel/down_rate_limit_us 20000
@@ -149,7 +148,7 @@ on init
     chmod 0664 /dev/cpuset/camera-daemon-mid-high-group/tasks
 
     write /sys/kernel/vendor_sched/cam_prefer_idle 1
-    write /sys/kernel/vendor_sched/cam_uclamp_min 10
+    write /sys/kernel/vendor_sched/cam_uclamp_min 1
 
     chown system system /dev/cpuset/cgroup.procs
 
@@ -255,8 +254,8 @@ on init
     start watchdogd
 
     # Add a boost for NNAPI HAL
-    write /dev/cpuctl/nnapi-hal/cpu.uclamp.min 15
-    write /sys/kernel/vendor_sched/nnapi_uclamp_min 154
+    write /sys/kernel/vendor_sched/nnapi_prefer_idle 0
+    write /sys/kernel/vendor_sched/nnapi_uclamp_min 512
 
     # Add memlat governor settings
     write /sys/class/devfreq/gs_memlat_devfreq:devfreq_mif_cpu0_memlat@17000010/polling_interval 10
@@ -280,17 +279,12 @@ on init
 on init
     setprop vendor.device.modules.ready 1
 
-on init && property:ro.boot.hw.soc.rev=0
-    setprop vendor.powerhal.config powerhint_a0.json
-
-on init && property:ro.boot.hw.soc.rev=1
-    setprop vendor.powerhal.config powerhint_a1.json
-
 on late-fs
     # Wait for keymaster HALs
     exec_start wait_for_keymaster
 
     # Start bootanimation class before mount
+    start bootanim
     class_start animation
 
     # Mount RW partitions which need run fsck
@@ -374,6 +368,7 @@ on post-fs-data
 on zygote-start
     # For PixelLogger configuration file.
     chmod 0771 /data/vendor/wifi
+    write /sys/kernel/vendor_sched/sys_uclamp_min 0
 
 on post-fs-data
     # Create the directories used by the Wireless subsystem
@@ -513,28 +508,31 @@ on fs
     chown system system /sys/class/backlight/panel0-backlight/hbm_mode
     chown system system /sys/class/backlight/panel0-backlight/local_hbm_mode
     chown system system /sys/devices/platform/exynos-drm/primary-panel/gamma
+    chown system system /sys/devices/platform/exynos-drm/primary-panel/min_vrefresh
+    chown system system /sys/devices/platform/exynos-drm/primary-panel/idle_delay_ms
     chown system system /sys/module/drm/parameters/vblankoffdelay
-    chown system system /sys/class/dqe/atc/ambient_light
-    chown system system /sys/class/dqe/atc/st
-    chown system system /sys/class/dqe/atc/en
-    chown system system /sys/class/dqe/atc/lt
-    chown system system /sys/class/dqe/atc/ns
-    chown system system /sys/class/dqe/atc/dither
-    chown system system /sys/class/dqe/atc/pl_w1
-    chown system system /sys/class/dqe/atc/pl_w2
-    chown system system /sys/class/dqe/atc/ctmode
-    chown system system /sys/class/dqe/atc/pp_en
-    chown system system /sys/class/dqe/atc/upgrade_on
-    chown system system /sys/class/dqe/atc/tdr_max
-    chown system system /sys/class/dqe/atc/tdr_min
-    chown system system /sys/class/dqe/atc/back_light
-    chown system system /sys/class/dqe/atc/dstep
-    chown system system /sys/class/dqe/atc/scale_mode
-    chown system system /sys/class/dqe/atc/threshold_1
-    chown system system /sys/class/dqe/atc/threshold_2
-    chown system system /sys/class/dqe/atc/threshold_3
-    chown system system /sys/class/dqe/atc/gain_limit
-    chown system system /sys/class/dqe/atc/lt_calc_ab_shift
+    chown system system /sys/class/dqe0/atc/ambient_light
+    chown system system /sys/class/dqe0/atc/st
+    chown system system /sys/class/dqe0/atc/en
+    chown system system /sys/class/dqe0/atc/lt
+    chown system system /sys/class/dqe0/atc/ns
+    chown system system /sys/class/dqe0/atc/dither
+    chown system system /sys/class/dqe0/atc/pl_w1
+    chown system system /sys/class/dqe0/atc/pl_w2
+    chown system system /sys/class/dqe0/atc/ctmode
+    chown system system /sys/class/dqe0/atc/pp_en
+    chown system system /sys/class/dqe0/atc/upgrade_on
+    chown system system /sys/class/dqe0/atc/tdr_max
+    chown system system /sys/class/dqe0/atc/tdr_min
+    chown system system /sys/class/dqe0/atc/back_light
+    chown system system /sys/class/dqe0/atc/dstep
+    chown system system /sys/class/dqe0/atc/scale_mode
+    chown system system /sys/class/dqe0/atc/threshold_1
+    chown system system /sys/class/dqe0/atc/threshold_2
+    chown system system /sys/class/dqe0/atc/threshold_3
+    chown system system /sys/class/dqe0/atc/gain_limit
+    chown system system /sys/class/dqe0/atc/lt_calc_ab_shift
+
     chown system system /sys/devices/platform/1c240000.drmdecon/early_wakeup
     chmod 0220 /sys/devices/platform/1c240000.drmdecon/early_wakeup
     chown system system /sys/devices/platform/1c242000.drmdecon/early_wakeup
@@ -637,7 +635,7 @@ on property:sys.boot_completed=1
     # Runtime fs tuning
     write /sys/block/sda/queue/nr_requests 128
     write /sys/block/sda/queue/iostats 1
-    write /sys/block/sda/queue/iosched/slice_idle 8
+    write /sys/block/sda/queue/iosched/slice_idle 0
     write /dev/sys/fs/by-name/userdata/data_io_flag 8
     write /dev/sys/fs/by-name/userdata/node_io_flag 8
 
@@ -673,10 +671,40 @@ on property:sys.boot_completed=1
     setprop vendor.powerhal.init 1
 
     # Setup final cpu.uclamp
-    write /dev/cpuctl/top-app/cpu.uclamp.min 10
-    write /dev/cpuctl/foreground/cpu.uclamp.min 0
-    write /sys/kernel/vendor_sched/ta_uclamp_min 103
+    write /sys/kernel/vendor_sched/ta_uclamp_min 1
     write /sys/kernel/vendor_sched/fg_uclamp_min 0
+    write /sys/kernel/vendor_sched/sys_prefer_idle 0
+    # cfs_rq clamp is using tg->uclamp setting
+    # align it with the vendor_group setting
+    write /sys/kernel/vendor_sched/bg_uclamp_max 512
+    write /dev/cpuctl/background/cpu.uclamp.max 50
+    write /sys/kernel/vendor_sched/bg_group_throttle 512
+    write /sys/kernel/vendor_sched/sysbg_uclamp_max 512
+    write /dev/cpuctl/system-background/cpu.uclamp.max 50
+    write /sys/kernel/vendor_sched/sysbg_group_throttle 512
+    write /sys/kernel/vendor_sched/dex2oat_uclamp_max 615
+    write /dev/cpuctl/dex2oat/cpu.uclamp.max 60
+    write /sys/kernel/vendor_sched/dex2oat_group_throttle 615
+    write /sys/kernel/vendor_sched/ota_uclamp_max 410
+    write /sys/kernel/vendor_sched/ota_group_throttle 410
+
+    # Setup groups for SF (RT used for SF RE, SF used for SF main)
+    write /sys/kernel/vendor_sched/rt_uclamp_min 125
+    write /sys/kernel/vendor_sched/rt_prefer_idle 1
+    write /sys/kernel/vendor_sched/sf_uclamp_min 30
+    write /sys/kernel/vendor_sched/sf_prefer_idle 1
+
+    # Setup cpu.shares to throttle background groups (bg ~ 5% sysbg ~ 5% dex2oat ~2.5%)
+    write /dev/cpuctl/background/cpu.shares 1024
+    write /dev/cpuctl/system-background/cpu.shares 1024
+    write /dev/cpuctl/dex2oat/cpu.shares 512
+    write /dev/cpuctl/system/cpu.shares 20480
+    # We only have system and background groups holding tasks and the groups below are empty
+    write /dev/cpuctl/camera-daemon/cpu.shares 20480
+    write /dev/cpuctl/foreground/cpu.shares 20480
+    write /dev/cpuctl/nnapi-hal/cpu.shares 20480
+    write /dev/cpuctl/rt/cpu.shares 20480
+    write /dev/cpuctl/top-app/cpu.shares 20480
 
     # gvotables for dumpstate
     chown system system /sys/kernel/debug/gvotables
@@ -695,6 +723,14 @@ on property:sys.boot_completed=1
     # AOC reset permission
     chown root system /sys/devices/platform/19000000.aoc/reset
     chmod 0220 /sys/devices/platform/19000000.aoc/reset
+
+    # AOC UDFPS clock compensation permission
+    chown system system /sys/devices/platform/19000000.aoc/control/udfps_set_clock_source
+    chmod 220 /sys/devices/platform/19000000.aoc/control/udfps_set_clock_source
+    chown system system /sys/devices/platform/19000000.aoc/control/udfps_get_osc_freq
+    chmod 440 /sys/devices/platform/19000000.aoc/control/udfps_get_osc_freq
+    chown system system /sys/devices/platform/19000000.aoc/control/udfps_get_disp_freq
+    chmod 440 /sys/devices/platform/19000000.aoc/control/udfps_get_disp_freq
 
 # IMS WiFi Calling
     service charonservice /system/vendor/bin/charon
@@ -776,14 +812,12 @@ on post-fs-data
     symlink /mnt/vendor/persist/ss /data/vendor/ss/persist
     chown root system /data/vendor/ss/persist
     chmod 0770 /data/vendor/ss/persist
-    chown system system /dev/sg1
 
-    start storageproxyd
+    restart storageproxyd
 
 service storageproxyd /vendor/bin/storageproxyd -d /dev/trusty-ipc-dev0 \
         -r /dev/sg1 -p /data/vendor/ss -t ufs
-    class main
-    disabled
+    class early_hal
     user root
 
 # Write build info to kdebuginfo
@@ -809,18 +843,13 @@ on fs
 
 on property:vendor.thermal.link_ready=1
     # BCL
-    write /dev/thermal/tz-by-name/smpl_gm/policy user_space
-    write /dev/thermal/tz-by-name/vdroop1/policy user_space
-    write /dev/thermal/tz-by-name/vdroop2/policy user_space
-    write /dev/thermal/tz-by-name/ocp_cpu1/policy user_space
-    write /dev/thermal/tz-by-name/ocp_cpu2/policy user_space
-    write /dev/thermal/tz-by-name/ocp_tpu/policy user_space
-    write /dev/thermal/tz-by-name/ocp_gpu/policy user_space
-    write /dev/thermal/tz-by-name/soft_ocp_cpu1/policy user_space
-    write /dev/thermal/tz-by-name/soft_ocp_cpu2/policy user_space
-    write /dev/thermal/tz-by-name/soft_ocp_tpu/policy user_space
-    write /dev/thermal/tz-by-name/soft_ocp_gpu/policy user_space
-    write /dev/thermal/tz-by-name/soc/policy user_space
+    write /sys/devices/virtual/pmic/mitigation/triggered_lvl/smpl_lvl 3100
+    write /sys/devices/virtual/pmic/mitigation/triggered_lvl/soft_ocp_cpu2_lvl 9000
+    write /sys/devices/virtual/pmic/mitigation/triggered_lvl/soft_ocp_gpu_lvl 9000
+    write /sys/devices/virtual/pmic/mitigation/triggered_lvl/soft_ocp_tpu_lvl 8500
+    write /sys/devices/virtual/pmic/mitigation/clock_div/tpu_clk_div 0x201
+    write /sys/devices/virtual/pmic/mitigation/clock_div/gpu_clk_div 0x801
+    write /sys/devices/virtual/pmic/mitigation/clock_div/cpu2_clk_div 0x801
     chown system system /dev/thermal/tz-by-name/soc/mode
     chown system system /dev/thermal/tz-by-name/vdroop2/trip_point_0_temp
     chown system system /dev/thermal/tz-by-name/vdroop2/trip_point_0_hyst
@@ -847,9 +876,13 @@ on property:vendor.thermal.link_ready=1
     chown system system /dev/thermal/tz-by-name/soc/trip_point_0_temp
     chown system system /dev/thermal/tz-by-name/soc/trip_point_0_hyst
     # Thermal
+    chown system system /dev/thermal/tz-by-name/quiet_therm/trip_point_0_temp
+    chown system system /dev/thermal/tz-by-name/quiet_therm/trip_point_0_hyst
     chown system system /dev/thermal/cdev-by-name/thermal-cpufreq-0/user_vote
     chown system system /dev/thermal/cdev-by-name/thermal-cpufreq-1/user_vote
     chown system system /dev/thermal/cdev-by-name/thermal-cpufreq-2/user_vote
+    chown system system /dev/thermal/cdev-by-name/thermal-gpufreq-0/user_vote
+    chown system system /dev/thermal/cdev-by-name/tpu_cooling/user_vote
     chown system system /dev/thermal/cdev-by-name/fcc/cur_state
 
 on property:vendor.disable.bcl.control=1

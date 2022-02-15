@@ -132,6 +132,25 @@
       "ResetOnInit": true
     },
     {
+      "Name": "SFUClampBoost",
+      "Path": "/sys/kernel/vendor_sched/sf_uclamp_min",
+      "Values": [
+        "65",
+        "30"
+      ],
+      "ResetOnInit": true
+    },
+    {
+      "Name": "MLUclampBoost",
+      "Path": "/sys/kernel/vendor_sched/nnapi_uclamp_min",
+      "Values": [
+          "154",
+          "512"
+      ],
+      "DefaultIndex": 0,
+      "ResetOnInit": true
+    },
+    {
       "Name": "CDPreferIdle",
       "Path": "/sys/kernel/vendor_sched/cam_prefer_idle",
       "Values": [
@@ -213,15 +232,6 @@
       "ResetOnInit": true
     },
     {
-      "Name": "HighCapacityStartCpu",
-      "Path": "/sys/kernel/vendor_sched/high_capacity_start_cpu",
-      "Values": [
-        "4",
-        "6"
-      ],
-      "ResetOnInit": true
-    },
-    {
       "Name": "DisplayWakeup",
       "Path": "/sys/devices/platform/1c240000.drmdecon/early_wakeup",
       "Values": [
@@ -272,6 +282,12 @@
       "PowerHint": "INTERACTION",
       "Type": "EndHint",
       "Value": "DISABLE_TA_BOOST"
+    },
+    {
+      "PowerHint": "INTERACTION",
+      "Node": "SFUClampBoost",
+      "Duration": 5000,
+      "Value": "65"
     },
     {
       "PowerHint": "INTERACTION",
@@ -664,12 +680,6 @@
     },
     {
       "PowerHint": "CAMERA_STREAMING_EXTREME",
-      "Node": "HighCapacityStartCpu",
-      "Duration": 0,
-      "Value": "4"
-    },
-    {
-      "PowerHint": "CAMERA_STREAMING_EXTREME",
       "Node": "GPUMinFreq",
       "Duration": 0,
       "Value": "302000"
@@ -739,12 +749,6 @@
       "Node": "CDPreferHighCap",
       "Duration": 0,
       "Value": "1"
-    },
-    {
-      "PowerHint": "CAMERA_STREAMING_HIGH",
-      "Node": "HighCapacityStartCpu",
-      "Duration": 0,
-      "Value": "4"
     },
     {
       "PowerHint": "CAMERA_STREAMING_HIGH",
@@ -883,12 +887,6 @@
       "Node": "CDPreferIdle",
       "Duration": 0,
       "Value": "0"
-    },
-    {
-      "PowerHint": "CAMERA_STREAMING_LOW",
-      "Node": "HighCapacityStartCpu",
-      "Duration": 0,
-      "Value": "4"
     },
     {
       "PowerHint": "CAMERA_STREAMING_LOW",
@@ -1053,6 +1051,18 @@
       "Node": "GPUMinFreq",
       "Duration": 0,
       "Value": "400000"
+    },
+    {
+      "PowerHint": "FP_BOOST",
+      "Node": "CPUBigClusterMaxFreq",
+      "Duration": 1000,
+      "Value": "9999999"
+    },
+    {
+      "PowerHint": "FP_BOOST",
+      "Node": "CPUBigClusterMinFreq",
+      "Duration": 1000,
+      "Value": "9999999"
     }
   ]
 }

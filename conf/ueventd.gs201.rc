@@ -162,6 +162,9 @@
 /dev/trusty-ipc-dev0     0660   system     drmrpc
 /dev/trusty-log0         0660   system     system
 
+# RPMB
+/dev/sg1                 0660   system     system
+
 # Citadel
 /dev/gsc0                0660   hsm        hsm
 
@@ -202,3 +205,6 @@
 
 # Direct Charging
 /dev/logbuffer_pca9468_tcpm            0600   system     system
+
+# Wlan
+/dev/wlan                              0660   wifi       wifi

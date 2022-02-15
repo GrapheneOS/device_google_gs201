@@ -38,13 +38,17 @@ PRODUCT_PROPERTY_OVERRIDES += \
     vendor.camera.debug.force_mesh_warp_on=0 \
     vendor.camera.debug.force_rectiface_node_on=0 \
     vendor.camera.debug.force_steadiface_on=0 \
-    vendor.camera.debug.force_tnr_on=0
+    vendor.camera.debug.force_tnr_on=0 \
+    vendor.camera.debug.force_segmentation_node_on=0 \
+    vendor.camera.debug.enable_saliency=0 \
+    vendor.camera.debug.force_local_tone_mapping_on=0 \
+    vendor.camera.debug.local_tone_mapping_controller_v1.mode=0
 
 # Disable ScreenDecorations for factory builds
 PRODUCT_PROPERTY_OVERRIDES += \
     debug.disable_screen_decorations=true
 
-PRODUCT_DEFAULT_PROPERTY_OVERRIDES += ro.surface_flinger.set_idle_timer_ms=80
+PRODUCT_DEFAULT_PROPERTY_OVERRIDES += ro.surface_flinger.set_idle_timer_ms?=80
 PRODUCT_DEFAULT_PROPERTY_OVERRIDES += ro.surface_flinger.set_touch_timer_ms=200
 PRODUCT_DEFAULT_PROPERTY_OVERRIDES += ro.surface_flinger.set_display_power_timer_ms=1000
 PRODUCT_DEFAULT_PROPERTY_OVERRIDES += ro.surface_flinger.use_content_detection_for_refresh_rate=true

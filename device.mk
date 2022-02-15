@@ -14,11 +14,9 @@
 # limitations under the License.
 #
 
-TARGET_BOARD_PLATFORM := gs201
+include device/google/gs-common/device.mk
 
-ifneq (,$(filter %_64,$(TARGET_PRODUCT)))
-LOCAL_64ONLY := _64
-endif
+TARGET_BOARD_PLATFORM := gs201
 
 AB_OTA_POSTINSTALL_CONFIG += \
 	RUN_POSTINSTALL_system=true \
@@ -32,6 +30,14 @@ VENDOR_SECURITY_PATCH = $(PLATFORM_SECURITY_PATCH)
 # Set boot SPL
 BOOT_SECURITY_PATCH = $(PLATFORM_SECURITY_PATCH)
 
+# TODO(b/207450311): Remove this flag once implemented
+USE_PIXEL_GRALLOC := false
+ifeq ($(USE_PIXEL_GRALLOC),true)
+	PRODUCT_SOONG_NAMESPACES += hardware/google/gchips/GrallocHAL
+else
+	PRODUCT_SOONG_NAMESPACES += hardware/google/gchips/gralloc4
+endif
+
 PRODUCT_SOONG_NAMESPACES += \
 	hardware/google/av \
 	hardware/google/gchips \
@@ -40,6 +46,7 @@ PRODUCT_SOONG_NAMESPACES += \
 	hardware/google/interfaces \
 	hardware/google/pixel \
 	device/google/gs201 \
+	device/google/gs201/powerstats \
 	vendor/google/whitechapel/tools \
 	vendor/google/interfaces \
 	vendor/google_devices/common/proprietary/confirmatioui_hal \
@@ -54,6 +61,10 @@ LOCAL_KERNEL := $(TARGET_KERNEL_DIR)/Image.lz4
 # OEM Unlock reporting
 PRODUCT_DEFAULT_PROPERTY_OVERRIDES += \
 	ro.oem_unlock_supported=1
+
+# Include vendor telephony soong namespace
+PRODUCT_SOONG_NAMESPACES += \
+	vendor/samsung_slsi/telephony/$(BOARD_USES_SHARED_VENDOR_TELEPHONY)
 
 ifneq (,$(filter userdebug eng, $(TARGET_BUILD_VARIANT)))
 #Set IKE logs to verbose for WFC
@@ -86,7 +97,6 @@ endif
 
 # From system.property
 PRODUCT_PROPERTY_OVERRIDES += \
-	dev.usbsetting.embedded=on \
 	ro.telephony.default_network=27 \
 	persist.vendor.ril.use.iccid_to_plmn=1 \
 	persist.vendor.ril.emergencynumber.mode=5
@@ -107,6 +117,10 @@ PRODUCT_PRODUCT_PROPERTIES += \
 # Enable Early Camping
 PRODUCT_PRODUCT_PROPERTIES += \
 	persist.vendor.ril.camp_on_earlier=1
+
+# Hearing Aid Audio Support Using Bluetooth LE
+PRODUCT_PRODUCT_PROPERTIES += \
+	bluetooth.profile.asha.central.enabled=true
 
 # Carrier configuration default location
 PRODUCT_PROPERTY_OVERRIDES += \
@@ -141,17 +155,17 @@ TARGET_USES_VULKAN = false
 
 # TODO(b/185349920)
 # PRODUCT_SOONG_NAMESPACES += \
-#        vendor/arm/mali/valhall \
-#        vendor/arm/mali/valhall/cl \
-#        vendor/arm/mali/valhall/libmali \
-#        vendor/arm/mali/valhall/cinstr/production/gpu-hwc-reader
+#        vendor/arm/mali/valhall
 
 PRODUCT_PACKAGES += \
-       mali_csffw.bin \
-       libGLES_mali-gs201-prebuilt \
-       vulkan.gs201-prebuilt \
+       csffw_image_prebuilt__firmware_prebuilt_todx_mali_csffw.bin \
+       libGLES_mali \
+       vulkan.mali \
        libOpenCL \
-#        libgpudataproducer
+       libgpudataproducer \
+
+PRODUCT_VENDOR_PROPERTIES += \
+       ro.hardware.vulkan=mali
 
 include device/google/gs101/neuralnetwork/neuralnetwork.mk
 
@@ -175,12 +189,12 @@ PRODUCT_VENDOR_PROPERTIES += \
        ro.hardware.egl = swiftshader
 else
 PRODUCT_VENDOR_PROPERTIES += \
-       ro.hardware.egl = mali_gs201
+       ro.hardware.egl = mali
 endif
 PRODUCT_VENDOR_PROPERTIES += \
        ro.opengles.version=196610 \
-       debug.renderengine.backend=skiaglthreaded
-#       graphics.gpu.profiler.support=true \
+       debug.renderengine.backend=skiaglthreaded \
+       graphics.gpu.profiler.support=true \
 
 # GRAPHICS - GPU (end)
 # ####################
@@ -188,10 +202,10 @@ PRODUCT_VENDOR_PROPERTIES += \
 # Device Manifest, Device Compatibility Matrix for Treble
 ifeq ($(DEVICE_USES_EXYNOS_GRALLOC_VERSION), 4)
 	DEVICE_MANIFEST_FILE := \
-		device/google/gs201/manifest$(LOCAL_64ONLY).xml
+		device/google/gs201/manifest.xml
 else
 	DEVICE_MANIFEST_FILE := \
-		device/google/gs201/manifest$(LOCAL_64ONLY)-gralloc3.xml
+		device/google/gs201/manifest-gralloc3.xml
 endif
 
 ifneq (,$(filter aosp_%,$(TARGET_PRODUCT)))
@@ -254,6 +268,7 @@ PRODUCT_COPY_FILES += \
 # Shell scripts
 PRODUCT_COPY_FILES += \
 	device/google/gs201/init.insmod.sh:$(TARGET_COPY_OUT_VENDOR)/bin/init.insmod.sh \
+	device/google/$(TARGET_BOARD_PLATFORM)/set_usb_irq.sh:$(TARGET_COPY_OUT_VENDOR)/bin/hw/set_usb_irq.sh
 
 # insmod files
 PRODUCT_COPY_FILES += \
@@ -292,10 +307,6 @@ PRODUCT_PACKAGES += \
 	tune2fs.vendor_ramdisk \
 	resize2fs.vendor_ramdisk
 
-# Filesystem: convert /dev/block/by-name/persist to f2fs
-PRODUCT_COPY_FILES += \
-	device/google/gs201/convert_to_f2fs.sh:$(TARGET_COPY_OUT_VENDOR)/bin/convert_to_f2fs.sh \
-
 # Userdata Checkpointing OTA GC
 PRODUCT_PACKAGES += \
 	checkpoint_gc
@@ -319,8 +330,13 @@ PRODUCT_PROPERTY_OVERRIDES += \
 	persist.vendor.sys.modem.logging.enable=true
 
 # Enable silent CP crash handling
+ifneq (,$(filter userdebug eng, $(TARGET_BUILD_VARIANT)))
 PRODUCT_PROPERTY_OVERRIDES += \
 	persist.vendor.ril.crash_handling_mode=1
+else
+PRODUCT_PROPERTY_OVERRIDES += \
+	persist.vendor.ril.crash_handling_mode=2
+endif
 
 # Add support dual SIM mode
 PRODUCT_PROPERTY_OVERRIDES += \
@@ -376,12 +392,10 @@ PRODUCT_PRODUCT_PROPERTIES += \
 PRODUCT_COPY_FILES += \
 	device/google/gs201/task_profiles.json:$(TARGET_COPY_OUT_VENDOR)/etc/task_profiles.json
 
-PRODUCT_COPY_FILES += \
-	device/google/gs201/powerhint_a0.json:$(TARGET_COPY_OUT_VENDOR)/etc/powerhint_a0.json
-
-PRODUCT_COPY_FILES += \
-	device/google/gs201/powerhint_a1.json:$(TARGET_COPY_OUT_VENDOR)/etc/powerhint_a1.json
 -include hardware/google/pixel/power-libperfmgr/aidl/device.mk
+
+# IRQ rebalancing.
+include hardware/google/pixel/rebalance_interrupts/rebalance_interrupts.mk
 
 # PowerStats HAL
 PRODUCT_PACKAGES += \
@@ -483,34 +497,18 @@ else
         LOCAL_TARGET_PRODUCT := slider
 endif
 
-#ifneq ($(wildcard vendor/google/camera),)
-SOONG_CONFIG_NAMESPACES += lyric
-SOONG_CONFIG_lyric += \
-	use_lyric_camera_hal \
-	soc \
-	tuning_product
+$(call soong_config_set,google3a_config,soc,gs201)
+$(call soong_config_set,google3a_config,gcam_awb,true)
+$(call soong_config_set,google3a_config,ghawb_truetone,true)
 
-SOONG_CONFIG_lyric_soc := gs201
-SOONG_CONFIG_lyric_use_lyric_camera_hal := true
-# SOONG_CONFIG_lyric_tuning_product is set in device-specific makefiles,
+ifneq ($(wildcard vendor/google/services/LyricCameraHAL/src),)
+$(call soong_config_set,lyric,soc,gs201)
+$(call soong_config_set,lyric,use_lyric_camera_hal,true)
+# lyric::tuning_product is set in device-specific makefiles,
 # such as device/google/${DEVICE}/device-${DEVICE}.mk
 
-SOONG_CONFIG_NAMESPACES += google3a_config
-SOONG_CONFIG_google3a_config += \
-	soc \
-	gcam_awb \
-	ghawb_truetone \
-	target_device
-
-SOONG_CONFIG_google3a_config_soc := gs201
-SOONG_CONFIG_google3a_config_gcam_awb := true
-SOONG_CONFIG_google3a_config_ghawb_truetone := true
-
-
-SOONG_CONFIG_NAMESPACES += gch
-SOONG_CONFIG_gch += hwl_library
-SOONG_CONFIG_gch_hwl_library := lyric
-#endif
+$(call soong_config_set,gch,hwl_library,lyric)
+endif
 
 # WiFi
 PRODUCT_PACKAGES += \
@@ -571,7 +569,7 @@ PRODUCT_COPY_FILES += \
 	frameworks/native/data/etc/android.hardware.usb.host.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.usb.host.xml \
 	frameworks/native/data/etc/android.hardware.usb.accessory.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.usb.accessory.xml
 
-#PRODUCT_COPY_FILES += \
+PRODUCT_COPY_FILES += \
 	frameworks/native/data/etc/android.hardware.camera.flash-autofocus.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.camera.flash-autofocus.xml \
 	frameworks/native/data/etc/android.hardware.camera.front.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.camera.front.xml \
 	frameworks/native/data/etc/android.hardware.camera.concurrent.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.camera.concurrent.xml \
@@ -601,17 +599,19 @@ endif
 
 PRODUCT_PROPERTY_OVERRIDES += \
 	debug.sf.disable_backpressure=0 \
-	debug.sf.enable_gl_backpressure=1
+	debug.sf.enable_gl_backpressure=1 \
+	debug.sf.enable_sdr_dimming=1
 
 PRODUCT_DEFAULT_PROPERTY_OVERRIDES += debug.sf.use_phase_offsets_as_durations=1
-PRODUCT_DEFAULT_PROPERTY_OVERRIDES += debug.sf.late.sf.duration=8300000
-PRODUCT_DEFAULT_PROPERTY_OVERRIDES += debug.sf.late.app.duration=20500000
-PRODUCT_DEFAULT_PROPERTY_OVERRIDES += debug.sf.early.sf.duration=16000000
-PRODUCT_DEFAULT_PROPERTY_OVERRIDES += debug.sf.early.app.duration=16500000
-PRODUCT_DEFAULT_PROPERTY_OVERRIDES += debug.sf.earlyGl.sf.duration=13500000
-PRODUCT_DEFAULT_PROPERTY_OVERRIDES += debug.sf.earlyGl.app.duration=21000000
+PRODUCT_DEFAULT_PROPERTY_OVERRIDES += debug.sf.late.sf.duration=10500000
+PRODUCT_DEFAULT_PROPERTY_OVERRIDES += debug.sf.late.app.duration=16600000
+PRODUCT_DEFAULT_PROPERTY_OVERRIDES += debug.sf.early.sf.duration=16600000
+PRODUCT_DEFAULT_PROPERTY_OVERRIDES += debug.sf.early.app.duration=16600000
+PRODUCT_DEFAULT_PROPERTY_OVERRIDES += debug.sf.earlyGl.sf.duration=16600000
+PRODUCT_DEFAULT_PROPERTY_OVERRIDES += debug.sf.earlyGl.app.duration=16600000
 
-PRODUCT_DEFAULT_PROPERTY_OVERRIDES += ro.surface_flinger.set_idle_timer_ms=80
+PRODUCT_DEFAULT_PROPERTY_OVERRIDES += ro.surface_flinger.enable_layer_caching=true
+PRODUCT_DEFAULT_PROPERTY_OVERRIDES += ro.surface_flinger.set_idle_timer_ms?=80
 PRODUCT_DEFAULT_PROPERTY_OVERRIDES += ro.surface_flinger.set_touch_timer_ms=200
 PRODUCT_DEFAULT_PROPERTY_OVERRIDES += ro.surface_flinger.set_display_power_timer_ms=1000
 PRODUCT_DEFAULT_PROPERTY_OVERRIDES += ro.surface_flinger.use_content_detection_for_refresh_rate=true
@@ -670,9 +670,7 @@ endif
 ## VIDEO
 ####################################
 
-SOONG_CONFIG_NAMESPACES += bigo
-SOONG_CONFIG_bigo += soc
-SOONG_CONFIG_bigo_soc := gs201
+$(call soong_config_set,bigo,soc,gs201)
 
 # 1. Codec 2.0
 # exynos service
@@ -705,6 +703,10 @@ PRODUCT_PROPERTY_OVERRIDES += \
        debug.stagefright.ccodec_delayed_params=1 \
        ro.vendor.gpu.dataspace=1
 
+# Create input surface on the framework side
+PRODUCT_PROPERTY_OVERRIDES += \
+	debug.stagefright.c2inputsurface=-1 \
+
 # 2. OpenMAX IL
 PRODUCT_COPY_FILES += \
 	device/google/gs201/media_codecs.xml:$(TARGET_COPY_OUT_VENDOR)/etc/media_codecs.xml \
@@ -720,7 +722,7 @@ CBD_USE_V2 := true
 CBD_PROTOCOL_SIT := true
 
 # setup dalvik vm configs.
-$(call inherit-product, frameworks/native/build/phone-xhdpi-2048-dalvik-heap.mk)
+$(call inherit-product, frameworks/native/build/phone-xhdpi-6144-dalvik-heap.mk)
 
 PRODUCT_TAGS += dalvik.gc.type-precise
 
@@ -827,11 +829,9 @@ PRODUCT_PACKAGES += \
 	vts.bin
 
 # This will be called only if IMSService is building with source code for dev branches.
-$(call inherit-product-if-exists, vendor/samsung_slsi/telephony/shannon-ims/device-vendor.mk)
+$(call inherit-product-if-exists, vendor/samsung_slsi/telephony/$(BOARD_USES_SHARED_VENDOR_TELEPHONY)/shannon-ims/device-vendor.mk)
 
 PRODUCT_PACKAGES += ShannonIms
-
-$(call inherit-product-if-exists, vendor/samsung_slsi/telephony/shannon-iwlan/device-vendor.mk)
 
 #RCS Test Messaging App
 PRODUCT_PACKAGES_DEBUG += \
@@ -857,18 +857,14 @@ USE_RADIO_HAL_1_6 := true
 #$(call inherit-product, vendor/google_devices/gs201/proprietary/device-vendor.mk)
 
 ifneq ($(BOARD_WITHOUT_RADIO),true)
-$(call inherit-product-if-exists, vendor/samsung_slsi/telephony/common/device-vendor.mk)
+$(call inherit-product-if-exists, vendor/samsung_slsi/telephony/$(BOARD_USES_SHARED_VENDOR_TELEPHONY)/common/device-vendor.mk)
 endif
 
 #GPS HAL
 include device/google/gs201/gnss/device-gnss.mk
 BOARD_VENDOR_SEPOLICY_DIRS += device/google/gs201-sepolicy/gps
 
-ifeq (,$(filter %_64,$(TARGET_PRODUCT)))
-$(call inherit-product, $(SRC_TARGET_DIR)/product/core_64_bit.mk)
-else
 $(call inherit-product, $(SRC_TARGET_DIR)/product/core_64_bit_only.mk)
-endif
 #$(call inherit-product, hardware/google_devices/exynos5/exynos5.mk)
 #$(call inherit-product-if-exists, hardware/google_devices/gs201/gs201.mk)
 #$(call inherit-product-if-exists, vendor/google_devices/common/exynos-vendor.mk)
@@ -888,6 +884,13 @@ PRODUCT_PACKAGES += modem_svc_sit
 # modem logging binary/configs
 PRODUCT_PACKAGES += modem_logging_control
 
+# modem logging configs
+PRODUCT_COPY_FILES += \
+	device/google/gs201/radio/config/logging.conf:$(TARGET_COPY_OUT_VENDOR)/etc/modem/logging.conf \
+	device/google/gs201/radio/config/default.cfg:$(TARGET_COPY_OUT_VENDOR)/etc/modem/default.cfg \
+	device/google/gs201/radio/config/default.nprf:$(TARGET_COPY_OUT_VENDOR)/etc/modem/default.nprf \
+	device/google/gs201/radio/config/default_metrics.xml:$(TARGET_COPY_OUT_VENDOR)/etc/modem/default_metrics.xml
+
 PRODUCT_COPY_FILES += \
 	device/google/gs201/radio/gnss_blanking.csv:$(TARGET_COPY_OUT_VENDOR)/etc/modem/gnss_blanking.csv
 
@@ -902,14 +905,14 @@ PRODUCT_PACKAGES_DEBUG += \
 	$(NULL)
 
 PRODUCT_PACKAGES += \
-	android.hardware.health@2.1-impl-gs201 \
-	android.hardware.health@2.1-service
+	android.hardware.health-service.gs201 \
+	android.hardware.health-service.gs201_recovery \
 
 # Audio
 # Audio HAL Server & Default Implementations
 PRODUCT_PACKAGES += \
 	android.hardware.audio.service \
-	android.hardware.audio@7.0-impl \
+	android.hardware.audio@7.1-impl \
 	android.hardware.audio.effect@7.0-impl \
 	android.hardware.soundtrigger@2.3-impl \
 	vendor.google.whitechapel.audio.audioext@2.0-impl \
@@ -936,8 +939,8 @@ PRODUCT_PACKAGES += \
 	audio.a2dp.default \
 	audio.bluetooth.default \
 	audio.r_submix.default \
-	audio_spk_35l41
-#	sound_trigger.primary.$(TARGET_BOARD_PLATFORM) \
+	audio_spk_35l41 \
+	sound_trigger.primary.$(TARGET_BOARD_PLATFORM)
 #	libaoc_waves \
 #
 
@@ -963,11 +966,14 @@ PRODUCT_SOONG_NAMESPACES += \
 	vendor/google/whitechapel/audio/hal \
 	vendor/google/whitechapel/audio/interfaces
 
-SOONG_CONFIG_NAMESPACES += aoc_audio_board
-SOONG_CONFIG_aoc_audio_board += \
-	platform
+$(call soong_config_set,aoc_audio_board,platform,$(TARGET_BOARD_PLATFORM))
 
-SOONG_CONFIG_aoc_audio_board_platform := $(TARGET_BOARD_PLATFORM)
+## AoC soong
+PRODUCT_SOONG_NAMESPACES += \
+        vendor/google/whitechapel/aoc
+
+$(call soong_config_set,aoc,target_soc,$(TARGET_BOARD_PLATFORM))
+
 #
 ## Audio properties
 PRODUCT_PROPERTY_OVERRIDES += \
