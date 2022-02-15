@@ -963,6 +963,7 @@ void DumpstateDevice::dumpRamdumpSection(int fd) {
 // Dump items that don't fit well into any other section
 void DumpstateDevice::dumpMiscSection(int fd) {
     RunCommandToFd(fd, "VENDOR PROPERTIES", {"/vendor/bin/getprop"});
+    DumpFileToFd(fd, "VENDOR PROC DUMP", "/proc/vendor_sched/dump_task");
 }
 
 // Dump items related to GSC
