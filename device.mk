@@ -609,6 +609,7 @@ PRODUCT_DEFAULT_PROPERTY_OVERRIDES += debug.sf.early.sf.duration=16600000
 PRODUCT_DEFAULT_PROPERTY_OVERRIDES += debug.sf.early.app.duration=16600000
 PRODUCT_DEFAULT_PROPERTY_OVERRIDES += debug.sf.earlyGl.sf.duration=16600000
 PRODUCT_DEFAULT_PROPERTY_OVERRIDES += debug.sf.earlyGl.app.duration=16600000
+PRODUCT_DEFAULT_PROPERTY_OVERRIDES += debug.sf.frame_rate_multiple_threshold=120
 
 PRODUCT_DEFAULT_PROPERTY_OVERRIDES += ro.surface_flinger.enable_layer_caching=true
 PRODUCT_DEFAULT_PROPERTY_OVERRIDES += ro.surface_flinger.set_idle_timer_ms?=80
@@ -850,6 +851,8 @@ SIM_COUNT := 2
 SUPPORT_MULTI_SIM := true
 # Support NR
 SUPPORT_NR := true
+# Support 5G on both stacks
+SUPPORT_NR_DS := true
 # Using IRadio 1.6
 USE_RADIO_HAL_1_6 := true
 
@@ -915,7 +918,7 @@ PRODUCT_PACKAGES += \
 	android.hardware.audio@7.1-impl \
 	android.hardware.audio.effect@7.0-impl \
 	android.hardware.soundtrigger@2.3-impl \
-	vendor.google.whitechapel.audio.audioext@2.0-impl \
+	vendor.google.whitechapel.audio.audioext@3.0-impl \
 	android.hardware.bluetooth.audio@2.1-impl
 
 #
