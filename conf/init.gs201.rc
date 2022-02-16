@@ -508,6 +508,7 @@ on fs
     chown system system /sys/devices/platform/exynos-drm/primary-panel/gamma
     chown system system /sys/devices/platform/exynos-drm/primary-panel/min_vrefresh
     chown system system /sys/devices/platform/exynos-drm/primary-panel/idle_delay_ms
+    chown system system /sys/devices/platform/exynos-drm/primary-panel/panel_idle
     chown system system /sys/module/drm/parameters/vblankoffdelay
     chown system system /sys/class/dqe0/atc/ambient_light
     chown system system /sys/class/dqe0/atc/st
