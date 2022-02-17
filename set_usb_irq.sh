@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/vendor/bin/sh
 
 # Switch into /proc/irq/$IRQ for the dwc3 usb controller
 cd /proc/irq/*/dwc3/.. || exit 7
