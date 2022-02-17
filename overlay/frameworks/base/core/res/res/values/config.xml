@@ -278,6 +278,9 @@
           available on some devices. -->
     <bool name="config_enableHapticTextHandle">true</bool>
 
+    <!-- Enable Zram writeback feature to allow unused pages in zram be written to flash. -->
+    <bool name="config_zramWriteback">true</bool>
+
     <!-- Configure tcp buffer sizes in the form:
          rmem_min,rmem_def,rmem_max,wmem_min,wmem_def,wmem_max
          If this is configured as an empty string, the system default will be applied.
