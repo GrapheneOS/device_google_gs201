@@ -153,8 +153,7 @@ USE_SWIFTSHADER := false
 # HWUI
 TARGET_USES_VULKAN = false
 
-# PRODUCT_SOONG_NAMESPACES += \
-#        vendor/arm/mali/valhall
+PRODUCT_SOONG_NAMESPACES += vendor/arm/mali/valhall
 
 $(call soong_config_set,pixel_mali,soc,$(TARGET_BOARD_PLATFORM))
 
@@ -229,8 +228,8 @@ DEVICE_MATRIX_FILE := \
 
 DEVICE_PACKAGE_OVERLAYS += device/google/gs201/overlay
 
-# This will be updated to 31 (Android S) for shipping
-PRODUCT_SHIPPING_API_LEVEL := 30
+# This will be updated to 33 (Android T) for shipping
+PRODUCT_SHIPPING_API_LEVEL := 31
 
 # Temporarily disable the debugfs restriction on 31 (Android S)
 PRODUCT_SET_DEBUGFS_RESTRICTIONS := false
@@ -1037,10 +1036,6 @@ PRODUCT_PACKAGES += \
 	update_engine \
 	update_engine_sideload \
 	update_verifier
-
-# tetheroffload HAL
-PRODUCT_PACKAGES += \
-	vendor.samsung_slsi.hardware.tetheroffload@1.0-service
 
 # pKVM
 $(call inherit-product, packages/modules/Virtualization/apex/product_packages.mk)
