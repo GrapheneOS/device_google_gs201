@@ -1074,6 +1074,9 @@ include hardware/google/pixel/PixelLogger/PixelLogger.mk
 # sscoredump
 include hardware/google/pixel/sscoredump/device.mk
 
+# RadioExt Version
+USES_RADIOEXT_V1_4 = true
+
 # Wifi ext
 include hardware/google/pixel/wifi_ext/device.mk
 
