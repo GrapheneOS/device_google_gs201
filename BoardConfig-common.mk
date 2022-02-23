@@ -36,7 +36,6 @@ BOARD_KERNEL_CMDLINE += dyndbg=\"func alloc_contig_dump_pages +p\"
 BOARD_KERNEL_CMDLINE += earlycon=exynos4210,0x10A00000 console=ttySAC0,115200 androidboot.console=ttySAC0 printk.devkmsg=on
 BOARD_KERNEL_CMDLINE += cma_sysfs.experimental=Y
 BOARD_BOOTCONFIG += androidboot.boot_devices=14700000.ufs
-BOARD_BOOTCONFIG += androidboot.selinux=permissive
 
 TARGET_NO_BOOTLOADER := true
 TARGET_NO_KERNEL := false
