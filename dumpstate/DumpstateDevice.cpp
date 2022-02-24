@@ -71,7 +71,7 @@ namespace implementation {
 
 typedef std::chrono::time_point<std::chrono::steady_clock> timepoint_t;
 
-const char kVerboseLoggingProperty[] = "persist.dumpstate.verbose_logging.enabled";
+const char kVerboseLoggingProperty[] = "persist.vendor.verbose_logging_enabled";
 
 void DumpstateDevice::dumpLogs(int fd, std::string srcDir, std::string destDir, int maxFileNum,
                                const char *logPrefix) {
