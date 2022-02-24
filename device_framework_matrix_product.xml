@@ -31,7 +31,7 @@
             <instance>dual</instance>
         </interface>
     </hal>
-    <hal format="aidl">
+    <hal format="aidl" optional="true">
         <name>android.hardware.wifi.hostapd</name>
         <version>1</version>
         <interface>
