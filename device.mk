@@ -114,6 +114,10 @@ PRODUCT_PROPERTY_OVERRIDES += \
 PRODUCT_PRODUCT_PROPERTIES += \
 	persist.radio.reboot_on_modem_change=false
 
+# Configure DSDS by default
+PRODUCT_PRODUCT_PROPERTIES += \
+	persist.radio.multisim.config=dsds
+
 # Enable Early Camping
 PRODUCT_PRODUCT_PROPERTIES += \
 	persist.vendor.ril.camp_on_earlier=1
@@ -228,8 +232,8 @@ DEVICE_MATRIX_FILE := \
 
 DEVICE_PACKAGE_OVERLAYS += device/google/gs201/overlay
 
-# This will be updated to 31 (Android S) for shipping
-PRODUCT_SHIPPING_API_LEVEL := 30
+# This will be updated to 33 (Android T) for shipping
+PRODUCT_SHIPPING_API_LEVEL := 32
 
 # Temporarily disable the debugfs restriction on 31 (Android S)
 PRODUCT_SET_DEBUGFS_RESTRICTIONS := false
@@ -242,7 +246,7 @@ PRODUCT_ENFORCE_PRODUCT_PARTITION_INTERFACE := true
 PRODUCT_COPY_FILES += \
 	$(LOCAL_KERNEL):kernel \
 	device/google/gs201/conf/init.gs201.usb.rc:$(TARGET_COPY_OUT_VENDOR)/etc/init/hw/init.gs201.usb.rc \
-	device/google/gs201/conf/ueventd.gs201.rc:$(TARGET_COPY_OUT_VENDOR)/ueventd.rc
+	device/google/gs201/conf/ueventd.gs201.rc:$(TARGET_COPY_OUT_VENDOR)/etc/ueventd.rc
 
 PRODUCT_COPY_FILES += \
 	device/google/gs201/conf/init.gs201.rc:$(TARGET_COPY_OUT_VENDOR)/etc/init/hw/init.gs201.rc
@@ -1036,10 +1040,6 @@ PRODUCT_PACKAGES += \
 	update_engine \
 	update_engine_sideload \
 	update_verifier
-
-# tetheroffload HAL
-PRODUCT_PACKAGES += \
-	vendor.samsung_slsi.hardware.tetheroffload@1.0-service
 
 # pKVM
 $(call inherit-product, packages/modules/Virtualization/apex/product_packages.mk)
