@@ -374,7 +374,9 @@ PRODUCT_PACKAGES += android.hardware.sensors@2.1-service.multihal
 
 # USB HAL
 PRODUCT_PACKAGES += \
-	android.hardware.usb@1.3-service.gs201
+	android.hardware.usb-service
+PRODUCT_PACKAGES += \
+	android.hardware.usb.gadget-service
 
 # MIDI feature
 PRODUCT_COPY_FILES += \
