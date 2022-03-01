@@ -501,6 +501,12 @@ void DumpstateDevice::dumpThermalSection(int fd) {
                    "for f in /sys/class/thermal/cooling* ; do "
                        "type=`cat $f/type` ; state2power_table=`cat $f/state2power_table` ; echo \"$type: $state2power_table\" ; "
                        "done"});
+    DumpFileToFd(fd, "TMU state:", "/sys/module/gs_thermal/parameters/tmu_reg_dump_state");
+    DumpFileToFd(fd, "TMU current temperature:", "/sys/module/gs_thermal/parameters/tmu_reg_dump_current_temp");
+    DumpFileToFd(fd, "TMU_TOP rise thresholds:", "/sys/module/gs_thermal/parameters/tmu_top_reg_dump_rise_thres");
+    DumpFileToFd(fd, "TMU_TOP fall thresholds:", "/sys/module/gs_thermal/parameters/tmu_top_reg_dump_fall_thres");
+    DumpFileToFd(fd, "TMU_SUB rise thresholds:", "/sys/module/gs_thermal/parameters/tmu_sub_reg_dump_rise_thres");
+    DumpFileToFd(fd, "TMU_SUB fall thresholds:", "/sys/module/gs_thermal/parameters/tmu_sub_reg_dump_fall_thres");
 }
 
 // Dump items related to touch
