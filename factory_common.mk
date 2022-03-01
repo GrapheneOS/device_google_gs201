@@ -54,8 +54,8 @@ PRODUCT_DEFAULT_PROPERTY_OVERRIDES += ro.surface_flinger.set_display_power_timer
 PRODUCT_DEFAULT_PROPERTY_OVERRIDES += ro.surface_flinger.use_content_detection_for_refresh_rate=true
 
 # factory should always has SELinux permissive
-BOARD_BOOTCONFIG += androidboot.selinux=permissive
-BOARD_KERNEL_CMDLINE += androidboot.selinux=permissive
+#BOARD_BOOTCONFIG += androidboot.selinux=permissive
+#BOARD_KERNEL_CMDLINE += androidboot.selinux=permissive
 
 # Disable Bluetooth as default in factory build
 DEVICE_PACKAGE_OVERLAYS += device/google/gs201/overlay-factory
