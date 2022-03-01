@@ -1,8 +1,7 @@
-# TODO (b/206902205): remove root permission later
 service vendor.usb-gadget-hal-1-2 /vendor/bin/hw/android.hardware.usb.gadget-service
     class hal
-    user root
-    group root system shell mtp
+    user system
+    group system shell mtp
 
 on post-fs
     chown root system /sys/class/typec/port0/power_role
