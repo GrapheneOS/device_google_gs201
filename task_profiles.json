@@ -8,6 +8,7 @@
           "Params":
           {
             "FilePath": "/sys/kernel/vendor_sched/set_task_group_ta",
+            "ProcFilePath": "/sys/kernel/vendor_sched/set_proc_group_ta",
             "Value": "<pid>",
             "LogFailures": "false"
           }
@@ -22,6 +23,7 @@
           "Params":
           {
             "FilePath": "/sys/kernel/vendor_sched/set_task_group_cam",
+            "ProcFilePath": "/sys/kernel/vendor_sched/set_proc_group_cam",
             "Value": "<pid>",
             "LogFailures": "false"
           }
@@ -36,6 +38,7 @@
           "Params":
           {
             "FilePath": "/sys/kernel/vendor_sched/set_task_group_cam_power",
+            "ProcFilePath": "/sys/kernel/vendor_sched/set_proc_group_cam_power",
             "Value": "<pid>",
             "LogFailures": "false"
           }
@@ -50,6 +53,7 @@
           "Params":
           {
             "FilePath": "/sys/kernel/vendor_sched/set_task_group_dex2oat",
+            "ProcFilePath": "/sys/kernel/vendor_sched/set_proc_group_dex2oat",
             "Value": "<pid>",
             "LogFailures": "false"
           }
@@ -64,6 +68,7 @@
           "Params":
           {
             "FilePath": "/sys/kernel/vendor_sched/set_task_group_ota",
+            "ProcFilePath": "/sys/kernel/vendor_sched/set_proc_group_ota",
             "Value": "<pid>",
             "LogFailures": "false"
           }
@@ -117,6 +122,7 @@
           "Params":
           {
             "FilePath": "/sys/kernel/vendor_sched/set_task_group_bg",
+            "ProcFilePath": "/sys/kernel/vendor_sched/set_proc_group_bg",
             "Value": "<pid>",
             "LogFailures": "false"
           }
@@ -131,6 +137,7 @@
           "Params":
           {
             "FilePath": "/sys/kernel/vendor_sched/set_task_group_sys",
+            "ProcFilePath": "/sys/kernel/vendor_sched/set_proc_group_sys",
             "Value": "<pid>",
             "LogFailures": "false"
           }
@@ -145,6 +152,7 @@
           "Params":
           {
             "FilePath": "/sys/kernel/vendor_sched/set_task_group_fg",
+            "ProcFilePath": "/sys/kernel/vendor_sched/set_proc_group_fg",
             "Value": "<pid>",
             "LogFailures": "false"
           }
@@ -159,6 +167,7 @@
           "Params":
           {
             "FilePath": "/sys/kernel/vendor_sched/set_task_group_ta",
+            "ProcFilePath": "/sys/kernel/vendor_sched/set_proc_group_ta",
             "Value": "<pid>",
             "LogFailures": "false"
           }
@@ -173,6 +182,7 @@
           "Params":
           {
             "FilePath": "/sys/kernel/vendor_sched/set_task_group_nnapi",
+            "ProcFilePath": "/sys/kernel/vendor_sched/set_proc_group_nnapi",
             "Value": "<pid>",
             "LogFailures": "false"
           }
@@ -187,6 +197,7 @@
           "Params":
           {
             "FilePath": "/sys/kernel/vendor_sched/set_task_group_sysbg",
+            "ProcFilePath": "/sys/kernel/vendor_sched/set_proc_group_sysbg",
             "Value": "<pid>",
             "LogFailures": "false"
           }
@@ -209,6 +220,7 @@
           "Params":
           {
             "FilePath": "/sys/kernel/vendor_sched/set_task_group_sf",
+            "ProcFilePath": "/sys/kernel/vendor_sched/set_proc_group_sf",
             "Value": "<pid>",
             "LogFailures": "false"
           }
@@ -231,6 +243,7 @@
           "Params":
           {
             "FilePath": "/sys/kernel/vendor_sched/set_task_group_rt",
+            "ProcFilePath": "/sys/kernel/vendor_sched/set_proc_group_rt",
             "Value": "<pid>",
             "LogFailures": "false"
           }
