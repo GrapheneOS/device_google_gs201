@@ -71,8 +71,7 @@ on early-boot
     # acm function for uwb
     mkdir /config/usb_gadget/g1/functions/acm.uwb0
 
-    # disable permission change. TODO (b/206902205): add back later
-    # setprop vendor.usb.functions.ready 1
+    setprop vendor.usb.functions.ready 1
 
 on boot
     write /config/usb_gadget/g1/bcdDevice 0x0510
