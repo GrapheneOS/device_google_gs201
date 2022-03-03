@@ -54,8 +54,6 @@ PRODUCT_SOONG_NAMESPACES += \
 	vendor/google_nos/test/system-test-harness \
 	vendor/google/camera
 
-DEVICE_USES_EXYNOS_GRALLOC_VERSION := 4
-
 LOCAL_KERNEL := $(TARGET_KERNEL_DIR)/Image.lz4
 
 # OEM Unlock reporting
@@ -204,13 +202,8 @@ PRODUCT_VENDOR_PROPERTIES += \
 # ####################
 
 # Device Manifest, Device Compatibility Matrix for Treble
-ifeq ($(DEVICE_USES_EXYNOS_GRALLOC_VERSION), 4)
-	DEVICE_MANIFEST_FILE := \
-		device/google/gs201/manifest.xml
-else
-	DEVICE_MANIFEST_FILE := \
-		device/google/gs201/manifest-gralloc3.xml
-endif
+DEVICE_MANIFEST_FILE := \
+	device/google/gs201/manifest.xml
 
 ifneq (,$(filter aosp_%,$(TARGET_PRODUCT)))
 DEVICE_MANIFEST_FILE += \
@@ -450,19 +443,11 @@ PRODUCT_PROPERTY_OVERRIDES += aaudio.hw_burst_min_usec=2000
 PRODUCT_PACKAGES += \
 	com.android.future.usb.accessory
 
-# for now include gralloc here. should come from hardware/google_devices/exynos5
-ifeq ($(DEVICE_USES_EXYNOS_GRALLOC_VERSION), 4)
-	PRODUCT_PACKAGES += \
-		android.hardware.graphics.mapper@4.0-impl \
-		android.hardware.graphics.allocator@4.0-service \
-		android.hardware.graphics.allocator@4.0-impl
-else
-	PRODUCT_PACKAGES += \
-		android.hardware.graphics.mapper@2.0-impl \
-		android.hardware.graphics.allocator@2.0-service \
-		android.hardware.graphics.allocator@2.0-impl \
-		gralloc.$(TARGET_BOARD_PLATFORM)
-endif
+PRODUCT_PACKAGES += \
+	android.hardware.graphics.mapper@4.0-impl \
+	android.hardware.graphics.allocator@4.0-service \
+	android.hardware.graphics.allocator@4.0-impl \
+	android.hardware.graphics.allocator-V1-service
 
 # AIDL memtrack
 PRODUCT_PACKAGES += \
@@ -856,8 +841,8 @@ SUPPORT_MULTI_SIM := true
 SUPPORT_NR := true
 # Support 5G on both stacks
 SUPPORT_NR_DS := true
-# Using IRadio 1.6
-USE_RADIO_HAL_1_6 := true
+# Using IRadio 2.0
+USE_RADIO_HAL_2_0 := true
 
 #$(call inherit-product, vendor/google_devices/telephony/common/device-vendor.mk)
 #$(call inherit-product, vendor/google_devices/gs201/proprietary/device-vendor.mk)
@@ -922,7 +907,7 @@ PRODUCT_PACKAGES += \
 	android.hardware.audio.effect@7.0-impl \
 	android.hardware.soundtrigger@2.3-impl \
 	vendor.google.whitechapel.audio.audioext@3.0-impl \
-	android.hardware.bluetooth.audio@2.1-impl
+	android.hardware.bluetooth.audio-impl \
 
 #
 ##Audio HAL libraries
