@@ -7,6 +7,7 @@
 system                                                   /system                     erofs   ro                       wait,slotselect,avb=vbmeta_system,logical,first_stage_mount,readahead_size_kb=128
 # During compliance testing, the previous line would fail (because GSI is ext4), and the next line would be used to mount GSI.
 system                                                   /system                     ext4    ro,barrier=1             wait,slotselect,avb=vbmeta_system,logical,first_stage_mount,readahead_size_kb=128
+system_dlkm                                              /system_dlkm                erofs   ro,barrier=1             wait,slotselect,avb=vbmeta_system,logical,first_stage_mount,readahead_size_kb=128
 system_ext                                               /system_ext                 erofs   ro                       wait,slotselect,avb=vbmeta_system,logical,first_stage_mount,readahead_size_kb=128
 product                                                  /product                    erofs   ro                       wait,slotselect,avb=vbmeta_system,logical,first_stage_mount,readahead_size_kb=128
 vendor                                                   /vendor                     erofs   ro                       wait,slotselect,avb=vbmeta_vendor,logical,first_stage_mount,readahead_size_kb=128
