@@ -33,11 +33,53 @@ namespace gadget {
 namespace V1_2 {
 namespace implementation {
 
-UsbGadget::UsbGadget() {
+UsbGadget::UsbGadget() : mGadgetIrqPath("") {
     if (access(OS_DESC_PATH, R_OK) != 0) {
         ALOGE("configfs setup not done yet");
         abort();
     }
+}
+
+V1_0::Status UsbGadget::getUsbGadgetIrqPath() {
+    std::string irqs;
+    size_t read_pos = 0;
+    size_t found_pos = 0;
+
+    if (!ReadFileToString(kProcInterruptsPath, &irqs)) {
+        ALOGE("cannot read all interrupts");
+        return Status::ERROR;
+    }
+
+    while (true) {
+        found_pos = irqs.find_first_of("\n", read_pos);
+        if (found_pos == std::string::npos) {
+            ALOGI("the string of all interrupts is unexpected");
+            return Status::ERROR;
+        }
+
+        std::string single_irq = irqs.substr(read_pos, found_pos - read_pos);
+
+        if (single_irq.find("dwc3", 0) != std::string::npos) {
+            unsigned int dwc3_irq_number;
+            size_t dwc3_pos = single_irq.find_first_of(":");
+            if (!ParseUint(single_irq.substr(0, dwc3_pos), &dwc3_irq_number)) {
+                ALOGI("unknown IRQ strings");
+                return Status::ERROR;
+            }
+
+            mGadgetIrqPath = kProcIrqPath + single_irq.substr(0, dwc3_pos) + kSmpAffinityList;
+            break;
+        }
+
+        if (found_pos == irqs.npos) {
+            ALOGI("USB gadget doesn't start");
+            return Status::ERROR;
+        }
+
+        read_pos = found_pos + 1;
+    }
+
+    return Status::SUCCESS;
 }
 
 void currentFunctionsAppliedCallback(bool functionsApplied, void *payload) {
@@ -359,6 +401,10 @@ Return<void> UsbGadget::setCurrentUsbFunctions(uint64_t functions,
     mCurrentUsbFunctions = functions;
     mCurrentUsbFunctionsApplied = false;
 
+    // Get the gadget IRQ number before tearDownGadget()
+    if (mGadgetIrqPath.empty())
+        getUsbGadgetIrqPath();
+
     // Unlink the gadget and stop the monitor if running.
     V1_0::Status status = tearDownGadget();
     if (status != Status::SUCCESS) {
@@ -391,9 +437,15 @@ Return<void> UsbGadget::setCurrentUsbFunctions(uint64_t functions,
     }
 
     if (functions & GadgetFunction::NCM) {
-        SetProperty("vendor.usb.dwc3_irq", "big");
+        if (!mGadgetIrqPath.empty()) {
+            if (!WriteStringToFile(BIG_CORE, mGadgetIrqPath))
+                ALOGI("Cannot move gadget IRQ to big core, path:%s", mGadgetIrqPath.c_str());
+        }
     } else {
-        SetProperty("vendor.usb.dwc3_irq", "medium");
+        if (!mGadgetIrqPath.empty()) {
+            if (!WriteStringToFile(MEDIUM_CORE, mGadgetIrqPath))
+                ALOGI("Cannot move gadget IRQ to medium core, path:%s", mGadgetIrqPath.c_str());
+        }
     }
 
     ALOGI("Usb Gadget setcurrent functions called successfully");
