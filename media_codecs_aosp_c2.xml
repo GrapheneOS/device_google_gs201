@@ -115,7 +115,7 @@
             <Limit name="size" min="64x64" max="3840x2176" />
             <Limit name="alignment" value="2x2" />
             <Limit name="block-size" value="64x64" />
-            <Limit name="block-count" range="1-2025" />
+            <Limit name="block-count" range="1-2040" />
             <Limit name="blocks-per-second" min="1" max="3888000" />
             <Limit name="bitrate" range="1-80000000" />
             <Limit name="performance-point-1280x720" range="240" />
@@ -128,7 +128,7 @@
             <Limit name="size" min="64x64" max="3840x2176" />
             <Limit name="alignment" value="2x2" />
             <Limit name="block-size" value="64x64" />
-            <Limit name="block-count" range="1-2025" />
+            <Limit name="block-count" range="1-2040" />
             <Limit name="blocks-per-second" min="1" max="3888000" />
             <Limit name="bitrate" range="1-80000000" />
             <Limit name="performance-point-1280x720" range="240" />
@@ -159,7 +159,7 @@
             <Limit name="size" min="64x64" max="3840x2176" />
             <Limit name="alignment" value="2x2" />
             <Limit name="block-size" value="32x32" />
-            <Limit name="block-count" range="1-8100" />
+            <Limit name="block-count" range="1-8160" />
             <Limit name="blocks-per-second" min="1" max="979200" />
             <Limit name="bitrate" range="1-120000000" />
             <Limit name="performance-point-1280x720" range="240" />
@@ -214,7 +214,7 @@
             <Limit name="size" min="64x64" max="3840x2176" />
             <Limit name="alignment" value="2x2" />
             <Limit name="block-size" value="64x64" />
-            <Limit name="block-count" range="1-2025" />
+            <Limit name="block-count" range="1-2040" />
             <Limit name="blocks-per-second" min="1" max="243000" />
             <Limit name="bitrate" range="1-80000000" />
             <Limit name="performance-point-1280x720" range="240" />
