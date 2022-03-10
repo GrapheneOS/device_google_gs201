@@ -153,50 +153,52 @@ endif
 USE_SWIFTSHADER := false
 
 # HWUI
-TARGET_USES_VULKAN = false
+TARGET_USES_VULKAN = true
 
-PRODUCT_SOONG_NAMESPACES += vendor/arm/mali/valhall
+PRODUCT_SOONG_NAMESPACES += \
+	vendor/arm/mali/valhall
 
 $(call soong_config_set,pixel_mali,soc,$(TARGET_BOARD_PLATFORM))
 
+include device/google/gs101/neuralnetwork/neuralnetwork.mk
+
 PRODUCT_PACKAGES += \
-       csffw_image_prebuilt__firmware_prebuilt_todx_mali_csffw.bin \
-       libGLES_mali \
-       vulkan.mali \
-       libOpenCL \
-       libgpudataproducer \
+	csffw_image_prebuilt__firmware_prebuilt_todx_mali_csffw.bin \
+	libGLES_mali \
+	vulkan.mali \
+	libOpenCL \
+	libgpudataproducer \
 
 PRODUCT_VENDOR_PROPERTIES += \
-       ro.hardware.vulkan=mali
-
-include device/google/gs101/neuralnetwork/neuralnetwork.mk
+	ro.hardware.vulkan=mali
 
 ifeq ($(USE_SWIFTSHADER),true)
 PRODUCT_PACKAGES += \
-       libGLESv1_CM_swiftshader \
-       libEGL_swiftshader \
-       libGLESv2_swiftshader
+   libGLESv1_CM_swiftshader \
+   libEGL_swiftshader \
+   libGLESv2_swiftshader
 endif
 
 PRODUCT_COPY_FILES += \
-       frameworks/native/data/etc/android.hardware.opengles.aep.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.opengles.aep.xml \
-       frameworks/native/data/etc/android.hardware.vulkan.version-1_1.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.vulkan.version.xml \
-       frameworks/native/data/etc/android.hardware.vulkan.level-1.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.vulkan.level.xml \
-       frameworks/native/data/etc/android.hardware.vulkan.compute-0.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.vulkan.compute.xml \
-       frameworks/native/data/etc/android.software.vulkan.deqp.level-2021-03-01.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.software.vulkan.deqp.level.xml \
-       frameworks/native/data/etc/android.software.opengles.deqp.level-2021-03-01.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.software.opengles.deqp.level.xml
+	frameworks/native/data/etc/android.hardware.opengles.aep.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.opengles.aep.xml \
+	frameworks/native/data/etc/android.hardware.vulkan.version-1_1.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.vulkan.version.xml \
+	frameworks/native/data/etc/android.hardware.vulkan.level-1.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.vulkan.level.xml \
+	frameworks/native/data/etc/android.hardware.vulkan.compute-0.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.vulkan.compute.xml \
+	frameworks/native/data/etc/android.software.vulkan.deqp.level-2021-03-01.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.software.vulkan.deqp.level.xml \
+	frameworks/native/data/etc/android.software.opengles.deqp.level-2021-03-01.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.software.opengles.deqp.level.xml
 
 ifeq ($(USE_SWIFTSHADER),true)
 PRODUCT_VENDOR_PROPERTIES += \
-       ro.hardware.egl = swiftshader
+	ro.hardware.egl = swiftshader
 else
 PRODUCT_VENDOR_PROPERTIES += \
-       ro.hardware.egl = mali
+	ro.hardware.egl = mali
 endif
+
 PRODUCT_VENDOR_PROPERTIES += \
-       ro.opengles.version=196610 \
-       debug.renderengine.backend=skiaglthreaded \
-       graphics.gpu.profiler.support=true \
+	ro.opengles.version=196610 \
+	graphics.gpu.profiler.support=true \
+	debug.renderengine.backend=skiaglthreaded \
 
 # GRAPHICS - GPU (end)
 # ####################
@@ -381,9 +383,6 @@ PRODUCT_PROPERTY_OVERRIDES += \
 	persist.vendor.usb.usbradio.config=dm
 endif
 
-# Power HAL
-PRODUCT_COPY_FILES += \
-	device/google/gs201/powerhint.json:$(TARGET_COPY_OUT_VENDOR)/etc/powerhint.json
 # adpf 16ms update rate
 PRODUCT_PRODUCT_PROPERTIES += \
         vendor.powerhal.adpf.rate=16666666
@@ -844,8 +843,8 @@ SUPPORT_MULTI_SIM := true
 SUPPORT_NR := true
 # Support 5G on both stacks
 SUPPORT_NR_DS := true
-# Using IRadio 1.6
-USE_RADIO_HAL_1_6 := true
+# Using IRadio 2.0
+USE_RADIO_HAL_2_0 := true
 
 #$(call inherit-product, vendor/google_devices/telephony/common/device-vendor.mk)
 #$(call inherit-product, vendor/google_devices/gs201/proprietary/device-vendor.mk)
