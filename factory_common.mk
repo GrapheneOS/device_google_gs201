@@ -63,11 +63,14 @@ DEVICE_PACKAGE_OVERLAYS += device/google/gs201/overlay-factory
 PRODUCT_COPY_FILES += \
     device/google/gs201/conf/init.factory.rc:$(TARGET_COPY_OUT_VENDOR)/etc/init/hw/init.factory.rc
 
+BOARD_SEPOLICY_DIRS += hardware/google/pixel-sepolicy/factory_boost
+
 # Add factory-friendly changes
 PRODUCT_PACKAGES += \
         FactoryOverlaySettings \
         FactoryOverlayLauncher3 \
-        FactoryOverlayFrameworkRes
+        FactoryOverlayFrameworkRes \
+        factory_post_boot
 
 # To prevent rebooting due to crashing services
 PRODUCT_SYSTEM_DEFAULT_PROPERTIES += \
