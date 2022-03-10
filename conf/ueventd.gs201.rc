@@ -177,6 +177,9 @@
 # TPU
 /dev/janeiro            0660   system     system
 
+# DSP
+/dev/gxp                0660   system     system
+
 # TOE
 /dev/dit2                 0660   radio      radio
 
