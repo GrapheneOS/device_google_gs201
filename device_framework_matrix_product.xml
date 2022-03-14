@@ -113,7 +113,7 @@
     <hal format="aidl" optional="true">
         <name>hardware.qorvo.uwb</name>
         <interface>
-            <name>IUwb</name>
+            <name>IUwbVendor</name>
             <instance>default</instance>
         </interface>
     </hal>
