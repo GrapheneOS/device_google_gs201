@@ -35,12 +35,14 @@ const struct SysfsCollector::SysfsPaths sysfs_paths = {
     .SlowioWriteCntPath = UFSHC_PATH(slowio_write_cnt),
     .SlowioUnmapCntPath = UFSHC_PATH(slowio_unmap_cnt),
     .SlowioSyncCntPath = UFSHC_PATH(slowio_sync_cnt),
+    .CycleCountBinsPath = "/sys/class/power_supply/battery/cycle_counts",
     .UFSLifetimeA = UFSHC_PATH(health_descriptor/life_time_estimation_a),
     .UFSLifetimeB = UFSHC_PATH(health_descriptor/life_time_estimation_b),
     .UFSLifetimeC = UFSHC_PATH(health_descriptor/life_time_estimation_c),
     .F2fsStatsPath = "/sys/fs/f2fs/",
     .ImpedancePath = "/sys/devices/platform/audiometrics/speaker_impedance",
     .CodecPath =     "/sys/devices/platform/audiometrics/codec_state",
+    .EEPROMPath = "/dev/battery_history",
     .SpeakerTemperaturePath = "/sys/devices/platform/audiometrics/speaker_temp",
     .SpeakerExcursionPath = "/sys/devices/platform/audiometrics/speaker_excursion",
     .SpeakerHeartBeatPath = "/sys/devices/platform/audiometrics/speaker_heartbeat",
@@ -57,7 +59,8 @@ const struct SysfsCollector::SysfsPaths sysfs_paths = {
 
 const struct UeventListener::UeventPaths ueventPaths = {
         .AudioUevent = "/devices/virtual/amcs/amcs",
-};
+        .WirelessChargerPtmcPath = "/sys/class/power_supply/wireless/device/ptmc_id",
+        .TypeCPartnerUevent = "PRODUCT_TYPE="};
 
 int main() {
     LOG(INFO) << "starting PixelStats";
