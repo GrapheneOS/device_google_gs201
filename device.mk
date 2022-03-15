@@ -184,6 +184,9 @@ endif
 # Must match BOARD_USES_SWIFTSHADER in BoardConfig.mk
 USE_SWIFTSHADER := false
 
+# Must match BOARD_USES_ANGLE in BoardConfig.mk
+USE_ANGLE := true
+
 # HWUI
 TARGET_USES_VULKAN = true
 
@@ -211,6 +214,13 @@ PRODUCT_PACKAGES += \
    libGLESv2_swiftshader
 endif
 
+ifeq ($(USE_ANGLE),true)
+PRODUCT_PACKAGES += \
+	libEGL_angle \
+	libGLESv1_CM_angle \
+	libGLESv2_angle
+endif
+
 PRODUCT_COPY_FILES += \
 	frameworks/native/data/etc/android.hardware.opengles.aep.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.opengles.aep.xml \
 	frameworks/native/data/etc/android.hardware.vulkan.version-1_1.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.vulkan.version.xml \
@@ -222,6 +232,10 @@ PRODUCT_COPY_FILES += \
 ifeq ($(USE_SWIFTSHADER),true)
 PRODUCT_VENDOR_PROPERTIES += \
 	ro.hardware.egl = swiftshader
+else ifeq ($(USE_ANGLE),true)
+PRODUCT_VENDOR_PROPERTIES += \
+	ro.hardware.egl = angle \
+	ro.hardware.egl_legacy = mali
 else
 PRODUCT_VENDOR_PROPERTIES += \
 	ro.hardware.egl = mali
