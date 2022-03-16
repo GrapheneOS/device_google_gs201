@@ -214,6 +214,8 @@ on init
     chown system system /sys/devices/platform/10970000.hsi2c/i2c-5/5-0050/eeprom
     chown system system /sys/devices/platform/10970000.hsi2c/i2c-4/4-0050/eeprom
     chown system system /sys/devices/platform/10da0000.hsi2c/i2c-6/6-0050/eeprom
+    chown system system /dev/battery_history
+    chmod 0644 /dev/battery_history
 
     # Modem temperature driver
     chown radio system /sys/devices/platform/cp-tm1/cp_temp
