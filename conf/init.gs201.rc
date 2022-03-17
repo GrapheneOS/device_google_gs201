@@ -511,6 +511,10 @@ on fs
     restorecon_recursive /mnt/vendor/modem_userdata
     chown radio system /mnt/vendor/modem_userdata
 
+    # Mount modem partition
+    mount_all /vendor/etc/fstab.modem --early
+    restorecon_recursive /mnt/vendor/modem_img
+
     restorecon_recursive /mnt/vendor/persist
     restorecon_recursive /mnt/vendor/persist/aoc
     restorecon_recursive /mnt/vendor/persist/audio
