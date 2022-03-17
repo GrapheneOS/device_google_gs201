@@ -945,3 +945,8 @@ on property:persist.vendor.softmaxfreq.cl1=*
 
 on property:persist.vendor.softmaxfreq.cl2=*
     write /sys/devices/platform/exynos-acme/freq_qos_max "6 ${persist.vendor.softmaxfreq.cl2}"
+
+# UFS
+on property:ro.boot.mode=charger && property:init.svc.vendor.charger=running
+    # Enable UFS powersaving in Off Mode Charger
+    write /dev/sys/block/bootdevice/clkgate_enable 1
