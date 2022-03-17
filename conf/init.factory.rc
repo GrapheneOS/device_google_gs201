@@ -16,4 +16,4 @@ on boot
 on property:sys.boot_completed=1
     # Bump nnapi min clamp & add adbd to it for factory (b/222226268)
     write /sys/kernel/vendor_sched/nnapi_uclamp_min 512
-    exec - system system -- /vendor/bin/factory/factory_post_boot
+    exec - root root -- /vendor/bin/factory/factory_post_boot
