@@ -910,8 +910,8 @@ void DumpstateDevice::dumpAoCSection(int fd) {
     DumpFileToFd(fd, "AoC audio wake", "/sys/devices/platform/19000000.aoc/control/audio_wakeup");
     DumpFileToFd(fd, "AoC logging wake", "/sys/devices/platform/19000000.aoc/control/logging_wakeup");
     DumpFileToFd(fd, "AoC hotword wake", "/sys/devices/platform/19000000.aoc/control/hotword_wakeup");
-    DumpFileToFd(fd, "AoC memory exception wake", "/sys/devices/platform/19000000.aoc/control/memory_exception");
-    DumpFileToFd(fd, "AoC memory votes", "/sys/devices/platform/19000000.aoc/control/memory_votes");
+    RunCommandToFd(fd, "AoC memory exception wake", {"/vendor/bin/sh", "-c", "cat /sys/devices/platform/19000000.aoc/control/memory_exception"}, CommandOptions::WithTimeout(2).Build());
+    RunCommandToFd(fd, "AoC memory votes", {"/vendor/bin/sh", "-c", "cat /sys/devices/platform/19000000.aoc/control/memory_votes"}, CommandOptions::WithTimeout(2).Build());
 }
 
 // Dump items related to sensors usf.
