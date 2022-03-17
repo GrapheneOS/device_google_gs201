@@ -84,7 +84,7 @@ struct DumpstateDevice : public IDumpstateDevice {
     // Hybrid and binary sections that require an additional file descriptor
     void dumpModem(int fd, int fdModem);
     void dumpRilLogs(int fd, std::string destDir);
-    void dumpGpsLogs(int fd, std::string destDir);
+    void dumpGpsLogs(int fd, const std::string &destDir);
     void dumpCameraLogs(int fd, const std::string &destDir);
 };
 
