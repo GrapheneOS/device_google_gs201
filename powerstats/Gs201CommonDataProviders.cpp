@@ -587,6 +587,10 @@ void addDevfreq(std::shared_ptr<PowerStats> p) {
     p->addStateResidencyDataProvider(std::make_unique<DevfreqStateResidencyDataProvider>(
             "MFC",
             "/sys/devices/platform/17000070.devfreq_mfc/devfreq/17000070.devfreq_mfc"));
+
+    p->addStateResidencyDataProvider(std::make_unique<DevfreqStateResidencyDataProvider>(
+            "BO",
+            "/sys/devices/platform/17000080.devfreq_bo/devfreq/17000080.devfreq_bo"));
 }
 
 void addTPU(std::shared_ptr<PowerStats> p) {
