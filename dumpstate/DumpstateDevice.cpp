@@ -63,6 +63,7 @@ namespace V1_1 {
 namespace implementation {
 
 #define GPS_LOG_PREFIX "gl-"
+#define GPS_MCU_LOG_PREFIX "esw-"
 #define MODEM_LOG_PREFIX "sbuff_"
 #define EXTENDED_LOG_PREFIX "extended_log_"
 #define RIL_LOG_PREFIX "rild.log."
@@ -190,13 +191,18 @@ void dumpModemEFS(std::string destDir) {
     }
 }
 
-void DumpstateDevice::dumpGpsLogs(int fd, std::string destDir) {
+void DumpstateDevice::dumpGpsLogs(int fd, const std::string &destDir) {
     const std::string gpsLogDir = GPS_LOG_DIRECTORY;
     const std::string gpsTmpLogDir = gpsLogDir + "/.tmp";
-    int maxFileNum = android::base::GetIntProperty(GPS_LOG_NUMBER_PROPERTY, 30);
+    const std::string gpsDestDir = destDir + "/gps";
+    int maxFileNum = android::base::GetIntProperty(GPS_LOG_NUMBER_PROPERTY, 20);
 
-    dumpLogs(fd, gpsTmpLogDir, destDir, 1, GPS_LOG_PREFIX);
-    dumpLogs(fd, gpsLogDir, destDir, maxFileNum, GPS_LOG_PREFIX);
+    RunCommandToFd(fd, "MKDIR GPS LOG", {"/vendor/bin/mkdir", "-p", gpsDestDir.c_str()},
+                   CommandOptions::WithTimeout(2).Build());
+
+    dumpLogs(fd, gpsTmpLogDir, gpsDestDir, 1, GPS_LOG_PREFIX);
+    dumpLogs(fd, gpsLogDir, gpsDestDir, 3, GPS_MCU_LOG_PREFIX);
+    dumpLogs(fd, gpsLogDir, gpsDestDir, maxFileNum, GPS_LOG_PREFIX);
 }
 
 void DumpstateDevice::dumpCameraLogs(int fd, const std::string &destDir) {
