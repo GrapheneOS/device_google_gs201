@@ -18,6 +18,8 @@
 -->
 
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <!-- If face auth sends the user directly to home/last open app, or stays on keyguard by default-->
+    <bool name="config_faceAuthDismissesKeyguard">false</bool>
 
     <!-- Our amoled doesn't animate well. -->
     <bool name="config_animateScreenLights">false</bool>
