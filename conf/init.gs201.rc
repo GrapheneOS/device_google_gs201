@@ -357,8 +357,6 @@ on post-fs-data
     chmod 0664 /sys/devices/platform/1c2c0000.drmdsim/hs_clock
     chmod 0664 /sys/devices/platform/1c2d0000.drmdsim/hs_clock
 
-    setprop vold.post_fs_data_done 1
-
     # IPSEC PIDDIR for VoWiFi
     mkdir /data/vendor/misc 0771 root system
     mkdir /data/vendor/misc/vpn 0771 root system
