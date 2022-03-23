@@ -230,9 +230,6 @@ DEVICE_PACKAGE_OVERLAYS += device/google/gs201/overlay
 # This will be updated to 33 (Android T) for shipping
 PRODUCT_SHIPPING_API_LEVEL := 32
 
-# Temporarily disable the debugfs restriction on 31 (Android S)
-PRODUCT_SET_DEBUGFS_RESTRICTIONS := false
-
 # Enforce the Product interface
 PRODUCT_PRODUCT_VNDK_VERSION := current
 PRODUCT_ENFORCE_PRODUCT_PARTITION_INTERFACE := true
