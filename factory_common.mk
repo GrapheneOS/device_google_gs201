@@ -57,6 +57,9 @@ PRODUCT_DEFAULT_PROPERTY_OVERRIDES += ro.surface_flinger.use_content_detection_f
 BOARD_BOOTCONFIG += androidboot.selinux=permissive
 BOARD_KERNEL_CMDLINE += androidboot.selinux=permissive
 
+# Disable DebugFS restrictions in factory builds
+PRODUCT_SET_DEBUGFS_RESTRICTIONS := false
+
 # Disable Bluetooth as default in factory build
 DEVICE_PACKAGE_OVERLAYS += device/google/gs201/overlay-factory
 
