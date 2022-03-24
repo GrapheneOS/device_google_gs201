@@ -31,9 +31,4 @@
 
     <!-- String indicating the package name of the device GbaService implementation. -->
     <string name="config_gba_package" translatable="false">com.shannon.rcsservice</string>
-
-    <!-- This device requires that emergency calls are placed over the default data SIM.
-         This is done mainly to avoid placing emergency calls over CROSS SIM when even
-         though it's the default voice SIM. -->
-    <bool name="config_gnss_supl_requires_default_data_for_emergency">true</bool>
 </resources>
