@@ -929,7 +929,6 @@ PRODUCT_PACKAGES += \
 	audio_amcs_ext \
 	audio.usb.default \
 	audio.usbv2.default \
-	audio.a2dp.default \
 	audio.bluetooth.default \
 	audio.r_submix.default \
 	audio_spk_35l41 \
