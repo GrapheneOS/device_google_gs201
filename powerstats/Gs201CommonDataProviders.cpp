@@ -136,6 +136,23 @@ void addAoC(std::shared_ptr<PowerStats> p) {
     };
     p->addStateResidencyDataProvider(
             std::make_unique<AocStateResidencyDataProvider>(monitorIds, monitorStates));
+
+    // Add AoC restart count
+    const GenericStateResidencyDataProvider::StateResidencyConfig restartCountConfig = {
+            .entryCountSupported = true,
+            .entryCountPrefix = "",
+            .totalTimeSupported = false,
+            .lastEntrySupported = false,
+    };
+    const std::vector<std::pair<std::string, std::string>> restartCountHeaders = {
+            std::make_pair("RESTART", ""),
+    };
+    std::vector<GenericStateResidencyDataProvider::PowerEntityConfig> cfgs;
+    cfgs.emplace_back(
+            generateGenericStateResidencyConfigs(restartCountConfig, restartCountHeaders),
+            "AoC-Count", "");
+    p->addStateResidencyDataProvider(std::make_unique<GenericStateResidencyDataProvider>(
+            "/sys/devices/platform/19000000.aoc/restart_count", cfgs));
 }
 
 void addDvfsStats(std::shared_ptr<PowerStats> p) {
