@@ -450,10 +450,6 @@ PRODUCT_PACKAGES += \
 	android.hardware.graphics.allocator@4.0-impl \
 	android.hardware.graphics.allocator-V1-service
 
-# AIDL memtrack
-PRODUCT_PACKAGES += \
-	android.hardware.memtrack-service.example
-
 PRODUCT_PACKAGES += \
 	memtrack.$(TARGET_BOARD_PLATFORM) \
 	libion_exynos \
