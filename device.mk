@@ -230,9 +230,6 @@ DEVICE_PACKAGE_OVERLAYS += device/google/gs201/overlay
 # This will be updated to 33 (Android T) for shipping
 PRODUCT_SHIPPING_API_LEVEL := 32
 
-# Temporarily disable the debugfs restriction on 31 (Android S)
-PRODUCT_SET_DEBUGFS_RESTRICTIONS := false
-
 # Enforce the Product interface
 PRODUCT_PRODUCT_VNDK_VERSION := current
 PRODUCT_ENFORCE_PRODUCT_PARTITION_INTERFACE := true
@@ -889,9 +886,6 @@ PRODUCT_COPY_FILES += \
 	device/google/gs201/radio/config/default.cfg:$(TARGET_COPY_OUT_VENDOR)/etc/modem/default.cfg \
 	device/google/gs201/radio/config/default.nprf:$(TARGET_COPY_OUT_VENDOR)/etc/modem/default.nprf \
 	device/google/gs201/radio/config/default_metrics.xml:$(TARGET_COPY_OUT_VENDOR)/etc/modem/default_metrics.xml
-
-PRODUCT_COPY_FILES += \
-	device/google/gs201/radio/gnss_blanking.csv:$(TARGET_COPY_OUT_VENDOR)/etc/modem/gnss_blanking.csv
 
 # ARM NN files
 ARM_COMPUTE_CL_ENABLE := 1
