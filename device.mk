@@ -450,10 +450,6 @@ PRODUCT_PACKAGES += \
 	android.hardware.graphics.allocator@4.0-impl \
 	android.hardware.graphics.allocator-V1-service
 
-# AIDL memtrack
-PRODUCT_PACKAGES += \
-	android.hardware.memtrack-service.example
-
 PRODUCT_PACKAGES += \
 	memtrack.$(TARGET_BOARD_PLATFORM) \
 	libion_exynos \
@@ -929,7 +925,6 @@ PRODUCT_PACKAGES += \
 	audio_amcs_ext \
 	audio.usb.default \
 	audio.usbv2.default \
-	audio.a2dp.default \
 	audio.bluetooth.default \
 	audio.r_submix.default \
 	audio_spk_35l41 \

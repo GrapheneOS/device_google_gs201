@@ -270,9 +270,13 @@ static V1_0::Status validateAndSetVidPid(uint64_t functions) {
             ret = setVidPid("0x18d1", "0x4eeb");
             break;
         case GadgetFunction::ADB | GadgetFunction::NCM:
-            if (!(vendorFunctions == "user" || vendorFunctions == ""))
-                ALOGE("Invalid vendorFunctions set: %s", vendorFunctions.c_str());
-            ret = setVidPid("0x18d1", "0x4eec");
+            if (vendorFunctions == "dm") {
+                ret = setVidPid("0x04e8", "0x6862");
+            } else {
+                if (!(vendorFunctions == "user" || vendorFunctions == ""))
+                    ALOGE("Invalid vendorFunctions set: %s", vendorFunctions.c_str());
+                ret = setVidPid("0x18d1", "0x4eec");
+            }
             break;
         default:
             ALOGE("Combination not supported");
