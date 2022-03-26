@@ -803,12 +803,6 @@ on  property:persist.sys.test_harness=1 && property:persist.vendor.testing_batte
     setprop persist.vendor.charge.start.level 0
     setprop vendor.battery.defender.disable 1
 
-on property:persist.vendor.charge.stop.level=*
-    write /sys/devices/platform/google,charger/charge_stop_level ${persist.vendor.charge.stop.level}
-
-on property:persist.vendor.charge.start.level=*
-    write /sys/devices/platform/google,charger/charge_start_level ${persist.vendor.charge.start.level}
-
 service insmod_sh_common /vendor/bin/init.insmod.sh /vendor/etc/init.insmod.gs201.cfg
     class main
     user root
