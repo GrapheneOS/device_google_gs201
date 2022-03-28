@@ -178,7 +178,7 @@
 /dev/janeiro            0660   system     system
 
 # DSP
-/dev/gxp                0660   system     system
+/dev/gxp                0666   system     camera
 
 # TOE
 /dev/dit2                 0660   radio      radio
