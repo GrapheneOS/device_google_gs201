@@ -422,7 +422,7 @@ PRODUCT_PACKAGES += \
 
 # dumpstate HAL
 PRODUCT_PACKAGES += \
-	android.hardware.dumpstate@1.1-service.gs201
+	android.hardware.dumpstate-service.gs201
 
 # AoC support
 include device/google/gs201/aoc/device.mk
