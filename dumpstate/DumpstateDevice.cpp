@@ -832,6 +832,8 @@ void DumpstateDevice::dumpMemorySection(int fd) {
                         "fi; "
                         "done"});
     DumpFileToFd(fd, "dmabuf info", "/d/dma_buf/bufinfo");
+    DumpFileToFd(fd, "Page Pinner - longterm pin", "/sys/kernel/debug/page_pinner/longterm_pinner");
+    DumpFileToFd(fd, "Page Pinner - alloc_contig_failed", "/sys/kernel/debug/page_pinner/alloc_contig_failed");
 }
 
 static void DumpF2FS(int fd) {
@@ -924,16 +926,21 @@ void DumpstateDevice::dumpAoCSection(int fd) {
     DumpFileToFd(fd, "AoC hotword wake", "/sys/devices/platform/19000000.aoc/control/hotword_wakeup");
     RunCommandToFd(fd, "AoC memory exception wake", {"/vendor/bin/sh", "-c", "cat /sys/devices/platform/19000000.aoc/control/memory_exception"}, CommandOptions::WithTimeout(2).Build());
     RunCommandToFd(fd, "AoC memory votes", {"/vendor/bin/sh", "-c", "cat /sys/devices/platform/19000000.aoc/control/memory_votes"}, CommandOptions::WithTimeout(2).Build());
-    RunCommandToFd(fd, "AoC Heap Stats (A32)",  {"/vendor/bin/sh", "-c", "echo 'dbg heap -c 1' > /dev/acd-debug; timeout 0.1 cat /dev/acd-debug"},  CommandOptions::WithTimeout(1).Build());
-    RunCommandToFd(fd, "AoC Heap Stats (F1)",   {"/vendor/bin/sh", "-c", "echo 'dbg heap -c 2' > /dev/acd-debug; timeout 0.1 cat /dev/acd-debug"},  CommandOptions::WithTimeout(1).Build());
-    RunCommandToFd(fd, "AoC Heap Stats (HF0)",  {"/vendor/bin/sh", "-c", "echo 'dbg heap -c 3' > /dev/acd-debug; timeout 0.1 cat /dev/acd-debug"},  CommandOptions::WithTimeout(1).Build());
-    RunCommandToFd(fd, "AoC Heap Stats (HF1)",  {"/vendor/bin/sh", "-c", "echo 'dbg heap -c 4' > /dev/acd-debug; timeout 0.1 cat /dev/acd-debug"},  CommandOptions::WithTimeout(1).Build());
-    RunCommandToFd(fd, "AoC Tasks Stats (A32)", {"/vendor/bin/sh", "-c", "echo 'dbg tasks -c 1' > /dev/acd-debug; timeout 0.1 cat /dev/acd-debug"}, CommandOptions::WithTimeout(1).Build());
-    RunCommandToFd(fd, "AoC Tasks Stats (F1)",  {"/vendor/bin/sh", "-c", "echo 'dbg tasks -c 2' > /dev/acd-debug; timeout 0.1 cat /dev/acd-debug"}, CommandOptions::WithTimeout(1).Build());
-    RunCommandToFd(fd, "AoC Tasks Stats (HF0)", {"/vendor/bin/sh", "-c", "echo 'dbg tasks -c 3' > /dev/acd-debug; timeout 0.1 cat /dev/acd-debug"}, CommandOptions::WithTimeout(1).Build());
-    RunCommandToFd(fd, "AoC Tasks Stats (HF1)", {"/vendor/bin/sh", "-c", "echo 'dbg tasks -c 4' > /dev/acd-debug; timeout 0.1 cat /dev/acd-debug"}, CommandOptions::WithTimeout(1).Build());
-    RunCommandToFd(fd, "AoC MIF Stats",         {"/vendor/bin/sh", "-c", "echo 'mif details' > /dev/acd-debug; timeout 0.1 cat /dev/acd-debug"},    CommandOptions::WithTimeout(1).Build());
-
+        RunCommandToFd(fd, "AoC Heap Stats (A32)",
+      {"/vendor/bin/sh", "-c", "echo 'dbg heap -c 1' > /dev/acd-debug; timeout 0.1 cat /dev/acd-debug"},
+      CommandOptions::WithTimeout(1).Build());
+    RunCommandToFd(fd, "AoC Heap Stats (F1)",
+      {"/vendor/bin/sh", "-c", "echo 'dbg heap -c 2' > /dev/acd-debug; timeout 0.1 cat /dev/acd-debug"},
+      CommandOptions::WithTimeout(1).Build());
+    RunCommandToFd(fd, "AoC Heap Stats (HF0)",
+      {"/vendor/bin/sh", "-c", "echo 'dbg heap -c 3' > /dev/acd-debug; timeout 0.1 cat /dev/acd-debug"},
+      CommandOptions::WithTimeout(1).Build());
+    RunCommandToFd(fd, "AoC Heap Stats (HF1)",
+      {"/vendor/bin/sh", "-c", "echo 'dbg heap -c 4' > /dev/acd-debug; timeout 0.1 cat /dev/acd-debug"},
+      CommandOptions::WithTimeout(1).Build());
+    RunCommandToFd(fd, "AoC MIF Stats",
+      {"/vendor/bin/sh", "-c", "echo 'mif details' > /dev/acd-debug; timeout 0.1 cat /dev/acd-debug"},
+      CommandOptions::WithTimeout(1).Build());
 }
 
 // Dump items related to sensors usf.
