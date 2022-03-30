@@ -269,7 +269,6 @@ PRODUCT_COPY_FILES += \
 # Shell scripts
 PRODUCT_COPY_FILES += \
 	device/google/gs201/init.insmod.sh:$(TARGET_COPY_OUT_VENDOR)/bin/init.insmod.sh \
-	device/google/$(TARGET_BOARD_PLATFORM)/set_usb_irq.sh:$(TARGET_COPY_OUT_VENDOR)/bin/hw/set_usb_irq.sh
 
 # insmod files
 PRODUCT_COPY_FILES += \
