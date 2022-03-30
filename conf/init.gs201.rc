@@ -41,6 +41,8 @@ on init
     chown system system /proc/vendor_sched/set_proc_group_dex2oat
     chown system system /proc/vendor_sched/set_proc_group_cam_power
     chown system system /proc/vendor_sched/set_proc_group_ota
+    chown system system /proc/vendor_sched/prefer_idle_set
+    chown system system /proc/vendor_sched/prefer_idle_clear
 
     chmod 0220 /proc/vendor_sched/set_task_group_bg
     chmod 0220 /proc/vendor_sched/set_task_group_cam
@@ -66,6 +68,8 @@ on init
     chmod 0220 /proc/vendor_sched/set_proc_group_dex2oat
     chmod 0220 /proc/vendor_sched/set_proc_group_cam_power
     chmod 0220 /proc/vendor_sched/set_proc_group_ota
+    chmod 0220 /proc/vendor_sched/prefer_idle_set
+    chmod 0220 /proc/vendor_sched/prefer_idle_clear
 
     wait /dev/block/platform/${ro.boot.boot_devices}
     symlink /dev/block/platform/${ro.boot.boot_devices} /dev/block/bootdevice
