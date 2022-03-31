@@ -165,12 +165,6 @@ on property:vendor.usb.config=*
 on property:persist.vendor.usb.usbradio.config=*
    start usbd
 
-on property:vendor.usb.dwc3_irq=medium
-   exec /vendor/bin/hw/set_usb_irq.sh medium
-
-on property:vendor.usb.dwc3_irq=big
-   exec /vendor/bin/hw/set_usb_irq.sh big
-
 on charger
     mkdir /config/usb_gadget/g1
     mkdir /config/usb_gadget/g1/strings/0x409
