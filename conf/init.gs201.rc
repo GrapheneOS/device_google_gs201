@@ -41,6 +41,8 @@ on init
     chown system system /proc/vendor_sched/set_proc_group_dex2oat
     chown system system /proc/vendor_sched/set_proc_group_cam_power
     chown system system /proc/vendor_sched/set_proc_group_ota
+    chown system system /proc/vendor_sched/prefer_idle_set
+    chown system system /proc/vendor_sched/prefer_idle_clear
 
     chmod 0220 /proc/vendor_sched/set_task_group_bg
     chmod 0220 /proc/vendor_sched/set_task_group_cam
@@ -66,6 +68,8 @@ on init
     chmod 0220 /proc/vendor_sched/set_proc_group_dex2oat
     chmod 0220 /proc/vendor_sched/set_proc_group_cam_power
     chmod 0220 /proc/vendor_sched/set_proc_group_ota
+    chmod 0220 /proc/vendor_sched/prefer_idle_set
+    chmod 0220 /proc/vendor_sched/prefer_idle_clear
 
     wait /dev/block/platform/${ro.boot.boot_devices}
     symlink /dev/block/platform/${ro.boot.boot_devices} /dev/block/bootdevice
@@ -699,6 +703,7 @@ on property:sys.boot_completed=1
     setprop vendor.powerhal.init 1
 
     # Setup final cpu.uclamp
+    write /proc/vendor_sched/uclamp_threshold 8
     write /proc/vendor_sched/ta_uclamp_min 1
     write /proc/vendor_sched/fg_uclamp_min 0
     write /proc/vendor_sched/sys_prefer_idle 0
@@ -902,6 +907,8 @@ on property:vendor.thermal.link_ready=1
     chown system system /dev/thermal/tz-by-name/soft_ocp_gpu/trip_point_0_hyst
     chown system system /dev/thermal/tz-by-name/soc/trip_point_0_temp
     chown system system /dev/thermal/tz-by-name/soc/trip_point_0_hyst
+    chown system system /dev/thermal/tz-by-name/batoilo/trip_point_0_temp
+    chown system system /dev/thermal/tz-by-name/batoilo/trip_point_0_hyst
     # Thermal
     chown system system /dev/thermal/tz-by-name/quiet_therm/trip_point_0_temp
     chown system system /dev/thermal/tz-by-name/quiet_therm/trip_point_0_hyst
