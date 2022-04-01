@@ -645,7 +645,9 @@ void addGs201CommonDataProviders(std::shared_ptr<PowerStats> p) {
     setEnergyMeter(p);
 
     addPixelStateResidencyDataProvider(p);
-    addAoC(p);
+    // TODO(b/220032540): Re-enable AoC reporting when AoC long latency issue is fixed or
+    // the timeout mechanism is merged.
+    //addAoC(p);
     addDvfsStats(p);
     addSoC(p);
     addCPUclusters(p);
