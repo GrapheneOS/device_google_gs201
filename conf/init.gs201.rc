@@ -868,18 +868,20 @@ on fs
 
 on property:vendor.thermal.link_ready=1
     # BCL
-    write /sys/devices/virtual/pmic/mitigation/clock_ratio/tpu_light_clk_ratio 0xfff041c5
-    write /sys/devices/virtual/pmic/mitigation/clock_ratio/cpu2_light_clk_ratio 0xfff041c5
-    write /sys/devices/virtual/pmic/mitigation/clock_ratio/gpu_heavy_clk_ratio 0xfff04385
-    write /sys/devices/virtual/pmic/mitigation/clock_ratio/tpu_heavy_clk_ratio 0xfff041c3
-    write /sys/devices/virtual/pmic/mitigation/clock_ratio/cpu2_heavy_clk_ratio 0xfff041c3
+    write /sys/devices/virtual/pmic/mitigation/clock_ratio/tpu_light_clk_ratio 0xfff041c1 #DFS
+    write /sys/devices/virtual/pmic/mitigation/clock_ratio/cpu1_heavy_clk_ratio 0xfff041c1 #DFS
+    write /sys/devices/virtual/pmic/mitigation/clock_ratio/cpu2_heavy_clk_ratio 0xfff041c1 #DFS
+    write /sys/devices/virtual/pmic/mitigation/clock_ratio/gpu_light_clk_ratio 0xfff04381 #DFS
+    write /sys/devices/virtual/pmic/mitigation/clock_ratio/cpu2_light_clk_ratio 0xfff041c3 #OCP
+    write /sys/devices/virtual/pmic/mitigation/clock_ratio/gpu_heavy_clk_ratio 0xfff04385 #OCP
+    write /sys/devices/virtual/pmic/mitigation/clock_ratio/tpu_heavy_clk_ratio 0xfff041c3 #OCP
     write /sys/devices/virtual/pmic/mitigation/triggered_lvl/smpl_lvl 3100
-    write /sys/devices/virtual/pmic/mitigation/triggered_lvl/soft_ocp_cpu2_lvl 9000
+    write /sys/devices/virtual/pmic/mitigation/triggered_lvl/soft_ocp_cpu2_lvl 12000
     write /sys/devices/virtual/pmic/mitigation/triggered_lvl/soft_ocp_gpu_lvl 9000
     write /sys/devices/virtual/pmic/mitigation/triggered_lvl/soft_ocp_tpu_lvl 8500
-    write /sys/devices/virtual/pmic/mitigation/clock_div/tpu_clk_div 0x201
-    write /sys/devices/virtual/pmic/mitigation/clock_div/gpu_clk_div 0x801
-    write /sys/devices/virtual/pmic/mitigation/clock_div/cpu2_clk_div 0x801
+    write /sys/devices/virtual/pmic/mitigation/clock_div/tpu_clk_div 0x1
+    write /sys/devices/virtual/pmic/mitigation/clock_div/gpu_clk_div 0x1
+    write /sys/devices/virtual/pmic/mitigation/clock_div/cpu2_clk_div 0x1
     chown system system /dev/thermal/tz-by-name/soc/mode
     chown system system /dev/thermal/tz-by-name/vdroop2/trip_point_0_temp
     chown system system /dev/thermal/tz-by-name/vdroop2/trip_point_0_hyst
