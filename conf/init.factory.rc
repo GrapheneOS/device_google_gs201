@@ -12,3 +12,8 @@ on boot
 
     # Audio test folder
     mkdir /data/AudioTest 0775 system system
+
+on property:sys.boot_completed=1
+    # Bump nnapi min clamp & add adbd to it for factory (b/222226268)
+    write /proc/vendor_sched/nnapi_uclamp_min 512
+    exec - root root -- /vendor/bin/factory/factory_post_boot

@@ -177,6 +177,9 @@
 # TPU
 /dev/janeiro            0660   system     system
 
+# DSP
+/dev/gxp                0666   system     camera
+
 # TOE
 /dev/dit2                 0660   radio      radio
 
@@ -208,6 +211,9 @@
 
 # Direct Charging
 /dev/logbuffer_pca9468_tcpm            0600   system     system
+
+# Raw HID devices
+/dev/hidraw*                           0660   system     system
 
 # Wlan
 /dev/wlan                              0660   wifi       wifi

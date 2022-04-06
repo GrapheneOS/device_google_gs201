@@ -153,50 +153,52 @@ endif
 USE_SWIFTSHADER := false
 
 # HWUI
-TARGET_USES_VULKAN = false
+TARGET_USES_VULKAN = true
 
-PRODUCT_SOONG_NAMESPACES += vendor/arm/mali/valhall
+PRODUCT_SOONG_NAMESPACES += \
+	vendor/arm/mali/valhall
 
 $(call soong_config_set,pixel_mali,soc,$(TARGET_BOARD_PLATFORM))
 
+include device/google/gs101/neuralnetwork/neuralnetwork.mk
+
 PRODUCT_PACKAGES += \
-       csffw_image_prebuilt__firmware_prebuilt_todx_mali_csffw.bin \
-       libGLES_mali \
-       vulkan.mali \
-       libOpenCL \
-       libgpudataproducer \
+	csffw_image_prebuilt__firmware_prebuilt_todx_mali_csffw.bin \
+	libGLES_mali \
+	vulkan.mali \
+	libOpenCL \
+	libgpudataproducer \
 
 PRODUCT_VENDOR_PROPERTIES += \
-       ro.hardware.vulkan=mali
-
-include device/google/gs101/neuralnetwork/neuralnetwork.mk
+	ro.hardware.vulkan=mali
 
 ifeq ($(USE_SWIFTSHADER),true)
 PRODUCT_PACKAGES += \
-       libGLESv1_CM_swiftshader \
-       libEGL_swiftshader \
-       libGLESv2_swiftshader
+   libGLESv1_CM_swiftshader \
+   libEGL_swiftshader \
+   libGLESv2_swiftshader
 endif
 
 PRODUCT_COPY_FILES += \
-       frameworks/native/data/etc/android.hardware.opengles.aep.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.opengles.aep.xml \
-       frameworks/native/data/etc/android.hardware.vulkan.version-1_1.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.vulkan.version.xml \
-       frameworks/native/data/etc/android.hardware.vulkan.level-1.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.vulkan.level.xml \
-       frameworks/native/data/etc/android.hardware.vulkan.compute-0.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.vulkan.compute.xml \
-       frameworks/native/data/etc/android.software.vulkan.deqp.level-2021-03-01.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.software.vulkan.deqp.level.xml \
-       frameworks/native/data/etc/android.software.opengles.deqp.level-2021-03-01.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.software.opengles.deqp.level.xml
+	frameworks/native/data/etc/android.hardware.opengles.aep.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.opengles.aep.xml \
+	frameworks/native/data/etc/android.hardware.vulkan.version-1_1.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.vulkan.version.xml \
+	frameworks/native/data/etc/android.hardware.vulkan.level-1.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.vulkan.level.xml \
+	frameworks/native/data/etc/android.hardware.vulkan.compute-0.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.vulkan.compute.xml \
+	frameworks/native/data/etc/android.software.vulkan.deqp.level-2021-03-01.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.software.vulkan.deqp.level.xml \
+	frameworks/native/data/etc/android.software.opengles.deqp.level-2021-03-01.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.software.opengles.deqp.level.xml
 
 ifeq ($(USE_SWIFTSHADER),true)
 PRODUCT_VENDOR_PROPERTIES += \
-       ro.hardware.egl = swiftshader
+	ro.hardware.egl = swiftshader
 else
 PRODUCT_VENDOR_PROPERTIES += \
-       ro.hardware.egl = mali
+	ro.hardware.egl = mali
 endif
+
 PRODUCT_VENDOR_PROPERTIES += \
-       ro.opengles.version=196610 \
-       debug.renderengine.backend=skiaglthreaded \
-       graphics.gpu.profiler.support=true \
+	ro.opengles.version=196610 \
+	graphics.gpu.profiler.support=true \
+	debug.renderengine.backend=skiaglthreaded \
 
 # GRAPHICS - GPU (end)
 # ####################
@@ -228,8 +230,8 @@ DEVICE_PACKAGE_OVERLAYS += device/google/gs201/overlay
 # This will be updated to 33 (Android T) for shipping
 PRODUCT_SHIPPING_API_LEVEL := 32
 
-# Temporarily disable the debugfs restriction on 31 (Android S)
-PRODUCT_SET_DEBUGFS_RESTRICTIONS := false
+# RKP VINTF
+-include vendor/google_nos/host/android/hals/keymaster/aidl/strongbox/RemotelyProvisionedComponent-citadel.mk
 
 # Enforce the Product interface
 PRODUCT_PRODUCT_VNDK_VERSION := current
@@ -259,13 +261,14 @@ PRODUCT_PACKAGES += \
 	fstab.gs201.vendor_ramdisk \
 	fstab.gs201-fips \
 	fstab.gs201-fips.vendor_ramdisk
+
 PRODUCT_COPY_FILES += \
-	device/google/gs201/conf/fstab.persist:$(TARGET_COPY_OUT_VENDOR)/etc/fstab.persist
+	device/google/$(TARGET_BOARD_PLATFORM)/conf/fstab.persist:$(TARGET_COPY_OUT_VENDOR)/etc/fstab.persist \
+	device/google/$(TARGET_BOARD_PLATFORM)/conf/fstab.modem:$(TARGET_COPY_OUT_VENDOR)/etc/fstab.modem
 
 # Shell scripts
 PRODUCT_COPY_FILES += \
 	device/google/gs201/init.insmod.sh:$(TARGET_COPY_OUT_VENDOR)/bin/init.insmod.sh \
-	device/google/$(TARGET_BOARD_PLATFORM)/set_usb_irq.sh:$(TARGET_COPY_OUT_VENDOR)/bin/hw/set_usb_irq.sh
 
 # insmod files
 PRODUCT_COPY_FILES += \
@@ -449,10 +452,6 @@ PRODUCT_PACKAGES += \
 	android.hardware.graphics.allocator@4.0-impl \
 	android.hardware.graphics.allocator-V1-service
 
-# AIDL memtrack
-PRODUCT_PACKAGES += \
-	android.hardware.memtrack-service.example
-
 PRODUCT_PACKAGES += \
 	memtrack.$(TARGET_BOARD_PLATFORM) \
 	libion_exynos \
@@ -604,6 +603,10 @@ PRODUCT_DEFAULT_PROPERTY_OVERRIDES += ro.surface_flinger.set_idle_timer_ms?=80
 PRODUCT_DEFAULT_PROPERTY_OVERRIDES += ro.surface_flinger.set_touch_timer_ms=200
 PRODUCT_DEFAULT_PROPERTY_OVERRIDES += ro.surface_flinger.set_display_power_timer_ms=1000
 PRODUCT_DEFAULT_PROPERTY_OVERRIDES += ro.surface_flinger.use_content_detection_for_refresh_rate=true
+PRODUCT_DEFAULT_PROPERTY_OVERRIDES += ro.surface_flinger.max_frame_buffer_acquired_buffers=3
+
+PRODUCT_DEFAULT_PROPERTY_OVERRIDES += ro.surface_flinger.supports_background_blur=1
+PRODUCT_SYSTEM_PROPERTIES += ro.launcher.blur.appLaunch=0
 
 # Must align with HAL types Dataspace
 # The data space of wide color gamut composition preference is Dataspace::DISPLAY_P3
@@ -882,9 +885,6 @@ PRODUCT_COPY_FILES += \
 	device/google/gs201/radio/config/default.nprf:$(TARGET_COPY_OUT_VENDOR)/etc/modem/default.nprf \
 	device/google/gs201/radio/config/default_metrics.xml:$(TARGET_COPY_OUT_VENDOR)/etc/modem/default_metrics.xml
 
-PRODUCT_COPY_FILES += \
-	device/google/gs201/radio/gnss_blanking.csv:$(TARGET_COPY_OUT_VENDOR)/etc/modem/gnss_blanking.csv
-
 # ARM NN files
 ARM_COMPUTE_CL_ENABLE := 1
 
@@ -927,7 +927,6 @@ PRODUCT_PACKAGES += \
 	audio_amcs_ext \
 	audio.usb.default \
 	audio.usbv2.default \
-	audio.a2dp.default \
 	audio.bluetooth.default \
 	audio.r_submix.default \
 	audio_spk_35l41 \

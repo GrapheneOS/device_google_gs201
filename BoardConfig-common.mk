@@ -27,19 +27,32 @@ TARGET_SOC_NAME := google
 USES_DEVICE_GOOGLE_GS201 := true
 
 TARGET_ARCH := arm64
-TARGET_ARCH_VARIANT := armv8-a
+TARGET_ARCH_VARIANT := armv8-2a
 TARGET_CPU_ABI := arm64-v8a
-TARGET_CPU_VARIANT := generic
-TARGET_CPU_VARIANT_RUNTIME := cortex-a53
+TARGET_CPU_VARIANT := cortex-a55
+TARGET_CPU_VARIANT_RUNTIME := cortex-a55
 
 BOARD_KERNEL_CMDLINE += dyndbg=\"func alloc_contig_dump_pages +p\"
 BOARD_KERNEL_CMDLINE += earlycon=exynos4210,0x10A00000 console=ttySAC0,115200 androidboot.console=ttySAC0 printk.devkmsg=on
 BOARD_KERNEL_CMDLINE += cma_sysfs.experimental=Y
+BOARD_KERNEL_CMDLINE += cgroup_disable=memory
+BOARD_KERNEL_CMDLINE += rcupdate.rcu_expedited=1 rcu_nocbs=all
+BOARD_KERNEL_CMDLINE += stack_depot_disable=off page_pinner=on
+BOARD_KERNEL_CMDLINE += swiotlb=1024
 BOARD_BOOTCONFIG += androidboot.boot_devices=14700000.ufs
 
 TARGET_NO_BOOTLOADER := true
-TARGET_NO_KERNEL := false
 TARGET_NO_RADIOIMAGE := true
+ifneq (,$(filter userdebug eng,$(TARGET_BUILD_VARIANT)))
+BOARD_PREBUILT_BOOTIMAGE := $(wildcard $(TARGET_KERNEL_DIR)/boot.img)
+else
+BOARD_PREBUILT_BOOTIMAGE := $(wildcard $(TARGET_KERNEL_DIR)/boot-user.img)
+endif
+ifneq (,$(BOARD_PREBUILT_BOOTIMAGE))
+TARGET_NO_KERNEL := true
+else
+TARGET_NO_KERNEL := false
+endif
 BOARD_USES_GENERIC_KERNEL_IMAGE := true
 BOARD_MOVE_RECOVERY_RESOURCES_TO_VENDOR_BOOT := true
 BOARD_MOVE_GSI_AVB_KEYS_TO_VENDOR_BOOT := true

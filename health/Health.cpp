@@ -67,7 +67,9 @@ constexpr char kVoltageAvg[] {FG_DIR "/voltage_now"};
 
 #define WLC_DIR "/sys/class/power_supply/wireless"
 
-static BatteryDefender battDefender(WLC_DIR "/present");
+static BatteryDefender battDefender(WLC_DIR "/present",
+    "/sys/devices/platform/google,charger/charge_start_level",
+    "/sys/devices/platform/google,charger/charge_stop_level");
 static BatteryThermalControl battThermalControl(
     "dev/thermal/tz-by-name/soc/mode");
 static BatteryMetricsLogger battMetricsLogger(kBatteryResistance, kBatteryOCV);

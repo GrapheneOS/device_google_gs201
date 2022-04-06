@@ -136,6 +136,23 @@ void addAoC(std::shared_ptr<PowerStats> p) {
     };
     p->addStateResidencyDataProvider(
             std::make_unique<AocStateResidencyDataProvider>(monitorIds, monitorStates));
+
+    // Add AoC restart count
+    const GenericStateResidencyDataProvider::StateResidencyConfig restartCountConfig = {
+            .entryCountSupported = true,
+            .entryCountPrefix = "",
+            .totalTimeSupported = false,
+            .lastEntrySupported = false,
+    };
+    const std::vector<std::pair<std::string, std::string>> restartCountHeaders = {
+            std::make_pair("RESTART", ""),
+    };
+    std::vector<GenericStateResidencyDataProvider::PowerEntityConfig> cfgs;
+    cfgs.emplace_back(
+            generateGenericStateResidencyConfigs(restartCountConfig, restartCountHeaders),
+            "AoC-Count", "");
+    p->addStateResidencyDataProvider(std::make_unique<GenericStateResidencyDataProvider>(
+            "/sys/devices/platform/19000000.aoc/restart_count", cfgs));
 }
 
 void addDvfsStats(std::shared_ptr<PowerStats> p) {
@@ -221,15 +238,10 @@ void addDvfsStats(std::shared_ptr<PowerStats> p) {
     cfgs.push_back({"TPU", {
         std::make_pair("1066MHz", "1066000"),
         std::make_pair("845MHz", "845000"),
-        std::make_pair("625MHz", "625000"),
-        std::make_pair("227MHz", "227000"),
-        std::make_pair("RET_SLOW", "6"),
-        std::make_pair("S_OFF", "5"),
-        std::make_pair("S_SLOW", "4"),
-        std::make_pair("DS_FAST", "3"),
-        std::make_pair("DS_SLOW", "2"),
-        std::make_pair("DS_OFF", "1"),
-        std::make_pair("OFF", "0"),
+        std::make_pair("627MHz", "627000"),
+        std::make_pair("401MHz", "401000"),
+        std::make_pair("226MHz", "226000"),
+        std::make_pair("0MHz", "0"),
     }});
 
     p->addStateResidencyDataProvider(std::make_unique<DvfsStateResidencyDataProvider>(
@@ -587,6 +599,10 @@ void addDevfreq(std::shared_ptr<PowerStats> p) {
     p->addStateResidencyDataProvider(std::make_unique<DevfreqStateResidencyDataProvider>(
             "MFC",
             "/sys/devices/platform/17000070.devfreq_mfc/devfreq/17000070.devfreq_mfc"));
+
+    p->addStateResidencyDataProvider(std::make_unique<DevfreqStateResidencyDataProvider>(
+            "BO",
+            "/sys/devices/platform/17000080.devfreq_bo/devfreq/17000080.devfreq_bo"));
 }
 
 void addTPU(std::shared_ptr<PowerStats> p) {
@@ -594,8 +610,8 @@ void addTPU(std::shared_ptr<PowerStats> p) {
 
     stateCoeffs = {
         // TODO (b/197721618): Measuring the TPU power numbers
-        {"227000",  10},
-        {"625000",  20},
+        {"226000",  10},
+        {"627000",  20},
         {"845000",  30},
         {"1066000", 40}};
 

@@ -1,4 +1,4 @@
-<manifest version="1.0" type="device" target-level="6">
+<manifest version="1.0" type="device" target-level="7">
    <hal format="hidl">
         <name>android.hardware.audio</name>
         <transport>hwbinder</transport>
@@ -41,24 +41,6 @@
         <version>4.0</version>
         <interface>
             <name>IMapper</name>
-            <instance>default</instance>
-        </interface>
-    </hal>
-    <hal format="hidl">
-        <name>android.hardware.graphics.composer</name>
-        <transport>hwbinder</transport>
-        <version>2.4</version>
-        <interface>
-            <name>IComposer</name>
-            <instance>default</instance>
-        </interface>
-    </hal>
-    <hal format="hidl">
-        <name>android.hardware.renderscript</name>
-        <transport arch="32+64">passthrough</transport>
-        <version>1.0</version>
-        <interface>
-            <name>IDevice</name>
             <instance>default</instance>
         </interface>
     </hal>
@@ -120,5 +102,4 @@
            <instance>default</instance>
        </interface>
     </hal>
-    <kernel target-level="6"/>
 </manifest>

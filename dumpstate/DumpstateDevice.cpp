@@ -63,6 +63,7 @@ namespace V1_1 {
 namespace implementation {
 
 #define GPS_LOG_PREFIX "gl-"
+#define GPS_MCU_LOG_PREFIX "esw-"
 #define MODEM_LOG_PREFIX "sbuff_"
 #define EXTENDED_LOG_PREFIX "extended_log_"
 #define RIL_LOG_PREFIX "rild.log."
@@ -190,13 +191,18 @@ void dumpModemEFS(std::string destDir) {
     }
 }
 
-void DumpstateDevice::dumpGpsLogs(int fd, std::string destDir) {
+void DumpstateDevice::dumpGpsLogs(int fd, const std::string &destDir) {
     const std::string gpsLogDir = GPS_LOG_DIRECTORY;
     const std::string gpsTmpLogDir = gpsLogDir + "/.tmp";
-    int maxFileNum = android::base::GetIntProperty(GPS_LOG_NUMBER_PROPERTY, 30);
+    const std::string gpsDestDir = destDir + "/gps";
+    int maxFileNum = android::base::GetIntProperty(GPS_LOG_NUMBER_PROPERTY, 20);
 
-    dumpLogs(fd, gpsTmpLogDir, destDir, 1, GPS_LOG_PREFIX);
-    dumpLogs(fd, gpsLogDir, destDir, maxFileNum, GPS_LOG_PREFIX);
+    RunCommandToFd(fd, "MKDIR GPS LOG", {"/vendor/bin/mkdir", "-p", gpsDestDir.c_str()},
+                   CommandOptions::WithTimeout(2).Build());
+
+    dumpLogs(fd, gpsTmpLogDir, gpsDestDir, 1, GPS_LOG_PREFIX);
+    dumpLogs(fd, gpsLogDir, gpsDestDir, 3, GPS_MCU_LOG_PREFIX);
+    dumpLogs(fd, gpsLogDir, gpsDestDir, maxFileNum, GPS_LOG_PREFIX);
 }
 
 void DumpstateDevice::dumpCameraLogs(int fd, const std::string &destDir) {
@@ -493,14 +499,20 @@ void DumpstateDevice::dumpThermalSection(int fd) {
                    "for f in /sys/class/thermal/cooling* ; do "
                        "type=`cat $f/type` ; temp=`cat $f/cur_state` ; echo \"$type: $temp\" ; "
                        "done"});
+    RunCommandToFd(fd, "Cooling Device User Vote State", {"/vendor/bin/sh", "-c",
+                   "for f in /sys/class/thermal/cooling* ; do "
+                   "if [ ! -f $f/user_vote ]; then continue; fi; "
+                   "type=`cat $f/type` ; temp=`cat $f/user_vote` ; echo \"$type: $temp\" ; "
+                   "done"});
     RunCommandToFd(fd, "Cooling Device Time in State", {"/vendor/bin/sh", "-c", "for f in /sys/class/thermal/cooling* ; "
                    "do type=`cat $f/type` ; temp=`cat $f/stats/time_in_state_ms` ; echo \"$type:\n$temp\" ; done"});
     RunCommandToFd(fd, "Cooling Device Trans Table", {"/vendor/bin/sh", "-c", "for f in /sys/class/thermal/cooling* ; "
                    "do type=`cat $f/type` ; temp=`cat $f/stats/trans_table` ; echo \"$type:\n$temp\" ; done"});
     RunCommandToFd(fd, "Cooling Device State2Power Table", {"/vendor/bin/sh", "-c",
                    "for f in /sys/class/thermal/cooling* ; do "
-                       "type=`cat $f/type` ; state2power_table=`cat $f/state2power_table` ; echo \"$type: $state2power_table\" ; "
-                       "done"});
+                   "if [ ! -f $f/state2power_table ]; then continue; fi; "
+                   "type=`cat $f/type` ; state2power_table=`cat $f/state2power_table` ; echo \"$type: $state2power_table\" ; "
+                   "done"});
     DumpFileToFd(fd, "TMU state:", "/sys/module/gs_thermal/parameters/tmu_reg_dump_state");
     DumpFileToFd(fd, "TMU current temperature:", "/sys/module/gs_thermal/parameters/tmu_reg_dump_current_temp");
     DumpFileToFd(fd, "TMU_TOP rise thresholds:", "/sys/module/gs_thermal/parameters/tmu_top_reg_dump_rise_thres");
@@ -517,7 +529,62 @@ void DumpstateDevice::dumpTouchSection(int fd) {
                                       "/proc/fts_ext/driver_test"};
     const char lsi_spi_path[] = "/sys/devices/virtual/sec/tsp";
     const char syna_cmd_path[] = "/sys/class/spi_master/spi0/spi0.0/synaptics_tcm.0/sysfs";
+    const char focaltech_cmd_path[] = "/proc/focaltech_touch";
     char cmd[256];
+
+    if (!access(focaltech_cmd_path, R_OK)) {
+        // Enable: force touch active
+        snprintf(cmd, sizeof(cmd), "echo 21 > %s/force_active", focaltech_cmd_path);
+        RunCommandToFd(fd, "Enable Force Touch Active", {"/vendor/bin/sh", "-c", cmd});
+
+        // Touch Firmware Version
+        snprintf(cmd, sizeof(cmd), "%s/FW_Version", focaltech_cmd_path);
+        DumpFileToFd(fd, "Touch Firmware Version", cmd);
+
+        // Touch INT PIN Test
+        snprintf(cmd, sizeof(cmd), "%s/INT_PIN", focaltech_cmd_path);
+        DumpFileToFd(fd, "Touch INT PIN Test", cmd);
+
+        // Get Raw Data - Delta
+        snprintf(cmd, sizeof(cmd), "%s/selftest/Panel_Differ", focaltech_cmd_path);
+        DumpFileToFd(fd, "Get Raw Data - Panel_Differ", cmd);
+
+        // Get Raw Data - Raw
+        snprintf(cmd, sizeof(cmd), "%s/selftest/Rawdata", focaltech_cmd_path);
+        DumpFileToFd(fd, "Get Raw Data - Raw", cmd);
+
+        // Get Raw Data - Baseline
+        snprintf(cmd, sizeof(cmd), "%s/selftest/Baseline", focaltech_cmd_path);
+        DumpFileToFd(fd, "Get Raw Data - Baseline", cmd);
+
+        // Get Raw Data - Noise
+        snprintf(cmd, sizeof(cmd), "%s/selftest/Noise", focaltech_cmd_path);
+        DumpFileToFd(fd, "Get Raw Data - Noise", cmd);
+
+        // Get Raw Data - Uniformity
+        snprintf(cmd, sizeof(cmd), "%s/selftest/Rawdata_Uniformity", focaltech_cmd_path);
+        DumpFileToFd(fd, "Get Raw Data - Uniformity", cmd);
+
+        // Get Scap_CB
+        snprintf(cmd, sizeof(cmd), "%s/selftest/Scap_CB", focaltech_cmd_path);
+        DumpFileToFd(fd, "Get Scap_CB", cmd);
+
+        // Get Scap_CB - Raw
+        snprintf(cmd, sizeof(cmd), "%s/selftest/Scap_Rawdata", focaltech_cmd_path);
+        DumpFileToFd(fd, "Get Scap_Rawdata", cmd);
+
+        // Get Short Test
+        snprintf(cmd, sizeof(cmd), "%s/selftest/Short", focaltech_cmd_path);
+        DumpFileToFd(fd, "Get Short Test", cmd);
+
+        // Get HeatMap(ms,ss)
+        snprintf(cmd, sizeof(cmd), "%s/selftest/Strength", focaltech_cmd_path);
+        DumpFileToFd(fd, "Get HeatMap(ms,ss)", cmd);
+
+        // Disable: force touch active
+        snprintf(cmd, sizeof(cmd), "echo 20 > %s/force_active", focaltech_cmd_path);
+        RunCommandToFd(fd, "Disable Force Touch Active", {"/vendor/bin/sh", "-c", cmd});
+    }
 
     if (!access(syna_cmd_path, R_OK)) {
         // Enable: force touch active
@@ -820,6 +887,8 @@ void DumpstateDevice::dumpMemorySection(int fd) {
                         "fi; "
                         "done"});
     DumpFileToFd(fd, "dmabuf info", "/d/dma_buf/bufinfo");
+    DumpFileToFd(fd, "Page Pinner - longterm pin", "/sys/kernel/debug/page_pinner/longterm_pinner");
+    DumpFileToFd(fd, "Page Pinner - alloc_contig_failed", "/sys/kernel/debug/page_pinner/alloc_contig_failed");
 }
 
 static void DumpF2FS(int fd) {
@@ -890,13 +959,19 @@ void DumpstateDevice::dumpDisplaySection(int fd) {
     DumpFileToFd(fd, "CRTC-0 underrun count", "/sys/kernel/debug/dri/0/crtc-0/underrun_cnt");
     DumpFileToFd(fd, "CRTC-0 crc count", "/sys/kernel/debug/dri/0/crtc-0/crc_cnt");
     DumpFileToFd(fd, "CRTC-0 ecc count", "/sys/kernel/debug/dri/0/crtc-0/ecc_cnt");
+    DumpFileToFd(fd, "CRTC-0 idma err count", "/sys/kernel/debug/dri/0/crtc-0/idma_err_cnt");
     DumpFileToFd(fd, "CRTC-0 event log", "/sys/kernel/debug/dri/0/crtc-0/event");
     DumpFileToFd(fd, "CRTC-1 underrun count", "/sys/kernel/debug/dri/0/crtc-1/underrun_cnt");
     DumpFileToFd(fd, "CRTC-1 crc count", "/sys/kernel/debug/dri/0/crtc-1/crc_cnt");
     DumpFileToFd(fd, "CRTC-1 ecc count", "/sys/kernel/debug/dri/0/crtc-1/ecc_cnt");
+    DumpFileToFd(fd, "CRTC-1 idma err count", "/sys/kernel/debug/dri/0/crtc-1/idma_err_cnt");
     DumpFileToFd(fd, "CRTC-1 event log", "/sys/kernel/debug/dri/0/crtc-1/event");
     RunCommandToFd(fd, "libdisplaycolor", {"/vendor/bin/dumpsys", "displaycolor", "-v"},
                    CommandOptions::WithTimeout(2).Build());
+    DumpFileToFd(fd, "Primary panel name", "/sys/devices/platform/exynos-drm/primary-panel/panel_name");
+    DumpFileToFd(fd, "Primary panel extra info", "/sys/devices/platform/exynos-drm/primary-panel/panel_extinfo");
+    DumpFileToFd(fd, "Secondary panel name", "/sys/devices/platform/exynos-drm/secondary-panel/panel_name");
+    DumpFileToFd(fd, "Secondary panel extra info", "/sys/devices/platform/exynos-drm/secondary-panel/panel_extinfo");
 }
 
 // Dump items related to AoC
@@ -910,8 +985,23 @@ void DumpstateDevice::dumpAoCSection(int fd) {
     DumpFileToFd(fd, "AoC audio wake", "/sys/devices/platform/19000000.aoc/control/audio_wakeup");
     DumpFileToFd(fd, "AoC logging wake", "/sys/devices/platform/19000000.aoc/control/logging_wakeup");
     DumpFileToFd(fd, "AoC hotword wake", "/sys/devices/platform/19000000.aoc/control/hotword_wakeup");
-    DumpFileToFd(fd, "AoC memory exception wake", "/sys/devices/platform/19000000.aoc/control/memory_exception");
-    DumpFileToFd(fd, "AoC memory votes", "/sys/devices/platform/19000000.aoc/control/memory_votes");
+    RunCommandToFd(fd, "AoC memory exception wake", {"/vendor/bin/sh", "-c", "cat /sys/devices/platform/19000000.aoc/control/memory_exception"}, CommandOptions::WithTimeout(2).Build());
+    RunCommandToFd(fd, "AoC memory votes", {"/vendor/bin/sh", "-c", "cat /sys/devices/platform/19000000.aoc/control/memory_votes"}, CommandOptions::WithTimeout(2).Build());
+        RunCommandToFd(fd, "AoC Heap Stats (A32)",
+      {"/vendor/bin/sh", "-c", "echo 'dbg heap -c 1' > /dev/acd-debug; timeout 0.1 cat /dev/acd-debug"},
+      CommandOptions::WithTimeout(1).Build());
+    RunCommandToFd(fd, "AoC Heap Stats (F1)",
+      {"/vendor/bin/sh", "-c", "echo 'dbg heap -c 2' > /dev/acd-debug; timeout 0.1 cat /dev/acd-debug"},
+      CommandOptions::WithTimeout(1).Build());
+    RunCommandToFd(fd, "AoC Heap Stats (HF0)",
+      {"/vendor/bin/sh", "-c", "echo 'dbg heap -c 3' > /dev/acd-debug; timeout 0.1 cat /dev/acd-debug"},
+      CommandOptions::WithTimeout(1).Build());
+    RunCommandToFd(fd, "AoC Heap Stats (HF1)",
+      {"/vendor/bin/sh", "-c", "echo 'dbg heap -c 4' > /dev/acd-debug; timeout 0.1 cat /dev/acd-debug"},
+      CommandOptions::WithTimeout(1).Build());
+    RunCommandToFd(fd, "AoC MIF Stats",
+      {"/vendor/bin/sh", "-c", "echo 'mif details' > /dev/acd-debug; timeout 0.1 cat /dev/acd-debug"},
+      CommandOptions::WithTimeout(1).Build());
 }
 
 // Dump items related to sensors usf.
