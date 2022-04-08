@@ -860,11 +860,12 @@ on post-fs-data
 
 # ODPM
 on fs
-    chown system system /sys/devices/platform/acpm_mfd_bus@17500000/i2c-6/6-001f/s2mpg10-meter/s2mpg10-odpm/iio:device0/enabled_rails
-    chown system system /sys/devices/platform/acpm_mfd_bus@17510000/i2c-7/7-002f/s2mpg11-meter/s2mpg11-odpm/iio:device1/enabled_rails
+    chown system system /sys/devices/platform/acpm_mfd_bus@18100000/i2c-7/i2c-s2mpg12mfd/s2mpg12-meter/s2mpg12-odpm/iio\:device0/enabled_rails
+    chown system system /sys/devices/platform/acpm_mfd_bus@18110000/i2c-8/i2c-s2mpg13mfd/s2mpg13-meter/s2mpg13-odpm/iio\:device1/enabled_rails
 
-    chown system system /sys/devices/platform/acpm_mfd_bus@17500000/i2c-7/7-001f/s2mpg10-meter/s2mpg10-odpm/iio:device0/enabled_rails
-    chown system system /sys/devices/platform/acpm_mfd_bus@17510000/i2c-8/8-002f/s2mpg11-meter/s2mpg11-odpm/iio:device1/enabled_rails
+on post-fs-data
+    mkdir /data/vendor/powerstats 0771 system system
+    chown system system /data/vendor/powerstats
 
 on property:vendor.thermal.link_ready=1
     # BCL
