@@ -43,6 +43,20 @@ on init
     chown system system /proc/vendor_sched/set_proc_group_ota
     chown system system /proc/vendor_sched/prefer_idle_set
     chown system system /proc/vendor_sched/prefer_idle_clear
+    chown system system /proc/vendor_sched/pmu_poll_enable
+    chown system system /proc/vendor_sched/pmu_poll_time
+    chown system system /sys/devices/system/cpu/cpufreq/policy0/sched_pixel/lcpi_threshold
+    chown system system /sys/devices/system/cpu/cpufreq/policy0/sched_pixel/spc_threshold
+    chown system system /sys/devices/system/cpu/cpufreq/policy0/sched_pixel/limit_frequency
+    chown system system /sys/devices/system/cpu/cpufreq/policy0/sched_pixel/pmu_limit_enable
+    chown system system /sys/devices/system/cpu/cpufreq/policy4/sched_pixel/lcpi_threshold
+    chown system system /sys/devices/system/cpu/cpufreq/policy4/sched_pixel/spc_threshold
+    chown system system /sys/devices/system/cpu/cpufreq/policy4/sched_pixel/limit_frequency
+    chown system system /sys/devices/system/cpu/cpufreq/policy4/sched_pixel/pmu_limit_enable
+    chown system system /sys/devices/system/cpu/cpufreq/policy6/sched_pixel/lcpi_threshold
+    chown system system /sys/devices/system/cpu/cpufreq/policy6/sched_pixel/spc_threshold
+    chown system system /sys/devices/system/cpu/cpufreq/policy6/sched_pixel/limit_frequency
+    chown system system /sys/devices/system/cpu/cpufreq/policy6/sched_pixel/pmu_limit_enable
 
     chmod 0220 /proc/vendor_sched/set_task_group_bg
     chmod 0220 /proc/vendor_sched/set_task_group_cam
@@ -70,6 +84,8 @@ on init
     chmod 0220 /proc/vendor_sched/set_proc_group_ota
     chmod 0220 /proc/vendor_sched/prefer_idle_set
     chmod 0220 /proc/vendor_sched/prefer_idle_clear
+    chmod 0220 /proc/vendor_sched/pmu_poll_enable
+    chmod 0220 /proc/vendor_sched/pmu_poll_time
 
     wait /dev/block/platform/${ro.boot.boot_devices}
     symlink /dev/block/platform/${ro.boot.boot_devices} /dev/block/bootdevice
@@ -721,6 +737,24 @@ on property:sys.boot_completed=1
     write /proc/vendor_sched/ota_uclamp_max 410
     write /proc/vendor_sched/ota_group_throttle 410
 
+    # Set PMU freq limit parameters
+    write /sys/devices/system/cpu/cpufreq/policy0/sched_pixel/lcpi_threshold 2
+    write /sys/devices/system/cpu/cpufreq/policy0/sched_pixel/spc_threshold 59
+    write /sys/devices/system/cpu/cpufreq/policy0/sched_pixel/limit_frequency 1401000
+    write /sys/devices/system/cpu/cpufreq/policy4/sched_pixel/lcpi_threshold 6
+    write /sys/devices/system/cpu/cpufreq/policy4/sched_pixel/spc_threshold 64
+    write /sys/devices/system/cpu/cpufreq/policy4/sched_pixel/limit_frequency 1826000
+    write /sys/devices/system/cpu/cpufreq/policy6/sched_pixel/lcpi_threshold 5
+    write /sys/devices/system/cpu/cpufreq/policy6/sched_pixel/spc_threshold 69
+    write /sys/devices/system/cpu/cpufreq/policy6/sched_pixel/limit_frequency 2507000
+    write /proc/vendor_sched/pmu_poll_time 10
+
+    # Disable PMU freq limit
+    write /sys/devices/system/cpu/cpufreq/policy0/sched_pixel/pmu_limit_enable 1
+    write /sys/devices/system/cpu/cpufreq/policy4/sched_pixel/pmu_limit_enable 1
+    write /sys/devices/system/cpu/cpufreq/policy6/sched_pixel/pmu_limit_enable 1
+    write /proc/vendor_sched/pmu_poll_enable 0
+
     # Setup groups for SF (RT used for SF RE, SF used for SF main)
     write /proc/vendor_sched/rt_uclamp_min 125
     write /proc/vendor_sched/rt_prefer_idle 1
@@ -862,11 +896,12 @@ on post-fs-data
 
 # ODPM
 on fs
-    chown system system /sys/devices/platform/acpm_mfd_bus@17500000/i2c-6/6-001f/s2mpg10-meter/s2mpg10-odpm/iio:device0/enabled_rails
-    chown system system /sys/devices/platform/acpm_mfd_bus@17510000/i2c-7/7-002f/s2mpg11-meter/s2mpg11-odpm/iio:device1/enabled_rails
+    chown system system /sys/devices/platform/acpm_mfd_bus@18100000/i2c-7/i2c-s2mpg12mfd/s2mpg12-meter/s2mpg12-odpm/iio\:device0/enabled_rails
+    chown system system /sys/devices/platform/acpm_mfd_bus@18110000/i2c-8/i2c-s2mpg13mfd/s2mpg13-meter/s2mpg13-odpm/iio\:device1/enabled_rails
 
-    chown system system /sys/devices/platform/acpm_mfd_bus@17500000/i2c-7/7-001f/s2mpg10-meter/s2mpg10-odpm/iio:device0/enabled_rails
-    chown system system /sys/devices/platform/acpm_mfd_bus@17510000/i2c-8/8-002f/s2mpg11-meter/s2mpg11-odpm/iio:device1/enabled_rails
+on post-fs-data
+    mkdir /data/vendor/powerstats 0771 system system
+    chown system system /data/vendor/powerstats
 
 on property:vendor.thermal.link_ready=1
     # BCL
