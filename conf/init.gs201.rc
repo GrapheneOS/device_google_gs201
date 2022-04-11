@@ -797,6 +797,9 @@ on property:sys.boot_completed=1
     chown system system /sys/devices/platform/19000000.aoc/control/udfps_get_disp_freq
     chmod 440 /sys/devices/platform/19000000.aoc/control/udfps_get_disp_freq
 
+    #enable GPU power optimization
+    write /sys/devices/platform/28000000.mali/ifpo 1
+
 # IMS WiFi Calling
     service charonservice /system/vendor/bin/charon
     class main
