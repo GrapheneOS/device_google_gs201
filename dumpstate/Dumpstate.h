@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016 The Android Open Source Project
+ * Copyright (C) 2022 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,44 +13,31 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-#ifndef ANDROID_HARDWARE_DUMPSTATE_V1_1_DUMPSTATEDEVICE_H
-#define ANDROID_HARDWARE_DUMPSTATE_V1_1_DUMPSTATEDEVICE_H
 
-#include <android/hardware/dumpstate/1.1/IDumpstateDevice.h>
-#include <hidl/MQDescriptor.h>
-#include <hidl/Status.h>
-#include <string>
+#pragma once
 
+#include <aidl/android/hardware/dumpstate/BnDumpstateDevice.h>
+#include <aidl/android/hardware/dumpstate/IDumpstateDevice.h>
+#include <android/binder_status.h>
+
+namespace aidl {
 namespace android {
 namespace hardware {
 namespace dumpstate {
-namespace V1_1 {
-namespace implementation {
 
-using ::android::hardware::dumpstate::V1_1::DumpstateMode;
-using ::android::hardware::dumpstate::V1_1::DumpstateStatus;
-using ::android::hardware::dumpstate::V1_1::IDumpstateDevice;
-using ::android::hardware::hidl_handle;
-using ::android::hardware::hidl_string;
-using ::android::hardware::hidl_vec;
-using ::android::hardware::Return;
-
-struct DumpstateDevice : public IDumpstateDevice {
+class Dumpstate : public BnDumpstateDevice {
   public:
-    DumpstateDevice();
+    Dumpstate();
 
-    // Methods from ::android::hardware::dumpstate::V1_0::IDumpstateDevice follow.
-    Return<void> dumpstateBoard(const hidl_handle& h) override;
+    ::ndk::ScopedAStatus dumpstateBoard(const std::vector<::ndk::ScopedFileDescriptor>& in_fds,
+                                        IDumpstateDevice::DumpstateMode in_mode,
+                                        int64_t in_timeoutMillis) override;
 
-    // Methods from ::android::hardware::dumpstate::V1_1::IDumpstateDevice follow.
-    Return<DumpstateStatus> dumpstateBoard_1_1(const hidl_handle& h,
-                                               const DumpstateMode mode,
-                                               const uint64_t timeoutMillis) override;
-    Return<void> setVerboseLoggingEnabled(const bool enable) override;
-    Return<bool> getVerboseLoggingEnabled() override;
+    ::ndk::ScopedAStatus getVerboseLoggingEnabled(bool* _aidl_return) override;
 
-    // Methods from ::android::hidl::base::V1_0::IBase follow.
-    Return<void> debug(const hidl_handle &fd, const hidl_vec<hidl_string> &args) override;
+    ::ndk::ScopedAStatus setVerboseLoggingEnabled(bool in_enable) override;
+
+    binder_status_t dump(int fd, const char** args, uint32_t numArgs) override;
 
   private:
     const std::string kAllSections = "all";
@@ -86,12 +73,12 @@ struct DumpstateDevice : public IDumpstateDevice {
     void dumpRilLogs(int fd, std::string destDir);
     void dumpGpsLogs(int fd, const std::string &destDir);
     void dumpCameraLogs(int fd, const std::string &destDir);
+
+    //bool getVerboseLoggingEnabledImpl();
+    //::ndk::ScopedAStatus dumpstateBoardImpl(const int fd, const bool full);
 };
 
-}  // namespace implementation
-}  // namespace V1_0
 }  // namespace dumpstate
 }  // namespace hardware
 }  // namespace android
-
-#endif  // ANDROID_HARDWARE_DUMPSTATE_V1_1_DUMPSTATEDEVICE_H
+}  // namespace aidl
