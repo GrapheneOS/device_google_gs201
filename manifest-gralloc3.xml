@@ -79,10 +79,8 @@
         <fqname>@1.3::ICryptoFactory/widevine</fqname>
         <fqname>@1.3::IDrmFactory/widevine</fqname>
     </hal>
-    <hal format = "hidl">
+    <hal format="aidl">
         <name>android.hardware.dumpstate</name>
-        <transport>hwbinder</transport>
-        <version>1.0</version>
         <interface>
             <name>IDumpstateDevice</name>
             <instance>default</instance>

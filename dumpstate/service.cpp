@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016 The Android Open Source Project
+ * Copyright (C) 2022 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,31 +13,25 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-#define LOG_TAG "android.hardware.dumpstate@1.0-service.gs201"
+#define LOG_TAG "android.hardware.dumpstate-service.gs201"
 
-#include <hidl/HidlSupport.h>
-#include <hidl/HidlTransportSupport.h>
+#include "Dumpstate.h"
 
-#include "DumpstateDevice.h"
+#include <android-base/logging.h>
+#include <android/binder_manager.h>
+#include <android/binder_process.h>
 
-using ::android::hardware::configureRpcThreadpool;
-using ::android::hardware::dumpstate::V1_1::IDumpstateDevice;
-using ::android::hardware::dumpstate::V1_1::implementation::DumpstateDevice;
-using ::android::hardware::joinRpcThreadpool;
-using ::android::sp;
+using aidl::android::hardware::dumpstate::Dumpstate;
 
+int main() {
+    ABinderProcess_setThreadPoolMaxThreadCount(0);
+    std::shared_ptr<Dumpstate> dumpstate = ndk::SharedRefBase::make<Dumpstate>();
 
-int main(int /* argc */, char* /* argv */ []) {
-  sp<IDumpstateDevice> dumpstate = new DumpstateDevice;
-  configureRpcThreadpool(1, true);
+    const std::string instance = std::string() + Dumpstate::descriptor + "/default";
+    binder_status_t status =
+            AServiceManager_registerLazyService(dumpstate->asBinder().get(), instance.c_str());
+    CHECK_EQ(status, STATUS_OK);
 
-  android::status_t status = dumpstate->registerAsService();
-
-  if (status != android::OK)
-  {
-    ALOGE("Could not register DumpstateDevice service (%d).", status);
-    return -1;
-  }
-
-  joinRpcThreadpool();
+    ABinderProcess_joinThreadPool();
+    return EXIT_FAILURE;  // Unreachable
 }
