@@ -178,6 +178,14 @@
             <instance>default</instance>
         </interface>
     </hal>
+    <hal format="hidl">
+        <name>hardware.google.bluetooth.ewp</name>
+        <version>1.0</version>
+        <interface>
+            <name>IBluetoothEwp</name>
+            <instance>default</instance>
+        </interface>
+    </hal>
     <hal format="hidl" optional="true">
         <name>vendor.google.google_battery</name>
         <version>1.2</version>
