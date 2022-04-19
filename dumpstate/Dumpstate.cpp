@@ -575,6 +575,10 @@ void Dumpstate::dumpTouchSection(int fd) {
         snprintf(cmd, sizeof(cmd), "%s/selftest/Short", focaltech_cmd_path);
         DumpFileToFd(fd, "Get Short Test", cmd);
 
+        // Get HeatMap(ms,ss)
+        snprintf(cmd, sizeof(cmd), "%s/selftest/Strength", focaltech_cmd_path);
+        DumpFileToFd(fd, "Get HeatMap(ms,ss)", cmd);
+
         // Disable: force touch active
         snprintf(cmd, sizeof(cmd), "echo 20 > %s/force_active", focaltech_cmd_path);
         RunCommandToFd(fd, "Disable Force Touch Active", {"/vendor/bin/sh", "-c", cmd});
