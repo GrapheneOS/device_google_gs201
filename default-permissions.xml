@@ -47,6 +47,8 @@
         <!-- Location -->
         <permission name="android.permission.ACCESS_FINE_LOCATION" fixed="false"/>
         <permission name="android.permission.ACCESS_BACKGROUND_LOCATION" fixed="false"/>
+        <!-- Battery Widget -->
+        <permission name="android.permission.BLUETOOTH_CONNECT" fixed="false"/>
     </exception>
 
     <exception package="com.google.android.apps.cbrsnetworkmonitor">
