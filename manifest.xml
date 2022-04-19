@@ -44,10 +44,8 @@
             <instance>default</instance>
         </interface>
     </hal>
-    <hal format = "hidl">
+    <hal format="aidl">
         <name>android.hardware.dumpstate</name>
-        <transport>hwbinder</transport>
-        <version>1.1</version>
         <interface>
             <name>IDumpstateDevice</name>
             <instance>default</instance>
