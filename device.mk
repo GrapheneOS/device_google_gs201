@@ -1026,8 +1026,9 @@ PRODUCT_PACKAGES += \
 include device/google/gs101/telephony/pktrouter.mk
 
 # Thermal HAL
-include hardware/google/pixel/thermal/device.mk
 PRODUCT_PROPERTY_OVERRIDES += persist.vendor.enable.thermal.genl=true
+include hardware/google/pixel/thermal/device.mk
+$(call soong_config_set,thermal_hal_feature,pid,apply_2_0)
 
 ## TPU packages
 include device/google/gs201/edgetpu/edgetpu.mk
