@@ -404,8 +404,5 @@ BOARD_KERNEL_CMDLINE += at24.write_timeout=100
 # Enable larger logbuf
 BOARD_KERNEL_CMDLINE += log_buf_len=1024K
 
-# Enable load module in parallel
-BOARD_BOOTCONFIG += androidboot.load_modules_parallel=true
-
 # Protected VM firmware
 BOARD_PVMFWIMAGE_PARTITION_SIZE := 0x00100000
