@@ -110,7 +110,7 @@ void DumpstateDevice::dumpLogs(int fd, std::string srcDir, std::string destDir, 
         std::string copyCmd = "/vendor/bin/cp " + srcLogFile + " " + destLogFile;
 
         ALOGD("Copying %s to %s\n", srcLogFile.c_str(), destLogFile.c_str());
-        RunCommandToFd(fd, "CP DIAG LOGS", { "/vendor/bin/sh", "-c", copyCmd.c_str() }, options);
+        RunCommandToFd(fd, "CP LOGS", { "/vendor/bin/sh", "-c", copyCmd.c_str() }, options);
     }
 
     while (num_entries--) {
@@ -1144,7 +1144,7 @@ void DumpstateDevice::dumpModem(int fd, int fdModem)
         dumpModemEFS(modemLogAllDir);
     }
 
-    RunCommandToFd(fd, "TAR LOG", {"/vendor/bin/tar", "cvf", modemLogCombined.c_str(), "-C", modemLogAllDir.c_str(), "."}, CommandOptions::WithTimeout(120).Build());
+    RunCommandToFd(fd, "TAR LOG", {"/vendor/bin/tar", "cvf", modemLogCombined.c_str(), "-C", modemLogAllDir.c_str(), "."}, CommandOptions::WithTimeout(20).Build());
     RunCommandToFd(fd, "CHG PERM", {"/vendor/bin/chmod", "a+w", modemLogCombined.c_str()}, CommandOptions::WithTimeout(2).Build());
 
     std::vector<uint8_t> buffer(65536);
