@@ -904,6 +904,9 @@ on post-fs-data
     mkdir /data/vendor/powerstats 0771 system system
     chown system system /data/vendor/powerstats
 
+on late-init && property:ro.boot.hw.soc.rev=0
+    setprop vendor.thermal.config "thermal_info_config_A0.json"
+
 on property:vendor.thermal.link_ready=1
     # BCL
     write /sys/devices/virtual/pmic/mitigation/clock_ratio/tpu_light_clk_ratio 0xfff041c1 #DFS

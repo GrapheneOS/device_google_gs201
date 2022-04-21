@@ -404,9 +404,6 @@ PRODUCT_PROPERTY_OVERRIDES += \
 	persist.vendor.usb.usbradio.config=dm
 endif
 
-# adpf 16ms update rate
-PRODUCT_PRODUCT_PROPERTIES += \
-        vendor.powerhal.adpf.rate=16666666
 
 PRODUCT_COPY_FILES += \
 	device/google/gs201/task_profiles.json:$(TARGET_COPY_OUT_VENDOR)/etc/task_profiles.json
@@ -902,10 +899,13 @@ PRODUCT_PACKAGES += modem_logging_control
 
 # modem logging configs
 PRODUCT_COPY_FILES += \
-	device/google/gs201/radio/config/logging.conf:$(TARGET_COPY_OUT_VENDOR)/etc/modem/logging.conf \
-	device/google/gs201/radio/config/default.cfg:$(TARGET_COPY_OUT_VENDOR)/etc/modem/default.cfg \
-	device/google/gs201/radio/config/default.nprf:$(TARGET_COPY_OUT_VENDOR)/etc/modem/default.nprf \
-	device/google/gs201/radio/config/default_metrics.xml:$(TARGET_COPY_OUT_VENDOR)/etc/modem/default_metrics.xml
+	device/google/$(TARGET_BOARD_PLATFORM)/radio/config/logging.conf:$(TARGET_COPY_OUT_VENDOR)/etc/modem/logging.conf \
+	device/google/$(TARGET_BOARD_PLATFORM)/radio/config/default.cfg:$(TARGET_COPY_OUT_VENDOR)/etc/modem/default.cfg \
+	device/google/$(TARGET_BOARD_PLATFORM)/radio/config/default.nprf:$(TARGET_COPY_OUT_VENDOR)/etc/modem/default.nprf \
+	device/google/$(TARGET_BOARD_PLATFORM)/radio/config/default_metrics.xml:$(TARGET_COPY_OUT_VENDOR)/etc/modem/default_metrics.xml \
+	device/google/$(TARGET_BOARD_PLATFORM)/radio/config/Pixel_Default.cfg:$(TARGET_COPY_OUT_VENDOR)/etc/modem/Pixel_Default.cfg \
+	device/google/$(TARGET_BOARD_PLATFORM)/radio/config/Pixel_Default.nprf:$(TARGET_COPY_OUT_VENDOR)/etc/modem/Pixel_Default.nprf \
+	device/google/$(TARGET_BOARD_PLATFORM)/radio/config/Pixel_Default_metrics.xml:$(TARGET_COPY_OUT_VENDOR)/etc/modem/Pixel_Default_metrics.xml \
 
 # ARM NN files
 ARM_COMPUTE_CL_ENABLE := 1
@@ -1028,8 +1028,9 @@ PRODUCT_PACKAGES += \
 include device/google/gs101/telephony/pktrouter.mk
 
 # Thermal HAL
-include hardware/google/pixel/thermal/device.mk
 PRODUCT_PROPERTY_OVERRIDES += persist.vendor.enable.thermal.genl=true
+include hardware/google/pixel/thermal/device.mk
+$(call soong_config_set,thermal_hal_feature,pid,apply_2_0)
 
 ## TPU packages
 include device/google/gs201/edgetpu/edgetpu.mk
@@ -1075,6 +1076,9 @@ include hardware/google/pixel/PixelLogger/PixelLogger.mk
 
 # sscoredump
 include hardware/google/pixel/sscoredump/device.mk
+
+# RadioExt Version
+USES_RADIOEXT_V1_4 = true
 
 # Wifi ext
 include hardware/google/pixel/wifi_ext/device.mk
