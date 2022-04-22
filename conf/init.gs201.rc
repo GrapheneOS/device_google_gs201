@@ -756,9 +756,9 @@ on property:sys.boot_completed=1
     write /proc/vendor_sched/pmu_poll_enable 0
 
     # Setup groups for SF (RT used for SF RE, SF used for SF main)
-    write /proc/vendor_sched/rt_uclamp_min 125
+    write /proc/vendor_sched/rt_uclamp_min 159
     write /proc/vendor_sched/rt_prefer_idle 1
-    write /proc/vendor_sched/sf_uclamp_min 30
+    write /proc/vendor_sched/sf_uclamp_min 39
     write /proc/vendor_sched/sf_prefer_idle 1
 
     # Setup cpu.shares to throttle background groups (bg ~ 5% sysbg ~ 5% dex2oat ~2.5%)
