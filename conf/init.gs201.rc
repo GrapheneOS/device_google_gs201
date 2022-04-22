@@ -972,6 +972,8 @@ on property:vendor.disable.bcl.control=0
 on post-fs-data && property:ro.vendor.factory=1
     # HBM mode for UDFPS factory apk
     chmod 666 /d/dri/0/DSI-1/panel/reg/payload
+    chmod 666 /d/dri/0/DSI-1/panel/reg/count
+    chmod 666 /d/dri/0/DSI-1/panel/reg/address
     chmod 666 /d/dri/0/DSI-1/panel/hbm_mode
     chmod 666 /sys/class/backlight/panel0-backlight/local_hbm_max_timeout
     chmod 666 /sys/class/backlight/panel0-backlight/local_hbm_mode
