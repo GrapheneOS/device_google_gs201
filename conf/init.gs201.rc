@@ -754,9 +754,9 @@ on property:sys.boot_completed=1
     write /proc/vendor_sched/pmu_poll_enable 0
 
     # Setup groups for SF (RT used for SF RE, SF used for SF main)
-    write /proc/vendor_sched/rt_uclamp_min 125
+    write /proc/vendor_sched/rt_uclamp_min 159
     write /proc/vendor_sched/rt_prefer_idle 1
-    write /proc/vendor_sched/sf_uclamp_min 30
+    write /proc/vendor_sched/sf_uclamp_min 39
     write /proc/vendor_sched/sf_prefer_idle 1
 
     # Setup cpu.shares to throttle background groups (bg ~ 5% sysbg ~ 5% dex2oat ~2.5%)
@@ -970,6 +970,8 @@ on property:vendor.disable.bcl.control=0
 on post-fs-data && property:ro.vendor.factory=1
     # HBM mode for UDFPS factory apk
     chmod 666 /d/dri/0/DSI-1/panel/reg/payload
+    chmod 666 /d/dri/0/DSI-1/panel/reg/count
+    chmod 666 /d/dri/0/DSI-1/panel/reg/address
     chmod 666 /d/dri/0/DSI-1/panel/hbm_mode
     chmod 666 /sys/class/backlight/panel0-backlight/local_hbm_max_timeout
     chmod 666 /sys/class/backlight/panel0-backlight/local_hbm_mode
