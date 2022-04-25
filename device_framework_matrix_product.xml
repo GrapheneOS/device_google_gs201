@@ -6,13 +6,6 @@
             <instance>default</instance>
         </interface>
     </hal>
-    <hal format="aidl" optional="true">
-        <name>android.hardware.biometrics.fingerprint</name>
-        <interface>
-            <name>IFingerprint</name>
-            <instance>default</instance>
-        </interface>
-    </hal>
     <hal format="aidl">
         <name>android.hardware.contexthub</name>
         <version>1</version>
