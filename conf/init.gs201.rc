@@ -538,6 +538,7 @@ on fs
     restorecon_recursive /mnt/vendor/persist/audio
     restorecon_recursive /mnt/vendor/persist/sensors
     restorecon_recursive /mnt/vendor/persist/battery
+    restorecon_recursive /mnt/vendor/persist/modem
     # Set up display-related directories and permissions
     # Add restorecon_recursive command to make sure the restorecon label is persist_display_file.
     restorecon_recursive /mnt/vendor/persist/display
