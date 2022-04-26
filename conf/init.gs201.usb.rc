@@ -178,7 +178,7 @@ on charger
     write /config/usb_gadget/g1/bcdDevice 0x0510
     mkdir /config/usb_gadget/g1/functions/midi.gs5
     symlink /config/usb_gadget/g1/configs/b.1 /config/usb_gadget/g1/os_desc/b.1
-    setprop sys.usb.controller "11110000.dwc3"
+    setprop sys.usb.controller "11210000.dwc3"
     setprop sys.usb.configfs 1
 
 on property:ro.bootmode=charger
