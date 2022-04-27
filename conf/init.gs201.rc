@@ -909,7 +909,9 @@ on property:vendor.thermal.link_ready=1
     write /sys/devices/virtual/pmic/mitigation/clock_ratio/cpu2_light_clk_ratio 0xfff041c3 #OCP
     write /sys/devices/virtual/pmic/mitigation/clock_ratio/gpu_heavy_clk_ratio 0xfff04385 #OCP
     write /sys/devices/virtual/pmic/mitigation/clock_ratio/tpu_heavy_clk_ratio 0xfff041c3 #OCP
+    write /sys/devices/virtual/pmic/mitigation/triggered_lvl/uvlo1_lvl 3200
     write /sys/devices/virtual/pmic/mitigation/triggered_lvl/smpl_lvl 3100
+    write /sys/devices/virtual/pmic/mitigation/triggered_lvl/uvlo2_lvl 3000
     write /sys/devices/virtual/pmic/mitigation/triggered_lvl/soft_ocp_cpu2_lvl 12000
     write /sys/devices/virtual/pmic/mitigation/triggered_lvl/soft_ocp_gpu_lvl 9000
     write /sys/devices/virtual/pmic/mitigation/triggered_lvl/soft_ocp_tpu_lvl 8500
