@@ -994,7 +994,7 @@ void DumpstateDevice::dumpAoCSection(int fd) {
       {"/vendor/bin/sh", "-c", "echo 'dbg heap -c 4' > /dev/acd-debug; timeout 0.1 cat /dev/acd-debug"},
       CommandOptions::WithTimeout(1).Build());
     RunCommandToFd(fd, "AoC MIF Stats",
-      {"/vendor/bin/sh", "-c", "echo 'mif details' > /dev/acd-debug; timeout 0.1 cat /dev/acd-debug"},
+      {"/vendor/bin/sh", "-c", "echo 'mif details' > /dev/acd-debug; timeout 0.5 cat /dev/acd-debug"},
       CommandOptions::WithTimeout(1).Build());
 }
 
