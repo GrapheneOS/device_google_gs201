@@ -887,8 +887,7 @@ void DumpstateDevice::dumpMemorySection(int fd) {
                         "fi; "
                         "done"});
     DumpFileToFd(fd, "dmabuf info", "/d/dma_buf/bufinfo");
-    DumpFileToFd(fd, "Page Pinner - longterm pin", "/sys/kernel/debug/page_pinner/longterm_pinner");
-    DumpFileToFd(fd, "Page Pinner - alloc_contig_failed", "/sys/kernel/debug/page_pinner/alloc_contig_failed");
+    DumpFileToFd(fd, "Page Pinner - longterm pin", "/sys/kernel/debug/page_pinner/buffer");
 }
 
 static void DumpF2FS(int fd) {
