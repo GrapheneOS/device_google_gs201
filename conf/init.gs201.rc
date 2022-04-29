@@ -252,6 +252,9 @@ on init
     # Wireless Charge stats (write 0)
     chown system system /sys/class/power_supply/wireless/device/charge_stats
 
+    # Thermal Charge stats (write 0)
+    chown system system /sys/devices/platform/google,charger/thermal_stats
+
     # Permission for wireless charging
     chown system system /sys/class/power_supply/wireless/capacity
     chown system system /sys/class/power_supply/wireless/device/rtx
