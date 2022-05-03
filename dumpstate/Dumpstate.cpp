@@ -401,6 +401,8 @@ void Dumpstate::dumpPowerSection(int fd) {
 
     if (!PropertiesHelper::IsUserBuild()) {
         DumpFileToFd(fd, "DC_registers dump", "/sys/class/power_supply/pca94xx-mains/device/registers_dump");
+        DumpFileToFd(fd, "max77759_chg registers dump", "/d/max77759_chg/registers");
+        DumpFileToFd(fd, "max77729_pmic registers dump", "/d/max77729_pmic/registers");
 
         RunCommandToFd(fd, "fg_model", {"/vendor/bin/sh", "-c",
                             "for f in /d/maxfg* ; do "
