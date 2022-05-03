@@ -104,7 +104,6 @@ BOARD_EGL_CFG := device/google/gs201/conf/egl.cfg
 USE_OPENGL_RENDERER := true
 NUM_FRAMEBUFFER_SURFACE_BUFFERS := 3
 BOARD_USES_EXYNOS5_COMMON_GRALLOC := true
-BOARD_USES_EXYNOS_GRALLOC_VERSION := $(DEVICE_USES_EXYNOS_GRALLOC_VERSION)
 BOARD_USES_ALIGN_RESTRICTION := false
 BOARD_USES_GRALLOC_ION_SYNC := true
 
@@ -112,8 +111,6 @@ BOARD_USES_GRALLOC_ION_SYNC := true
 BOARD_USES_SWIFTSHADER := false
 
 # Gralloc4
-ifeq ($(BOARD_USES_EXYNOS_GRALLOC_VERSION),4)
-
 ifeq ($(BOARD_USES_SWIFTSHADER),true)
 $(call soong_config_set,arm_gralloc,gralloc_arm_no_external_afbc,true)
 $(call soong_config_set,arm_gralloc,mali_gpu_support_afbc_basic,false)
@@ -127,15 +124,8 @@ $(call soong_config_set,arm_gralloc,mali_gpu_support_afbc_wideblk,true)
 $(call soong_config_set,arm_gralloc,gralloc_init_afbc,true)
 $(call soong_config_set,arm_gralloc,dpu_support_1010102_afbc,true)
 endif # ifeq ($(BOARD_USES_SWIFTSHADER),true)
-$(call soong_config_set,arm_gralloc,gralloc_ion_sync_on_lock,$(BOARD_USES_GRALLOC_ION_SYNC))
-endif # ifeq ($(BOARD_USES_EXYNOS_GRALLOC_VERSION),4)
 
-# libVendorGraphicbuffer
-ifeq ($(BOARD_USES_EXYNOS_GRALLOC_VERSION),4)
-$(call soong_config_set,vendorgraphicbuffer,gralloc_version,four)
-else
-$(call soong_config_set,vendorgraphicbuffer,gralloc_version,three)
-endif
+$(call soong_config_set,arm_gralloc,gralloc_ion_sync_on_lock,$(BOARD_USES_GRALLOC_ION_SYNC))
 
 # Graphics
 #BOARD_USES_EXYNOS_DATASPACE_FEATURE := true
@@ -211,6 +201,9 @@ BOARD_SUPER_PARTITION_ERROR_LIMIT := 8006926336
 BOARD_USES_SYSTEM_DLKMIMAGE := true
 BOARD_SYSTEM_DLKMIMAGE_FILE_SYSTEM_TYPE := erofs
 TARGET_COPY_OUT_SYSTEM_DLKM := system_dlkm
+
+# Testing related defines
+BOARD_PERFSETUP_SCRIPT := platform_testing/scripts/perf-setup/p10c10-setup.sh
 
 #
 # AUDIO & VOICE
