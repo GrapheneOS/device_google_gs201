@@ -374,7 +374,13 @@ on post-fs-data
     # Modem replay folder
     mkdir /mnt/vendor/modem_userdata/replay 0775 radio system
 
-    # Write display MIPI frequency from Modem
+    # Write display frequency config from RadioExt HAL
+
+    # OSC frequency files
+    chown system system /sys/devices/platform/1c2c0000.drmdsim/1c2c0000.drmdsim.0/osc2_clk_khz
+    chmod 0664 /sys/devices/platform/1c2c0000.drmdsim/1c2c0000.drmdsim.0/osc2_clk_khz
+
+    # MIPI frequency files
     chown system system /sys/devices/platform/1c2c0000.drmdsim/hs_clock
     chown system system /sys/devices/platform/1c2d0000.drmdsim/hs_clock
     chmod 0664 /sys/devices/platform/1c2c0000.drmdsim/hs_clock
