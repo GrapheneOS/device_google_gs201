@@ -1,23 +1,9 @@
 <compatibility-matrix version="1.0" type="framework" level="7">
-    <hal format="aidl" optional="true">
-        <name>android.hardware.biometrics.face</name>
-        <interface>
-            <name>IFace</name>
-            <instance>default</instance>
-        </interface>
-    </hal>
     <hal format="aidl">
         <name>android.hardware.contexthub</name>
         <version>1</version>
         <interface>
             <name>IContextHub</name>
-            <instance>default</instance>
-        </interface>
-    </hal>
-    <hal format="aidl">
-        <name>android.hardware.gnss</name>
-        <interface>
-            <name>IGnss</name>
             <instance>default</instance>
         </interface>
     </hal>
@@ -35,14 +21,6 @@
         <interface>
             <name>ISap</name>
             <instance>slot2</instance>
-        </interface>
-    </hal>
-    <hal format="hidl" optional="true">
-        <name>android.hardware.radio.config</name>
-        <version>1.1</version>
-        <interface>
-            <name>IRadioConfig</name>
-            <instance>default</instance>
         </interface>
     </hal>
     <hal format="aidl" optional="true">
