@@ -86,6 +86,13 @@ static MonitorFfs monitorFfs(kGadgetName);
 #define BIG_CORE "6"
 #define MEDIUM_CORE "4"
 
+#define POWER_SUPPLY_PATH	"/sys/class/power_supply/usb/"
+#define USB_PORT0_PATH		"/sys/class/typec/port0/"
+
+#define CURRENT_MAX_PATH			POWER_SUPPLY_PATH	"current_max"
+#define CURRENT_USB_TYPE_PATH			POWER_SUPPLY_PATH	"usb_type"
+#define CURRENT_USB_POWER_OPERATION_MODE_PATH	USB_PORT0_PATH		"power_operation_mode"
+
 struct UsbGadget : public IUsbGadget {
     UsbGadget();
 
