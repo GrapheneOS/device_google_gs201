@@ -165,22 +165,6 @@ void addDvfsStats(std::shared_ptr<PowerStats> p) {
 
     std::vector<DvfsStateResidencyDataProvider::Config> cfgs;
 
-    cfgs.push_back({"MIF", {
-        std::make_pair("3172MHz", "3172000"),
-        std::make_pair("2730MHz", "2730000"),
-        std::make_pair("2535MHz", "2535000"),
-        std::make_pair("2288MHz", "2288000"),
-        std::make_pair("2028MHz", "2028000"),
-        std::make_pair("1716MHz", "1716000"),
-        std::make_pair("1539MHz", "1539000"),
-        std::make_pair("1352MHz", "1352000"),
-        std::make_pair("1014MHz", "1014000"),
-        std::make_pair("845MHz", "845000"),
-        std::make_pair("676MHz", "676000"),
-        std::make_pair("546MHz", "546000"),
-        std::make_pair("421MHz", "421000"),
-    }});
-
     cfgs.push_back({"CL0", {
         std::make_pair("2024MHz", "2024000"),
         std::make_pair("1950MHz", "1950000"),
@@ -580,6 +564,10 @@ void addPowerDomains(std::shared_ptr<PowerStats> p) {
 }
 
 void addDevfreq(std::shared_ptr<PowerStats> p) {
+    p->addStateResidencyDataProvider(std::make_unique<DevfreqStateResidencyDataProvider>(
+            "MIF",
+            "/sys/devices/platform/17000010.devfreq_mif/devfreq/17000010.devfreq_mif"));
+
     p->addStateResidencyDataProvider(std::make_unique<DevfreqStateResidencyDataProvider>(
             "INT",
             "/sys/devices/platform/17000020.devfreq_int/devfreq/17000020.devfreq_int"));
