@@ -717,6 +717,10 @@ on property:sys.boot_completed=1
     # Enable UFS powersaving
     write /dev/sys/block/bootdevice/clkgate_enable 1
 
+    # Reset DDR frequency
+    write /sys/devices/platform/17000010.devfreq_mif/devfreq/17000010.devfreq_mif/exynos_data/cancel_boot_freq 1
+    write /sys/devices/platform/17000020.devfreq_int/devfreq/17000020.devfreq_int/exynos_data/cancel_boot_freq 1
+
     # Setup final cpuset
     write /dev/cpuset/top-app/cpus 0-7
     write /dev/cpuset/foreground/cpus 0-3,4-5
