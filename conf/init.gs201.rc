@@ -717,6 +717,10 @@ on property:sys.boot_completed=1
     # Enable UFS powersaving
     write /dev/sys/block/bootdevice/clkgate_enable 1
 
+    # Reset DDR frequency
+    write /sys/devices/platform/17000010.devfreq_mif/devfreq/17000010.devfreq_mif/exynos_data/cancel_boot_freq 1
+    write /sys/devices/platform/17000020.devfreq_int/devfreq/17000020.devfreq_int/exynos_data/cancel_boot_freq 1
+
     # Setup final cpuset
     write /dev/cpuset/top-app/cpus 0-7
     write /dev/cpuset/foreground/cpus 0-3,4-5
@@ -747,11 +751,11 @@ on property:sys.boot_completed=1
 
     # Set PMU freq limit parameters
     write /sys/devices/system/cpu/cpufreq/policy0/sched_pixel/lcpi_threshold 2
-    write /sys/devices/system/cpu/cpufreq/policy0/sched_pixel/spc_threshold 59
+    write /sys/devices/system/cpu/cpufreq/policy0/sched_pixel/spc_threshold 70
     write /sys/devices/system/cpu/cpufreq/policy0/sched_pixel/limit_frequency 1401000
     write /sys/devices/system/cpu/cpufreq/policy4/sched_pixel/lcpi_threshold 6
-    write /sys/devices/system/cpu/cpufreq/policy4/sched_pixel/spc_threshold 64
-    write /sys/devices/system/cpu/cpufreq/policy4/sched_pixel/limit_frequency 1826000
+    write /sys/devices/system/cpu/cpufreq/policy4/sched_pixel/spc_threshold 65
+    write /sys/devices/system/cpu/cpufreq/policy4/sched_pixel/limit_frequency 1836000
     write /sys/devices/system/cpu/cpufreq/policy6/sched_pixel/lcpi_threshold 5
     write /sys/devices/system/cpu/cpufreq/policy6/sched_pixel/spc_threshold 69
     write /sys/devices/system/cpu/cpufreq/policy6/sched_pixel/limit_frequency 2507000
