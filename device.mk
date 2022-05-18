@@ -34,13 +34,12 @@ BOOT_SECURITY_PATCH = $(PLATFORM_SECURITY_PATCH)
 USE_PIXEL_GRALLOC := false
 ifeq ($(USE_PIXEL_GRALLOC),true)
 	PRODUCT_SOONG_NAMESPACES += hardware/google/gchips/GrallocHAL
-else
-	PRODUCT_SOONG_NAMESPACES += hardware/google/gchips/gralloc4
 endif
 
 PRODUCT_SOONG_NAMESPACES += \
 	hardware/google/av \
 	hardware/google/gchips \
+	hardware/google/gchips/gralloc4 \
 	hardware/google/graphics/common \
 	hardware/google/graphics/gs201 \
 	hardware/google/interfaces \
