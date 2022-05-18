@@ -110,6 +110,9 @@ BOARD_USES_GRALLOC_ION_SYNC := true
 # This should be the same value as USE_SWIFTSHADER in device.mk
 BOARD_USES_SWIFTSHADER := false
 
+# This should be the same value as USE_ANGLE in device.mk
+BOARD_USES_ANGLE := true
+
 # Gralloc4
 ifeq ($(BOARD_USES_SWIFTSHADER),true)
 $(call soong_config_set,arm_gralloc,gralloc_arm_no_external_afbc,true)
