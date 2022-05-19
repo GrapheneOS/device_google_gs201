@@ -739,15 +739,11 @@ on property:sys.boot_completed=1
     # align it with the vendor_group setting
     write /proc/vendor_sched/bg_uclamp_max 512
     write /dev/cpuctl/background/cpu.uclamp.max 50
-    write /proc/vendor_sched/bg_group_throttle 512
     write /proc/vendor_sched/sysbg_uclamp_max 512
     write /dev/cpuctl/system-background/cpu.uclamp.max 50
-    write /proc/vendor_sched/sysbg_group_throttle 512
     write /proc/vendor_sched/dex2oat_uclamp_max 615
     write /dev/cpuctl/dex2oat/cpu.uclamp.max 60
-    write /proc/vendor_sched/dex2oat_group_throttle 615
     write /proc/vendor_sched/ota_uclamp_max 410
-    write /proc/vendor_sched/ota_group_throttle 410
 
     # Set PMU freq limit parameters
     write /sys/devices/system/cpu/cpufreq/policy0/sched_pixel/lcpi_threshold 2
