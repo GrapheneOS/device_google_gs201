@@ -1,0 +1,9 @@
+on property:vendor.thermal.link_ready=1
+    mkdir /data/vendor/mitigation 0755 system system
+    chown system system /data/vendor/mitigation
+    start vendor.battery_mitigation
+
+service vendor.battery_mitigation /vendor/bin/hw/battery_mitigation
+    user system
+    group system
+    capabilities WAKE_ALARM BLOCK_SUSPEND
