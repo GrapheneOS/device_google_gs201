@@ -145,6 +145,7 @@ void private_healthd_board_init(struct healthd_config *hc) {
 }
 
 int private_healthd_board_battery_update(HealthInfo *health_info) {
+  int batt_level;
   deviceHealth.update(health_info);
   battThermalControl.updateThermalState(*health_info);
   battMetricsLogger.logBatteryProperties(*health_info);
@@ -153,8 +154,9 @@ int private_healthd_board_battery_update(HealthInfo *health_info) {
   ChargerDetect::onlineUpdate(health_info);
   battDefender.update(health_info);
 
+  batt_level = (health_info->batteryStatus == ::aidl::android::hardware::health::BatteryStatus::FULL) ? 101 : health_info->batteryLevel;
   if (needs_wlc_updates &&
-      !android::base::WriteStringToFile(std::to_string(health_info->batteryLevel), kWlcCapacity))
+      !android::base::WriteStringToFile(std::to_string(batt_level), kWlcCapacity))
       LOG(INFO) << "Unable to write battery level to wireless capacity";
 
   return 0;
