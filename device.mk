@@ -120,6 +120,10 @@ PRODUCT_PRODUCT_PROPERTIES += \
 PRODUCT_PRODUCT_PROPERTIES += \
 	persist.vendor.ril.camp_on_earlier=1
 
+# Enable SET_SCREEN_STATE request
+PRODUCT_PROPERTY_OVERRIDES += \
+	persist.vendor.ril.enable_set_screen_state=1
+
 # Set the Bluetooth Class of Device
 # Service Field: 0x5A -> 90
 #    Bit 14: LE audio
