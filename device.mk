@@ -881,6 +881,8 @@ SUPPORT_NR := true
 SUPPORT_NR_DS := true
 # Using IRadio 2.0
 USE_RADIO_HAL_2_0 := true
+# Using Early Send Device Info
+USE_EARLY_SEND_DEVICE_INFO := true
 
 #$(call inherit-product, vendor/google_devices/telephony/common/device-vendor.mk)
 #$(call inherit-product, vendor/google_devices/gs201/proprietary/device-vendor.mk)
