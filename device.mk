@@ -882,6 +882,8 @@ SUPPORT_NR := true
 SUPPORT_NR_DS := true
 # Using IRadio 2.0
 USE_RADIO_HAL_2_0 := true
+# Using Early Send Device Info
+USE_EARLY_SEND_DEVICE_INFO := true
 
 #$(call inherit-product, vendor/google_devices/telephony/common/device-vendor.mk)
 #$(call inherit-product, vendor/google_devices/gs201/proprietary/device-vendor.mk)
@@ -1111,8 +1113,8 @@ PRODUCT_PACKAGES_DEBUG += BatteryStatsViewer
 DEVICE_PRODUCT_COMPATIBILITY_MATRIX_FILE := device/google/gs201/device_framework_matrix_product.xml
 
 # Preopt SystemUI
-PRODUCT_DEXPREOPT_SPEED_APPS += \
-    SystemUIGoogle
+PRODUCT_DEXPREOPT_SPEED_APPS += SystemUIGoogle  # For internal
+PRODUCT_DEXPREOPT_SPEED_APPS += SystemUI  # For AOSP
 
 # Compile SystemUI on device with `speed`.
 PRODUCT_PROPERTY_OVERRIDES += \
