@@ -63,6 +63,8 @@
         <permission name="android.permission.ACCESS_BACKGROUND_LOCATION" fixed="false"/>
         <!-- Used to call ActivityTransition API for Smart PNO -->
         <permission name="android.permission.ACTIVITY_RECOGNITION" fixed="false"/>
+        <!-- Notifications -->
+        <permission name="android.permission.POST_NOTIFICATIONS" fixed="false"/>
     </exception>
 
     <exception

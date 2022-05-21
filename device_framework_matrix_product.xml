@@ -49,7 +49,7 @@
         </interface>
     </hal>
     <hal format="hidl" optional="true">
-        <name>com.fingerprints35.extension</name>
+        <name>com.fingerprints42.extension</name>
         <version>1.0</version>
         <interface>
             <name>IFingerprintAuthenticator</name>
@@ -138,6 +138,14 @@
         <version>1.1</version>
         <interface>
             <name>IBluetoothSar</name>
+            <instance>default</instance>
+        </interface>
+    </hal>
+    <hal format="hidl" optional="true">
+        <name>hardware.google.bluetooth.ext</name>
+        <version>1.0</version>
+        <interface>
+            <name>IBluetoothExt</name>
             <instance>default</instance>
         </interface>
     </hal>
