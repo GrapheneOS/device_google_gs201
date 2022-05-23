@@ -722,12 +722,12 @@ on property:sys.boot_completed=1
     write /sys/devices/platform/17000020.devfreq_int/devfreq/17000020.devfreq_int/exynos_data/cancel_boot_freq 1
 
     # Setup final cpuset
-    write /dev/cpuset/top-app/cpus 0-7
-    write /dev/cpuset/foreground/cpus 0-3,4-5
-    write /dev/cpuset/background/cpus 0-1
-    write /dev/cpuset/system-background/cpus 0-3
-    write /dev/cpuset/restricted/cpus 0-3
-    write /dev/cpuset/camera-daemon/cpus 0-7
+    write /dev/cpuset/top-app/cpus ${persist.device_config.vendor_system_native.top-app_cpuset:-0-7}
+    write /dev/cpuset/foreground/cpus ${persist.device_config.vendor_system_native.foreground_cpuset:-0-3,4-5}
+    write /dev/cpuset/background/cpus ${persist.device_config.vendor_system_native.background_cpuset:-0-1}
+    write /dev/cpuset/system-background/cpus ${persist.device_config.vendor_system_native.system-background_cpuset:-0-3}
+    write /dev/cpuset/restricted/cpus ${persist.device_config.vendor_system_native.restricted_cpuset:-0-3}
+    write /dev/cpuset/camera-daemon/cpus ${persist.device_config.vendor_system_native.camera-daemon_cpuset:-0-7}
     setprop vendor.powerhal.init 1
 
     # Setup final cpu.uclamp
@@ -1000,3 +1000,17 @@ on property:persist.vendor.softmaxfreq.cl2=*
 on property:ro.boot.mode=charger && property:init.svc.vendor.charger=running
     # Enable UFS powersaving in Off Mode Charger
     write /dev/sys/block/bootdevice/clkgate_enable 1
+
+# Cpuset experiment
+on property:persist.device_config.vendor_system_native.top-app_cpuset=*
+    write /dev/cpuset/top-app/cpus ${persist.device_config.vendor_system_native.top-app_cpuset:-0-7}
+on property:persist.device_config.vendor_system_native.foreground_cpuset=*
+    write /dev/cpuset/foreground/cpus ${persist.device_config.vendor_system_native.foreground_cpuset:-0-3,4-5}
+on property:persist.device_config.vendor_system_native.background_cpuset=*
+    write /dev/cpuset/background/cpus ${persist.device_config.vendor_system_native.background_cpuset:-0-1}
+on property:persist.device_config.vendor_system_native.system-background_cpuset=*
+    write /dev/cpuset/system-background/cpus ${persist.device_config.vendor_system_native.system-background_cpuset:-0-3}
+on property:persist.device_config.vendor_system_native.restricted_cpuset=*
+    write /dev/cpuset/restricted/cpus ${persist.device_config.vendor_system_native.restricted_cpuset:-0-3}
+on property:persist.device_config.vendor_system_native.camera-daemon_cpuset=*
+    write /dev/cpuset/camera-daemon/cpus ${persist.device_config.vendor_system_native.camera-daemon_cpuset:-0-7}
