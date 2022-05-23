@@ -179,6 +179,7 @@
             <Feature name="vq-minimum-quality"/>
             <Feature name="qp-bounds"/>
             <Feature name="encoding-statistics"/>
+            <Feature name="hdr-editing" />
         </MediaCodec>
         <MediaCodec name="c2.exynos.mpeg4.encoder" type="video/mp4v-es">
             <Limit name="size" min="32x32" max="2048x2048" />
