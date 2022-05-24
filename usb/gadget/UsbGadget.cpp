@@ -33,6 +33,12 @@ namespace gadget {
 namespace V1_2 {
 namespace implementation {
 
+string enabledPath;
+constexpr char kHsi2cPath[] = "/sys/devices/platform/10d50000.hsi2c";
+constexpr char kI2CPath[] = "/sys/devices/platform/10d50000.hsi2c/i2c-";
+constexpr char kAccessoryLimitCurrent[] = "i2c-max77759tcpc/usb_limit_accessory_current";
+constexpr char kAccessoryLimitCurrentEnable[] = "i2c-max77759tcpc/usb_limit_accessory_enable";
+
 UsbGadget::UsbGadget() : mGadgetIrqPath("") {
     if (access(OS_DESC_PATH, R_OK) != 0) {
         ALOGE("configfs setup not done yet");
@@ -382,13 +388,44 @@ V1_0::Status UsbGadget::setupFunctions(uint64_t functions,
     return Status::SUCCESS;
 }
 
+Status getI2cBusHelper(string *name) {
+    DIR *dp;
+
+    dp = opendir(kHsi2cPath);
+    if (dp != NULL) {
+        struct dirent *ep;
+
+        while ((ep = readdir(dp))) {
+            if (ep->d_type == DT_DIR) {
+                if (string::npos != string(ep->d_name).find("i2c-")) {
+                    std::strtok(ep->d_name, "-");
+                    *name = std::strtok(NULL, "-");
+                }
+            }
+        }
+        closedir(dp);
+        return Status::SUCCESS;
+    }
+
+    ALOGE("Failed to open %s", kHsi2cPath);
+    return Status::ERROR;
+}
+
 Return<void> UsbGadget::setCurrentUsbFunctions(uint64_t functions,
                                                const sp<V1_0::IUsbGadgetCallback> &callback,
                                                uint64_t timeout) {
     std::unique_lock<std::mutex> lk(mLockSetCurrentFunction);
+    std::string current_usb_power_operation_mode, current_usb_type;
+    std::string usb_limit_sink_enable;
+
+    string accessoryCurrentLimitEnablePath, accessoryCurrentLimitPath, path;
 
     mCurrentUsbFunctions = functions;
     mCurrentUsbFunctionsApplied = false;
+
+    getI2cBusHelper(&path);
+    accessoryCurrentLimitPath = kI2CPath + path + "/" + kAccessoryLimitCurrent;
+    accessoryCurrentLimitEnablePath = kI2CPath + path + "/" + kAccessoryLimitCurrentEnable;
 
     // Get the gadget IRQ number before tearDownGadget()
     if (mGadgetIrqPath.empty())
@@ -435,6 +472,28 @@ Return<void> UsbGadget::setCurrentUsbFunctions(uint64_t functions,
             if (!WriteStringToFile(MEDIUM_CORE, mGadgetIrqPath))
                 ALOGI("Cannot move gadget IRQ to medium core, path:%s", mGadgetIrqPath.c_str());
         }
+    }
+
+    if (ReadFileToString(CURRENT_USB_TYPE_PATH, &current_usb_type))
+        current_usb_type = Trim(current_usb_type);
+
+    if (ReadFileToString(CURRENT_USB_POWER_OPERATION_MODE_PATH, &current_usb_power_operation_mode))
+        current_usb_power_operation_mode = Trim(current_usb_power_operation_mode);
+
+    if (functions & GadgetFunction::ACCESSORY &&
+        current_usb_type == "Unknown SDP [CDP] DCP" &&
+        (current_usb_power_operation_mode == "default" ||
+        current_usb_power_operation_mode == "1.5A")) {
+        if (!WriteStringToFile("1300000", accessoryCurrentLimitPath)) {
+            ALOGI("Write 1.3A to limit current fail");
+        } else {
+            if (!WriteStringToFile("1", accessoryCurrentLimitEnablePath)) {
+                ALOGI("Enable limit current fail");
+            }
+        }
+    } else {
+        if (!WriteStringToFile("0", accessoryCurrentLimitEnablePath))
+            ALOGI("unvote accessory limit current failed");
     }
 
     ALOGI("Usb Gadget setcurrent functions called successfully");
