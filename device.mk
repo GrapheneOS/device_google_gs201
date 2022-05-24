@@ -21,7 +21,7 @@ TARGET_BOARD_PLATFORM := gs201
 AB_OTA_POSTINSTALL_CONFIG += \
 	RUN_POSTINSTALL_system=true \
 	POSTINSTALL_PATH_system=system/bin/otapreopt_script \
-	FILESYSTEM_TYPE_system=erofs \
+	FILESYSTEM_TYPE_system=ext4 \
 POSTINSTALL_OPTIONAL_system=true
 
 # Set Vendor SPL to match platform
@@ -118,6 +118,10 @@ PRODUCT_PRODUCT_PROPERTIES += \
 # Enable Early Camping
 PRODUCT_PRODUCT_PROPERTIES += \
 	persist.vendor.ril.camp_on_earlier=1
+
+# Enable SET_SCREEN_STATE request
+PRODUCT_PROPERTY_OVERRIDES += \
+	persist.vendor.ril.enable_set_screen_state=1
 
 # Set the Bluetooth Class of Device
 # Service Field: 0x5A -> 90
