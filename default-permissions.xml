@@ -41,6 +41,12 @@
     </exception>
     -->
 
+    <exception
+            package="com.google.android.apps.camera.services">
+        <!-- Camera -->
+        <permission name="android.permission.CAMERA" fixed="false"/>
+    </exception>
+
     <exception package="com.google.android.settings.intelligence">
         <!-- Calendar -->
         <permission name="android.permission.READ_CALENDAR" fixed="true"/>
