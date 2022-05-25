@@ -959,6 +959,8 @@ on property:vendor.thermal.link_ready=1
     # Thermal
     chown system system /dev/thermal/tz-by-name/quiet_therm/trip_point_0_temp
     chown system system /dev/thermal/tz-by-name/quiet_therm/trip_point_0_hyst
+    chown system system /dev/thermal/tz-by-name/usb_pwr_therm/trip_point_0_temp
+    chown system system /dev/thermal/tz-by-name/usb_pwr_therm/trip_point_0_hyst
     chown system system /dev/thermal/cdev-by-name/thermal-cpufreq-0/user_vote
     chown system system /dev/thermal/cdev-by-name/thermal-cpufreq-1/user_vote
     chown system system /dev/thermal/cdev-by-name/thermal-cpufreq-2/user_vote
