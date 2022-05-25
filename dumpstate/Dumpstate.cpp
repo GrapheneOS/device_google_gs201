@@ -453,6 +453,7 @@ void Dumpstate::dumpPowerSection(int fd) {
     if (!PropertiesHelper::IsUserBuild()) {
         RunCommandToFd(fd, "gvotables", {"/vendor/bin/sh", "-c", "cat /sys/kernel/debug/gvotables/*/status"});
     }
+    DumpFileToFd(fd, "Lastmeal", "/data/vendor/mitigation/lastmeal.txt");
     RunCommandToFd(fd, "Mitigation Stats", {"/vendor/bin/sh", "-c", "echo \"Source\\t\\tCount\\tSOC\\tTime\\tVoltage\"; "
                         "for f in `ls /sys/devices/virtual/pmic/mitigation/last_triggered_count/*` ; "
                         "do count=`cat $f`; "
