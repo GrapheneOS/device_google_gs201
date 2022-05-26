@@ -817,11 +817,11 @@ PRODUCT_COPY_FILES += \
 # System props to enable Bluetooth Quality Report (BQR) feature
 ifneq (,$(filter userdebug eng, $(TARGET_BUILD_VARIANT)))
 PRODUCT_PRODUCT_PROPERTIES += \
-	persist.bluetooth.bqr.event_mask=262174 \
+	persist.bluetooth.bqr.event_mask?=262174 \
 	persist.bluetooth.bqr.min_interval_ms=500
 else
 PRODUCT_PRODUCT_PROPERTIES += \
-	persist.bluetooth.bqr.event_mask=30 \
+	persist.bluetooth.bqr.event_mask?=30 \
 	persist.bluetooth.bqr.min_interval_ms=500
 endif
 
