@@ -1074,6 +1074,9 @@ PRODUCT_PACKAGES += \
 $(call inherit-product, packages/modules/Virtualization/apex/product_packages.mk)
 PRODUCT_BUILD_PVMFW_IMAGE := true
 
+# Enable to build standalone vendor_kernel_boot image.
+PRODUCT_BUILD_VENDOR_KERNEL_BOOT_IMAGE := true
+
 # Enable watchdog timeout loop breaker.
 PRODUCT_PROPERTY_OVERRIDES += \
 	framework_watchdog.fatal_window.second=600 \
