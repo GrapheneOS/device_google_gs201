@@ -817,11 +817,11 @@ PRODUCT_COPY_FILES += \
 # System props to enable Bluetooth Quality Report (BQR) feature
 ifneq (,$(filter userdebug eng, $(TARGET_BUILD_VARIANT)))
 PRODUCT_PRODUCT_PROPERTIES += \
-	persist.bluetooth.bqr.event_mask=262174 \
+	persist.bluetooth.bqr.event_mask?=262174 \
 	persist.bluetooth.bqr.min_interval_ms=500
 else
 PRODUCT_PRODUCT_PROPERTIES += \
-	persist.bluetooth.bqr.event_mask=30 \
+	persist.bluetooth.bqr.event_mask?=30 \
 	persist.bluetooth.bqr.min_interval_ms=500
 endif
 
@@ -1088,6 +1088,9 @@ PRODUCT_PACKAGES += \
 # pKVM
 $(call inherit-product, packages/modules/Virtualization/apex/product_packages.mk)
 PRODUCT_BUILD_PVMFW_IMAGE := true
+
+# Enable to build standalone vendor_kernel_boot image.
+PRODUCT_BUILD_VENDOR_KERNEL_BOOT_IMAGE := true
 
 # Enable watchdog timeout loop breaker.
 PRODUCT_PROPERTY_OVERRIDES += \
