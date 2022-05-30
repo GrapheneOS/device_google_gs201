@@ -34,8 +34,8 @@ namespace V1_2 {
 namespace implementation {
 
 string enabledPath;
-constexpr char kHsi2cPath[] = "/sys/devices/platform/10d50000.hsi2c";
-constexpr char kI2CPath[] = "/sys/devices/platform/10d50000.hsi2c/i2c-";
+constexpr char kHsi2cPath[] = "/sys/devices/platform/10d60000.hsi2c";
+constexpr char kI2CPath[] = "/sys/devices/platform/10d60000.hsi2c/i2c-";
 constexpr char kAccessoryLimitCurrent[] = "i2c-max77759tcpc/usb_limit_accessory_current";
 constexpr char kAccessoryLimitCurrentEnable[] = "i2c-max77759tcpc/usb_limit_accessory_enable";
 
