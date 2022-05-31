@@ -29,7 +29,7 @@ int main() {
 
     const std::string instance = std::string() + Dumpstate::descriptor + "/default";
     binder_status_t status =
-            AServiceManager_registerLazyService(dumpstate->asBinder().get(), instance.c_str());
+            AServiceManager_addService(dumpstate->asBinder().get(), instance.c_str());
     CHECK_EQ(status, STATUS_OK);
 
     ABinderProcess_joinThreadPool();
