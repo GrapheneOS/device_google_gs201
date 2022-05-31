@@ -97,7 +97,7 @@
     </hal>
     <hal format="aidl" optional="true">
       <name>com.google.hardware.pixel.display</name>
-        <version>5</version>
+        <version>6</version>
         <interface>
             <name>IDisplay</name>
             <instance>default</instance>
