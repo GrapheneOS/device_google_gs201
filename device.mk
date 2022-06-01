@@ -501,7 +501,7 @@ PRODUCT_PACKAGES += \
 	android.hardware.graphics.allocator-V1-service
 
 PRODUCT_PACKAGES += \
-	memtrack.$(TARGET_BOARD_PLATFORM) \
+	android.hardware.memtrack-service.pixel \
 	libion_exynos \
 	libion
 
