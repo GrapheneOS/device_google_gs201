@@ -38,6 +38,13 @@ const struct MitigationConfig::Config cfg = {
         "/dev/thermal/tz-by-name/battery_cycle/temp",
         "/sys/bus/iio/devices/iio:device0/lpf_power",
         "/sys/bus/iio/devices/iio:device1/lpf_power",
+        "/dev/thermal/cdev-by-name/thermal-cpufreq-2/cur_state",
+        "/dev/thermal/cdev-by-name/thermal-cpufreq-1/cur_state",
+        "/dev/thermal/cdev-by-name/thermal-gpufreq-0/cur_state",
+        "/dev/thermal/cdev-by-name/tpu_cooling/cur_state",
+        "/dev/thermal/cdev-by-name/CAM/cur_state",
+        "/dev/thermal/cdev-by-name/DISP/cur_state",
+        "/dev/thermal/cdev-by-name/gxp-cooling/cur_state",
         "/sys/class/power_supply/battery/voltage_now",
         "/sys/class/power_supply/battery/current_now",
     },
@@ -50,7 +57,8 @@ const struct MitigationConfig::Config cfg = {
     .SystemName = {
         "batoilo", "smpl_gm", "soc", "vdroop1", "vdroop2", "ocp_gpu",
         "ocp_tpu", "soft_ocp_cpu2", "soft_ocp_cpu1", "battery", "battery_cycle",
-        "main", "sub", "voltage_now", "current_now",
+        "main", "sub", "CPU2", "CPU1", "GPU", "TPU", "CAM", "DISP", "NPU",
+        "voltage_now", "current_now",
     },
     .LogFilePath = "/data/vendor/mitigation/lastmeal.txt",
 };
