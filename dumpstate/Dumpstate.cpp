@@ -385,6 +385,7 @@ void Dumpstate::dumpPowerSection(int fd) {
     DumpFileToFd(fd, "TTF", "/dev/logbuffer_ttf");
     DumpFileToFd(fd, "TTF details", "/sys/class/power_supply/battery/ttf_details");
     DumpFileToFd(fd, "TTF stats", "/sys/class/power_supply/battery/ttf_stats");
+    DumpFileToFd(fd, "aacr_state", "/sys/class/power_supply/battery/aacr_state");
     DumpFileToFd(fd, "maxq", "/dev/logbuffer_maxq");
 
     RunCommandToFd(fd, "TRICKLE-DEFEND Config", {"/vendor/bin/sh", "-c",
@@ -403,6 +404,7 @@ void Dumpstate::dumpPowerSection(int fd) {
         DumpFileToFd(fd, "DC_registers dump", "/sys/class/power_supply/pca94xx-mains/device/registers_dump");
         DumpFileToFd(fd, "max77759_chg registers dump", "/d/max77759_chg/registers");
         DumpFileToFd(fd, "max77729_pmic registers dump", "/d/max77729_pmic/registers");
+        DumpFileToFd(fd, "Charging table dump", "/d/google_battery/chg_raw_profile");
 
         RunCommandToFd(fd, "fg_model", {"/vendor/bin/sh", "-c",
                             "for f in /d/maxfg* ; do "
