@@ -226,9 +226,9 @@ on init
     chown system system /sys/class/power_supply/maxfg/m5_model_state
     chown system system /sys/class/power_supply/maxfg_base/m5_model_state
 
-    # pca9468 : slider+77729: 6-0057; slider+MW A1: 5-0057
-    chown system system /d/regmap/5-0057-pca9468-mains/registers
-    chown system system /d/regmap/6-0057-pca9468-mains/registers
+    # pca94xx : slider+77729: 6-0057; slider+MW A1: 5-0057
+    chown system system /d/regmap/5-0057-pca94xx-mains/registers
+    chown system system /d/regmap/6-0057-pca94xx-mains/registers
 
     # Dump eeprom
     chown system system /sys/devices/platform/10970000.hsi2c/i2c-5/5-0050/eeprom
@@ -247,7 +247,7 @@ on init
     chown system system /sys/class/power_supply/battery/charge_stats
 
     # Pca Charge stats (write 0)
-    chown system system /sys/class/power_supply/pca9468-mains/device/chg_stats
+    chown system system /sys/class/power_supply/pca94xx-mains/device/chg_stats
 
     # Wireless Charge stats (write 0)
     chown system system /sys/class/power_supply/wireless/device/charge_stats
