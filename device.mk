@@ -923,7 +923,11 @@ $(call inherit-product, $(SRC_TARGET_DIR)/product/core_64_bit_only.mk)
 #$(call inherit-product-if-exists, hardware/google_devices/gs201/gs201.mk)
 #$(call inherit-product-if-exists, vendor/google_devices/common/exynos-vendor.mk)
 #$(call inherit-product-if-exists, hardware/broadcom/wlan/bcmdhd/firmware/bcm4375/device-bcm.mk)
+ifeq ($(wildcard vendor/google/sensors/usf),)
+$(call inherit-product-if-exists, vendor/google_devices/gs201/proprietary/usf/usf_product.mk)
+else
 $(call inherit-product-if-exists, vendor/google/sensors/usf/android/usf_efw_product.mk)
+endif
 $(call inherit-product-if-exists, vendor/google/services/LyricCameraHAL/src/build/device-vendor.mk)
 $(call inherit-product-if-exists, vendor/google/camera/devices/whi/device-vendor.mk)
 
