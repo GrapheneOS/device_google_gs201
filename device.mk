@@ -912,10 +912,10 @@ USE_EARLY_SEND_DEVICE_INFO := true
 
 ifneq ($(BOARD_WITHOUT_RADIO),true)
 $(call inherit-product-if-exists, vendor/samsung_slsi/telephony/$(BOARD_USES_SHARED_VENDOR_TELEPHONY)/common/device-vendor.mk)
-endif
 
 #GPS HAL
 include device/google/gs201/gnss/device-gnss.mk
+endif
 BOARD_VENDOR_SEPOLICY_DIRS += device/google/gs201-sepolicy/gps
 
 $(call inherit-product, $(SRC_TARGET_DIR)/product/core_64_bit_only.mk)
