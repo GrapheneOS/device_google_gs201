@@ -295,6 +295,8 @@ on init
     chown system system /sys/devices/platform/google,charger/charge_start_level
     chown system system /sys/devices/platform/google,charger/charge_stop_level
     chown system system /sys/devices/platform/google,cpm/dc_ctl
+    # Important to include dd_state as it's used in battery defender in charger mode
+    chown system system /sys/devices/platform/google,charger/dd_state
 
     # Power Stats HAL
     chown system system /dev/bbd_pwrstat
@@ -716,6 +718,8 @@ on property:sys.boot_completed=1
 
     # Enable UFS powersaving
     write /dev/sys/block/bootdevice/clkgate_enable 1
+    # Disable dock-defend in Off Mode Charger
+    write /sys/devices/platform/google,charger/dd_state -1
 
     # Reset DDR frequency
     write /sys/devices/platform/17000010.devfreq_mif/devfreq/17000010.devfreq_mif/exynos_data/cancel_boot_freq 1
