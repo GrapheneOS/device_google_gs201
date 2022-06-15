@@ -891,6 +891,13 @@ void Dumpstate::dumpMemorySection(int fd) {
                         "done"});
     DumpFileToFd(fd, "dmabuf info", "/d/dma_buf/bufinfo");
     DumpFileToFd(fd, "Page Pinner - longterm pin", "/sys/kernel/debug/page_pinner/buffer");
+    RunCommandToFd(fd, "CMA info", {"/vendor/bin/sh", "-c",
+                       "for d in $(ls -d /d/cma/*); do "
+                         "echo --- $d;"
+                         "echo --- count; cat $d/count; "
+                         "echo --- used; cat $d/used; "
+                         "echo --- bitmap; cat $d/bitmap; "
+                       "done"});
 }
 
 static void DumpF2FS(int fd) {
