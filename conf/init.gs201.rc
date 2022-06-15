@@ -405,6 +405,7 @@ on post-fs-data
     chmod 0771 /mnt/vendor/persist/camera
     chmod 0771 /mnt/vendor/persist/camera/OTP_calibration
     chmod 0771 /mnt/vendor/persist/camera/pdaf_calibration_data
+    mkdir /mnt/vendor/persist/camera/rear 0770 system system
     chmod 0771 /mnt/vendor/persist/camera/rear
 
     # Audio dump and debug
