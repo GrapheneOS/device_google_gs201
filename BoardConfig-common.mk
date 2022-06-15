@@ -375,9 +375,9 @@ KERNEL_MODULES := $(wildcard $(KERNEL_MODULE_DIR)/*.ko)
 
 BOARD_VENDOR_KERNEL_MODULES_BLOCKLIST_FILE := $(KERNEL_MODULE_DIR)/vendor_dlkm.modules.blocklist
 
-BOARD_VENDOR_KERNEL_RAMDISK_KERNEL_MODULES_LOAD := $(strip $(shell cat $(KERNEL_MODULE_DIR)/vendor_boot.modules.load))
+BOARD_VENDOR_KERNEL_RAMDISK_KERNEL_MODULES_LOAD := $(strip $(shell cat $(KERNEL_MODULE_DIR)/vendor_kernel_boot.modules.load))
 ifndef BOARD_VENDOR_KERNEL_RAMDISK_KERNEL_MODULES_LOAD
-$(error vendor_boot.modules.load not found or empty)
+$(error vendor_kernel_boot.modules.load not found or empty)
 endif
 BOARD_VENDOR_KERNEL_RAMDISK_KERNEL_MODULES := $(addprefix $(KERNEL_MODULE_DIR)/, $(notdir $(BOARD_VENDOR_KERNEL_RAMDISK_KERNEL_MODULES_LOAD)))
 
