@@ -140,24 +140,17 @@ PRODUCT_PRODUCT_PROPERTIES += \
 	bluetooth.profile.asha.central.enabled?=true \
 	bluetooth.profile.a2dp.source.enabled?=true \
 	bluetooth.profile.avrcp.target.enabled?=true \
-	bluetooth.profile.bap.broadcast.assist.enabled?=true \
-	bluetooth.profile.bap.unicast.client.enabled?=true \
 	bluetooth.profile.bas.client.enabled?=true \
-	bluetooth.profile.csip.set_coordinator.enabled?=true \
 	bluetooth.profile.gatt.enabled?=true \
-	bluetooth.profile.hap.client.enabled?=true \
 	bluetooth.profile.hfp.ag.enabled?=true \
 	bluetooth.profile.hid.device.enabled?=true \
 	bluetooth.profile.hid.host.enabled?=true \
 	bluetooth.profile.map.server.enabled?=true \
-	bluetooth.profile.mcp.server.enabled?=true \
 	bluetooth.profile.opp.enabled?=true \
 	bluetooth.profile.pan.nap.enabled?=true \
 	bluetooth.profile.pan.panu.enabled?=true \
 	bluetooth.profile.pbap.server.enabled?=true \
 	bluetooth.profile.sap.server.enabled?=true \
-	bluetooth.profile.ccp.server.enabled?=true \
-	bluetooth.profile.vcp.controller.enabled?=true
 
 # Carrier configuration default location
 PRODUCT_PROPERTY_OVERRIDES += \
@@ -912,10 +905,10 @@ USE_EARLY_SEND_DEVICE_INFO := true
 
 ifneq ($(BOARD_WITHOUT_RADIO),true)
 $(call inherit-product-if-exists, vendor/samsung_slsi/telephony/$(BOARD_USES_SHARED_VENDOR_TELEPHONY)/common/device-vendor.mk)
-endif
 
 #GPS HAL
 include device/google/gs201/gnss/device-gnss.mk
+endif
 BOARD_VENDOR_SEPOLICY_DIRS += device/google/gs201-sepolicy/gps
 
 $(call inherit-product, $(SRC_TARGET_DIR)/product/core_64_bit_only.mk)
