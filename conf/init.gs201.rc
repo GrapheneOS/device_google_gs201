@@ -247,7 +247,7 @@ on init
     chown system system /sys/class/power_supply/battery/charge_stats
 
     # Pca Charge stats (write 0)
-    chown system system /sys/class/power_supply/pca9468-mains/device/chg_stats
+    chown system system /sys/class/power_supply/pca94xx-mains/device/chg_stats
 
     # Wireless Charge stats (write 0)
     chown system system /sys/class/power_supply/wireless/device/charge_stats
