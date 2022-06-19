@@ -225,6 +225,7 @@ on init
     # Dump maxfg
     chown system system /sys/class/power_supply/maxfg/m5_model_state
     chown system system /sys/class/power_supply/maxfg_base/m5_model_state
+    chown system system /dev/maxfg_history
 
     # pca9468 : slider+77729: 6-0057; slider+MW A1: 5-0057
     chown system system /d/regmap/5-0057-pca9468-mains/registers
@@ -234,8 +235,7 @@ on init
     chown system system /sys/devices/platform/10970000.hsi2c/i2c-5/5-0050/eeprom
     chown system system /sys/devices/platform/10970000.hsi2c/i2c-4/4-0050/eeprom
     chown system system /sys/devices/platform/10da0000.hsi2c/i2c-6/6-0050/eeprom
-    chown system system /dev/battery_history
-    chmod 0644 /dev/battery_history
+    chown system system /sys/devices/platform/10da0000.hsi2c/i2c-7/7-0050/eeprom
 
     # Modem temperature driver
     chown radio system /sys/devices/platform/cp-tm1/cp_temp
@@ -482,6 +482,10 @@ on early-boot
     chown system system /dev/sys/block/bootdevice/slowio_write_cnt
     chown system system /dev/sys/block/bootdevice/slowio_unmap_cnt
     chown system system /dev/sys/block/bootdevice/slowio_sync_cnt
+
+    # Dump Battery EEPROM history for pixelstats
+    chown system system /dev/battery_history
+    chmod 0644 /dev/battery_history
 
 on boot
 
