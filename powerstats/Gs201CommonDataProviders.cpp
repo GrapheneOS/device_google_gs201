@@ -104,6 +104,8 @@ void addPlaceholderEnergyConsumers(std::shared_ptr<PowerStats> p) {
 void addAoC(std::shared_ptr<PowerStats> p) {
     // When the given timeout is 0, the timeout will be replaced with "120ms * statesCount".
     static const uint64_t TIMEOUT_MILLIS = 0;
+    // AoC clock is synced from "libaoc.c"
+    static const uint64_t AOC_CLOCK = 24576;
     std::string prefix = "/sys/devices/platform/19000000.aoc/control/";
 
     // Add AoC cores (a32, ff1, hf0, and hf1)
@@ -116,7 +118,7 @@ void addAoC(std::shared_ptr<PowerStats> p) {
     std::vector<std::pair<std::string, std::string>> coreStates = {
             {"DWN", "off"}, {"RET", "retention"}, {"WFI", "wfi"}};
     p->addStateResidencyDataProvider(std::make_unique<AocTimedStateResidencyDataProvider>(coreIds,
-            coreStates, TIMEOUT_MILLIS));
+            coreStates, TIMEOUT_MILLIS, AOC_CLOCK));
 
     // Add AoC voltage stats
     std::vector<std::pair<std::string, std::string>> voltageIds = {
@@ -128,7 +130,7 @@ void addAoC(std::shared_ptr<PowerStats> p) {
                                                                       {"UD", "underdrive"}};
     p->addStateResidencyDataProvider(
             std::make_unique<AocTimedStateResidencyDataProvider>(voltageIds, voltageStates,
-                    TIMEOUT_MILLIS));
+                    TIMEOUT_MILLIS, AOC_CLOCK));
 
     // Add AoC monitor mode
     std::vector<std::pair<std::string, std::string>> monitorIds = {
@@ -139,7 +141,7 @@ void addAoC(std::shared_ptr<PowerStats> p) {
     };
     p->addStateResidencyDataProvider(
             std::make_unique<AocTimedStateResidencyDataProvider>(monitorIds, monitorStates,
-                    TIMEOUT_MILLIS));
+                    TIMEOUT_MILLIS, AOC_CLOCK));
 
     // Add AoC restart count
     const GenericStateResidencyDataProvider::StateResidencyConfig restartCountConfig = {
