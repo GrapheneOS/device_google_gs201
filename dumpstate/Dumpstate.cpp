@@ -353,6 +353,10 @@ void Dumpstate::dumpPowerSection(int fd) {
         DumpFileToFd(fd, "maxfg_flip", "/dev/logbuffer_maxfg_flip_monitor");
     }
 
+    if (!stat("/dev/maxfg_history", &buffer)) {
+        DumpFileToFd(fd, "Maxim FG History", "/dev/maxfg_history");
+    }
+
     if (!stat("/sys/class/power_supply/dock", &buffer)) {
         DumpFileToFd(fd, "Power supply property dock", "/sys/class/power_supply/dock/uevent");
     }
@@ -426,6 +430,11 @@ void Dumpstate::dumpPowerSection(int fd) {
                             "for f in /d/maxfg* ; do "
                             "regs=`cat $f/registers`; echo $f: ;"
                             "echo \"$regs\"; done"});
+
+        RunCommandToFd(fd, "Maxim FG NV RAM", {"/vendor/bin/sh", "-c",
+                            "for f in /d/maxfg* ; do "
+                            "regs=`cat $f/nv_registers`; echo $f: ;"
+                            "echo \"$regs\"; done"});
     }
 
     /* EEPROM State */
@@ -435,8 +444,9 @@ void Dumpstate::dumpPowerSection(int fd) {
         RunCommandToFd(fd, "Battery EEPROM", {"/vendor/bin/sh", "-c", "xxd /sys/devices/platform/10970000.hsi2c/i2c-5/5-0050/eeprom"});
     } else if (!stat("/sys/devices/platform/10da0000.hsi2c/i2c-6/6-0050/eeprom", &buffer)) {
         RunCommandToFd(fd, "Battery EEPROM", {"/vendor/bin/sh", "-c", "xxd /sys/devices/platform/10da0000.hsi2c/i2c-6/6-0050/eeprom"});
+    } else if (!stat("/sys/devices/platform/10da0000.hsi2c/i2c-7/7-0050/eeprom", &buffer)) {
+        RunCommandToFd(fd, "Battery EEPROM", {"/vendor/bin/sh", "-c", "xxd /sys/devices/platform/10da0000.hsi2c/i2c-7/7-0050/eeprom"});
     }
-
 
     DumpFileToFd(fd, "Charger Stats", "/sys/class/power_supply/battery/charge_details");
     if (!PropertiesHelper::IsUserBuild()) {
