@@ -948,15 +948,25 @@ on property:vendor.thermal.link_ready=1
     chown system system /dev/thermal/tz-by-name/quiet_therm/trip_point_0_hyst
     chown system system /dev/thermal/tz-by-name/usb_pwr_therm/trip_point_0_temp
     chown system system /dev/thermal/tz-by-name/usb_pwr_therm/trip_point_0_hyst
+    chmod 664 /dev/thermal/cdev-by-name/thermal-cpufreq-0/user_vote
     chown system system /dev/thermal/cdev-by-name/thermal-cpufreq-0/user_vote
+    chmod 664 /dev/thermal/cdev-by-name/thermal-cpufreq-1/user_vote
     chown system system /dev/thermal/cdev-by-name/thermal-cpufreq-1/user_vote
+    chmod 664 /dev/thermal/cdev-by-name/thermal-cpufreq-2/user_vote
     chown system system /dev/thermal/cdev-by-name/thermal-cpufreq-2/user_vote
+    chmod 664 /dev/thermal/cdev-by-name/thermal-gpufreq-0/user_vote
     chown system system /dev/thermal/cdev-by-name/thermal-gpufreq-0/user_vote
+    chmod 664 /dev/thermal/cdev-by-name/tpu_cooling/user_vote
     chown system system /dev/thermal/cdev-by-name/tpu_cooling/user_vote
+    chmod 664 /dev/thermal/cdev-by-name/fcc/cur_state
     chown system system /dev/thermal/cdev-by-name/fcc/cur_state
+    chmod 664 /dev/thermal/cdev-by-name/dc_icl/cur_state
     chown system system /dev/thermal/cdev-by-name/dc_icl/cur_state
+    chmod 664 /dev/thermal/cdev-by-name/wlc_fcc/cur_state
     chown system system /dev/thermal/cdev-by-name/wlc_fcc/cur_state
+    chmod 664 /dev/thermal/cdev-by-name/chg_mdis/cur_state
     chown system system /dev/thermal/cdev-by-name/chg_mdis/cur_state
+    chmod 664 /dev/thermal/cdev-by-name/usbc-port/cur_state
     chown system system /dev/thermal/cdev-by-name/usbc-port/cur_state
 
 on property:vendor.disable.bcl.control=1
