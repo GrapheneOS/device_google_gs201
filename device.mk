@@ -985,6 +985,7 @@ PRODUCT_PACKAGES += \
 	audio_fortemedia_aoc \
 	audio_bluenote_aoc \
 	audio_usb_aoc \
+	audio_cca_aoc \
 	libamcsextfile \
 	audio_amcs_ext \
 	audio.usb.default \
