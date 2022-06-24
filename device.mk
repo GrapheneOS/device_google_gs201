@@ -972,6 +972,7 @@ PRODUCT_PACKAGES += \
 	audio_fortemedia_aoc \
 	audio_bluenote_aoc \
 	audio_usb_aoc \
+	audio_cca_aoc \
 	libamcsextfile \
 	audio_amcs_ext \
 	audio.usb.default \
@@ -999,6 +1000,10 @@ PRODUCT_COPY_FILES += \
         frameworks/av/services/audiopolicy/config/audio_policy_volumes.xml:$(TARGET_COPY_OUT_VENDOR)/etc/audio_policy_volumes.xml \
 	frameworks/av/services/audiopolicy/config/default_volume_tables.xml:$(TARGET_COPY_OUT_VENDOR)/etc/default_volume_tables.xml \
 	frameworks/av/services/audiopolicy/config/bluetooth_audio_policy_configuration_7_0.xml:$(TARGET_COPY_OUT_VENDOR)/etc/bluetooth_audio_policy_configuration_7_0.xml
+
+##Audio Vendor property
+PRODUCT_PROPERTY_OVERRIDES += \
+	persist.vendor.audio.cca.enabled=true
 
 ##Audio soong
 PRODUCT_SOONG_NAMESPACES += \
