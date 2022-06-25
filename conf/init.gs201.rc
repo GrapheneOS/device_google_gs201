@@ -816,8 +816,11 @@ on property:sys.boot_completed=1
     chown system system /sys/devices/platform/19000000.aoc/control/udfps_get_disp_freq
     chmod 440 /sys/devices/platform/19000000.aoc/control/udfps_get_disp_freq
 
-    #enable GPU power optimization
+    # Enable GPU power optimization
     write /sys/devices/platform/28000000.mali/ifpo 1
+
+    # Disable GPU firmware logging
+    write /sys/devices/platform/28000000.mali/firmware_config/Log\ verbosity/cur 0
 
 # IMS WiFi Calling
     service charonservice /system/vendor/bin/charon
@@ -974,7 +977,6 @@ on property:vendor.thermal.link_ready=1
     chown system system /dev/thermal/cdev-by-name/thermal-cpufreq-1/user_vote
     chown system system /dev/thermal/cdev-by-name/thermal-cpufreq-2/user_vote
     chown system system /dev/thermal/cdev-by-name/thermal-gpufreq-0/user_vote
-    chown system system /dev/thermal/cdev-by-name/gxp-cooling/user_vote
     chown system system /dev/thermal/cdev-by-name/tpu_cooling/user_vote
     chown system system /dev/thermal/cdev-by-name/fcc/cur_state
     chown system system /dev/thermal/cdev-by-name/dc_icl/cur_state
