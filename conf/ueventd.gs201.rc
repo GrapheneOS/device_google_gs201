@@ -119,6 +119,7 @@
 
 # IPC OEM
 /dev/oem_ipc*             0660   radio      radio
+/dev/oem_test             0660   radio      radio
 
 # interactive governor parameters
 /sys/devices/system/cpu/cpu*	cpufreq/interactive/timer_rate			0660	system	system
