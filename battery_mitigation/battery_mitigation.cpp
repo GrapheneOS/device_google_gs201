@@ -59,7 +59,7 @@ const struct MitigationConfig::Config cfg = {
         "main", "sub", "CPU2", "CPU1", "GPU", "TPU", "CAM", "DISP", "NPU",
         "voltage_now", "current_now",
     },
-    .LogFilePath = "/data/vendor/mitigation/lastmeal.txt",
+    .LogFilePath = "/data/vendor/mitigation/thismeal.txt",
 };
 
 int main(int /*argc*/, char ** /*argv*/) {
