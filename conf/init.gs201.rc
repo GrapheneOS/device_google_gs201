@@ -723,8 +723,6 @@ on property:sys.boot_completed=1
 
     # Enable UFS powersaving
     write /dev/sys/block/bootdevice/clkgate_enable 1
-    # Disable dock-defend in Off Mode Charger
-    write /sys/devices/platform/google,charger/dd_state -1
 
     # Reset DDR frequency
     write /sys/devices/platform/17000010.devfreq_mif/devfreq/17000010.devfreq_mif/exynos_data/cancel_boot_freq 1
@@ -1015,6 +1013,8 @@ on property:persist.vendor.softmaxfreq.cl2=*
 on property:ro.boot.mode=charger && property:init.svc.vendor.charger=running
     # Enable UFS powersaving in Off Mode Charger
     write /dev/sys/block/bootdevice/clkgate_enable 1
+    # Disable dock-defend in Off Mode Charger
+    write /sys/devices/platform/google,charger/dd_state -1
 
 # Cpuset experiment
 on property:persist.device_config.vendor_system_native.top-app_cpuset=*
