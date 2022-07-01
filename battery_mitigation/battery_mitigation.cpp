@@ -56,7 +56,7 @@ const struct MitigationConfig::Config cfg = {
     .SystemName = {
         "batoilo", "smpl_gm", "soc", "vdroop1", "vdroop2", "ocp_gpu",
         "ocp_tpu", "soft_ocp_cpu2", "soft_ocp_cpu1", "battery", "battery_cycle",
-        "main", "sub", "CPU2", "CPU1", "GPU", "TPU", "CAM", "DISP", "NPU",
+        "main", "sub", "CPU2", "CPU1", "GPU", "TPU", "CAM", "DISP",
         "voltage_now", "current_now",
     },
     .LogFilePath = "/data/vendor/mitigation/thismeal.txt",

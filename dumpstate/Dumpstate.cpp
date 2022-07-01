@@ -385,6 +385,7 @@ void Dumpstate::dumpPowerSection(int fd) {
     DumpFileToFd(fd, "PPS-google_cpm", "/dev/logbuffer_cpm");
     DumpFileToFd(fd, "PPS-dc", "/dev/logbuffer_pca9468");
 
+    DumpFileToFd(fd, "Battery Health", "/sys/class/power_supply/battery/health_index_stats");
     DumpFileToFd(fd, "BMS", "/dev/logbuffer_ssoc");
     DumpFileToFd(fd, "TTF", "/dev/logbuffer_ttf");
     DumpFileToFd(fd, "TTF details", "/sys/class/power_supply/battery/ttf_details");
