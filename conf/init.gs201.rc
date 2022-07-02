@@ -772,6 +772,21 @@ on property:sys.boot_completed=1
     write /sys/devices/system/cpu/cpufreq/policy6/sched_pixel/pmu_limit_enable 1
     write /proc/vendor_sched/pmu_poll_enable 0
 
+    # Make devices on the critical path for suspend/resume asynchronous
+    write /sys/devices/platform/acpm_mfd_bus@18110000/i2c-8/i2c-s2mpg13mfd/power/async "enabled"
+    write /sys/devices/platform/acpm_mfd_bus@18110000/i2c-8/power/async "enabled"
+    write /sys/devices/platform/acpm_mfd_bus@18110000/power/async "enabled"
+    write /sys/devices/platform/acpm_mfd_bus@18100000/i2c-7/i2c-s2mpg12mfd/power/async "enabled"
+    write /sys/devices/platform/acpm_mfd_bus@18100000/i2c-7/power/async "enabled"
+    write /sys/devices/platform/acpm_mfd_bus@18100000/power/async "enabled"
+    write /sys/devices/platform/dbgdev-pd-hsi0/power/async "enabled"
+    write /sys/devices/platform/fixedregulator@0/regulator/regulator.2/power/async "enabled"
+    write /sys/devices/platform/fixedregulator@0/power/async "enabled"
+    write /sys/devices/platform/1e080000.clock-controller/power/async "enabled"
+    write /sys/devices/platform/10840000.pinctrl/power/async "enabled"
+    write /sys/devices/platform/18062080.pd-hsi0/power/async "enabled"
+    write /sys/devices/platform/14460000.pinctrl/power/async "enabled"
+
     # Setup groups for SF (RT used for SF RE, SF used for SF main)
     write /proc/vendor_sched/rt_uclamp_min 159
     write /proc/vendor_sched/rt_prefer_idle 1
