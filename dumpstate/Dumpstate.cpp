@@ -38,6 +38,7 @@
 #define MODEM_LOGGING_PROPERTY "vendor.sys.modem.logging.enable"
 #define MODEM_LOGGING_STATUS_PROPERTY "vendor.sys.modem.logging.status"
 #define MODEM_LOGGING_NUMBER_BUGREPORT_PROPERTY "persist.vendor.sys.modem.logging.br_num"
+#define MODEM_LOGGING_PATH_PROPERTY "vendor.sys.modem.logging.log_path"
 #define GPS_LOG_DIRECTORY "/data/vendor/gps/logs"
 #define GPS_LOG_NUMBER_PROPERTY "persist.vendor.gps.aol.log_num"
 #define GPS_LOGGING_STATUS_PROPERTY "vendor.gps.aol.enabled"
@@ -189,33 +190,6 @@ void dumpModemEFS(std::string destDir) {
     }
 }
 
-void Dumpstate::dumpGpsLogs(int fd, const std::string &destDir) {
-    const std::string gpsLogDir = GPS_LOG_DIRECTORY;
-    const std::string gpsTmpLogDir = gpsLogDir + "/.tmp";
-    const std::string gpsDestDir = destDir + "/gps";
-    int maxFileNum = ::android::base::GetIntProperty(GPS_LOG_NUMBER_PROPERTY, 20);
-
-    RunCommandToFd(fd, "MKDIR GPS LOG", {"/vendor/bin/mkdir", "-p", gpsDestDir.c_str()},
-                   CommandOptions::WithTimeout(2).Build());
-
-    dumpLogs(fd, gpsTmpLogDir, gpsDestDir, 1, GPS_LOG_PREFIX);
-    dumpLogs(fd, gpsLogDir, gpsDestDir, 3, GPS_MCU_LOG_PREFIX);
-    dumpLogs(fd, gpsLogDir, gpsDestDir, maxFileNum, GPS_LOG_PREFIX);
-}
-
-void Dumpstate::dumpCameraLogs(int fd, const std::string &destDir) {
-    static const std::string kCameraLogDir = "/data/vendor/camera/profiler";
-    const std::string cameraDestDir = destDir + "/camera";
-    RunCommandToFd(fd, "MKDIR CAMERA LOG", {"/vendor/bin/mkdir", "-p", cameraDestDir.c_str()},
-                   CommandOptions::WithTimeout(2).Build());
-    // Attach multiple latest sessions (in case the user is running concurrent
-    // sessions or starts a new session after the one with performance issues).
-    dumpLogs(fd, kCameraLogDir, cameraDestDir, 10, "session-ended-");
-    dumpLogs(fd, kCameraLogDir, cameraDestDir, 5, "high-drop-rate-");
-    dumpLogs(fd, kCameraLogDir, cameraDestDir, 5, "watchdog-");
-    dumpLogs(fd, kCameraLogDir, cameraDestDir, 5, "camera-ended-");
-}
-
 timepoint_t startSection(int fd, const std::string &sectionName) {
     ::android::base::WriteStringToFd(
             "\n"
@@ -250,6 +224,7 @@ void endSection(int fd, const std::string &sectionName, timepoint_t startTime) {
 Dumpstate::Dumpstate()
   : mTextSections{
         { "wlan", [this](int fd) { dumpWlanSection(fd); } },
+        { "modem", [this](int fd) { dumpModemSection(fd); } },
         { "soc", [this](int fd) { dumpSocSection(fd); } },
         { "storage", [this](int fd) { dumpStorageSection(fd); } },
         { "memory", [this](int fd) { dumpMemorySection(fd); } },
@@ -265,7 +240,14 @@ Dumpstate::Dumpstate()
         { "misc", [this](int fd) { dumpMiscSection(fd); } },
         { "gsc", [this](int fd) { dumpGscSection(fd); } },
         { "trusty", [this](int fd) { dumpTrustySection(fd); } },
-    } {
+    },
+  mLogSections{
+        { "modem", [this](int fd, const std::string &destDir) { dumpModemLogs(fd, destDir); } },
+        { "radio", [this](int fd, const std::string &destDir) { dumpRadioLogs(fd, destDir); } },
+        { "camera", [this](int fd, const std::string &destDir) { dumpCameraLogs(fd, destDir); } },
+        { "gps", [this](int fd, const std::string &destDir) { dumpGpsLogs(fd, destDir); } },
+        { "gxp", [this](int fd, const std::string &destDir) { dumpGxpLogs(fd, destDir); } },
+  } {
 }
 
 // Dump data requested by an argument to the "dump" interface, or help info
@@ -1083,17 +1065,7 @@ void Dumpstate::dumpTrustySection(int fd) {
     DumpFileToFd(fd, "Trusty TEE0 Logs", "/dev/trusty-log0");
 }
 
-void Dumpstate::dumpModem(int fd, int fdModem)
-{
-    std::string modemLogDir = MODEM_LOG_DIRECTORY;
-    std::string extendedLogDir = MODEM_EXTENDED_LOG_DIRECTORY;
-    std::string tcpdumpLogDir = TCPDUMP_LOG_DIRECTORY;
-    static const std::string sectionName = "modem";
-    auto startTime = startSection(fd, sectionName);
-
-    const std::string modemLogCombined = modemLogDir + "/modem_log_all.tar";
-    const std::string modemLogAllDir = modemLogDir + "/modem_log";
-
+void Dumpstate::dumpModemSection(int fd) {
     DumpFileToFd(fd, "Modem Stat", "/data/vendor/modem_stat/debug.txt");
     RunCommandToFd(fd, "Modem SSR history", {"/vendor/bin/sh", "-c",
                        "for f in $(ls /data/vendor/ssrdump/crashinfo_modem*); do "
@@ -1103,81 +1075,136 @@ void Dumpstate::dumpModem(int fd, int fdModem)
                        "for f in $(ls /data/vendor/log/rfsd/rfslog_*); do "
                        "echo $f ; cat $f ; done"},
                        CommandOptions::WithTimeout(2).Build());
-    RunCommandToFd(fd, "MKDIR MODEM LOG", {"/vendor/bin/mkdir", "-p", modemLogAllDir.c_str()}, CommandOptions::WithTimeout(2).Build());
+}
 
-    if (!PropertiesHelper::IsUserBuild()) {
-        bool modemLogEnabled = ::android::base::GetBoolProperty(MODEM_LOGGING_PERSIST_PROPERTY, false);
-        bool gpsLogEnabled = ::android::base::GetBoolProperty(GPS_LOGGING_STATUS_PROPERTY, false);
-        bool tcpdumpEnabled = ::android::base::GetBoolProperty(TCPDUMP_PERSIST_PROPERTY, false);
-        bool cameraLogsEnabled = ::android::base::GetBoolProperty(
-                "vendor.camera.debug.camera_performance_analyzer.attach_to_bugreport", true);
-        bool gxpDumpEnabled = ::android::base::GetBoolProperty("vendor.gxp.attach_to_bugreport", false);
-        int maxFileNum = ::android::base::GetIntProperty(MODEM_LOGGING_NUMBER_BUGREPORT_PROPERTY, 100);
+void Dumpstate::dumpModemLogs(int fd, const std::string &destDir) {
+    std::string extendedLogDir = MODEM_EXTENDED_LOG_DIRECTORY;
 
-        if (tcpdumpEnabled) {
-            dumpLogs(fd, tcpdumpLogDir, modemLogAllDir, ::android::base::GetIntProperty(TCPDUMP_NUMBER_BUGREPORT, 5), TCPDUMP_LOG_PREFIX);
-        }
+    dumpLogs(fd, extendedLogDir, destDir, 20, EXTENDED_LOG_PREFIX);
+    dumpModemEFS(destDir);
+}
 
-        if (modemLogEnabled) {
-            bool modemLogStarted = ::android::base::GetBoolProperty(MODEM_LOGGING_STATUS_PROPERTY, false);
+void Dumpstate::dumpRadioLogs(int fd, const std::string &destDir) {
+    std::string tcpdumpLogDir = TCPDUMP_LOG_DIRECTORY;
+    bool tcpdumpEnabled = ::android::base::GetBoolProperty(TCPDUMP_PERSIST_PROPERTY, false);
 
-            if (modemLogStarted) {
-                ::android::base::SetProperty(MODEM_LOGGING_PROPERTY, "false");
-                ALOGD("Stopping modem logging...\n");
-            } else {
-                ALOGD("modem logging is not running\n");
-            }
+    if (tcpdumpEnabled) {
+        dumpLogs(fd, tcpdumpLogDir, destDir, ::android::base::GetIntProperty(TCPDUMP_NUMBER_BUGREPORT, 5), TCPDUMP_LOG_PREFIX);
+    }
+    dumpRilLogs(fd, destDir);
+    dumpNetmgrLogs(destDir);
+}
 
-            for (int i = 0; i < 30; i++) {
-                if (!::android::base::GetBoolProperty(MODEM_LOGGING_STATUS_PROPERTY, false)) {
-                    ALOGD("modem logging stopped\n");
-                    sleep(1);
-                    break;
-                }
-                sleep(1);
-            }
+void Dumpstate::dumpGpsLogs(int fd, const std::string &destDir) {
+    bool gpsLogEnabled = ::android::base::GetBoolProperty(GPS_LOGGING_STATUS_PROPERTY, false);
+    if (!gpsLogEnabled) {
+        ALOGD("gps logging is not running\n");
+        return;
+    }
+    const std::string gpsLogDir = GPS_LOG_DIRECTORY;
+    const std::string gpsTmpLogDir = gpsLogDir + "/.tmp";
+    const std::string gpsDestDir = destDir + "/gps";
 
-            dumpLogs(fd, modemLogDir, modemLogAllDir, maxFileNum, MODEM_LOG_PREFIX);
+    int maxFileNum = ::android::base::GetIntProperty(GPS_LOG_NUMBER_PROPERTY, 20);
 
-            if (modemLogStarted) {
-                ALOGD("Restarting modem logging...\n");
-                ::android::base::SetProperty(MODEM_LOGGING_PROPERTY, "true");
-            }
-        }
+    RunCommandToFd(fd, "MKDIR GPS LOG", {"/vendor/bin/mkdir", "-p", gpsDestDir.c_str()},
+                   CommandOptions::WithTimeout(2).Build());
 
-        if (gpsLogEnabled) {
-            dumpGpsLogs(fd, modemLogAllDir);
-        } else {
-            ALOGD("gps logging is not running\n");
-        }
+    dumpLogs(fd, gpsTmpLogDir, gpsDestDir, 1, GPS_LOG_PREFIX);
+    dumpLogs(fd, gpsLogDir, gpsDestDir, 3, GPS_MCU_LOG_PREFIX);
+    dumpLogs(fd, gpsLogDir, gpsDestDir, maxFileNum, GPS_LOG_PREFIX);
+}
 
-        if (cameraLogsEnabled) {
-            dumpCameraLogs(STDOUT_FILENO, modemLogAllDir);
-        }
-
-        if (gxpDumpEnabled) {
-            const int maxGxpDebugDumps = 8;
-            const std::string gxpCoredumpOutputDir = modemLogAllDir + "/gxp_ssrdump";
-            const std::string gxpCoredumpInputDir = "/data/vendor/ssrdump";
-
-            RunCommandToFd(fd, "MKDIR GXP COREDUMP", {"/vendor/bin/mkdir", "-p", gxpCoredumpOutputDir}, CommandOptions::WithTimeout(2).Build());
-
-            // Copy GXP coredumps and crashinfo to the output directory.
-            dumpLogs(fd, gxpCoredumpInputDir + "/coredump", gxpCoredumpOutputDir, maxGxpDebugDumps, "coredump_gxp_platform");
-            dumpLogs(fd, gxpCoredumpInputDir, gxpCoredumpOutputDir, maxGxpDebugDumps, "crashinfo_gxp_platform");
-        }
-
-        dumpLogs(fd, extendedLogDir, modemLogAllDir, maxFileNum, EXTENDED_LOG_PREFIX);
-        dumpRilLogs(fd, modemLogAllDir);
-        dumpNetmgrLogs(modemLogAllDir);
-        dumpModemEFS(modemLogAllDir);
+void Dumpstate::dumpCameraLogs(int fd, const std::string &destDir) {
+    bool cameraLogsEnabled = ::android::base::GetBoolProperty(
+            "vendor.camera.debug.camera_performance_analyzer.attach_to_bugreport", true);
+    if (!cameraLogsEnabled) {
+        return;
     }
 
-    RunCommandToFd(fd, "TAR LOG", {"/vendor/bin/tar", "cvf", modemLogCombined.c_str(), "-C", modemLogAllDir.c_str(), "."}, CommandOptions::WithTimeout(20).Build());
-    RunCommandToFd(fd, "CHG PERM", {"/vendor/bin/chmod", "a+w", modemLogCombined.c_str()}, CommandOptions::WithTimeout(2).Build());
+    static const std::string kCameraLogDir = "/data/vendor/camera/profiler";
+    const std::string cameraDestDir = destDir + "/camera";
+
+    RunCommandToFd(fd, "MKDIR CAMERA LOG", {"/vendor/bin/mkdir", "-p", cameraDestDir.c_str()},
+                   CommandOptions::WithTimeout(2).Build());
+    // Attach multiple latest sessions (in case the user is running concurrent
+    // sessions or starts a new session after the one with performance issues).
+    dumpLogs(fd, kCameraLogDir, cameraDestDir, 10, "session-ended-");
+    dumpLogs(fd, kCameraLogDir, cameraDestDir, 5, "high-drop-rate-");
+    dumpLogs(fd, kCameraLogDir, cameraDestDir, 5, "watchdog-");
+    dumpLogs(fd, kCameraLogDir, cameraDestDir, 5, "camera-ended-");
+}
+
+void Dumpstate::dumpGxpLogs(int fd, const std::string &destDir) {
+    bool gxpDumpEnabled = ::android::base::GetBoolProperty("vendor.gxp.attach_to_bugreport", false);
+
+    if (gxpDumpEnabled) {
+        const int maxGxpDebugDumps = 8;
+        const std::string gxpCoredumpOutputDir = destDir + "/gxp_ssrdump";
+        const std::string gxpCoredumpInputDir = "/data/vendor/ssrdump";
+
+        RunCommandToFd(fd, "MKDIR GXP COREDUMP", {"/vendor/bin/mkdir", "-p", gxpCoredumpOutputDir}, CommandOptions::WithTimeout(2).Build());
+
+        // Copy GXP coredumps and crashinfo to the output directory.
+        dumpLogs(fd, gxpCoredumpInputDir + "/coredump", gxpCoredumpOutputDir, maxGxpDebugDumps, "coredump_gxp_platform");
+        dumpLogs(fd, gxpCoredumpInputDir, gxpCoredumpOutputDir, maxGxpDebugDumps, "crashinfo_gxp_platform");
+    }
+}
+
+void Dumpstate::dumpLogSection(int fd, int fd_bin)
+{
+    std::string logDir = MODEM_LOG_DIRECTORY;
+    const std::string logCombined = logDir + "/combined_logs.tar";
+    const std::string logAllDir = logDir + "/all_logs";
+
+    RunCommandToFd(fd, "MKDIR LOG", {"/vendor/bin/mkdir", "-p", logAllDir.c_str()}, CommandOptions::WithTimeout(2).Build());
+
+    static const std::string sectionName = "modem DM log";
+    auto startTime = startSection(fd, sectionName);
+    bool modemLogEnabled = ::android::base::GetBoolProperty(MODEM_LOGGING_PERSIST_PROPERTY, false);
+    if (modemLogEnabled && ::android::base::GetProperty(MODEM_LOGGING_PATH_PROPERTY, "") == MODEM_LOG_DIRECTORY) {
+        bool modemLogStarted = ::android::base::GetBoolProperty(MODEM_LOGGING_STATUS_PROPERTY, false);
+        int maxFileNum = ::android::base::GetIntProperty(MODEM_LOGGING_NUMBER_BUGREPORT_PROPERTY, 100);
+
+        if (modemLogStarted) {
+            ::android::base::SetProperty(MODEM_LOGGING_PROPERTY, "false");
+            ALOGD("Stopping modem logging...\n");
+        } else {
+            ALOGD("modem logging is not running\n");
+        }
+
+        for (int i = 0; i < 15; i++) {
+            if (!::android::base::GetBoolProperty(MODEM_LOGGING_STATUS_PROPERTY, false)) {
+                ALOGD("modem logging stopped\n");
+                sleep(1);
+                break;
+            }
+            sleep(1);
+        }
+
+        dumpLogs(fd, logDir, logAllDir, maxFileNum, MODEM_LOG_PREFIX);
+
+        if (modemLogStarted) {
+            ALOGD("Restarting modem logging...\n");
+            ::android::base::SetProperty(MODEM_LOGGING_PROPERTY, "true");
+        }
+    }
+    endSection(fd, sectionName, startTime);
+
+    // Dump all module logs
+    if (!PropertiesHelper::IsUserBuild()) {
+        for (const auto &section : mLogSections) {
+            auto startTime = startSection(fd, section.first);
+            section.second(fd, logAllDir);
+            endSection(fd, section.first, startTime);
+        }
+    }
+
+    RunCommandToFd(fd, "TAR LOG", {"/vendor/bin/tar", "cvf", logCombined.c_str(), "-C", logAllDir.c_str(), "."}, CommandOptions::WithTimeout(20).Build());
+    RunCommandToFd(fd, "CHG PERM", {"/vendor/bin/chmod", "a+w", logCombined.c_str()}, CommandOptions::WithTimeout(2).Build());
 
     std::vector<uint8_t> buffer(65536);
-    ::android::base::unique_fd fdLog(TEMP_FAILURE_RETRY(open(modemLogCombined.c_str(), O_RDONLY | O_CLOEXEC | O_NONBLOCK)));
+    ::android::base::unique_fd fdLog(TEMP_FAILURE_RETRY(open(logCombined.c_str(), O_RDONLY | O_CLOEXEC | O_NONBLOCK)));
 
     if (fdLog >= 0) {
         while (1) {
@@ -1186,11 +1213,11 @@ void Dumpstate::dumpModem(int fd, int fdModem)
             if (bytes_read == 0) {
                 break;
             } else if (bytes_read < 0) {
-                ALOGD("read(%s): %s\n", modemLogCombined.c_str(), strerror(errno));
+                ALOGD("read(%s): %s\n", logCombined.c_str(), strerror(errno));
                 break;
             }
 
-            ssize_t result = TEMP_FAILURE_RETRY(write(fdModem, buffer.data(), bytes_read));
+            ssize_t result = TEMP_FAILURE_RETRY(write(fd_bin, buffer.data(), bytes_read));
 
             if (result != bytes_read) {
                 ALOGD("Failed to write %ld bytes, actually written: %ld", bytes_read, result);
@@ -1199,10 +1226,8 @@ void Dumpstate::dumpModem(int fd, int fdModem)
         }
     }
 
-    RunCommandToFd(fd, "RM MODEM DIR", { "/vendor/bin/rm", "-r", modemLogAllDir.c_str()}, CommandOptions::WithTimeout(2).Build());
-    RunCommandToFd(fd, "RM LOG", { "/vendor/bin/rm", modemLogCombined.c_str()}, CommandOptions::WithTimeout(2).Build());
-
-    endSection(fd, sectionName, startTime);
+    RunCommandToFd(fd, "RM LOG DIR", { "/vendor/bin/rm", "-r", logAllDir.c_str()}, CommandOptions::WithTimeout(2).Build());
+    RunCommandToFd(fd, "RM LOG", { "/vendor/bin/rm", logCombined.c_str()}, CommandOptions::WithTimeout(2).Build());
 }
 
 ndk::ScopedAStatus Dumpstate::dumpstateBoard(const std::vector<::ndk::ScopedFileDescriptor>& in_fds,
@@ -1235,14 +1260,14 @@ ndk::ScopedAStatus Dumpstate::dumpstateBoard(const std::vector<::ndk::ScopedFile
                                                                     "Invalid mode");
     }
 
-    dumpTextSection(fd, kAllSections);
-
     if (in_fds.size() < 1) {
-          ALOGE("no FD for modem\n");
+          ALOGE("no FD for dumpstate_board binary\n");
     } else {
-          int fdModem = in_fds[1].get();
-          dumpModem(fd, fdModem);
+          int fd_bin = in_fds[1].get();
+          dumpLogSection(fd, fd_bin);
     }
+
+    dumpTextSection(fd, kAllSections);
 
     return ndk::ScopedAStatus::ok();
 }
