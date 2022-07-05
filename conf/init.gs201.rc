@@ -943,8 +943,6 @@ on property:vendor.thermal.link_ready=1
     write /sys/devices/virtual/pmic/mitigation/triggered_lvl/smpl_lvl 3100
     write /sys/devices/virtual/pmic/mitigation/triggered_lvl/uvlo2_lvl 3000
     write /sys/devices/virtual/pmic/mitigation/triggered_lvl/soft_ocp_cpu2_lvl 12000
-    write /sys/devices/virtual/pmic/mitigation/triggered_lvl/soft_ocp_gpu_lvl 9000
-    write /sys/devices/virtual/pmic/mitigation/triggered_lvl/soft_ocp_tpu_lvl 8500
     write /sys/devices/virtual/pmic/mitigation/clock_div/tpu_clk_div 0x1
     write /sys/devices/virtual/pmic/mitigation/clock_div/gpu_clk_div 0x1
     write /sys/devices/virtual/pmic/mitigation/clock_div/cpu2_clk_div 0x1
