@@ -227,10 +227,6 @@ on init
     chown system system /sys/class/power_supply/maxfg_base/m5_model_state
     chown system system /dev/maxfg_history
 
-    # pca9468 : slider+77729: 6-0057; slider+MW A1: 5-0057
-    chown system system /d/regmap/5-0057-pca9468-mains/registers
-    chown system system /d/regmap/6-0057-pca9468-mains/registers
-
     # Dump eeprom
     chown system system /sys/devices/platform/10970000.hsi2c/i2c-5/5-0050/eeprom
     chown system system /sys/devices/platform/10970000.hsi2c/i2c-4/4-0050/eeprom
@@ -947,8 +943,6 @@ on property:vendor.thermal.link_ready=1
     write /sys/devices/virtual/pmic/mitigation/triggered_lvl/smpl_lvl 3100
     write /sys/devices/virtual/pmic/mitigation/triggered_lvl/uvlo2_lvl 3000
     write /sys/devices/virtual/pmic/mitigation/triggered_lvl/soft_ocp_cpu2_lvl 12000
-    write /sys/devices/virtual/pmic/mitigation/triggered_lvl/soft_ocp_gpu_lvl 9000
-    write /sys/devices/virtual/pmic/mitigation/triggered_lvl/soft_ocp_tpu_lvl 8500
     write /sys/devices/virtual/pmic/mitigation/clock_div/tpu_clk_div 0x1
     write /sys/devices/virtual/pmic/mitigation/clock_div/gpu_clk_div 0x1
     write /sys/devices/virtual/pmic/mitigation/clock_div/cpu2_clk_div 0x1
