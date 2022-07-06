@@ -43,6 +43,7 @@ class Dumpstate : public BnDumpstateDevice {
     const std::string kAllSections = "all";
 
     std::vector<std::pair<std::string, std::function<void(int)>>> mTextSections;
+    std::vector<std::pair<std::string, std::function<void(int, const std::string &)>>> mLogSections;
 
     void dumpLogs(int fd, std::string srcDir, std::string destDir, int maxFileNum,
                   const char *logPrefix);
@@ -52,6 +53,7 @@ class Dumpstate : public BnDumpstateDevice {
     // Text sections that can be dumped individually on the command line in
     // addition to being included in full dumps
     void dumpWlanSection(int fd);
+    void dumpModemSection(int fd);
     void dumpPowerSection(int fd);
     void dumpThermalSection(int fd);
     void dumpTouchSection(int fd);
@@ -68,11 +70,17 @@ class Dumpstate : public BnDumpstateDevice {
     void dumpGscSection(int fd);
     void dumpTrustySection(int fd);
 
-    // Hybrid and binary sections that require an additional file descriptor
-    void dumpModem(int fd, int fdModem);
-    void dumpRilLogs(int fd, std::string destDir);
-    void dumpGpsLogs(int fd, const std::string &destDir);
+    void dumpLogSection(int fd, int fdModem);
+
+    // Log sections to be dumped individually into dumpstate_board.bin
+    void dumpModemLogs(int fd, const std::string &destDir);
+    void dumpRadioLogs(int fd, const std::string &destDir);
     void dumpCameraLogs(int fd, const std::string &destDir);
+    void dumpGpsLogs(int fd, const std::string &destDir);
+    void dumpGxpLogs(int fd, const std::string &destDir);
+
+    // Hybrid and binary sections that require an additional file descriptor
+    void dumpRilLogs(int fd, std::string destDir);
 
     //bool getVerboseLoggingEnabledImpl();
     //::ndk::ScopedAStatus dumpstateBoardImpl(const int fd, const bool full);
