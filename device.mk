@@ -350,27 +350,6 @@ PRODUCT_PROPERTY_OVERRIDES += \
 	persist.vendor.verbose_logging_enabled=false
 endif
 
-# CP Logging properties
-PRODUCT_PROPERTY_OVERRIDES += \
-	ro.vendor.sys.modem.logging.loc = /data/vendor/slog \
-	ro.vendor.cbd.modem_removable = "1" \
-	ro.vendor.cbd.modem_type = "s5100sit" \
-	persist.vendor.sys.modem.logging.br_num=5 \
-	persist.vendor.sys.modem.logging.enable=true
-
-# Enable silent CP crash handling
-ifneq (,$(filter userdebug eng, $(TARGET_BUILD_VARIANT)))
-PRODUCT_PROPERTY_OVERRIDES += \
-	persist.vendor.ril.crash_handling_mode=1
-else
-PRODUCT_PROPERTY_OVERRIDES += \
-	persist.vendor.ril.crash_handling_mode=2
-endif
-
-# Add support dual SIM mode
-PRODUCT_PROPERTY_OVERRIDES += \
-	persist.vendor.radio.multisim_switch_support=true
-
 # RPMB TA
 PRODUCT_PACKAGES += \
 	tlrpmb
@@ -896,6 +875,33 @@ USE_EARLY_SEND_DEVICE_INFO := true
 ifneq ($(BOARD_WITHOUT_RADIO),true)
 $(call inherit-product-if-exists, vendor/samsung_slsi/telephony/$(BOARD_USES_SHARED_VENDOR_TELEPHONY)/common/device-vendor.mk)
 
+# modem_svc_sit daemon
+PRODUCT_PACKAGES += modem_svc_sit
+
+# modem logging binary/configs
+PRODUCT_PACKAGES += modem_logging_control
+
+# CP Logging properties
+PRODUCT_PROPERTY_OVERRIDES += \
+	ro.vendor.sys.modem.logging.loc = /data/vendor/slog \
+	ro.vendor.cbd.modem_removable = "1" \
+	ro.vendor.cbd.modem_type = "s5100sit" \
+	persist.vendor.sys.modem.logging.br_num=5 \
+	persist.vendor.sys.modem.logging.enable=true
+
+# Enable silent CP crash handling
+ifneq (,$(filter userdebug eng, $(TARGET_BUILD_VARIANT)))
+PRODUCT_PROPERTY_OVERRIDES += \
+	persist.vendor.ril.crash_handling_mode=1
+else
+PRODUCT_PROPERTY_OVERRIDES += \
+	persist.vendor.ril.crash_handling_mode=2
+endif
+
+# Add support dual SIM mode
+PRODUCT_PROPERTY_OVERRIDES += \
+	persist.vendor.radio.multisim_switch_support=true
+
 #GPS HAL
 include device/google/gs201/gnss/device-gnss.mk
 endif
@@ -918,12 +924,6 @@ PRODUCT_COPY_FILES += \
 	device/google/gs201/default-permissions.xml:$(TARGET_COPY_OUT_PRODUCT)/etc/default-permissions/default-permissions.xml \
 	device/google/gs201/component-overrides.xml:$(TARGET_COPY_OUT_VENDOR)/etc/sysconfig/component-overrides.xml \
 	frameworks/native/data/etc/handheld_core_hardware.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/handheld_core_hardware.xml \
-
-# modem_svc_sit daemon
-PRODUCT_PACKAGES += modem_svc_sit
-
-# modem logging binary/configs
-PRODUCT_PACKAGES += modem_logging_control
 
 # modem logging configs
 PRODUCT_COPY_FILES += \
