@@ -218,6 +218,7 @@ on init
     chown system system /dev/logbuffer_ttf
     chown system system /dev/logbuffer_tcpm
     chown system system /dev/logbuffer_usbpd
+    chown system system /dev/logbuffer_pogo_transport
     chown system system /dev/logbuffer_wireless
     chown system system /dev/logbuffer_pca9468
     chown system system /dev/logbuffer_cpm
