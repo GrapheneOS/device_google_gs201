@@ -364,6 +364,7 @@ void Dumpstate::dumpPowerSection(int fd) {
 		       "echo \"contaminant_detection_status:\"; cat $f/contaminant_detection_status;  done"});
 
     DumpFileToFd(fd, "PD Engine", "/dev/logbuffer_usbpd");
+    DumpFileToFd(fd, "POGO Transport", "/dev/logbuffer_pogo_transport");
     DumpFileToFd(fd, "PPS-google_cpm", "/dev/logbuffer_cpm");
     DumpFileToFd(fd, "PPS-dc", "/dev/logbuffer_pca9468");
 
