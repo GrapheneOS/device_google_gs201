@@ -862,7 +862,8 @@ on post-fs-data
 service storageproxyd /vendor/bin/storageproxyd -d /dev/trusty-ipc-dev0 \
         -r /dev/sg1 -p /data/vendor/ss -t ufs
     class early_hal
-    user root
+    user system
+    group system
 
 # Write build info to kdebuginfo
 on property:ro.build.fingerprint=*
