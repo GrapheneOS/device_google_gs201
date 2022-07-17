@@ -320,10 +320,6 @@ on init
     write /sys/class/devfreq/gs_memlat_devfreq:devfreq_mif_cpu6_memlat@17000010/mem_latency/ratio_ceil 3200
     write /sys/class/devfreq/gs_memlat_devfreq:devfreq_mif_cpu7_memlat@17000010/mem_latency/ratio_ceil 3200
 
-# For GKI kernel, no device specific modules
-on init
-    setprop vendor.device.modules.ready 1
-
 on late-fs
     # Wait for keymaster HALs
     exec_start wait_for_keymaster
@@ -437,13 +433,6 @@ on post-fs-data
 on early-boot
     # Wait for insmod_sh to finish all common modules
     wait_for_prop vendor.common.modules.ready 1
-
-    # Wait for insmod_sh to finish all device specific modules
-    wait_for_prop vendor.device.modules.ready 1
-
-    # Other services depend on the properties
-    setprop vendor.all.modules.ready 1
-    setprop vendor.all.devices.ready 1
 
     # Permission for Health Storage HAL
     chown system system /dev/sys/block/bootdevice/manual_gc
@@ -946,6 +935,8 @@ on property:vendor.thermal.link_ready=1
     chown system system /dev/thermal/tz-by-name/skin_therm1/trip_point_0_hyst
     chown system system /dev/thermal/tz-by-name/quiet_therm/trip_point_0_temp
     chown system system /dev/thermal/tz-by-name/quiet_therm/trip_point_0_hyst
+    chown system system /dev/thermal/tz-by-name/usb_pwr_therm2/trip_point_0_temp
+    chown system system /dev/thermal/tz-by-name/usb_pwr_therm2/trip_point_0_hyst
     chown system system /dev/thermal/tz-by-name/usb_pwr_therm/trip_point_0_temp
     chown system system /dev/thermal/tz-by-name/usb_pwr_therm/trip_point_0_hyst
     chmod 664 /dev/thermal/cdev-by-name/thermal-cpufreq-0/user_vote
