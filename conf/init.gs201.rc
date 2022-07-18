@@ -798,6 +798,9 @@ on property:sys.boot_completed=1
     # write serialno to battery path for pairing
     write /sys/class/power_supply/battery/dev_sn ${ro.boot.serialno}
 
+    # Reduce pm_freeze_timeout value
+    write /sys/power/pm_freeze_timeout 1000
+
 # IMS WiFi Calling
     service charonservice /system/vendor/bin/charon
     class main
