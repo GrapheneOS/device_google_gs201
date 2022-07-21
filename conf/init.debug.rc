@@ -30,4 +30,5 @@ on property:power.battery_input.suspended=false
 # Bluetooth
 on post-fs-data
     chown bluetooth system /dev/logbuffer_btlpm
+    chown bluetooth system /dev/logbuffer_btpower
     chown bluetooth system /dev/logbuffer_tty18
