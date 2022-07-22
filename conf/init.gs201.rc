@@ -295,9 +295,6 @@ on init
     # Power Stats HAL
     chown system system /dev/bbd_pwrstat
 
-    # start watchdogd
-    start watchdogd
-
     # Add a boost for NNAPI HAL
     write /proc/vendor_sched/nnapi_prefer_idle 0
     write /proc/vendor_sched/nnapi_uclamp_min 512
@@ -839,12 +836,6 @@ service insmod_sh_common /vendor/bin/init.insmod.sh /vendor/etc/init.insmod.gs20
     group root system
     disabled
     oneshot
-
-# Set watchdog timer to 30 seconds and pet it every 10 seconds to get a 20 second margin
-service watchdogd /system/bin/watchdogd 10 20
-    class core
-    oneshot
-    seclabel u:r:watchdogd:s0
 
 # bugreport is triggered by holding down volume down, volume up and power
 service bugreport /system/bin/dumpstate -d -p -z
