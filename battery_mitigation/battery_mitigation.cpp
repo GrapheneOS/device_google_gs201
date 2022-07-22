@@ -44,6 +44,7 @@ const struct MitigationConfig::Config cfg = {
         "/dev/thermal/cdev-by-name/tpu_cooling/cur_state",
         "/dev/thermal/cdev-by-name/CAM/cur_state",
         "/dev/thermal/cdev-by-name/DISP/cur_state",
+        "/dev/thermal/cdev-by-name/gxp-cooling/cur_state",
         "/sys/class/power_supply/battery/voltage_now",
         "/sys/class/power_supply/battery/current_now",
     },
