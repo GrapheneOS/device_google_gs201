@@ -732,7 +732,9 @@ Status getPortStatusHelper(android::hardware::usb::Usb *usb,
             // When connected return powerBrickStatus
             if (port.second) {
                 string usbType;
-                if (ReadFileToString(string(kPowerSupplyUsbType), &usbType)) {
+                if ((*currentPortStatus)[i].currentPowerRole == PortPowerRole::SOURCE) {
+                    (*currentPortStatus)[i].powerBrickStatus = PowerBrickStatus::NOT_CONNECTED;
+                } else if (ReadFileToString(string(kPowerSupplyUsbType), &usbType)) {
                     if (strstr(usbType.c_str(), "[D")) {
                         (*currentPortStatus)[i].powerBrickStatus = PowerBrickStatus::CONNECTED;
                     } else if (strstr(usbType.c_str(), "[U")) {
