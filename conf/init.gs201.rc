@@ -291,6 +291,9 @@ on init
     chown system system /sys/devices/platform/google,cpm/dc_ctl
     # Important to include dd_state as it's used in battery defender in charger mode
     chown system system /sys/devices/platform/google,charger/dd_state
+    # Disable dock-defend by default
+    chown system system /sys/devices/platform/google,charger/dd_settings
+    write /sys/devices/platform/google,charger/dd_settings -1
 
     # Power Stats HAL
     chown system system /dev/bbd_pwrstat
@@ -859,7 +862,8 @@ on post-fs-data
 service storageproxyd /vendor/bin/storageproxyd -d /dev/trusty-ipc-dev0 \
         -r /dev/sg1 -p /data/vendor/ss -t ufs
     class early_hal
-    user root
+    user system
+    group system
 
 # Write build info to kdebuginfo
 on property:ro.build.fingerprint=*
