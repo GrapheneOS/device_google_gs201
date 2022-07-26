@@ -1063,7 +1063,7 @@ void Dumpstate::dumpGscSection(int fd) {
 }
 
 void Dumpstate::dumpTrustySection(int fd) {
-    DumpFileToFd(fd, "Trusty TEE0 Logs", "/dev/trusty-log0");
+    RunCommandToFd(fd, "Trusty TEE0 Logs", {"/vendor/bin/sh", "-c", "cat /dev/trusty-log0"}, CommandOptions::WithTimeout(1).Build());
 }
 
 void Dumpstate::dumpModemSection(int fd) {
