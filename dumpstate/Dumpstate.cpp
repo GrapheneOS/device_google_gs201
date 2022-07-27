@@ -976,6 +976,14 @@ void Dumpstate::dumpDisplaySection(int fd) {
     DumpFileToFd(fd, "Primary panel extra info", "/sys/devices/platform/exynos-drm/primary-panel/panel_extinfo");
     DumpFileToFd(fd, "Secondary panel name", "/sys/devices/platform/exynos-drm/secondary-panel/panel_name");
     DumpFileToFd(fd, "Secondary panel extra info", "/sys/devices/platform/exynos-drm/secondary-panel/panel_extinfo");
+    if (!PropertiesHelper::IsUserBuild()) {
+        DumpFileToFd(fd, "HWC Fence State", "/data/vendor/log/hwc/hwc_fence_state.txt");
+        DumpFileToFd(fd, "HWC Error Log", "/data/vendor/log/hwc/hwc_error_log.txt");
+        RunCommandToFd(fd, "HWC Debug Dumps", {"/vendor/bin/sh", "-c",
+                           "for f in $(ls /data/vendor/log/hwc/*_hwc_debug*.dump); do "
+                           "echo $f ; cat $f ; done"},
+                           CommandOptions::WithTimeout(2).Build());
+    }
 }
 
 // Dump items related to AoC
@@ -1074,7 +1082,7 @@ void Dumpstate::dumpGscSection(int fd) {
 }
 
 void Dumpstate::dumpTrustySection(int fd) {
-    DumpFileToFd(fd, "Trusty TEE0 Logs", "/dev/trusty-log0");
+    RunCommandToFd(fd, "Trusty TEE0 Logs", {"/vendor/bin/sh", "-c", "cat /dev/trusty-log0"}, CommandOptions::WithTimeout(1).Build());
 }
 
 void Dumpstate::dumpModemSection(int fd) {
