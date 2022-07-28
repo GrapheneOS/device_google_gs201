@@ -632,10 +632,9 @@ void addPixelStateResidencyDataProvider(std::shared_ptr<PowerStats> p) {
     p->addStateResidencyDataProvider(std::move(pixelSdp));
 }
 
-void addGs201CommonDataProviders(std::shared_ptr<PowerStats> p) {
+void addCommonDataProviders(std::shared_ptr<PowerStats> p) {
     setEnergyMeter(p);
 
-    addPixelStateResidencyDataProvider(p);
     addAoC(p);
     addDvfsStats(p);
     addSoC(p);
@@ -653,6 +652,15 @@ void addGs201CommonDataProviders(std::shared_ptr<PowerStats> p) {
     // TODO (b/181070764) (b/182941084):
     // Remove this when Wifi/BT energy consumption models are available or revert before ship
     addPlaceholderEnergyConsumers(p);
+}
+
+void addGs201CommonDataProviders(std::shared_ptr<PowerStats> p) {
+    addCommonDataProviders(p);
+    addPixelStateResidencyDataProvider(p);
+}
+
+void addGs201CommonDataProvidersQc(std::shared_ptr<PowerStats> p) {
+    addCommonDataProviders(p);
 }
 
 void addNFC(std::shared_ptr<PowerStats> p, const std::string& path) {
