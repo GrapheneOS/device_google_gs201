@@ -25,6 +25,7 @@
 #include <dataproviders/PowerStatsEnergyConsumer.h>
 #include <dataproviders/PowerStatsEnergyAttribution.h>
 #include <dataproviders/PixelStateResidencyDataProvider.h>
+#include <dataproviders/WlanStateResidencyDataProvider.h>
 
 #include <android-base/logging.h>
 #include <android-base/properties.h>
@@ -41,6 +42,7 @@ using aidl::android::hardware::power::stats::GenericStateResidencyDataProvider;
 using aidl::android::hardware::power::stats::IioEnergyMeterDataProvider;
 using aidl::android::hardware::power::stats::PixelStateResidencyDataProvider;
 using aidl::android::hardware::power::stats::PowerStatsEnergyConsumer;
+using aidl::android::hardware::power::stats::WlanStateResidencyDataProvider;
 
 // TODO (b/181070764) (b/182941084):
 // Remove this when Wifi/BT energy consumption models are available or revert before ship
@@ -528,6 +530,12 @@ void addWifi(std::shared_ptr<PowerStats> p) {
             cfgs));
 }
 
+void addWlan(std::shared_ptr<PowerStats> p) {
+    p->addStateResidencyDataProvider(std::make_unique<WlanStateResidencyDataProvider>(
+            "WLAN",
+            "/sys/kernel/wifi/power_stats"));
+}
+
 void addUfs(std::shared_ptr<PowerStats> p) {
     p->addStateResidencyDataProvider(std::make_unique<UfsStateResidencyDataProvider>("/sys/bus/platform/devices/14700000.ufs/ufs_stats/"));
 }
@@ -643,7 +651,6 @@ void addCommonDataProviders(std::shared_ptr<PowerStats> p) {
     addMobileRadio(p);
     addGNSS(p);
     addPCIe(p);
-    addWifi(p);
     addUfs(p);
     addPowerDomains(p);
     addDevfreq(p);
@@ -657,10 +664,12 @@ void addCommonDataProviders(std::shared_ptr<PowerStats> p) {
 void addGs201CommonDataProviders(std::shared_ptr<PowerStats> p) {
     addCommonDataProviders(p);
     addPixelStateResidencyDataProvider(p);
+    addWifi(p);
 }
 
 void addGs201CommonDataProvidersQc(std::shared_ptr<PowerStats> p) {
     addCommonDataProviders(p);
+    addWlan(p);
 }
 
 void addNFC(std::shared_ptr<PowerStats> p, const std::string& path) {
