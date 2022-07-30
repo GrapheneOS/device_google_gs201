@@ -64,14 +64,13 @@
             <instance>default</instance>
         </interface>
     </hal>
-    <hal format="hidl">
-      <name>vendor.google.google_battery</name>
-      <transport>hwbinder</transport>
-      <version>1.2</version>
-      <interface>
-        <name>IGoogleBattery</name>
-        <instance>default</instance>
-      </interface>
+    <hal format="aidl">
+        <name>vendor.google.google_battery</name>
+        <version>1</version>
+        <interface>
+            <name>IGoogleBattery</name>
+            <instance>default</instance>
+        </interface>
     </hal>
     <hal format="hidl">
        <name>vendor.google.whitechapel.audio.audioext</name>
