@@ -1036,6 +1036,7 @@ PRODUCT_SOONG_NAMESPACES += \
         vendor/google/whitechapel/aoc
 
 $(call soong_config_set,aoc,target_soc,$(TARGET_BOARD_PLATFORM))
+$(call soong_config_set,aoc,target_product,$(TARGET_PRODUCT))
 
 #
 ## Audio properties
