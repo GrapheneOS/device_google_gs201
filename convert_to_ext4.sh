@@ -109,6 +109,7 @@ while [[ $RETRIES -gt 0 ]]; do
 			continue
 		fi
 
+		cp -rp $MNT_OLD/.* $MNT_NEW/
 		cp -rp $MNT_OLD/* $MNT_NEW/
 		check_success "cp -rp $MNT_OLD/* $MNT_NEW/"
 		if [ $? -ne 0 ]; then
@@ -120,11 +121,12 @@ while [[ $RETRIES -gt 0 ]]; do
 		fi
 
 		# Calculate md5sum of all files and compare between persist and efs
-		(cd $MNT_NEW; find . -type f | xargs md5sum | sort) > $MNT_NEW/md5sums
-		(cd $MNT_OLD; find . -type f | xargs md5sum | sort) > $MNT_OLD/md5sums
-		diff -q $MNT_NEW/md5sums $MNT_OLD/md5sums
-		check_success "diff -q $MNT_NEW/md5sums $MNT_OLD/md5sums"
+		(cd $MNT_NEW; find . -type f | xargs md5sum | sort) > $MNT_BASE/new.md5sums
+		(cd $MNT_OLD; find . -type f | xargs md5sum | sort) > $MNT_BASE/old.md5sums
+		diff $MNT_BASE/new.md5sums $MNT_BASE/old.md5sums
+		check_success "diff $MNT_BASE/new.md5sums $MNT_BASE/old.md5sums"
 		RES=$?
+		rm $MNT_BASE/new.md5sums $MNT_BASE/old.md5sums
 
 		umount $MNT_NEW
 		umount $MNT_OLD
