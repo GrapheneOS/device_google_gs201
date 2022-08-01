@@ -2,7 +2,12 @@ import /vendor/etc/init/hw/init.gs201.usb.rc
 import android.hardware.drm@1.2-service.widevine.rc
 import init.exynos.sensorhub.rc
 
-on early-init
+on early-init && property:ro.debuggable=1
+    # Convert /dev/block/by-name/persist to ext4 on userdebug builds only
+    exec -- /system_ext/bin/convert_to_ext4.sh /dev/block/by-name/persist false
+    mount_all /vendor/etc/fstab.persist --early
+
+on early-init && property:ro.debuggable=0
     mount_all /vendor/etc/fstab.persist --early
 
 on init
