@@ -337,6 +337,10 @@ PRODUCT_PACKAGES += \
 	tune2fs.vendor_ramdisk \
 	resize2fs.vendor_ramdisk
 
+# Filesystem: convert /dev/block/by-name/persist to ext4 (b/239632964)
+PRODUCT_COPY_FILES += \
+	device/google/gs201/convert_to_ext4.sh:$(TARGET_COPY_OUT_SYSTEM_EXT)/bin/convert_to_ext4.sh \
+
 # Userdata Checkpointing OTA GC
 PRODUCT_PACKAGES += \
 	checkpoint_gc
