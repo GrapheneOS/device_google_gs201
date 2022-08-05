@@ -847,6 +847,10 @@ on  property:persist.sys.test_harness=1 && property:persist.vendor.testing_batte
     setprop persist.vendor.charge.start.level 0
     setprop vendor.battery.defender.disable 1
 
+# on userdebug and eng builds, enable scsi error recovery log
+on property:ro.debuggable=1
+    write /sys/module/scsi_mod/parameters/scsi_logging_level 63
+
 service insmod_sh_common /vendor/bin/init.insmod.sh /vendor/etc/init.insmod.gs201.cfg
     class main
     user root
