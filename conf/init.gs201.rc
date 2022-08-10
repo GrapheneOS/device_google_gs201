@@ -939,6 +939,8 @@ on property:vendor.thermal.link_ready=1
     chown system system /dev/thermal/tz-by-name/batoilo/trip_point_0_temp
     chown system system /dev/thermal/tz-by-name/batoilo/trip_point_0_hyst
     # Thermal
+    chown system system /dev/thermal/tz-by-name/skin_therm/trip_point_0_temp
+    chown system system /dev/thermal/tz-by-name/skin_therm/trip_point_0_hyst
     chown system system /dev/thermal/tz-by-name/skin_therm1/trip_point_0_temp
     chown system system /dev/thermal/tz-by-name/skin_therm1/trip_point_0_hyst
     chown system system /dev/thermal/tz-by-name/quiet_therm/trip_point_0_temp
