@@ -236,6 +236,14 @@ void addDvfsStats(std::shared_ptr<PowerStats> p) {
         std::make_pair("0MHz", "0"),
     }});
 
+    cfgs.push_back({"AUR", {
+        std::make_pair("1160MHz", "1160000"),
+        std::make_pair("750MHz", "750000"),
+        std::make_pair("373MHz", "373000"),
+        std::make_pair("178MHz", "178000"),
+        std::make_pair("0MHz", "0"),
+    }});
+
     p->addStateResidencyDataProvider(std::make_unique<DvfsStateResidencyDataProvider>(
             "/sys/devices/platform/acpm_stats/fvp_stats", NS_TO_MS, cfgs));
 }
