@@ -680,6 +680,22 @@ void addGs201CommonDataProvidersQc(std::shared_ptr<PowerStats> p) {
     addWlan(p);
 }
 
+void addGs201CommonDataProvidersBig(std::shared_ptr<PowerStats> p) {
+    setEnergyMeter(p);
+
+    addAoC(p);
+    addDvfsStats(p);
+    addSoC(p);
+    addCPUclusters(p);
+    addGPU(p);
+    addUfs(p);
+    addPowerDomains(p);
+    addDevfreq(p);
+    addTPU(p);
+    addPixelStateResidencyDataProvider(p);
+    addWifi(p);
+}
+
 void addNFC(std::shared_ptr<PowerStats> p, const std::string& path) {
     const GenericStateResidencyDataProvider::StateResidencyConfig nfcStateConfig = {
         .entryCountSupported = true,
