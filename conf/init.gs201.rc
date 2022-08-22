@@ -970,6 +970,19 @@ on property:vendor.thermal.link_ready=1
     chown system system /dev/thermal/cdev-by-name/chg_mdis/cur_state
     chown system system /dev/thermal/cdev-by-name/usbc-port/cur_state
 
+on charger
+    # Use charger thermal config
+    setprop vendor.thermal.config "thermal_info_config_charge.json"
+
+    # Wait for insmod_sh to finish all common modules
+    wait_for_prop vendor.common.modules.ready 1
+
+    # Create thermal symlink in off charging mode
+    mkdir /dev/thermal 0750 system system
+    mkdir /dev/thermal/tz-by-name 0750 system system
+    mkdir /dev/thermal/cdev-by-name 0750 system system
+    start vendor.thermal.symlinks
+
 on property:vendor.disable.bcl.control=1
     write /sys/devices/virtual/pmic/mitigation/instruction/enable_mitigation 0
 
