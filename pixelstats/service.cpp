@@ -57,6 +57,7 @@ const struct SysfsCollector::SysfsPaths sysfs_paths = {
         UFS_ERR_PATH(auto_hibern8_err_count)
     },
     .BlockStatsLength = BLOCK_STATS_LENGTH,
+    .AmsRatePath = "/sys/devices/platform/audiometrics/ams_rate_read_once",
 };
 
 const struct UeventListener::UeventPaths ueventPaths = {
