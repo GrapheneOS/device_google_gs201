@@ -129,7 +129,7 @@ BOARD_USES_GRALLOC_ION_SYNC := true
 BOARD_USES_SWIFTSHADER := false
 
 # This should be the same value as USE_ANGLE in device.mk
-BOARD_USES_ANGLE := true
+BOARD_USES_ANGLE := false
 
 # Gralloc4
 ifeq ($(BOARD_USES_SWIFTSHADER),true)
