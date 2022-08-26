@@ -1075,6 +1075,9 @@ void Dumpstate::dumpSensorsUSFSection(int fd) {
             RunCommandToFd(fd, "USF Registry",
                            {"/vendor/bin/sh", "-c", "usf_reg_edit save -"},
                            options);
+            RunCommandToFd(fd, "USF Last Stat Buffer",
+                           {"/vendor/bin/sh", "-c", "cat /data/vendor/sensors/debug/stats.history"},
+                           options);
         }
     }
 }
