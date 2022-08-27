@@ -129,7 +129,7 @@ BOARD_USES_GRALLOC_ION_SYNC := true
 BOARD_USES_SWIFTSHADER := false
 
 # This should be the same value as USE_ANGLE in device.mk
-BOARD_USES_ANGLE := true
+BOARD_USES_ANGLE := false
 
 # Gralloc4
 ifeq ($(BOARD_USES_SWIFTSHADER),true)
@@ -420,6 +420,3 @@ BOARD_KERNEL_CMDLINE += log_buf_len=1024K
 
 # Protected VM firmware
 BOARD_PVMFWIMAGE_PARTITION_SIZE := 0x00100000
-
-# pick up library for cleaning digital car keys on factory reset
--include vendor/google_devices/gs-common/proprietary/BoardConfigVendor.mk
