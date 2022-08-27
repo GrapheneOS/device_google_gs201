@@ -381,7 +381,7 @@ void addGPU(std::shared_ptr<PowerStats> p) {
         {"848000", 4044}};
 
     p->addEnergyConsumer(PowerStatsEnergyConsumer::createMeterAndAttrConsumer(p,
-            EnergyConsumerType::OTHER, "GPU", {"S8S_VDD_G3D_L2"},
+            EnergyConsumerType::OTHER, "GPU", {"S8S_VDD_G3D_L2", "S2S_VDD_G3D"},
             {{UID_TIME_IN_STATE, "/sys/devices/platform/28000000.mali/uid_time_in_state"}},
             stateCoeffs));
 
