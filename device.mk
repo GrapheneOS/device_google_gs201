@@ -570,7 +570,6 @@ $(call inherit-product, $(SRC_TARGET_DIR)/product/generic_ramdisk.mk)
 
 # Titan-M
 ifeq (,$(filter true, $(BOARD_WITHOUT_DTLS)))
-include hardware/google/pixel/dauntless/dauntless.mk
 include device/google/gs-common/dauntless/gsc.mk
 endif
 
