@@ -1138,7 +1138,7 @@ PRODUCT_PROPERTY_OVERRIDES += \
 
 # Suspend properties
 PRODUCT_PROPERTY_OVERRIDES += \
-    suspend.short_suspend_threshold_millis=5000
+    suspend.short_suspend_threshold_millis=2000
 
 # Enable Incremental on the device
 PRODUCT_PROPERTY_OVERRIDES += \
@@ -1154,7 +1154,7 @@ include hardware/google/pixel/PixelLogger/PixelLogger.mk
 include hardware/google/pixel/sscoredump/device.mk
 
 # RadioExt Version
-USES_RADIOEXT_V1_4 = true
+USES_RADIOEXT_V1_5 = true
 
 # Wifi ext
 include hardware/google/pixel/wifi_ext/device.mk
