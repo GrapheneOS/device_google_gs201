@@ -1138,7 +1138,7 @@ PRODUCT_PROPERTY_OVERRIDES += \
 
 # Suspend properties
 PRODUCT_PROPERTY_OVERRIDES += \
-    suspend.short_suspend_threshold_millis=5000
+    suspend.short_suspend_threshold_millis=2000
 
 # Enable Incremental on the device
 PRODUCT_PROPERTY_OVERRIDES += \
