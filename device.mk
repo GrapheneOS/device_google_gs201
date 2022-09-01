@@ -489,6 +489,7 @@ PRODUCT_PACKAGES += \
 PANTHER_PRODUCT := %panther
 CHEETAH_PRODUCT := %cheetah
 LYNX_PRODUCT := %lynx
+FELIX_PRODUCT := %felix
 CLOUDRIPPER_PRODUCT := %cloudripper
 ifneq (,$(filter $(PANTHER_PRODUCT), $(TARGET_PRODUCT)))
         LOCAL_TARGET_PRODUCT := panther
@@ -496,6 +497,8 @@ else ifneq (,$(filter $(CHEETAH_PRODUCT), $(TARGET_PRODUCT)))
         LOCAL_TARGET_PRODUCT := cheetah
 else ifneq (,$(filter $(LYNX_PRODUCT), $(TARGET_PRODUCT)))
         LOCAL_TARGET_PRODUCT := lynx
+else ifneq (,$(filter $(FELIX_PRODUCT), $(TARGET_PRODUCT)))
+        LOCAL_TARGET_PRODUCT := felix
 else ifneq (,$(filter $(CLOUDRIPPER_PRODUCT), $(TARGET_PRODUCT)))
         LOCAL_TARGET_PRODUCT := cloudripper
 else
