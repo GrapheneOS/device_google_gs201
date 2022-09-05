@@ -127,6 +127,7 @@ PRODUCT_PROPERTY_OVERRIDES += \
 	persist.vendor.ril.enable_set_screen_state=1
 
 # Set the Bluetooth Class of Device
+ifneq ($(USE_TABLET_BT_COD),true)
 # Service Field: 0x5A -> 90
 #    Bit 14: LE audio
 #    Bit 17: Networking
@@ -137,6 +138,18 @@ PRODUCT_PROPERTY_OVERRIDES += \
 # MINOR_CLASS: 0x0C -> 12 (Smart Phone)
 PRODUCT_PRODUCT_PROPERTIES += \
     bluetooth.device.class_of_device=90,66,12
+else
+# Service Field: 0x5A -> 90
+#    Bit 14: LE audio
+#    Bit 17: Networking
+#    Bit 19: Capturing
+#    Bit 20: Object Transfer
+#    Bit 22: Telephony
+# MAJOR_CLASS: 0x41 -> 65 (Computer)
+# MINOR_CLASS: 0x10 -> 16 (Handheld PC/PDA clamshell)
+PRODUCT_PRODUCT_PROPERTIES += \
+    bluetooth.device.class_of_device=90,65,16
+endif
 
 # Set supported Bluetooth profiles to enabled
 PRODUCT_PRODUCT_PROPERTIES += \
