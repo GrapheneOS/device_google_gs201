@@ -325,11 +325,9 @@ PRODUCT_COPY_FILES += \
 
 # Shell scripts
 PRODUCT_COPY_FILES += \
-	device/google/gs201/init.insmod.sh:$(TARGET_COPY_OUT_VENDOR)/bin/init.insmod.sh \
+	device/google/gs201/init.display.sh:$(TARGET_COPY_OUT_VENDOR)/bin/init.display.sh \
 
-# insmod files
-PRODUCT_COPY_FILES += \
-	device/google/gs201/init.insmod.gs201.cfg:$(TARGET_COPY_OUT_VENDOR)/etc/init.insmod.gs201.cfg
+include device/google/gs-common/insmod/insmod.mk
 
 # For creating dtbo image
 PRODUCT_HOST_PACKAGES += \
