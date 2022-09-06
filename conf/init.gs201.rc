@@ -604,6 +604,8 @@ service gnss_service /vendor/bin/hw/android.hardware.gnss@2.1-service-brcm
     class hal
     user gps
     group system gps radio
+    ioprio be 0
+    priority -1
 
 # disable gps service if no gps h/w
 on property:vendor.ril.cbd.svc=0
