@@ -240,7 +240,7 @@ on init
     chown system system /sys/devices/platform/10da0000.hsi2c/i2c-7/7-0050/eeprom
 
     # Loading common kernel modules in background
-    start insmod_sh_common
+    start init_display
 
     # Charge stats (write 0)
     chown system system /sys/class/power_supply/battery/charge_stats
@@ -848,7 +848,7 @@ on  property:persist.sys.test_harness=1 && property:persist.vendor.testing_batte
 on property:ro.debuggable=1
     write /sys/module/scsi_mod/parameters/scsi_logging_level 63
 
-service insmod_sh_common /vendor/bin/init.insmod.sh /vendor/etc/init.insmod.gs201.cfg
+service init_display /vendor/bin/init.display.sh
     class main
     user root
     group root system
