@@ -202,7 +202,7 @@ endif
 USE_SWIFTSHADER := false
 
 # Must match BOARD_USES_ANGLE in BoardConfig.mk
-USE_ANGLE := false
+USE_ANGLE := true
 
 # HWUI
 TARGET_USES_VULKAN = true
