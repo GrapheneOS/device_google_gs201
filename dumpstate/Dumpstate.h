@@ -69,6 +69,7 @@ class Dumpstate : public BnDumpstateDevice {
     void dumpMiscSection(int fd);
     void dumpGscSection(int fd);
     void dumpTrustySection(int fd);
+    void dumpLEDSection(int fd);
 
     void dumpLogSection(int fd, int fdModem);
 
