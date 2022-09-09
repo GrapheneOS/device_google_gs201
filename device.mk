@@ -325,11 +325,9 @@ PRODUCT_COPY_FILES += \
 
 # Shell scripts
 PRODUCT_COPY_FILES += \
-	device/google/gs201/init.insmod.sh:$(TARGET_COPY_OUT_VENDOR)/bin/init.insmod.sh \
+	device/google/gs201/init.display.sh:$(TARGET_COPY_OUT_VENDOR)/bin/init.display.sh \
 
-# insmod files
-PRODUCT_COPY_FILES += \
-	device/google/gs201/init.insmod.gs201.cfg:$(TARGET_COPY_OUT_VENDOR)/etc/init.insmod.gs201.cfg
+include device/google/gs-common/insmod/insmod.mk
 
 # For creating dtbo image
 PRODUCT_HOST_PACKAGES += \
@@ -1180,7 +1178,7 @@ PRODUCT_PACKAGES_DEBUG += BatteryStatsViewer
 # Install product specific framework compatibility matrix
 # (TODO: b/169535506) This includes the FCM for system_ext and product partition.
 # It must be split into the FCM of each partition.
-DEVICE_PRODUCT_COMPATIBILITY_MATRIX_FILE := device/google/gs201/device_framework_matrix_product.xml
+DEVICE_PRODUCT_COMPATIBILITY_MATRIX_FILE += device/google/gs201/device_framework_matrix_product.xml
 
 # Preopt SystemUI
 PRODUCT_DEXPREOPT_SPEED_APPS += SystemUIGoogle  # For internal
