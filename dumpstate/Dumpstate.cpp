@@ -1041,9 +1041,16 @@ void Dumpstate::dumpAoCSection(int fd) {
     DumpFileToFd(fd, "AoC audio wake", "/sys/devices/platform/19000000.aoc/control/audio_wakeup");
     DumpFileToFd(fd, "AoC logging wake", "/sys/devices/platform/19000000.aoc/control/logging_wakeup");
     DumpFileToFd(fd, "AoC hotword wake", "/sys/devices/platform/19000000.aoc/control/hotword_wakeup");
-    RunCommandToFd(fd, "AoC memory exception wake", {"/vendor/bin/sh", "-c", "cat /sys/devices/platform/19000000.aoc/control/memory_exception"}, CommandOptions::WithTimeout(2).Build());
-    RunCommandToFd(fd, "AoC memory votes", {"/vendor/bin/sh", "-c", "cat /sys/devices/platform/19000000.aoc/control/memory_votes"}, CommandOptions::WithTimeout(2).Build());
-        RunCommandToFd(fd, "AoC Heap Stats (A32)",
+    RunCommandToFd(fd, "AoC memory exception wake",
+      {"/vendor/bin/sh", "-c", "cat /sys/devices/platform/19000000.aoc/control/memory_exception"},
+      CommandOptions::WithTimeout(2).Build());
+    RunCommandToFd(fd, "AoC memory votes A32",
+      {"/vendor/bin/sh", "-c", "cat /sys/devices/platform/19000000.aoc/control/memory_votes_a32"},
+      CommandOptions::WithTimeout(2).Build());
+    RunCommandToFd(fd, "AoC memory votes FF1",
+      {"/vendor/bin/sh", "-c", "cat /sys/devices/platform/19000000.aoc/control/memory_votes_ff1"},
+      CommandOptions::WithTimeout(2).Build());
+    RunCommandToFd(fd, "AoC Heap Stats (A32)",
       {"/vendor/bin/sh", "-c", "echo 'dbg heap -c 1' > /dev/acd-debug; timeout 0.1 cat /dev/acd-debug"},
       CommandOptions::WithTimeout(1).Build());
     RunCommandToFd(fd, "AoC Heap Stats (F1)",
@@ -1054,9 +1061,6 @@ void Dumpstate::dumpAoCSection(int fd) {
       CommandOptions::WithTimeout(1).Build());
     RunCommandToFd(fd, "AoC Heap Stats (HF1)",
       {"/vendor/bin/sh", "-c", "echo 'dbg heap -c 4' > /dev/acd-debug; timeout 0.1 cat /dev/acd-debug"},
-      CommandOptions::WithTimeout(1).Build());
-    RunCommandToFd(fd, "AoC MIF Stats",
-      {"/vendor/bin/sh", "-c", "echo 'mif details' > /dev/acd-debug; timeout 0.1 cat /dev/acd-debug"},
       CommandOptions::WithTimeout(1).Build());
 }
 
