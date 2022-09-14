@@ -240,6 +240,7 @@ Dumpstate::Dumpstate()
         { "misc", [this](int fd) { dumpMiscSection(fd); } },
         { "gsc", [this](int fd) { dumpGscSection(fd); } },
         { "trusty", [this](int fd) { dumpTrustySection(fd); } },
+        { "led", [this](int fd) { dumpLEDSection(fd); } },
     },
   mLogSections{
         { "modem", [this](int fd, const std::string &destDir) { dumpModemLogs(fd, destDir); } },
@@ -1125,6 +1126,21 @@ void Dumpstate::dumpGscSection(int fd) {
 
 void Dumpstate::dumpTrustySection(int fd) {
     RunCommandToFd(fd, "Trusty TEE0 Logs", {"/vendor/bin/sh", "-c", "cat /dev/trusty-log0"}, CommandOptions::WithTimeout(1).Build());
+}
+
+// Dump items related to LED
+void Dumpstate::dumpLEDSection(int fd) {
+    struct stat buffer;
+
+    if (!PropertiesHelper::IsUserBuild()) {
+        if (!stat("/sys/class/leds/green", &buffer)) {
+            DumpFileToFd(fd, "Green LED Brightness", "/sys/class/leds/green/brightness");
+            DumpFileToFd(fd, "Green LED Max Brightness", "/sys/class/leds/green/max_brightness");
+        }
+        if (!stat("/mnt/vendor/persist/led/led_calibration_LUT.txt", &buffer)) {
+            DumpFileToFd(fd, "LED Calibration Data", "/mnt/vendor/persist/led/led_calibration_LUT.txt");
+        }
+    }
 }
 
 void Dumpstate::dumpModemSection(int fd) {
