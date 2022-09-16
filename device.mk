@@ -821,11 +821,6 @@ PRODUCT_PACKAGES += \
 PRODUCT_PROPERTY_OVERRIDES += \
 	ro.frp.pst=/dev/block/by-name/frp
 
-# Bluetooth
-PRODUCT_COPY_FILES += \
-	frameworks/native/data/etc/android.hardware.bluetooth.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.bluetooth.xml \
-	frameworks/native/data/etc/android.hardware.bluetooth_le.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.bluetooth_le.xml
-
 # System props to enable Bluetooth Quality Report (BQR) feature
 ifneq (,$(filter userdebug eng, $(TARGET_BUILD_VARIANT)))
 PRODUCT_PRODUCT_PROPERTIES += \
