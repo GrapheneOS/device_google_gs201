@@ -235,7 +235,6 @@ Dumpstate::Dumpstate()
         { "aoc", [this](int fd) { dumpAoCSection(fd); } },
         { "ramdump", [this](int fd) { dumpRamdumpSection(fd); } },
         { "misc", [this](int fd) { dumpMiscSection(fd); } },
-        { "trusty", [this](int fd) { dumpTrustySection(fd); } },
         { "led", [this](int fd) { dumpLEDSection(fd); } },
     },
   mLogSections{
@@ -1074,10 +1073,6 @@ void Dumpstate::dumpRamdumpSection(int fd) {
 void Dumpstate::dumpMiscSection(int fd) {
     RunCommandToFd(fd, "VENDOR PROPERTIES", {"/vendor/bin/getprop"});
     DumpFileToFd(fd, "VENDOR PROC DUMP", "/proc/vendor_sched/dump_task");
-}
-
-void Dumpstate::dumpTrustySection(int fd) {
-    RunCommandToFd(fd, "Trusty TEE0 Logs", {"/vendor/bin/sh", "-c", "cat /dev/trusty-log0"}, CommandOptions::WithTimeout(1).Build());
 }
 
 // Dump items related to LED

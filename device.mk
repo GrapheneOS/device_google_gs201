@@ -805,6 +805,9 @@ endif
 $(call inherit-product, system/core/trusty/trusty-storage.mk)
 $(call inherit-product, system/core/trusty/trusty-base.mk)
 
+# Trusty dump
+include device/google/gs-common/trusty/trusty.mk
+
 # Trusty unit test tool
 PRODUCT_PACKAGES_DEBUG += trusty-ut-ctrl \
    tipc-test
