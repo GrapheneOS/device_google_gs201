@@ -69,6 +69,8 @@ const struct SysfsCollector::SysfsPaths sysfs_paths = {
     },
     .CCARatePath = "/sys/devices/platform/audiometrics/cca_rate_read_once",
     .TempResidencyPath = "/sys/kernel/metrics/temp_residency/temp_residency_all/stats",
+    .ResumeLatencyMetricsPath = "/sys/kernel/metrics/resume_latency/resume_latency_metrics",
+    .LongIRQMetricsPath = "/sys/kernel/metrics/irq/long_irq_metrics"
 };
 
 const struct UeventListener::UeventPaths ueventPaths = {
