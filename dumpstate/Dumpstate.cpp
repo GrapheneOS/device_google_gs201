@@ -286,6 +286,8 @@ void Dumpstate::dumpTextSection(int fd, const std::string &sectionName) {
 void Dumpstate::dumpWlanSection(int fd) {
     // Dump firmware symbol table for firmware log decryption
     DumpFileToFd(fd, "WLAN FW Log Symbol Table", "/vendor/firmware/Data.msc");
+    RunCommandToFd(fd, "WLAN TWT Dump", {"/vendor/bin/sh", "-c",
+                    "cat /sys/wlan_ptracker/twt/*"});
 }
 
 // Dump items related to power and battery
