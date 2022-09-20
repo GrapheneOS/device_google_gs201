@@ -169,64 +169,6 @@ void addDvfsStats(std::shared_ptr<PowerStats> p) {
 
     std::vector<DvfsStateResidencyDataProvider::Config> cfgs;
 
-    cfgs.push_back({"CL0", {
-        std::make_pair("2024MHz", "2024000"),
-        std::make_pair("1950MHz", "1950000"),
-        std::make_pair("1803MHz", "1803000"),
-        std::make_pair("1704MHz", "1704000"),
-        std::make_pair("1598MHz", "1598000"),
-        std::make_pair("1401MHz", "1401000"),
-        std::make_pair("1328MHz", "1328000"),
-        std::make_pair("1197MHz", "1197000"),
-        std::make_pair("1098MHz", "1098000"),
-        std::make_pair("930MHz", "930000"),
-        std::make_pair("738MHz", "738000"),
-        std::make_pair("574MHz", "574000"),
-        std::make_pair("300MHz", "300000"),
-        std::make_pair("0MHz", "0"),
-    }});
-
-    cfgs.push_back({"CL1", {
-        std::make_pair("2348MHz", "2348000"),
-        std::make_pair("2253MHz", "2253000"),
-        std::make_pair("2130MHz", "2130000"),
-        std::make_pair("1999MHz", "1999000"),
-        std::make_pair("1836MHz", "1836000"),
-        std::make_pair("1663MHz", "1663000"),
-        std::make_pair("1491MHz", "1491000"),
-        std::make_pair("1328MHz", "1328000"),
-        std::make_pair("1197MHz", "1197000"),
-        std::make_pair("1024MHz", "1024000"),
-        std::make_pair("910MHz", "910000"),
-        std::make_pair("799MHz", "799000"),
-        std::make_pair("696MHz", "696000"),
-        std::make_pair("553MHz", "553000"),
-        std::make_pair("400MHz", "400000"),
-        std::make_pair("0MHz", "0"),
-    }});
-
-    cfgs.push_back({"CL2", {
-        std::make_pair("2850MHz", "2850000"),
-        std::make_pair("2802MHz", "2802000"),
-        std::make_pair("2704MHz", "2704000"),
-        std::make_pair("2630MHz", "2630000"),
-        std::make_pair("2507MHz", "2507000"),
-        std::make_pair("2401MHz", "2401000"),
-        std::make_pair("2252MHz", "2252000"),
-        std::make_pair("2188MHz", "2188000"),
-        std::make_pair("2048MHz", "2048000"),
-        std::make_pair("1826MHz", "1826000"),
-        std::make_pair("1745MHz", "1745000"),
-        std::make_pair("1582MHz", "1582000"),
-        std::make_pair("1426MHz", "1426000"),
-        std::make_pair("1277MHz", "1277000"),
-        std::make_pair("1106MHz", "1106000"),
-        std::make_pair("984MHz", "984000"),
-        std::make_pair("851MHz", "851000"),
-        std::make_pair("500MHz", "500000"),
-        std::make_pair("0MHz", "0"),
-    }});
-
     cfgs.push_back({"TPU", {
         std::make_pair("1066MHz", "1066000"),
         std::make_pair("845MHz", "845000"),
@@ -352,6 +294,15 @@ void addCPUclusters(std::shared_ptr<PowerStats> p) {
 
     p->addStateResidencyDataProvider(std::make_unique<GenericStateResidencyDataProvider>(
             "/sys/devices/platform/acpm_stats/core_stats", cfgs));
+
+    p->addStateResidencyDataProvider(std::make_unique<DevfreqStateResidencyDataProvider>(
+            "CL0", "/sys/devices/system/cpu/cpufreq/policy0/stats"));
+
+    p->addStateResidencyDataProvider(std::make_unique<DevfreqStateResidencyDataProvider>(
+            "CL1", "/sys/devices/system/cpu/cpufreq/policy4/stats"));
+
+    p->addStateResidencyDataProvider(std::make_unique<DevfreqStateResidencyDataProvider>(
+            "CL2", "/sys/devices/system/cpu/cpufreq/policy6/stats"));
 
     p->addEnergyConsumer(PowerStatsEnergyConsumer::createMeterConsumer(p,
             EnergyConsumerType::CPU_CLUSTER, "CPUCL0", {"S4M_VDD_CPUCL0"}));
