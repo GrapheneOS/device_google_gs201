@@ -960,6 +960,7 @@ on property:vendor.thermal.link_ready=1
     chmod 664 /dev/thermal/cdev-by-name/thermal-gpufreq-0/user_vote
     chown system system /dev/thermal/cdev-by-name/thermal-gpufreq-0/user_vote
     chmod 664 /dev/thermal/cdev-by-name/tpu_cooling/user_vote
+    chown system system /dev/thermal/cdev-by-name/gxp-cooling/user_vote
     chown system system /dev/thermal/cdev-by-name/tpu_cooling/user_vote
     chmod 664 /dev/thermal/cdev-by-name/fcc/cur_state
     chown system system /dev/thermal/cdev-by-name/fcc/cur_state
