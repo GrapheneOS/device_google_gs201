@@ -82,6 +82,7 @@
     </hal>
     <hal format="aidl" optional="true">
       <name>com.google.face.debug</name>
+      <version>2</version>
         <interface>
             <name>IDebugHost</name>
             <instance>default</instance>
