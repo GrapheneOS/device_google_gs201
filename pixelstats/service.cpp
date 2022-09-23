@@ -58,6 +58,14 @@ const struct SysfsCollector::SysfsPaths sysfs_paths = {
     },
     .BlockStatsLength = BLOCK_STATS_LENGTH,
     .AmsRatePath = "/sys/devices/platform/audiometrics/ams_rate_read_once",
+    .ThermalStatsPaths = {
+        "/sys/devices/platform/100a0000.BIG/trip_counter",
+        "/sys/devices/platform/100a0000.MID/trip_counter",
+        "/sys/devices/platform/100a0000.LITTLE/trip_counter",
+        "/sys/devices/platform/100b0000.G3D/trip_counter",
+        "/sys/devices/platform/100b0000.TPU/trip_counter",
+        "/sys/devices/platform/100b0000.AUR/trip_counter",
+    }
 };
 
 const struct UeventListener::UeventPaths ueventPaths = {
