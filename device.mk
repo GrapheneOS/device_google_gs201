@@ -570,6 +570,9 @@ PRODUCT_PACKAGES_DEBUG += \
 	f2fs.fibmap \
 	dump.f2fs
 
+# Storage dump
+include device/google/gs-common/storage/storage.mk
+
 # Storage health HAL
 PRODUCT_PACKAGES += \
 	android.hardware.health.storage-service.default
