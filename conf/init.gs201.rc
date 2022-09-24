@@ -796,9 +796,6 @@ on property:sys.boot_completed=1
     chown system system /sys/devices/platform/19000000.aoc/control/udfps_get_disp_freq
     chmod 440 /sys/devices/platform/19000000.aoc/control/udfps_get_disp_freq
 
-    # Enable GPU power optimization
-    write /sys/devices/platform/28000000.mali/ifpo 1
-
     # Disable GPU firmware logging
     write /sys/devices/platform/28000000.mali/firmware_config/Log\ verbosity/cur 0
 
