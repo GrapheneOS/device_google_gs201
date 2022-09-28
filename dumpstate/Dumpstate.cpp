@@ -956,13 +956,6 @@ void Dumpstate::dumpMemorySection(int fd) {
                        "done"});
 }
 
-static void DumpF2FS(int fd) {
-    DumpFileToFd(fd, "F2FS", "/sys/kernel/debug/f2fs/status");
-    DumpFileToFd(fd, "F2FS", "/dev/fscklogs/fsck");
-    RunCommandToFd(fd, "F2FS - fsck time (ms)", {"/vendor/bin/sh", "-c", "getprop ro.boottime.init.fsck.data"});
-    RunCommandToFd(fd, "F2FS - checkpoint=disable time (ms)", {"/vendor/bin/sh", "-c", "getprop ro.boottime.init.mount.data"});
-}
-
 static void DumpUFS(int fd) {
     DumpFileToFd(fd, "UFS model", "/sys/block/sda/device/model");
     DumpFileToFd(fd, "UFS rev", "/sys/block/sda/device/rev");
@@ -1016,7 +1009,6 @@ static void DumpUFS(int fd) {
 
 // Dump items related to storage
 void Dumpstate::dumpStorageSection(int fd) {
-    DumpF2FS(fd);
     DumpUFS(fd);
 }
 
