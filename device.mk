@@ -15,6 +15,7 @@
 #
 
 include device/google/gs-common/device.mk
+include device/google/gs-common/gs_watchdogd/watchdog.mk
 
 TARGET_BOARD_PLATFORM := gs201
 
