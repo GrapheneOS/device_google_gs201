@@ -15,6 +15,7 @@
 #
 
 include device/google/gs-common/device.mk
+include device/google/gs-common/gs_watchdogd/watchdog.mk
 
 TARGET_BOARD_PLATFORM := gs201
 
@@ -327,6 +328,7 @@ PRODUCT_COPY_FILES += \
 # Shell scripts
 PRODUCT_COPY_FILES += \
 	device/google/gs201/init.display.sh:$(TARGET_COPY_OUT_VENDOR)/bin/init.display.sh \
+	device/google/gs201/disable_contaminant_detection.sh:$(TARGET_COPY_OUT_VENDOR)/bin/hw/disable_contaminant_detection.sh
 
 include device/google/gs-common/insmod/insmod.mk
 
