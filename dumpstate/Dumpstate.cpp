@@ -233,7 +233,6 @@ Dumpstate::Dumpstate()
         { "display", [this](int fd) { dumpDisplaySection(fd); } },
         { "sensors-usf", [this](int fd) { dumpSensorsUSFSection(fd); } },
         { "aoc", [this](int fd) { dumpAoCSection(fd); } },
-        { "ramdump", [this](int fd) { dumpRamdumpSection(fd); } },
         { "misc", [this](int fd) { dumpMiscSection(fd); } },
         { "led", [this](int fd) { dumpLEDSection(fd); } },
     },
@@ -1034,39 +1033,6 @@ void Dumpstate::dumpSensorsUSFSection(int fd) {
                            options);
         }
     }
-}
-
-// Gzip binary data and dump to fd in base64 format. Cmd to decode is also attached.
-void dumpGzippedFileInBase64ToFd(int fd, const char* title, const char* file_path) {
-    auto cmd = ::android::base::StringPrintf("echo 'base64 -d <<EOF | gunzip' ; "
-               "/vendor/bin/gzip < \"%s\" | /vendor/bin/base64 ; "
-               "echo 'EOF'", file_path);
-    RunCommandToFd(fd, title,
-                   {"/vendor/bin/sh", "-c", cmd.c_str()},
-                   CommandOptions::WithTimeout(10).Build());
-}
-
-struct abl_log_header {
-    uint64_t i;
-    uint64_t size;
-    char buf[];
-} __attribute__((packed));
-
-// Dump items related to ramdump.
-void Dumpstate::dumpRamdumpSection(int fd) {
-    std::string abl_log;
-    if (::android::base::ReadFileToString("/mnt/vendor/ramdump/abl.log", &abl_log)) {
-        const struct abl_log_header *header = (const struct abl_log_header*) abl_log.c_str();
-        ::android::base::WriteStringToFd(::android::base::StringPrintf(
-                    "------ Ramdump misc file: abl.log (i:0x%" PRIx64 " size:0x%" PRIx64 ") ------\n%s\n",
-                    header->i, header->size, std::string(header->buf, header->i).c_str()), fd);
-    } else {
-        ::android::base::WriteStringToFd("*** Ramdump misc file: abl.log: File not found\n", fd);
-    }
-    dumpGzippedFileInBase64ToFd(
-        fd, "Ramdump misc file: acpm.lst (gzipped in base64)", "/mnt/vendor/ramdump/acpm.lst");
-    dumpGzippedFileInBase64ToFd(
-        fd, "Ramdump misc file: s2d.lst (gzipped in base64)", "/mnt/vendor/ramdump/s2d.lst");
 }
 
 // Dump items that don't fit well into any other section
