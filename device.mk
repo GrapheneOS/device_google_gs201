@@ -127,6 +127,7 @@ PRODUCT_PROPERTY_OVERRIDES += \
 	persist.vendor.ril.enable_set_screen_state=1
 
 # Set the Bluetooth Class of Device
+ifneq ($(USE_TABLET_BT_COD),true)
 # Service Field: 0x5A -> 90
 #    Bit 14: LE audio
 #    Bit 17: Networking
@@ -137,6 +138,18 @@ PRODUCT_PROPERTY_OVERRIDES += \
 # MINOR_CLASS: 0x0C -> 12 (Smart Phone)
 PRODUCT_PRODUCT_PROPERTIES += \
     bluetooth.device.class_of_device=90,66,12
+else
+# Service Field: 0x5A -> 90
+#    Bit 14: LE audio
+#    Bit 17: Networking
+#    Bit 19: Capturing
+#    Bit 20: Object Transfer
+#    Bit 22: Telephony
+# MAJOR_CLASS: 0x41 -> 65 (Computer)
+# MINOR_CLASS: 0x10 -> 16 (Handheld PC/PDA clamshell)
+PRODUCT_PRODUCT_PROPERTIES += \
+    bluetooth.device.class_of_device=90,65,16
+endif
 
 # Set supported Bluetooth profiles to enabled
 PRODUCT_PRODUCT_PROPERTIES += \
@@ -300,6 +313,7 @@ PRODUCT_COPY_FILES += \
 # Shell scripts
 PRODUCT_COPY_FILES += \
 	device/google/gs201/init.insmod.sh:$(TARGET_COPY_OUT_VENDOR)/bin/init.insmod.sh \
+	device/google/gs201/disable_contaminant_detection.sh:$(TARGET_COPY_OUT_VENDOR)/bin/hw/disable_contaminant_detection.sh
 
 # insmod files
 PRODUCT_COPY_FILES += \
@@ -369,15 +383,19 @@ PRODUCT_COPY_FILES += \
 # Sensors
 PRODUCT_COPY_FILES += \
 	frameworks/native/data/etc/android.hardware.sensor.accelerometer.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.sensor.accelerometer.xml \
-	frameworks/native/data/etc/android.hardware.sensor.barometer.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.sensor.barometer.xml \
 	frameworks/native/data/etc/android.hardware.sensor.compass.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.sensor.compass.xml \
 	frameworks/native/data/etc/android.hardware.sensor.dynamic.head_tracker.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.sensor.dynamic.head_tracker.xml \
 	frameworks/native/data/etc/android.hardware.sensor.gyroscope.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.sensor.gyroscope.xml \
-	frameworks/native/data/etc/android.hardware.sensor.hifi_sensors.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.sensor.hifi_sensors.xml \
 	frameworks/native/data/etc/android.hardware.sensor.light.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.sensor.light.xml\
-	frameworks/native/data/etc/android.hardware.sensor.proximity.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.sensor.proximity.xml \
 	frameworks/native/data/etc/android.hardware.sensor.stepcounter.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.sensor.stepcounter.xml \
 	frameworks/native/data/etc/android.hardware.sensor.stepdetector.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.sensor.stepdetector.xml
+# (See b/240652154)
+ifneq ($(DISABLE_SENSOR_BARO_PROX_HIFI),true)
+PRODUCT_COPY_FILES += \
+	frameworks/native/data/etc/android.hardware.sensor.barometer.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.sensor.barometer.xml \
+	frameworks/native/data/etc/android.hardware.sensor.hifi_sensors.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.sensor.hifi_sensors.xml \
+	frameworks/native/data/etc/android.hardware.sensor.proximity.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.sensor.proximity.xml
+endif
 
 # Add sensor HAL 2.1 product packages
 PRODUCT_PACKAGES += android.hardware.sensors@2.1-service.multihal
@@ -485,6 +503,8 @@ PRODUCT_PACKAGES += \
 PANTHER_PRODUCT := %panther
 CHEETAH_PRODUCT := %cheetah
 LYNX_PRODUCT := %lynx
+FELIX_PRODUCT := %felix
+TANGOR_PRODUCT := %tangorpro
 CLOUDRIPPER_PRODUCT := %cloudripper
 ifneq (,$(filter $(PANTHER_PRODUCT), $(TARGET_PRODUCT)))
         LOCAL_TARGET_PRODUCT := panther
@@ -492,6 +512,10 @@ else ifneq (,$(filter $(CHEETAH_PRODUCT), $(TARGET_PRODUCT)))
         LOCAL_TARGET_PRODUCT := cheetah
 else ifneq (,$(filter $(LYNX_PRODUCT), $(TARGET_PRODUCT)))
         LOCAL_TARGET_PRODUCT := lynx
+else ifneq (,$(filter $(FELIX_PRODUCT), $(TARGET_PRODUCT)))
+        LOCAL_TARGET_PRODUCT := felix
+else ifneq (,$(filter $(TANGOR_PRODUCT), $(TARGET_PRODUCT)))
+        LOCAL_TARGET_PRODUCT := tangorpro
 else ifneq (,$(filter $(CLOUDRIPPER_PRODUCT), $(TARGET_PRODUCT)))
         LOCAL_TARGET_PRODUCT := cloudripper
 else
@@ -942,8 +966,7 @@ $(call inherit-product-if-exists, vendor/google/camera/devices/whi/device-vendor
 
 PRODUCT_COPY_FILES += \
 	device/google/gs201/default-permissions.xml:$(TARGET_COPY_OUT_PRODUCT)/etc/default-permissions/default-permissions.xml \
-	device/google/gs201/component-overrides.xml:$(TARGET_COPY_OUT_VENDOR)/etc/sysconfig/component-overrides.xml \
-	frameworks/native/data/etc/handheld_core_hardware.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/handheld_core_hardware.xml \
+	device/google/gs201/component-overrides.xml:$(TARGET_COPY_OUT_VENDOR)/etc/sysconfig/component-overrides.xml
 
 # modem logging configs
 PRODUCT_COPY_FILES += \
@@ -1023,10 +1046,6 @@ PRODUCT_COPY_FILES += \
         frameworks/av/services/audiopolicy/config/audio_policy_volumes.xml:$(TARGET_COPY_OUT_VENDOR)/etc/audio_policy_volumes.xml \
 	frameworks/av/services/audiopolicy/config/default_volume_tables.xml:$(TARGET_COPY_OUT_VENDOR)/etc/default_volume_tables.xml \
 	frameworks/av/services/audiopolicy/config/bluetooth_audio_policy_configuration_7_0.xml:$(TARGET_COPY_OUT_VENDOR)/etc/bluetooth_audio_policy_configuration_7_0.xml
-
-##Audio Vendor property
-PRODUCT_PROPERTY_OVERRIDES += \
-	persist.vendor.audio.cca.enabled=true
 
 ##Audio soong
 PRODUCT_SOONG_NAMESPACES += \
@@ -1137,7 +1156,7 @@ include hardware/google/pixel/PixelLogger/PixelLogger.mk
 include hardware/google/pixel/sscoredump/device.mk
 
 # RadioExt Version
-USES_RADIOEXT_V1_4 = true
+USES_RADIOEXT_V1_5 = true
 
 # Wifi ext
 include hardware/google/pixel/wifi_ext/device.mk

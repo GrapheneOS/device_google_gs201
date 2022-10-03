@@ -164,6 +164,7 @@
             <Feature name="vq-minimum-quality"/>
             <Feature name="qp-bounds"/>
             <Feature name="encoding-statistics"/>
+            <Feature name="bitrate-modes" value="VBR,CBR,CBR-FD" />
         </MediaCodec>
         <MediaCodec name="c2.exynos.hevc.encoder" type="video/hevc" >
             <Limit name="size" min="64x64" max="3840x2176" />
@@ -180,6 +181,7 @@
             <Feature name="qp-bounds"/>
             <Feature name="encoding-statistics"/>
             <Feature name="hdr-editing" />
+            <Feature name="bitrate-modes" value="VBR,CBR,CBR-FD" />
         </MediaCodec>
         <MediaCodec name="c2.exynos.mpeg4.encoder" type="video/mp4v-es">
             <Limit name="size" min="32x32" max="2048x2048" />
@@ -195,6 +197,7 @@
             <Feature name="vq-minimum-quality"/>
             <Feature name="qp-bounds"/>
             <Feature name="encoding-statistics"/>
+            <Feature name="bitrate-modes" value="VBR,CBR" />
         </MediaCodec>
         <MediaCodec name="c2.exynos.h263.encoder" type="video/3gpp">
             <Limit name="size" min="32x32" max="2048x1152" />
@@ -209,6 +212,7 @@
             <Feature name="vq-minimum-quality"/>
             <Feature name="qp-bounds"/>
             <Feature name="encoding-statistics"/>
+            <Feature name="bitrate-modes" value="VBR,CBR" />
         </MediaCodec>
         <MediaCodec name="c2.exynos.vp8.encoder" type="video/x-vnd.on2.vp8" >
             <Limit name="size" min="32x32" max="3840x2160" />
@@ -224,6 +228,7 @@
             <Feature name="vq-minimum-quality"/>
             <Feature name="qp-bounds"/>
             <Feature name="encoding-statistics"/>
+            <Feature name="bitrate-modes" value="VBR,CBR" />
         </MediaCodec>
         <MediaCodec name="c2.exynos.vp9.encoder" type="video/x-vnd.on2.vp9" >
             <Limit name="size" min="64x64" max="3840x2176" />
@@ -239,6 +244,7 @@
             <Feature name="vq-minimum-quality"/>
             <Feature name="qp-bounds"/>
             <Feature name="encoding-statistics"/>
+            <Feature name="bitrate-modes" value="VBR,CBR" />
         </MediaCodec>
     </Encoders>
 </MediaCodecs>

@@ -82,6 +82,7 @@
     </hal>
     <hal format="aidl" optional="true">
       <name>com.google.face.debug</name>
+      <version>2</version>
         <interface>
             <name>IDebugHost</name>
             <instance>default</instance>
@@ -112,6 +113,7 @@
     </hal>
     <hal format="aidl" optional="true">
         <name>hardware.qorvo.uwb</name>
+        <version>2</version>
         <interface>
             <name>IUwbVendor</name>
             <instance>default</instance>
@@ -167,7 +169,7 @@
     </hal>
     <hal format="hidl" optional="true">
         <name>vendor.google.radioext</name>
-        <version>1.4</version>
+        <version>1.5</version>
         <interface>
             <name>IRadioExt</name>
             <instance>default</instance>

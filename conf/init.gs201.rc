@@ -254,6 +254,10 @@ on init
     # Thermal Charge stats (write 0)
     chown system system /sys/devices/platform/google,charger/thermal_stats
 
+    # Permission for wireless charging fan
+    chown system system /sys/devices/platform/google,charger/thermal_dc_fan_alarm
+    chown system system /sys/devices/platform/google,cpm/thermal_mdis_fan_alarm
+
     # Permission for wireless charging
     chown system system /sys/class/power_supply/wireless/capacity
     chown system system /sys/class/power_supply/wireless/device/rtx
@@ -609,6 +613,8 @@ service gnss_service /vendor/bin/hw/android.hardware.gnss@2.1-service-brcm
     class hal
     user gps
     group system gps radio
+    ioprio be 0
+    priority -1
 
 # disable gps service if no gps h/w
 on property:vendor.ril.cbd.svc=0
@@ -747,7 +753,7 @@ on property:sys.boot_completed=1
     write /sys/devices/platform/14460000.pinctrl/power/async "enabled"
 
     # Setup groups for SF (RT used for SF RE, SF used for SF main)
-    write /proc/vendor_sched/rt_uclamp_min 159
+    write /proc/vendor_sched/rt_uclamp_min 236
     write /proc/vendor_sched/rt_prefer_idle 1
     write /proc/vendor_sched/sf_uclamp_min 39
     write /proc/vendor_sched/sf_prefer_idle 1
@@ -789,9 +795,6 @@ on property:sys.boot_completed=1
     chmod 440 /sys/devices/platform/19000000.aoc/control/udfps_get_osc_freq
     chown system system /sys/devices/platform/19000000.aoc/control/udfps_get_disp_freq
     chmod 440 /sys/devices/platform/19000000.aoc/control/udfps_get_disp_freq
-
-    # Enable GPU power optimization
-    write /sys/devices/platform/28000000.mali/ifpo 1
 
     # Disable GPU firmware logging
     write /sys/devices/platform/28000000.mali/firmware_config/Log\ verbosity/cur 0
@@ -949,6 +952,8 @@ on property:vendor.thermal.link_ready=1
     chown system system /dev/thermal/tz-by-name/batoilo/trip_point_0_temp
     chown system system /dev/thermal/tz-by-name/batoilo/trip_point_0_hyst
     # Thermal
+    chown system system /dev/thermal/tz-by-name/skin_therm/trip_point_0_temp
+    chown system system /dev/thermal/tz-by-name/skin_therm/trip_point_0_hyst
     chown system system /dev/thermal/tz-by-name/skin_therm1/trip_point_0_temp
     chown system system /dev/thermal/tz-by-name/skin_therm1/trip_point_0_hyst
     chown system system /dev/thermal/tz-by-name/quiet_therm/trip_point_0_temp
@@ -961,12 +966,26 @@ on property:vendor.thermal.link_ready=1
     chown system system /dev/thermal/cdev-by-name/thermal-cpufreq-1/user_vote
     chown system system /dev/thermal/cdev-by-name/thermal-cpufreq-2/user_vote
     chown system system /dev/thermal/cdev-by-name/thermal-gpufreq-0/user_vote
+    chown system system /dev/thermal/cdev-by-name/gxp-cooling/user_vote
     chown system system /dev/thermal/cdev-by-name/tpu_cooling/user_vote
     chown system system /dev/thermal/cdev-by-name/fcc/cur_state
     chown system system /dev/thermal/cdev-by-name/dc_icl/cur_state
     chown system system /dev/thermal/cdev-by-name/wlc_fcc/cur_state
     chown system system /dev/thermal/cdev-by-name/chg_mdis/cur_state
     chown system system /dev/thermal/cdev-by-name/usbc-port/cur_state
+
+on charger
+    # Use charger thermal config
+    setprop vendor.thermal.config "thermal_info_config_charge.json"
+
+    # Wait for insmod_sh to finish all common modules
+    wait_for_prop vendor.common.modules.ready 1
+
+    # Create thermal symlink in off charging mode
+    mkdir /dev/thermal 0750 system system
+    mkdir /dev/thermal/tz-by-name 0750 system system
+    mkdir /dev/thermal/cdev-by-name 0750 system system
+    start vendor.thermal.symlinks
 
 on property:vendor.disable.bcl.control=1
     write /sys/devices/virtual/pmic/mitigation/instruction/enable_mitigation 0
