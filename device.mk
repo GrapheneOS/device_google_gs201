@@ -17,6 +17,7 @@
 include device/google/gs-common/device.mk
 include device/google/gs-common/gs_watchdogd/watchdog.mk
 include device/google/gs-common/ramdump/ramdump.mk
+include device/google/gs-common/soc/soc.mk
 
 TARGET_BOARD_PLATFORM := gs201
 
