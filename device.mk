@@ -16,6 +16,7 @@
 
 include device/google/gs-common/device.mk
 include device/google/gs-common/gs_watchdogd/watchdog.mk
+include device/google/gs-common/ramdump/ramdump.mk
 
 TARGET_BOARD_PLATFORM := gs201
 
@@ -804,6 +805,9 @@ endif
 # Trusty (KM, GK, Storage)
 $(call inherit-product, system/core/trusty/trusty-storage.mk)
 $(call inherit-product, system/core/trusty/trusty-base.mk)
+
+# Trusty dump
+include device/google/gs-common/trusty/trusty.mk
 
 # Trusty unit test tool
 PRODUCT_PACKAGES_DEBUG += trusty-ut-ctrl \
