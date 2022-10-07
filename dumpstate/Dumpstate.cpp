@@ -222,7 +222,6 @@ void endSection(int fd, const std::string &sectionName, timepoint_t startTime) {
 Dumpstate::Dumpstate()
   : mTextSections{
         { "wlan", [this](int fd) { dumpWlanSection(fd); } },
-        { "modem", [this](int fd) { dumpModemSection(fd); } },
         { "memory", [this](int fd) { dumpMemorySection(fd); } },
         { "Devfreq", [this](int fd) { dumpDevfreqSection(fd); } },
         { "cpu", [this](int fd) { dumpCpuSection(fd); } },
@@ -1043,18 +1042,6 @@ void Dumpstate::dumpLEDSection(int fd) {
             DumpFileToFd(fd, "LED Calibration Data", "/mnt/vendor/persist/led/led_calibration_LUT.txt");
         }
     }
-}
-
-void Dumpstate::dumpModemSection(int fd) {
-    DumpFileToFd(fd, "Modem Stat", "/data/vendor/modem_stat/debug.txt");
-    RunCommandToFd(fd, "Modem SSR history", {"/vendor/bin/sh", "-c",
-                       "for f in $(ls /data/vendor/ssrdump/crashinfo_modem*); do "
-                       "echo $f ; cat $f ; done"},
-                       CommandOptions::WithTimeout(2).Build());
-    RunCommandToFd(fd, "RFSD error log", {"/vendor/bin/sh", "-c",
-                       "for f in $(ls /data/vendor/log/rfsd/rfslog_*); do "
-                       "echo $f ; cat $f ; done"},
-                       CommandOptions::WithTimeout(2).Build());
 }
 
 void Dumpstate::dumpModemLogs(int fd, const std::string &destDir) {
