@@ -63,8 +63,27 @@ const struct MitigationConfig::Config cfg = {
     .LogFilePath = "/data/vendor/mitigation/thismeal.txt",
 };
 
+const char kReadyFilePath[] = "/sys/devices/virtual/pmic/mitigation/instruction/ready";
+const char kReadyProperty[] = "vendor.brownout.mitigation.ready";
+
 int main(int /*argc*/, char ** /*argv*/) {
     bmSp = new BatteryMitigation(cfg);
+    bool isBatteryMitigationReady = false;
+    std::string ready_str;
+    int val = 0;
+    while (!isBatteryMitigationReady) {
+        if (!android::base::ReadFileToString(kReadyFilePath, &ready_str)) {
+            continue;
+        }
+        ready_str = android::base::Trim(ready_str);
+        if (!android::base::ParseInt(ready_str, &val)) {
+            continue;
+        }
+        if (val == 1) {
+            isBatteryMitigationReady = true;
+        }
+    }
+    android::base::SetProperty(kReadyProperty, "1");
     while (true) {
         pause();
     }
