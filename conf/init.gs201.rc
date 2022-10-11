@@ -901,7 +901,7 @@ on post-fs-data
     mkdir /data/vendor/powerstats 0771 system system
     chown system system /data/vendor/powerstats
 
-on property:vendor.thermal.link_ready=1
+on property:vendor.brownout.mitigation.ready=1
     # BCL
     write /sys/devices/virtual/pmic/mitigation/clock_ratio/tpu_light_clk_ratio 0xfff041c1 #DFS
     write /sys/devices/virtual/pmic/mitigation/clock_ratio/cpu1_heavy_clk_ratio 0xfff041c1 #DFS
@@ -917,6 +917,9 @@ on property:vendor.thermal.link_ready=1
     write /sys/devices/virtual/pmic/mitigation/clock_div/tpu_clk_div 0x1
     write /sys/devices/virtual/pmic/mitigation/clock_div/gpu_clk_div 0x1
     write /sys/devices/virtual/pmic/mitigation/clock_div/cpu2_clk_div 0x1
+
+on property:vendor.thermal.link_ready=1
+    # BCL
     chown system system /dev/thermal/tz-by-name/soc/mode
     chown system system /dev/thermal/tz-by-name/vdroop2/trip_point_0_temp
     chown system system /dev/thermal/tz-by-name/vdroop2/trip_point_0_hyst
