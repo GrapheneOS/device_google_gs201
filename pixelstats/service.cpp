@@ -58,6 +58,7 @@ const struct SysfsCollector::SysfsPaths sysfs_paths = {
     },
     .BlockStatsLength = BLOCK_STATS_LENGTH,
     .AmsRatePath = "/sys/devices/platform/audiometrics/ams_rate_read_once",
+    .MitigationPath = "/sys/devices/virtual/pmic/mitigation",
     .ThermalStatsPaths = {
         "/sys/devices/platform/100a0000.BIG/trip_counter",
         "/sys/devices/platform/100a0000.MID/trip_counter",
