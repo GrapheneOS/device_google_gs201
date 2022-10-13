@@ -384,9 +384,6 @@ BOARD_DTBOIMG_PARTITION_SIZE := 0x01000000
 # Build vendor kernel boot image
 BOARD_VENDOR_KERNEL_BOOTIMAGE_PARTITION_SIZE := 0x04000000
 
-# System As Root
-BOARD_BUILD_SYSTEM_ROOT_IMAGE := false
-
 # Vendor ramdisk image for kernel development
 BOARD_BUILD_VENDOR_RAMDISK_IMAGE := true
 
