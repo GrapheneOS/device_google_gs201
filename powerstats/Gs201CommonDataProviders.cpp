@@ -318,7 +318,6 @@ void addGPU(std::shared_ptr<PowerStats> p) {
 
     // TODO (b/197721618): Measuring the GPU power numbers
     stateCoeffs = {
-        {"151000",  642},
         {"202000",  890},
         {"251000", 1102},
         {"302000", 1308},
@@ -614,10 +613,6 @@ void addCommonDataProviders(std::shared_ptr<PowerStats> p) {
     addPowerDomains(p);
     addDevfreq(p);
     addTPU(p);
-
-    // TODO (b/181070764) (b/182941084):
-    // Remove this when Wifi/BT energy consumption models are available or revert before ship
-    addPlaceholderEnergyConsumers(p);
 }
 
 void addGs201CommonDataProviders(std::shared_ptr<PowerStats> p) {
