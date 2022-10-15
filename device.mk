@@ -558,7 +558,6 @@ $(call soong_config_set,google3a_config,soc,gs201)
 
 # WiFi
 PRODUCT_PACKAGES += \
-	android.hardware.wifi-service \
 	wificond \
 	libwpa_client
 
