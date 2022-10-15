@@ -289,4 +289,7 @@
         <item>"com.shannon.imsservice"</item>
         <item>"com.android.phone"</item>
     </string-array>
+
+    <!-- Whether device supports increased touch sensitvity -->
+    <bool name="config_supportGloveMode">true</bool>
 </resources>
