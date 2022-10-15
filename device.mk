@@ -1074,7 +1074,6 @@ PRODUCT_PACKAGES += \
 # A/B support
 PRODUCT_PACKAGES += \
 	otapreopt_script \
-	cppreopts.sh \
 	update_engine \
 	update_engine_sideload \
 	update_verifier
