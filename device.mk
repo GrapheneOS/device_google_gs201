@@ -850,8 +850,8 @@ endif
 PRODUCT_PACKAGES += \
 	vndk-libs
 
-PRODUCT_ENFORCE_RRO_TARGETS := \
-	framework-res
+#PRODUCT_ENFORCE_RRO_TARGETS := \
+#	framework-res
 
 # Dynamic Partitions
 PRODUCT_USE_DYNAMIC_PARTITIONS := true
