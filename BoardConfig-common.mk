@@ -315,7 +315,7 @@ BOARD_EXYNOS_S10B_FORMAT_ALIGN := 64
 
 # NeuralNetworks
 GPU_SOURCE_PRESENT := $(wildcard vendor/arm/mali/valhall)
-GPU_PREBUILD_PRESENT := $(wildcard vendor/google_devices/zebu/prebuilts/libs)
+GPU_PREBUILD_PRESENT := $(wildcard vendor/google_devices/$(TARGET_DEVICE)/proprietary/vendor)
 ifneq (,$(strip $(GPU_SOURCE_PRESENT) $(GPU_PREBUILD_PRESENT)))
 ARMNN_COMPUTE_CL_ENABLE := 1
 else
