@@ -22,4 +22,7 @@
     <bool name="config_show_connectivity_helper_call_quality">true</bool>
     <!-- The switch preference's default value of connectivity helper DeviceToDevice-->
     <bool name="config_show_connectivity_helper_d2d">true</bool>
+
+    <!-- Whether to show Smooth Display feature in Settings Options -->
+    <bool name="config_show_smooth_display">true</bool>
 </resources>
