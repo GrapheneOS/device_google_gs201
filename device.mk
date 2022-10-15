@@ -1142,7 +1142,6 @@ PRODUCT_PACKAGES += dump_power_gs201.sh
 DEVICE_PRODUCT_COMPATIBILITY_MATRIX_FILE += device/google/gs201/device_framework_matrix_product.xml
 
 # Preopt SystemUI
-PRODUCT_DEXPREOPT_SPEED_APPS += SystemUIGoogle  # For internal
 PRODUCT_DEXPREOPT_SPEED_APPS += SystemUI  # For AOSP
 
 # Compile SystemUI on device with `speed`.
