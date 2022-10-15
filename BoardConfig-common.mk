@@ -87,27 +87,13 @@ AB_OTA_PARTITIONS += \
 	system_dlkm \
 	system_ext \
 	product \
-	vbmeta_system
-
-ifneq ($(PRODUCT_BUILD_BOOT_IMAGE),false)
-AB_OTA_PARTITIONS += boot
-endif
-ifneq ($(PRODUCT_BUILD_INIT_BOOT_IMAGE), false)
-AB_OTA_PARTITIONS += init_boot
-endif
-ifneq ($(PRODUCT_BUILD_VENDOR_BOOT_IMAGE),false)
-AB_OTA_PARTITIONS += vendor_boot
-AB_OTA_PARTITIONS += dtbo
-endif
-ifeq ($(PRODUCT_BUILD_VENDOR_KERNEL_BOOT_IMAGE),true)
-AB_OTA_PARTITIONS += vendor_kernel_boot
-endif
-ifneq ($(PRODUCT_BUILD_VBMETA_IMAGE),false)
-AB_OTA_PARTITIONS += vbmeta
-endif
-ifneq ($(PRODUCT_BUILD_PVMFW_IMAGE),false)
-AB_OTA_PARTITIONS += pvmfw
-endif
+	boot \
+	init_boot \
+	vendor_boot \
+	dtbo \
+	vendor_kernel_boot \
+	vbmeta \
+	pvmfw
 
 # EMULATOR common modules
 BOARD_EMULATOR_COMMON_MODULES := liblight
@@ -143,29 +129,6 @@ $(call soong_config_set,arm_gralloc,gralloc_ion_sync_on_lock,$(BOARD_USES_GRALLO
 
 # Graphics
 #BOARD_USES_EXYNOS_DATASPACE_FEATURE := true
-
-# Enable chain partition for system.
-BOARD_AVB_VBMETA_SYSTEM := system system_dlkm system_ext product
-BOARD_AVB_VBMETA_SYSTEM_KEY_PATH := external/avb/test/data/testkey_rsa2048.pem
-BOARD_AVB_VBMETA_SYSTEM_ALGORITHM := SHA256_RSA2048
-BOARD_AVB_VBMETA_SYSTEM_ROLLBACK_INDEX := $(PLATFORM_SECURITY_PATCH_TIMESTAMP)
-BOARD_AVB_VBMETA_SYSTEM_ROLLBACK_INDEX_LOCATION := 1
-
-ifneq ($(PRODUCT_BUILD_PVMFW_IMAGE),false)
-BOARD_AVB_VBMETA_SYSTEM += pvmfw
-endif
-
-# Enable chained vbmeta for boot images
-BOARD_AVB_BOOT_KEY_PATH := external/avb/test/data/testkey_rsa2048.pem
-BOARD_AVB_BOOT_ALGORITHM := SHA256_RSA2048
-BOARD_AVB_BOOT_ROLLBACK_INDEX := $(PLATFORM_SECURITY_PATCH_TIMESTAMP)
-BOARD_AVB_BOOT_ROLLBACK_INDEX_LOCATION := 2
-
-# Enable chained vbmeta for init_boot images
-BOARD_AVB_INIT_BOOT_KEY_PATH := external/avb/test/data/testkey_rsa2048.pem
-BOARD_AVB_INIT_BOOT_ALGORITHM := SHA256_RSA2048
-BOARD_AVB_INIT_BOOT_ROLLBACK_INDEX := $(PLATFORM_SECURITY_PATCH_TIMESTAMP)
-BOARD_AVB_INIT_BOOT_ROLLBACK_INDEX_LOCATION := 4
 
 TARGET_USERIMAGES_USE_EXT4 := true
 TARGET_USERIMAGES_USE_F2FS := true
