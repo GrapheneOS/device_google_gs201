@@ -45,8 +45,8 @@ genrule {
     name: "gen_fstab.gs201-fips",
     srcs: ["fstab.gs201.in"],
     out: ["fstab.gs201-fips"],
-    cmd: "sed -e s/@fileencryption@/aes-256-xts/" +
-        " -e s/@metadata_encryption@/aes-256-xts/ $(in) > $(out)",
+    cmd: "sed -e s/@fileencryption@/::inlinecrypt_optimized+wrappedkey_v0/" +
+        " -e s/@metadata_encryption@/:wrappedkey_v0/ $(in) > $(out)",
 }
 
 prebuilt_etc {
