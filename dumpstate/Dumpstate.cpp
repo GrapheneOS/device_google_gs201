@@ -47,8 +47,6 @@
 #define TCPDUMP_NUMBER_BUGREPORT "persist.vendor.tcpdump.log.br_num"
 #define TCPDUMP_PERSIST_PROPERTY "persist.vendor.tcpdump.log.alwayson"
 
-#define HW_REVISION "ro.boot.hardware.revision"
-
 using android::os::dumpstate::CommandOptions;
 using android::os::dumpstate::DumpFileToFd;
 using android::os::dumpstate::PropertiesHelper;
@@ -229,7 +227,6 @@ Dumpstate::Dumpstate()
         { "thermal", [this](int fd) { dumpThermalSection(fd); } },
         { "touch", [this](int fd) { dumpTouchSection(fd); } },
         { "display", [this](int fd) { dumpDisplaySection(fd); } },
-        { "sensors-usf", [this](int fd) { dumpSensorsUSFSection(fd); } },
         { "misc", [this](int fd) { dumpMiscSection(fd); } },
         { "led", [this](int fd) { dumpLEDSection(fd); } },
     },
@@ -972,28 +969,6 @@ void Dumpstate::dumpDisplaySection(int fd) {
                            "for f in $(ls /data/vendor/log/hwc/*_hwc_debug*.dump); do "
                            "echo $f ; cat $f ; done"},
                            CommandOptions::WithTimeout(2).Build());
-    }
-}
-
-// Dump items related to sensors usf.
-void Dumpstate::dumpSensorsUSFSection(int fd) {
-    CommandOptions options = CommandOptions::WithTimeout(2).Build();
-    RunCommandToFd(fd, "USF statistics",
-                   {"/vendor/bin/sh", "-c", "usf_stats get --all"},
-                   options);
-    if (!PropertiesHelper::IsUserBuild()) {
-        // Not a user build, if this is also not a production device dump the USF registry.
-        std::string hwRev = ::android::base::GetProperty(HW_REVISION, "");
-        if (hwRev.find("PROTO") != std::string::npos ||
-            hwRev.find("EVT") != std::string::npos ||
-            hwRev.find("DVT") != std::string::npos) {
-            RunCommandToFd(fd, "USF Registry",
-                           {"/vendor/bin/sh", "-c", "usf_reg_edit save -"},
-                           options);
-            RunCommandToFd(fd, "USF Last Stat Buffer",
-                           {"/vendor/bin/sh", "-c", "cat /data/vendor/sensors/debug/stats.history"},
-                           options);
-        }
     }
 }
 
