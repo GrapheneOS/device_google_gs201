@@ -20,7 +20,20 @@
 
 using aidl::android::hardware::power::stats::PowerStats;
 
+void addAoC(std::shared_ptr<PowerStats> p);
+void addCPUclusters(std::shared_ptr<PowerStats> p);
+void addDevfreq(std::shared_ptr<PowerStats> p);
+void addDvfsStats(std::shared_ptr<PowerStats> p);
+void addGNSS(std::shared_ptr<PowerStats> p);
 void addGs201CommonDataProviders(std::shared_ptr<PowerStats> p);
-void addGs201CommonDataProvidersBig(std::shared_ptr<PowerStats> p);
-void addGs201CommonDataProvidersQc(std::shared_ptr<PowerStats> p);
+void addMobileRadio(std::shared_ptr<PowerStats> p);
 void addNFC(std::shared_ptr<PowerStats> p, const std::string& path);
+void addPCIe(std::shared_ptr<PowerStats> p);
+void addPixelStateResidencyDataProvider(std::shared_ptr<PowerStats> p);
+void addPowerDomains(std::shared_ptr<PowerStats> p);
+void addSoC(std::shared_ptr<PowerStats> p);
+void addTPU(std::shared_ptr<PowerStats> p);
+void addUfs(std::shared_ptr<PowerStats> p);
+void addWifi(std::shared_ptr<PowerStats> p);
+void addWlan(std::shared_ptr<PowerStats> p);
+void setEnergyMeter(std::shared_ptr<PowerStats> p);
