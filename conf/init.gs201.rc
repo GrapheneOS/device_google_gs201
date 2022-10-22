@@ -14,6 +14,9 @@ on init
     # CPU0 cannot be offline
     chmod 0444 /sys/devices/system/cpu/cpu0/online
 
+    # Set teo as cpu idle governor
+    write /sys/devices/system/cpu/cpuidle/current_governor teo
+
     # Boot time fs tuning
     write /sys/block/sda/queue/iostats 0
     write /sys/block/sda/queue/scheduler bfq
