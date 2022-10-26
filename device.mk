@@ -809,6 +809,7 @@ PRODUCT_PACKAGES += \
 #PRODUCT_PACKAGES += \
 #	trusty_metricsd
 
+$(call soong_config_set,google_displaycolor,displaycolor_platform,gs201)
 PRODUCT_PACKAGES += \
 	android.hardware.composer.hwc3-service.pixel \
 	libdisplaycolor
