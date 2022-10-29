@@ -309,9 +309,6 @@ on init
     # Disable dock-defend by default
     chown system system /sys/devices/platform/google,charger/dd_settings
     write /sys/devices/platform/google,charger/dd_settings -1
-    # Enable charger mode (aka off-mode charging) by default
-    chown system system /sys/class/power_supply/battery/charger_mode
-    write /sys/class/power_supply/battery/charger_mode 1
 
     # Power Stats HAL
     chown system system /dev/bbd_pwrstat
@@ -857,14 +854,6 @@ on  property:persist.sys.test_harness=1 && property:persist.vendor.testing_batte
     setprop persist.vendor.charge.stop.level 100
     setprop persist.vendor.charge.start.level 0
     setprop vendor.battery.defender.disable 1
-
-# Clear the state of charger_mode
-on property:persist.vendor.charger_mode.enable=1
-    write /sys/class/power_supply/battery/charger_mode 0
-
-# Enable charger_mode when user triggers shutdown from menu
-on property:sys.shutdown.requested=0userrequested
-    write /sys/class/power_supply/battery/charger_mode 1
 
 # on userdebug and eng builds, enable scsi error recovery log
 on property:ro.debuggable=1
