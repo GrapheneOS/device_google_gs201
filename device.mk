@@ -963,11 +963,12 @@ PRODUCT_PROPERTY_OVERRIDES += \
 PRODUCT_COPY_FILES += \
 	device/google/$(TARGET_BOARD_PLATFORM)/conf/init.modem.rc:$(TARGET_COPY_OUT_VENDOR)/etc/init/init.modem.rc \
 	device/google/$(TARGET_BOARD_PLATFORM)/conf/fstab.modem:$(TARGET_COPY_OUT_VENDOR)/etc/fstab.modem \
+	device/google/gs201/location/gps.cer:$(TARGET_COPY_OUT_VENDOR)/etc/gnss/gps.cer
 
-#GPS HAL
-include device/google/gs201/gnss/device-gnss.mk
+
+include device/google/gs-common/gps/brcm/device.mk
 endif
-BOARD_VENDOR_SEPOLICY_DIRS += device/google/gs201-sepolicy/gps
+
 
 $(call inherit-product, $(SRC_TARGET_DIR)/product/core_64_bit_only.mk)
 #$(call inherit-product, hardware/google_devices/exynos5/exynos5.mk)
