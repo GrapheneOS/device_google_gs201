@@ -376,6 +376,7 @@ void Dumpstate::dumpPowerSection(int fd) {
     DumpFileToFd(fd, "TTF stats", "/sys/class/power_supply/battery/ttf_stats");
     DumpFileToFd(fd, "aacr_state", "/sys/class/power_supply/battery/aacr_state");
     DumpFileToFd(fd, "maxq", "/dev/logbuffer_maxq");
+    DumpFileToFd(fd, "TEMP/DOCK-DEFEND", "/dev/logbuffer_bd");
 
     RunCommandToFd(fd, "TRICKLE-DEFEND Config", {"/vendor/bin/sh", "-c",
                         " cd /sys/devices/platform/google,battery/power_supply/battery/;"
