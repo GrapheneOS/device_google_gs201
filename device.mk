@@ -562,10 +562,6 @@ PRODUCT_PACKAGES += \
 PRODUCT_PACKAGES += \
         ConnectivityOverlay
 
-# Battery Mitigation
-PRODUCT_PACKAGES += \
-        battery_mitigation
-
 PRODUCT_PACKAGES_DEBUG += \
 	sg_write_buffer \
 	f2fs_io \
@@ -581,6 +577,8 @@ include device/google/gs-common/storage/storage.mk
 PRODUCT_PACKAGES += \
 	android.hardware.health.storage-service.default
 
+# Battery Mitigation
+include device/google/gs-common/battery_mitigation/bcl.mk
 # storage pixelstats
 -include hardware/google/pixel/pixelstats/device.mk
 
