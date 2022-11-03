@@ -246,6 +246,7 @@ Dumpstate::Dumpstate()
 // if the specified section is not supported.
 void Dumpstate::dumpTextSection(int fd, const std::string &sectionName) {
     bool dumpAll = (sectionName == kAllSections);
+    std::string dumpFiles;
 
     for (const auto &section : mTextSections) {
         if (dumpAll || sectionName == section.first) {
@@ -259,22 +260,29 @@ void Dumpstate::dumpTextSection(int fd, const std::string &sectionName) {
         }
     }
 
-    // Execute all programs under vendor/bin/dump/
+    // Execute all or designated programs under vendor/bin/dump/
     std::unique_ptr<DIR, decltype(&closedir)> dir(opendir("/vendor/bin/dump"), closedir);
     if (!dir) {
-      ALOGE("Fail To Open Dir vendor/bin/dump/");
-    } else {
-      dirent *entry;
-      while ((entry = readdir(dir.get())) != nullptr) {
+        ALOGE("Fail To Open Dir vendor/bin/dump/");
+        ::android::base::WriteStringToFd("Fail To Open Dir vendor/bin/dump/\n", fd);
+        return;
+    }
+    dirent *entry;
+    while ((entry = readdir(dir.get())) != nullptr) {
         // Skip '.', '..'
         if (entry->d_name[0] == '.') {
-          continue;
+            continue;
         }
         std::string bin(entry->d_name);
-        auto startTime = startSection(fd, "/vendor/bin/dump/"+bin);
-        RunCommandToFd(fd, "/vendor/bin/dump/"+bin, {"/vendor/bin/dump/"+bin});
-        endSection(fd, "/vendor/bin/dump/"+bin, startTime);
-      }
+        dumpFiles = dumpFiles + " " + bin;
+        if (dumpAll || sectionName == bin) {
+            auto startTime = startSection(fd, bin);
+            RunCommandToFd(fd, "/vendor/bin/dump/"+bin, {"/vendor/bin/dump/"+bin});
+            endSection(fd, bin, startTime);
+            if (!dumpAll) {
+                return;
+            }
+        }
     }
 
     if (dumpAll) {
@@ -287,6 +295,7 @@ void Dumpstate::dumpTextSection(int fd, const std::string &sectionName) {
     for (const auto &section : mTextSections) {
         ::android::base::WriteStringToFd(" " + section.first, fd);
     }
+    ::android::base::WriteStringToFd(dumpFiles, fd);
     ::android::base::WriteStringToFd("\nNote: sections with attachments (e.g. modem) are"
                                    "not avalable from the command line.\n", fd);
 }
