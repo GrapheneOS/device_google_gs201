@@ -241,6 +241,7 @@ Dumpstate::Dumpstate()
         { "gsc", [this](int fd) { dumpGscSection(fd); } },
         { "trusty", [this](int fd) { dumpTrustySection(fd); } },
         { "led", [this](int fd) { dumpLEDSection(fd); } },
+        { "pixel-trace", [this](int fd) { dumpPixelTraceSection(fd); } },
     },
   mLogSections{
         { "modem", [this](int fd, const std::string &destDir) { dumpModemLogs(fd, destDir); } },
@@ -1306,6 +1307,10 @@ void Dumpstate::dumpLogSection(int fd, int fd_bin)
 
     RunCommandToFd(fd, "RM LOG DIR", { "/vendor/bin/rm", "-r", logAllDir.c_str()}, CommandOptions::WithTimeout(2).Build());
     RunCommandToFd(fd, "RM LOG", { "/vendor/bin/rm", logCombined.c_str()}, CommandOptions::WithTimeout(2).Build());
+}
+
+void Dumpstate::dumpPixelTraceSection(int fd) {
+    DumpFileToFd(fd, "Pixel trace", "/sys/kernel/tracing/instances/pixel/trace");
 }
 
 ndk::ScopedAStatus Dumpstate::dumpstateBoard(const std::vector<::ndk::ScopedFileDescriptor>& in_fds,
