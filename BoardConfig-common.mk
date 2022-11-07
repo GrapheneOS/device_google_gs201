@@ -58,11 +58,7 @@ BOARD_BOOTCONFIG += androidboot.boot_devices=14700000.ufs
 
 TARGET_NO_BOOTLOADER := true
 TARGET_NO_RADIOIMAGE := true
-ifneq (,$(filter userdebug eng,$(TARGET_BUILD_VARIANT)))
 BOARD_PREBUILT_BOOTIMAGE := $(wildcard $(TARGET_KERNEL_DIR)/boot.img)
-else
-BOARD_PREBUILT_BOOTIMAGE := $(wildcard $(TARGET_KERNEL_DIR)/boot-user.img)
-endif
 ifneq (,$(BOARD_PREBUILT_BOOTIMAGE))
 TARGET_NO_KERNEL := true
 else
