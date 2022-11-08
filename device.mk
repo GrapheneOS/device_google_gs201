@@ -1118,8 +1118,13 @@ PRODUCT_PROPERTY_OVERRIDES += persist.vendor.enable.thermal.genl=true
 include hardware/google/pixel/thermal/device.mk
 $(call soong_config_set,thermal_hal_feature,pid,apply_2_0)
 
-## TPU packages
-include device/google/gs201/edgetpu/edgetpu.mk
+# EdgeTPU
+include device/google/gs-common/edgetpu/edgetpu.mk
+# Config variables for TPU chip on device.
+$(call soong_config_set,edgetpu_config,chip,janeiro)
+# TPU firmware
+PRODUCT_PACKAGES += edgetpu-janeiro.fw
+
 
 # Connectivity Thermal Power Manager
 PRODUCT_PACKAGES += \
