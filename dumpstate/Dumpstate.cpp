@@ -15,6 +15,7 @@
  */
 
 #define LOG_TAG "dumpstate_device"
+#define ATRACE_TAG ATRACE_TAG_ALWAYS
 
 #include <inttypes.h>
 
@@ -22,6 +23,7 @@
 #include <android-base/stringprintf.h>
 #include <android-base/properties.h>
 #include <android-base/unique_fd.h>
+#include <cutils/trace.h>
 #include <log/log.h>
 #include <sys/stat.h>
 
@@ -187,6 +189,7 @@ void dumpModemEFS(std::string destDir) {
 }
 
 timepoint_t startSection(int fd, const std::string &sectionName) {
+    ATRACE_BEGIN(sectionName.c_str());
     ::android::base::WriteStringToFd(
             "\n"
             "------ Section start: " + sectionName + " ------\n"
@@ -195,6 +198,7 @@ timepoint_t startSection(int fd, const std::string &sectionName) {
 }
 
 void endSection(int fd, const std::string &sectionName, timepoint_t startTime) {
+    ATRACE_END();
     auto endTime = std::chrono::steady_clock::now();
     auto elapsedMsec = std::chrono::duration_cast<std::chrono::milliseconds>
             (endTime - startTime).count();
@@ -1149,6 +1153,7 @@ void Dumpstate::dumpLogSection(int fd, int fd_bin)
 ndk::ScopedAStatus Dumpstate::dumpstateBoard(const std::vector<::ndk::ScopedFileDescriptor>& in_fds,
                                              IDumpstateDevice::DumpstateMode in_mode,
                                              int64_t in_timeoutMillis) {
+    ATRACE_BEGIN("dumpstateBoard");
     // Unused arguments.
     (void) in_timeoutMillis;
 
@@ -1185,6 +1190,7 @@ ndk::ScopedAStatus Dumpstate::dumpstateBoard(const std::vector<::ndk::ScopedFile
 
     dumpTextSection(fd, kAllSections);
 
+    ATRACE_END();
     return ndk::ScopedAStatus::ok();
 }
 
