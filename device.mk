@@ -901,6 +901,7 @@ PRODUCT_PACKAGES += ShannonIms
 
 #RCS Test Messaging App
 PRODUCT_PACKAGES_DEBUG += \
+	preinstalled-packages-product-gs201-device-debug.xml \
 	TestRcsApp
 
 PRODUCT_PACKAGES += ShannonRcs
