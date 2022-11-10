@@ -869,7 +869,7 @@ PRODUCT_COPY_FILES += \
 
 # fastbootd
 PRODUCT_PACKAGES += \
-	android.hardware.fastboot@1.1-impl.pixel \
+	android.hardware.fastboot-service.pixel_recovery \
 	fastbootd
 
 #google iwlan
