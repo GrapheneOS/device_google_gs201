@@ -15,6 +15,7 @@
  */
 
 #define LOG_TAG "dumpstate_device"
+#define ATRACE_TAG ATRACE_TAG_ALWAYS
 
 #include <inttypes.h>
 
@@ -22,6 +23,7 @@
 #include <android-base/stringprintf.h>
 #include <android-base/properties.h>
 #include <android-base/unique_fd.h>
+#include <cutils/trace.h>
 #include <log/log.h>
 #include <sys/stat.h>
 
@@ -46,8 +48,6 @@
 #define TCPDUMP_LOG_DIRECTORY "/data/vendor/tcpdump_logger/logs"
 #define TCPDUMP_NUMBER_BUGREPORT "persist.vendor.tcpdump.log.br_num"
 #define TCPDUMP_PERSIST_PROPERTY "persist.vendor.tcpdump.log.alwayson"
-
-#define HW_REVISION "ro.boot.hardware.revision"
 
 using android::os::dumpstate::CommandOptions;
 using android::os::dumpstate::DumpFileToFd;
@@ -189,6 +189,7 @@ void dumpModemEFS(std::string destDir) {
 }
 
 timepoint_t startSection(int fd, const std::string &sectionName) {
+    ATRACE_BEGIN(sectionName.c_str());
     ::android::base::WriteStringToFd(
             "\n"
             "------ Section start: " + sectionName + " ------\n"
@@ -197,6 +198,7 @@ timepoint_t startSection(int fd, const std::string &sectionName) {
 }
 
 void endSection(int fd, const std::string &sectionName, timepoint_t startTime) {
+    ATRACE_END();
     auto endTime = std::chrono::steady_clock::now();
     auto elapsedMsec = std::chrono::duration_cast<std::chrono::milliseconds>
             (endTime - startTime).count();
@@ -229,7 +231,6 @@ Dumpstate::Dumpstate()
         { "thermal", [this](int fd) { dumpThermalSection(fd); } },
         { "touch", [this](int fd) { dumpTouchSection(fd); } },
         { "display", [this](int fd) { dumpDisplaySection(fd); } },
-        { "sensors-usf", [this](int fd) { dumpSensorsUSFSection(fd); } },
         { "misc", [this](int fd) { dumpMiscSection(fd); } },
         { "led", [this](int fd) { dumpLEDSection(fd); } },
     },
@@ -975,28 +976,6 @@ void Dumpstate::dumpDisplaySection(int fd) {
     }
 }
 
-// Dump items related to sensors usf.
-void Dumpstate::dumpSensorsUSFSection(int fd) {
-    CommandOptions options = CommandOptions::WithTimeout(2).Build();
-    RunCommandToFd(fd, "USF statistics",
-                   {"/vendor/bin/sh", "-c", "usf_stats get --all"},
-                   options);
-    if (!PropertiesHelper::IsUserBuild()) {
-        // Not a user build, if this is also not a production device dump the USF registry.
-        std::string hwRev = ::android::base::GetProperty(HW_REVISION, "");
-        if (hwRev.find("PROTO") != std::string::npos ||
-            hwRev.find("EVT") != std::string::npos ||
-            hwRev.find("DVT") != std::string::npos) {
-            RunCommandToFd(fd, "USF Registry",
-                           {"/vendor/bin/sh", "-c", "usf_reg_edit save -"},
-                           options);
-            RunCommandToFd(fd, "USF Last Stat Buffer",
-                           {"/vendor/bin/sh", "-c", "cat /data/vendor/sensors/debug/stats.history"},
-                           options);
-        }
-    }
-}
-
 // Dump items that don't fit well into any other section
 void Dumpstate::dumpMiscSection(int fd) {
     RunCommandToFd(fd, "VENDOR PROPERTIES", {"/vendor/bin/getprop"});
@@ -1174,6 +1153,7 @@ void Dumpstate::dumpLogSection(int fd, int fd_bin)
 ndk::ScopedAStatus Dumpstate::dumpstateBoard(const std::vector<::ndk::ScopedFileDescriptor>& in_fds,
                                              IDumpstateDevice::DumpstateMode in_mode,
                                              int64_t in_timeoutMillis) {
+    ATRACE_BEGIN("dumpstateBoard");
     // Unused arguments.
     (void) in_timeoutMillis;
 
@@ -1210,6 +1190,7 @@ ndk::ScopedAStatus Dumpstate::dumpstateBoard(const std::vector<::ndk::ScopedFile
 
     dumpTextSection(fd, kAllSections);
 
+    ATRACE_END();
     return ndk::ScopedAStatus::ok();
 }
 
