@@ -541,6 +541,9 @@ on fs
     mount_all /vendor/etc/fstab.modem --early
     restorecon_recursive /mnt/vendor/modem_img
 
+    # for battery defender
+    mkdir /mnt/vendor/persist/battery 0700 system system
+
     restorecon_recursive /mnt/vendor/persist
     restorecon_recursive /mnt/vendor/persist/aoc
     restorecon_recursive /mnt/vendor/persist/audio
