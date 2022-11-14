@@ -551,7 +551,8 @@ PRODUCT_PACKAGES += \
 
 # Battery Mitigation
 PRODUCT_PACKAGES += \
-        battery_mitigation
+        battery_mitigation \
+        BrownoutDetection
 
 PRODUCT_PACKAGES_DEBUG += \
 	sg_write_buffer \
