@@ -243,6 +243,7 @@ Dumpstate::Dumpstate()
         { "trusty", [this](int fd) { dumpTrustySection(fd); } },
         { "led", [this](int fd) { dumpLEDSection(fd); } },
         { "pixel-trace", [this](int fd) { dumpPixelTraceSection(fd); } },
+        { "perf-metrics", [this](int fd) { dumpPerfMetricsSection(fd); } },
     },
   mLogSections{
         { "modem", [this](int fd, const std::string &destDir) { dumpModemLogs(fd, destDir); } },
@@ -1318,6 +1319,11 @@ void Dumpstate::dumpLogSection(int fd, int fd_bin)
 
 void Dumpstate::dumpPixelTraceSection(int fd) {
     DumpFileToFd(fd, "Pixel trace", "/sys/kernel/tracing/instances/pixel/trace");
+}
+
+void Dumpstate::dumpPerfMetricsSection(int fd) {
+    DumpFileToFd(fd, "Long running IRQ metrics", "/sys/kernel/metrics/irq/long_irq_metrics");
+    DumpFileToFd(fd, "Resume latency metrics", "/sys/kernel/metrics/resume_latency/resume_latency_metrics");
 }
 
 ndk::ScopedAStatus Dumpstate::dumpstateBoard(const std::vector<::ndk::ScopedFileDescriptor>& in_fds,
