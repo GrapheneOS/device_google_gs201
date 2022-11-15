@@ -520,6 +520,7 @@ void Dumpstate::dumpThermalSection(int fd) {
     DumpFileToFd(fd, "TMU_TOP fall thresholds:", "/sys/module/gs_thermal/parameters/tmu_top_reg_dump_fall_thres");
     DumpFileToFd(fd, "TMU_SUB rise thresholds:", "/sys/module/gs_thermal/parameters/tmu_sub_reg_dump_rise_thres");
     DumpFileToFd(fd, "TMU_SUB fall thresholds:", "/sys/module/gs_thermal/parameters/tmu_sub_reg_dump_fall_thres");
+    DumpFileToFd(fd, "Temperature Residency Metrics:", "/sys/kernel/metrics/temp_residency/temp_residency_all/stats");
 }
 
 // Dump items related to touch
