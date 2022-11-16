@@ -546,7 +546,6 @@ void Dumpstate::dumpTouchSection(int fd) {
                                       "/proc/fts/driver_test",
                                       "/sys/class/spi_master/spi6/spi6.0",
                                       "/proc/fts_ext/driver_test"};
-    const char syna_cmd_path[] = "/sys/class/spi_master/spi0/spi0.0/synaptics_tcm.0/sysfs";
     const char focaltech_cmd_path[] = "/proc/focaltech_touch";
     const char gti0_cmd_path[] = "/sys/devices/virtual/goog_touch_interface/gti.0";
     char cmd[256];
@@ -602,35 +601,6 @@ void Dumpstate::dumpTouchSection(int fd) {
 
         // Disable: force touch active
         snprintf(cmd, sizeof(cmd), "echo 20 > %s/force_active", focaltech_cmd_path);
-        RunCommandToFd(fd, "Disable Force Touch Active", {"/vendor/bin/sh", "-c", cmd});
-    }
-
-    if (!access(syna_cmd_path, R_OK)) {
-        // Enable: force touch active
-        snprintf(cmd, sizeof(cmd), "echo 21 > %s/force_active", syna_cmd_path);
-        RunCommandToFd(fd, "Enable Force Touch Active", {"/vendor/bin/sh", "-c", cmd});
-
-        // Touch Firmware Information
-        snprintf(cmd, sizeof(cmd), "%s/info", syna_cmd_path);
-        DumpFileToFd(fd, "Touch Firmware Information", cmd);
-
-        // Get Raw Data - Delta
-        snprintf(cmd, sizeof(cmd),
-                 "echo 12 > %s/get_raw_data && cat %s/get_raw_data", syna_cmd_path, syna_cmd_path);
-        RunCommandToFd(fd, "Get Raw Data - Delta", {"/vendor/bin/sh", "-c", cmd});
-
-        // Get Raw Data - Raw
-        snprintf(cmd, sizeof(cmd),
-                 "echo 13 > %s/get_raw_data && cat %s/get_raw_data", syna_cmd_path, syna_cmd_path);
-        RunCommandToFd(fd, "Get Raw Data - Raw", {"/vendor/bin/sh", "-c", cmd});
-
-        // Get Raw Data - Baseline
-        snprintf(cmd, sizeof(cmd),
-                 "echo 14 > %s/get_raw_data && cat %s/get_raw_data", syna_cmd_path, syna_cmd_path);
-        RunCommandToFd(fd, "Get Raw Data - Baseline", {"/vendor/bin/sh", "-c", cmd});
-
-        // Disable: force touch active
-        snprintf(cmd, sizeof(cmd), "echo 20 > %s/force_active", syna_cmd_path);
         RunCommandToFd(fd, "Disable Force Touch Active", {"/vendor/bin/sh", "-c", cmd});
     }
 
