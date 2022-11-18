@@ -546,63 +546,8 @@ void Dumpstate::dumpTouchSection(int fd) {
                                       "/proc/fts/driver_test",
                                       "/sys/class/spi_master/spi6/spi6.0",
                                       "/proc/fts_ext/driver_test"};
-    const char focaltech_cmd_path[] = "/proc/focaltech_touch";
     const char gti0_cmd_path[] = "/sys/devices/virtual/goog_touch_interface/gti.0";
     char cmd[256];
-
-    if (!access(focaltech_cmd_path, R_OK)) {
-        // Enable: force touch active
-        snprintf(cmd, sizeof(cmd), "echo 21 > %s/force_active", focaltech_cmd_path);
-        RunCommandToFd(fd, "Enable Force Touch Active", {"/vendor/bin/sh", "-c", cmd});
-
-        // Touch Firmware Version
-        snprintf(cmd, sizeof(cmd), "%s/FW_Version", focaltech_cmd_path);
-        DumpFileToFd(fd, "Touch Firmware Version", cmd);
-
-        // Touch INT PIN Test
-        snprintf(cmd, sizeof(cmd), "%s/INT_PIN", focaltech_cmd_path);
-        DumpFileToFd(fd, "Touch INT PIN Test", cmd);
-
-        // Get Raw Data - Delta
-        snprintf(cmd, sizeof(cmd), "%s/selftest/Panel_Differ", focaltech_cmd_path);
-        DumpFileToFd(fd, "Get Raw Data - Panel_Differ", cmd);
-
-        // Get Raw Data - Raw
-        snprintf(cmd, sizeof(cmd), "%s/selftest/Rawdata", focaltech_cmd_path);
-        DumpFileToFd(fd, "Get Raw Data - Raw", cmd);
-
-        // Get Raw Data - Baseline
-        snprintf(cmd, sizeof(cmd), "%s/selftest/Baseline", focaltech_cmd_path);
-        DumpFileToFd(fd, "Get Raw Data - Baseline", cmd);
-
-        // Get Raw Data - Noise
-        snprintf(cmd, sizeof(cmd), "%s/selftest/Noise", focaltech_cmd_path);
-        DumpFileToFd(fd, "Get Raw Data - Noise", cmd);
-
-        // Get Raw Data - Uniformity
-        snprintf(cmd, sizeof(cmd), "%s/selftest/Rawdata_Uniformity", focaltech_cmd_path);
-        DumpFileToFd(fd, "Get Raw Data - Uniformity", cmd);
-
-        // Get Scap_CB
-        snprintf(cmd, sizeof(cmd), "%s/selftest/Scap_CB", focaltech_cmd_path);
-        DumpFileToFd(fd, "Get Scap_CB", cmd);
-
-        // Get Scap_CB - Raw
-        snprintf(cmd, sizeof(cmd), "%s/selftest/Scap_Rawdata", focaltech_cmd_path);
-        DumpFileToFd(fd, "Get Scap_Rawdata", cmd);
-
-        // Get Short Test
-        snprintf(cmd, sizeof(cmd), "%s/selftest/Short", focaltech_cmd_path);
-        DumpFileToFd(fd, "Get Short Test", cmd);
-
-        // Get HeatMap(ms,ss)
-        snprintf(cmd, sizeof(cmd), "%s/selftest/Strength", focaltech_cmd_path);
-        DumpFileToFd(fd, "Get HeatMap(ms,ss)", cmd);
-
-        // Disable: force touch active
-        snprintf(cmd, sizeof(cmd), "echo 20 > %s/force_active", focaltech_cmd_path);
-        RunCommandToFd(fd, "Disable Force Touch Active", {"/vendor/bin/sh", "-c", cmd});
-    }
 
     for (int i = 0; i < 4; i+=2) {
         snprintf(cmd, sizeof(cmd), "%s", stm_cmd_path[i + 1]);
