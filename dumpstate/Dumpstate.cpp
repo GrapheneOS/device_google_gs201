@@ -546,7 +546,6 @@ void Dumpstate::dumpTouchSection(int fd) {
                                       "/proc/fts/driver_test",
                                       "/sys/class/spi_master/spi6/spi6.0",
                                       "/proc/fts_ext/driver_test"};
-    const char gti0_cmd_path[] = "/sys/devices/virtual/goog_touch_interface/gti.0";
     char cmd[256];
 
     for (int i = 0; i < 4; i+=2) {
@@ -667,48 +666,6 @@ void Dumpstate::dumpTouchSection(int fd) {
             RunCommandToFd(fd, "Restore Bus Owner",
                            {"/vendor/bin/sh", "-c", cmd});
         }
-    }
-
-    if (!access(gti0_cmd_path, R_OK)) {
-        // Enable: force touch active
-        snprintf(cmd, sizeof(cmd), "echo 1 > %s/force_active", gti0_cmd_path);
-        RunCommandToFd(fd, "Force Touch Active", {"/vendor/bin/sh", "-c", cmd});
-
-        // Touch Firmware Version
-        snprintf(cmd, sizeof(cmd), "%s/fw_ver", gti0_cmd_path);
-        DumpFileToFd(fd, "Touch Firmware Version", cmd);
-
-        // Get Mutual Sensing Data - Baseline
-        snprintf(cmd, sizeof(cmd), "cat %s/ms_base", gti0_cmd_path);
-        RunCommandToFd(fd, "Get Mutual Sensing Data - Baseline", {"/vendor/bin/sh", "-c", cmd});
-
-        // Get Mutual Sensing Data - Delta
-        snprintf(cmd, sizeof(cmd), "cat %s/ms_diff", gti0_cmd_path);
-        RunCommandToFd(fd, "Get Mutual Sensing Data - Delta", {"/vendor/bin/sh", "-c", cmd});
-
-        // Get Mutual Sensing Data - Raw
-        snprintf(cmd, sizeof(cmd), "cat %s/ms_raw", gti0_cmd_path);
-        RunCommandToFd(fd, "Get Mutual Sensing Data - Raw", {"/vendor/bin/sh", "-c", cmd});
-
-        // Get Self Sensing Data - Baseline
-        snprintf(cmd, sizeof(cmd), "cat %s/ss_base", gti0_cmd_path);
-        RunCommandToFd(fd, "Get Self Sensing Data - Baseline", {"/vendor/bin/sh", "-c", cmd});
-
-        // Get Self Sensing Data - Delta
-        snprintf(cmd, sizeof(cmd), "cat %s/ss_diff", gti0_cmd_path);
-        RunCommandToFd(fd, "Get Self Sensing Data - Delta", {"/vendor/bin/sh", "-c", cmd});
-
-        // Get Self Sensing Data - Raw
-        snprintf(cmd, sizeof(cmd), "cat %s/ss_raw", gti0_cmd_path);
-        RunCommandToFd(fd, "Get Self Sensing Data - Raw", {"/vendor/bin/sh", "-c", cmd});
-
-        // Self Test
-        snprintf(cmd, sizeof(cmd), "cat %s/self_test", gti0_cmd_path);
-        RunCommandToFd(fd, "Self Test", {"/vendor/bin/sh", "-c", cmd});
-
-        // Disable: force touch active
-        snprintf(cmd, sizeof(cmd), "echo 0 > %s/force_active", gti0_cmd_path);
-        RunCommandToFd(fd, "Disable Force Touch Active", {"/vendor/bin/sh", "-c", cmd});
     }
 }
 
