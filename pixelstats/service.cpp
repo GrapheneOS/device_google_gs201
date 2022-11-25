@@ -68,6 +68,7 @@ const struct SysfsCollector::SysfsPaths sysfs_paths = {
         "/sys/devices/platform/100b0000.AUR/trip_counter",
     },
     .CCARatePath = "/sys/devices/platform/audiometrics/cca_rate_read_once",
+    .TempResidencyPath = "/sys/kernel/metrics/temp_residency/temp_residency_all/stats",
 };
 
 const struct UeventListener::UeventPaths ueventPaths = {
