@@ -617,7 +617,10 @@ void Dumpstate::dumpTouchSection(int fd) {
         RunCommandToFd(fd, "Disable Force Touch Active", {"/vendor/bin/sh", "-c", cmd});
     }
 
-    for (int i = 0; i < 4; i+=2) {
+    for (int i = 0; i < 4; i += 2) {  // ftm5
+        snprintf(cmd, sizeof(cmd), "%s", stm_cmd_path[i]);
+        if (!access(cmd, R_OK))
+            continue;
         snprintf(cmd, sizeof(cmd), "%s", stm_cmd_path[i + 1]);
         if (!access(cmd, R_OK)) {
             snprintf(cmd, sizeof(cmd), "echo A0 01 01 > %s", stm_cmd_path[i + 1]);
