@@ -54,7 +54,6 @@ class Dumpstate : public BnDumpstateDevice {
     // addition to being included in full dumps
     void dumpWlanSection(int fd);
     void dumpPowerSection(int fd);
-    void dumpTouchSection(int fd);
     void dumpCpuSection(int fd);
     void dumpDevfreqSection(int fd);
     void dumpMemorySection(int fd);
