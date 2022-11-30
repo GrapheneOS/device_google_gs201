@@ -523,6 +523,10 @@ on property:persist.vendor.radio.no_modem_board=1
 
 on fs
     mount_all --early
+
+    # for battery defender
+    mkdir /mnt/vendor/persist/battery 0700 system system
+
     restorecon_recursive /mnt/vendor/persist
     restorecon_recursive /mnt/vendor/persist/aoc
     restorecon_recursive /mnt/vendor/persist/audio
