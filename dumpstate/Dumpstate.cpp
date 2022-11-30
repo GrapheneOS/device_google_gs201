@@ -619,7 +619,7 @@ void Dumpstate::dumpTouchSection(int fd) {
 
     for (int i = 0; i < 4; i += 2) {  // ftm5
         snprintf(cmd, sizeof(cmd), "%s", stm_cmd_path[i]);
-        if (!access(cmd, R_OK))
+        if (access(cmd, R_OK))
             continue;
         snprintf(cmd, sizeof(cmd), "%s", stm_cmd_path[i + 1]);
         if (!access(cmd, R_OK)) {
