@@ -551,8 +551,12 @@ PRODUCT_PACKAGES += \
 
 # Battery Mitigation
 PRODUCT_PACKAGES += \
-        battery_mitigation \
-        BrownoutDetection
+        battery_mitigation
+
+
+ifneq (,$(filter userdebug eng, $(TARGET_BUILD_VARIANT)))
+PRODUCT_PACKAGES += BrownoutDetection
+endif
 
 PRODUCT_PACKAGES_DEBUG += \
 	sg_write_buffer \
