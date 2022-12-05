@@ -30,7 +30,7 @@
 #include "DumpstateUtil.h"
 
 #define MODEM_LOG_DIRECTORY "/data/vendor/radio/logs/always-on"
-#define MODEM_LOG_MASK_HISTORY_DIRECTORY "/data/vendor/radio/logs/mask_history"
+#define MODEM_LOG_HISTORY_DIRECTORY "data/vendor/radio/logs/history"
 #define MODEM_EXTENDED_LOG_DIRECTORY "/data/vendor/radio/extended_logs"
 #define RIL_LOG_DIRECTORY "/data/vendor/radio"
 #define RIL_LOG_DIRECTORY_PROPERTY "persist.vendor.ril.log.base_dir"
@@ -1164,10 +1164,10 @@ void Dumpstate::dumpModemSection(int fd) {
 
 void Dumpstate::dumpModemLogs(int fd, const std::string &destDir) {
     std::string extendedLogDir = MODEM_EXTENDED_LOG_DIRECTORY;
-    std::string modemLogMaskHistoryDir = MODEM_LOG_MASK_HISTORY_DIRECTORY;
+    std::string modemLogHistoryDir = MODEM_LOG_HISTORY_DIRECTORY;
 
     dumpLogs(fd, extendedLogDir, destDir, 20, EXTENDED_LOG_PREFIX);
-    dumpLogs(fd, modemLogMaskHistoryDir, destDir, 1, "LoggingMask");
+    dumpLogs(fd, modemLogHistoryDir, destDir, 2, "Logging");
     dumpModemEFS(destDir);
 }
 
