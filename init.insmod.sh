@@ -51,6 +51,8 @@ else
   # to unblock early-boot trigger
   setprop vendor.common.modules.ready
   setprop vendor.device.modules.ready
+  setprop vendor.all.modules.ready
+  setprop vendor.all.devices.ready
   exit 1
 fi
 

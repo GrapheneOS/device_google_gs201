@@ -240,6 +240,7 @@ Dumpstate::Dumpstate()
         { "misc", [this](int fd) { dumpMiscSection(fd); } },
         { "gsc", [this](int fd) { dumpGscSection(fd); } },
         { "trusty", [this](int fd) { dumpTrustySection(fd); } },
+        { "led", [this](int fd) { dumpLEDSection(fd); } },
     },
   mLogSections{
         { "modem", [this](int fd, const std::string &destDir) { dumpModemLogs(fd, destDir); } },
@@ -335,6 +336,10 @@ void Dumpstate::dumpPowerSection(int fd) {
         DumpFileToFd(fd, "maxfg_flip", "/dev/logbuffer_maxfg_flip_monitor");
     }
 
+    if (!stat("/dev/maxfg_history", &buffer)) {
+        DumpFileToFd(fd, "Maxim FG History", "/dev/maxfg_history");
+    }
+
     if (!stat("/sys/class/power_supply/dock", &buffer)) {
         DumpFileToFd(fd, "Power supply property dock", "/sys/class/power_supply/dock/uevent");
     }
@@ -360,6 +365,7 @@ void Dumpstate::dumpPowerSection(int fd) {
 		       "echo \"contaminant_detection_status:\"; cat $f/contaminant_detection_status;  done"});
 
     DumpFileToFd(fd, "PD Engine", "/dev/logbuffer_usbpd");
+    DumpFileToFd(fd, "POGO Transport", "/dev/logbuffer_pogo_transport");
     DumpFileToFd(fd, "PPS-google_cpm", "/dev/logbuffer_cpm");
     DumpFileToFd(fd, "PPS-dc", "/dev/logbuffer_pca9468");
 
@@ -409,6 +415,11 @@ void Dumpstate::dumpPowerSection(int fd) {
                             "for f in /d/maxfg* ; do "
                             "regs=`cat $f/registers`; echo $f: ;"
                             "echo \"$regs\"; done"});
+
+        RunCommandToFd(fd, "Maxim FG NV RAM", {"/vendor/bin/sh", "-c",
+                            "for f in /d/maxfg* ; do "
+                            "regs=`cat $f/nv_registers`; echo $f: ;"
+                            "echo \"$regs\"; done"});
     }
 
     /* EEPROM State */
@@ -418,8 +429,9 @@ void Dumpstate::dumpPowerSection(int fd) {
         RunCommandToFd(fd, "Battery EEPROM", {"/vendor/bin/sh", "-c", "xxd /sys/devices/platform/10970000.hsi2c/i2c-5/5-0050/eeprom"});
     } else if (!stat("/sys/devices/platform/10da0000.hsi2c/i2c-6/6-0050/eeprom", &buffer)) {
         RunCommandToFd(fd, "Battery EEPROM", {"/vendor/bin/sh", "-c", "xxd /sys/devices/platform/10da0000.hsi2c/i2c-6/6-0050/eeprom"});
+    } else if (!stat("/sys/devices/platform/10da0000.hsi2c/i2c-7/7-0050/eeprom", &buffer)) {
+        RunCommandToFd(fd, "Battery EEPROM", {"/vendor/bin/sh", "-c", "xxd /sys/devices/platform/10da0000.hsi2c/i2c-7/7-0050/eeprom"});
     }
-
 
     DumpFileToFd(fd, "Charger Stats", "/sys/class/power_supply/battery/charge_details");
     if (!PropertiesHelper::IsUserBuild()) {
@@ -517,6 +529,7 @@ void Dumpstate::dumpTouchSection(int fd) {
     const char lsi_spi_path[] = "/sys/devices/virtual/sec/tsp";
     const char syna_cmd_path[] = "/sys/class/spi_master/spi0/spi0.0/synaptics_tcm.0/sysfs";
     const char focaltech_cmd_path[] = "/proc/focaltech_touch";
+    const char gti0_cmd_path[] = "/sys/devices/virtual/goog_touch_interface/gti.0";
     char cmd[256];
 
     if (!access(focaltech_cmd_path, R_OK)) {
@@ -808,6 +821,48 @@ void Dumpstate::dumpTouchSection(int fd) {
                  lsi_spi_path, lsi_spi_path);
         RunCommandToFd(fd, "Force Touch Active", {"/vendor/bin/sh", "-c", cmd});
     }
+
+    if (!access(gti0_cmd_path, R_OK)) {
+        // Enable: force touch active
+        snprintf(cmd, sizeof(cmd), "echo 1 > %s/force_active", gti0_cmd_path);
+        RunCommandToFd(fd, "Force Touch Active", {"/vendor/bin/sh", "-c", cmd});
+
+        // Touch Firmware Version
+        snprintf(cmd, sizeof(cmd), "%s/fw_ver", gti0_cmd_path);
+        DumpFileToFd(fd, "Touch Firmware Version", cmd);
+
+        // Get Mutual Sensing Data - Baseline
+        snprintf(cmd, sizeof(cmd), "cat %s/ms_base", gti0_cmd_path);
+        RunCommandToFd(fd, "Get Mutual Sensing Data - Baseline", {"/vendor/bin/sh", "-c", cmd});
+
+        // Get Mutual Sensing Data - Delta
+        snprintf(cmd, sizeof(cmd), "cat %s/ms_diff", gti0_cmd_path);
+        RunCommandToFd(fd, "Get Mutual Sensing Data - Delta", {"/vendor/bin/sh", "-c", cmd});
+
+        // Get Mutual Sensing Data - Raw
+        snprintf(cmd, sizeof(cmd), "cat %s/ms_raw", gti0_cmd_path);
+        RunCommandToFd(fd, "Get Mutual Sensing Data - Raw", {"/vendor/bin/sh", "-c", cmd});
+
+        // Get Self Sensing Data - Baseline
+        snprintf(cmd, sizeof(cmd), "cat %s/ss_base", gti0_cmd_path);
+        RunCommandToFd(fd, "Get Self Sensing Data - Baseline", {"/vendor/bin/sh", "-c", cmd});
+
+        // Get Self Sensing Data - Delta
+        snprintf(cmd, sizeof(cmd), "cat %s/ss_diff", gti0_cmd_path);
+        RunCommandToFd(fd, "Get Self Sensing Data - Delta", {"/vendor/bin/sh", "-c", cmd});
+
+        // Get Self Sensing Data - Raw
+        snprintf(cmd, sizeof(cmd), "cat %s/ss_raw", gti0_cmd_path);
+        RunCommandToFd(fd, "Get Self Sensing Data - Raw", {"/vendor/bin/sh", "-c", cmd});
+
+        // Self Test
+        snprintf(cmd, sizeof(cmd), "cat %s/self_test", gti0_cmd_path);
+        RunCommandToFd(fd, "Self Test", {"/vendor/bin/sh", "-c", cmd});
+
+        // Disable: force touch active
+        snprintf(cmd, sizeof(cmd), "echo 0 > %s/force_active", gti0_cmd_path);
+        RunCommandToFd(fd, "Disable Force Touch Active", {"/vendor/bin/sh", "-c", cmd});
+    }
 }
 
 // Dump items related to SoC
@@ -978,9 +1033,16 @@ void Dumpstate::dumpAoCSection(int fd) {
     DumpFileToFd(fd, "AoC audio wake", "/sys/devices/platform/19000000.aoc/control/audio_wakeup");
     DumpFileToFd(fd, "AoC logging wake", "/sys/devices/platform/19000000.aoc/control/logging_wakeup");
     DumpFileToFd(fd, "AoC hotword wake", "/sys/devices/platform/19000000.aoc/control/hotword_wakeup");
-    RunCommandToFd(fd, "AoC memory exception wake", {"/vendor/bin/sh", "-c", "cat /sys/devices/platform/19000000.aoc/control/memory_exception"}, CommandOptions::WithTimeout(2).Build());
-    RunCommandToFd(fd, "AoC memory votes", {"/vendor/bin/sh", "-c", "cat /sys/devices/platform/19000000.aoc/control/memory_votes"}, CommandOptions::WithTimeout(2).Build());
-        RunCommandToFd(fd, "AoC Heap Stats (A32)",
+    RunCommandToFd(fd, "AoC memory exception wake",
+      {"/vendor/bin/sh", "-c", "cat /sys/devices/platform/19000000.aoc/control/memory_exception"},
+      CommandOptions::WithTimeout(2).Build());
+    RunCommandToFd(fd, "AoC memory votes A32",
+      {"/vendor/bin/sh", "-c", "cat /sys/devices/platform/19000000.aoc/control/memory_votes_a32"},
+      CommandOptions::WithTimeout(2).Build());
+    RunCommandToFd(fd, "AoC memory votes FF1",
+      {"/vendor/bin/sh", "-c", "cat /sys/devices/platform/19000000.aoc/control/memory_votes_ff1"},
+      CommandOptions::WithTimeout(2).Build());
+    RunCommandToFd(fd, "AoC Heap Stats (A32)",
       {"/vendor/bin/sh", "-c", "echo 'dbg heap -c 1' > /dev/acd-debug; timeout 0.1 cat /dev/acd-debug"},
       CommandOptions::WithTimeout(1).Build());
     RunCommandToFd(fd, "AoC Heap Stats (F1)",
@@ -991,9 +1053,6 @@ void Dumpstate::dumpAoCSection(int fd) {
       CommandOptions::WithTimeout(1).Build());
     RunCommandToFd(fd, "AoC Heap Stats (HF1)",
       {"/vendor/bin/sh", "-c", "echo 'dbg heap -c 4' > /dev/acd-debug; timeout 0.1 cat /dev/acd-debug"},
-      CommandOptions::WithTimeout(1).Build());
-    RunCommandToFd(fd, "AoC MIF Stats",
-      {"/vendor/bin/sh", "-c", "echo 'mif details' > /dev/acd-debug; timeout 0.1 cat /dev/acd-debug"},
       CommandOptions::WithTimeout(1).Build());
 }
 
@@ -1011,6 +1070,9 @@ void Dumpstate::dumpSensorsUSFSection(int fd) {
             hwRev.find("DVT") != std::string::npos) {
             RunCommandToFd(fd, "USF Registry",
                            {"/vendor/bin/sh", "-c", "usf_reg_edit save -"},
+                           options);
+            RunCommandToFd(fd, "USF Last Stat Buffer",
+                           {"/vendor/bin/sh", "-c", "cat /data/vendor/sensors/debug/stats.history"},
                            options);
         }
     }
@@ -1064,6 +1126,21 @@ void Dumpstate::dumpGscSection(int fd) {
 
 void Dumpstate::dumpTrustySection(int fd) {
     RunCommandToFd(fd, "Trusty TEE0 Logs", {"/vendor/bin/sh", "-c", "cat /dev/trusty-log0"}, CommandOptions::WithTimeout(1).Build());
+}
+
+// Dump items related to LED
+void Dumpstate::dumpLEDSection(int fd) {
+    struct stat buffer;
+
+    if (!PropertiesHelper::IsUserBuild()) {
+        if (!stat("/sys/class/leds/green", &buffer)) {
+            DumpFileToFd(fd, "Green LED Brightness", "/sys/class/leds/green/brightness");
+            DumpFileToFd(fd, "Green LED Max Brightness", "/sys/class/leds/green/max_brightness");
+        }
+        if (!stat("/mnt/vendor/persist/led/led_calibration_LUT.txt", &buffer)) {
+            DumpFileToFd(fd, "LED Calibration Data", "/mnt/vendor/persist/led/led_calibration_LUT.txt");
+        }
+    }
 }
 
 void Dumpstate::dumpModemSection(int fd) {

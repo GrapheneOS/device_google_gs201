@@ -1,14 +1,18 @@
-on property:sys.boot_completed=1 && property:ro.boot.bootreason=reboot,ocp
+on property:sys.boot_completed=1 && property:ro.boot.bootreason=reboot,ocp,pmic,if
     copy data/vendor/mitigation/thismeal.txt data/vendor/mitigation/lastmeal.txt
+    chown system system data/vendor/mitigation/lastmeal.txt
 
 on property:sys.boot_completed=1 && property:ro.boot.bootreason=reboot,uvlo,pmic,if
     copy data/vendor/mitigation/thismeal.txt data/vendor/mitigation/lastmeal.txt
+    chown system system data/vendor/mitigation/lastmeal.txt
 
 on property:sys.boot_completed=1 && property:ro.boot.bootreason=reboot,uvlo,pmic,main
     copy data/vendor/mitigation/thismeal.txt data/vendor/mitigation/lastmeal.txt
+    chown system system data/vendor/mitigation/lastmeal.txt
 
 on property:sys.boot_completed=1 && property:ro.boot.bootreason=reboot,uvlo,pmic,sub
     copy data/vendor/mitigation/thismeal.txt data/vendor/mitigation/lastmeal.txt
+    chown system system data/vendor/mitigation/lastmeal.txt
 
 on property:vendor.thermal.link_ready=1
     mkdir /data/vendor/mitigation 0755 system system

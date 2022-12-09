@@ -116,6 +116,8 @@
     <exception package="com.google.android.wfcactivation">
         <!-- SMS -->
         <permission name="android.permission.RECEIVE_WAP_PUSH" fixed="false"/>
+        <!-- Notifications -->
+        <permission name="android.permission.POST_NOTIFICATIONS" fixed="false"/>
     </exception>
 
     <exception package="com.google.android.apps.accessibility.voiceaccess">

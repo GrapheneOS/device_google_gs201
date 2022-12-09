@@ -60,9 +60,11 @@ LOCAL_KERNEL := $(TARGET_KERNEL_DIR)/Image.lz4
 PRODUCT_DEFAULT_PROPERTY_OVERRIDES += \
 	ro.oem_unlock_supported=1
 
+ifneq ($(BOARD_WITHOUT_RADIO),true)
 # Include vendor telephony soong namespace
 PRODUCT_SOONG_NAMESPACES += \
 	vendor/samsung_slsi/telephony/$(BOARD_USES_SHARED_VENDOR_TELEPHONY)
+endif
 
 ifneq (,$(filter userdebug eng, $(TARGET_BUILD_VARIANT)))
 #Set IKE logs to verbose for WFC
@@ -125,6 +127,7 @@ PRODUCT_PROPERTY_OVERRIDES += \
 	persist.vendor.ril.enable_set_screen_state=1
 
 # Set the Bluetooth Class of Device
+ifneq ($(USE_TABLET_BT_COD),true)
 # Service Field: 0x5A -> 90
 #    Bit 14: LE audio
 #    Bit 17: Networking
@@ -135,6 +138,18 @@ PRODUCT_PROPERTY_OVERRIDES += \
 # MINOR_CLASS: 0x0C -> 12 (Smart Phone)
 PRODUCT_PRODUCT_PROPERTIES += \
     bluetooth.device.class_of_device=90,66,12
+else
+# Service Field: 0x5A -> 90
+#    Bit 14: LE audio
+#    Bit 17: Networking
+#    Bit 19: Capturing
+#    Bit 20: Object Transfer
+#    Bit 22: Telephony
+# MAJOR_CLASS: 0x41 -> 65 (Computer)
+# MINOR_CLASS: 0x10 -> 16 (Handheld PC/PDA clamshell)
+PRODUCT_PRODUCT_PROPERTIES += \
+    bluetooth.device.class_of_device=90,65,16
+endif
 
 # Set supported Bluetooth profiles to enabled
 PRODUCT_PRODUCT_PROPERTIES += \
@@ -294,11 +309,11 @@ PRODUCT_PACKAGES += \
 
 PRODUCT_COPY_FILES += \
 	device/google/$(TARGET_BOARD_PLATFORM)/conf/fstab.persist:$(TARGET_COPY_OUT_VENDOR)/etc/fstab.persist \
-	device/google/$(TARGET_BOARD_PLATFORM)/conf/fstab.modem:$(TARGET_COPY_OUT_VENDOR)/etc/fstab.modem
 
 # Shell scripts
 PRODUCT_COPY_FILES += \
 	device/google/gs201/init.insmod.sh:$(TARGET_COPY_OUT_VENDOR)/bin/init.insmod.sh \
+	device/google/gs201/disable_contaminant_detection.sh:$(TARGET_COPY_OUT_VENDOR)/bin/hw/disable_contaminant_detection.sh
 
 # insmod files
 PRODUCT_COPY_FILES += \
@@ -354,27 +369,6 @@ PRODUCT_PROPERTY_OVERRIDES += \
 	persist.vendor.verbose_logging_enabled=false
 endif
 
-# CP Logging properties
-PRODUCT_PROPERTY_OVERRIDES += \
-	ro.vendor.sys.modem.logging.loc = /data/vendor/slog \
-	ro.vendor.cbd.modem_removable = "1" \
-	ro.vendor.cbd.modem_type = "s5100sit" \
-	persist.vendor.sys.modem.logging.br_num=5 \
-	persist.vendor.sys.modem.logging.enable=true
-
-# Enable silent CP crash handling
-ifneq (,$(filter userdebug eng, $(TARGET_BUILD_VARIANT)))
-PRODUCT_PROPERTY_OVERRIDES += \
-	persist.vendor.ril.crash_handling_mode=1
-else
-PRODUCT_PROPERTY_OVERRIDES += \
-	persist.vendor.ril.crash_handling_mode=2
-endif
-
-# Add support dual SIM mode
-PRODUCT_PROPERTY_OVERRIDES += \
-	persist.vendor.radio.multisim_switch_support=true
-
 # RPMB TA
 PRODUCT_PACKAGES += \
 	tlrpmb
@@ -389,15 +383,19 @@ PRODUCT_COPY_FILES += \
 # Sensors
 PRODUCT_COPY_FILES += \
 	frameworks/native/data/etc/android.hardware.sensor.accelerometer.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.sensor.accelerometer.xml \
-	frameworks/native/data/etc/android.hardware.sensor.barometer.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.sensor.barometer.xml \
 	frameworks/native/data/etc/android.hardware.sensor.compass.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.sensor.compass.xml \
 	frameworks/native/data/etc/android.hardware.sensor.dynamic.head_tracker.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.sensor.dynamic.head_tracker.xml \
 	frameworks/native/data/etc/android.hardware.sensor.gyroscope.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.sensor.gyroscope.xml \
-	frameworks/native/data/etc/android.hardware.sensor.hifi_sensors.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.sensor.hifi_sensors.xml \
 	frameworks/native/data/etc/android.hardware.sensor.light.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.sensor.light.xml\
-	frameworks/native/data/etc/android.hardware.sensor.proximity.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.sensor.proximity.xml \
 	frameworks/native/data/etc/android.hardware.sensor.stepcounter.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.sensor.stepcounter.xml \
 	frameworks/native/data/etc/android.hardware.sensor.stepdetector.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.sensor.stepdetector.xml
+# (See b/240652154)
+ifneq ($(DISABLE_SENSOR_BARO_PROX_HIFI),true)
+PRODUCT_COPY_FILES += \
+	frameworks/native/data/etc/android.hardware.sensor.barometer.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.sensor.barometer.xml \
+	frameworks/native/data/etc/android.hardware.sensor.hifi_sensors.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.sensor.hifi_sensors.xml \
+	frameworks/native/data/etc/android.hardware.sensor.proximity.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.sensor.proximity.xml
+endif
 
 # Add sensor HAL 2.1 product packages
 PRODUCT_PACKAGES += android.hardware.sensors@2.1-service.multihal
@@ -504,11 +502,20 @@ PRODUCT_PACKAGES += \
 
 PANTHER_PRODUCT := %panther
 CHEETAH_PRODUCT := %cheetah
+LYNX_PRODUCT := %lynx
+FELIX_PRODUCT := %felix
+TANGOR_PRODUCT := %tangorpro
 CLOUDRIPPER_PRODUCT := %cloudripper
 ifneq (,$(filter $(PANTHER_PRODUCT), $(TARGET_PRODUCT)))
         LOCAL_TARGET_PRODUCT := panther
 else ifneq (,$(filter $(CHEETAH_PRODUCT), $(TARGET_PRODUCT)))
         LOCAL_TARGET_PRODUCT := cheetah
+else ifneq (,$(filter $(LYNX_PRODUCT), $(TARGET_PRODUCT)))
+        LOCAL_TARGET_PRODUCT := lynx
+else ifneq (,$(filter $(FELIX_PRODUCT), $(TARGET_PRODUCT)))
+        LOCAL_TARGET_PRODUCT := felix
+else ifneq (,$(filter $(TANGOR_PRODUCT), $(TARGET_PRODUCT)))
+        LOCAL_TARGET_PRODUCT := tangorpro
 else ifneq (,$(filter $(CLOUDRIPPER_PRODUCT), $(TARGET_PRODUCT)))
         LOCAL_TARGET_PRODUCT := cloudripper
 else
@@ -595,8 +602,16 @@ PRODUCT_COPY_FILES += \
 	frameworks/native/data/etc/android.hardware.usb.host.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.usb.host.xml \
 	frameworks/native/data/etc/android.hardware.usb.accessory.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.usb.accessory.xml
 
+# (See b/239142680, b/211840489, b/225749853)
+ifneq ($(DISABLE_CAMERA_FS_AF),true)
 PRODUCT_COPY_FILES += \
-	frameworks/native/data/etc/android.hardware.camera.flash-autofocus.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.camera.flash-autofocus.xml \
+	frameworks/native/data/etc/android.hardware.camera.flash-autofocus.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.camera.flash-autofocus.xml
+else
+PRODUCT_COPY_FILES += \
+	frameworks/native/data/etc/android.hardware.camera.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.camera.xml
+endif
+
+PRODUCT_COPY_FILES += \
 	frameworks/native/data/etc/android.hardware.camera.front.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.camera.front.xml \
 	frameworks/native/data/etc/android.hardware.camera.concurrent.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.camera.concurrent.xml \
 	frameworks/native/data/etc/android.hardware.camera.full.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.camera.full.xml\
@@ -639,6 +654,7 @@ PRODUCT_DEFAULT_PROPERTY_OVERRIDES += debug.sf.earlyGl.app.duration=16600000
 PRODUCT_DEFAULT_PROPERTY_OVERRIDES += debug.sf.frame_rate_multiple_threshold=120
 PRODUCT_DEFAULT_PROPERTY_OVERRIDES += debug.sf.layer_caching_active_layer_timeout_ms=1000
 PRODUCT_DEFAULT_PROPERTY_OVERRIDES += debug.sf.treat_170m_as_sRGB=1
+PRODUCT_DEFAULT_PROPERTY_OVERRIDES += persist.vendor.camera.sf_usedsp=0
 
 PRODUCT_DEFAULT_PROPERTY_OVERRIDES += ro.surface_flinger.enable_layer_caching=true
 PRODUCT_DEFAULT_PROPERTY_OVERRIDES += ro.surface_flinger.set_idle_timer_ms?=80
@@ -863,6 +879,7 @@ PRODUCT_PACKAGES += \
 	calliope_iva.bin \
 	vts.bin
 
+ifneq ($(BOARD_WITHOUT_RADIO),true)
 # This will be called only if IMSService is building with source code for dev branches.
 $(call inherit-product-if-exists, vendor/samsung_slsi/telephony/$(BOARD_USES_SHARED_VENDOR_TELEPHONY)/shannon-ims/device-vendor.mk)
 
@@ -873,6 +890,7 @@ PRODUCT_PACKAGES_DEBUG += \
 	TestRcsApp
 
 PRODUCT_PACKAGES += ShannonRcs
+endif
 
 # Boot Control HAL
 PRODUCT_PACKAGES += \
@@ -897,10 +915,41 @@ USE_EARLY_SEND_DEVICE_INFO := true
 
 ifneq ($(BOARD_WITHOUT_RADIO),true)
 $(call inherit-product-if-exists, vendor/samsung_slsi/telephony/$(BOARD_USES_SHARED_VENDOR_TELEPHONY)/common/device-vendor.mk)
+
+# modem_svc_sit daemon
+PRODUCT_PACKAGES += modem_svc_sit
+
+# modem logging binary/configs
+PRODUCT_PACKAGES += modem_logging_control
+
+# CP Logging properties
+PRODUCT_PROPERTY_OVERRIDES += \
+	ro.vendor.sys.modem.logging.loc = /data/vendor/slog \
+	ro.vendor.cbd.modem_removable = "1" \
+	ro.vendor.cbd.modem_type = "s5100sit" \
+	persist.vendor.sys.modem.logging.br_num=5 \
+	persist.vendor.sys.modem.logging.enable=true
+
+# Enable silent CP crash handling
+ifneq (,$(filter userdebug eng, $(TARGET_BUILD_VARIANT)))
+PRODUCT_PROPERTY_OVERRIDES += \
+	persist.vendor.ril.crash_handling_mode=1
+else
+PRODUCT_PROPERTY_OVERRIDES += \
+	persist.vendor.ril.crash_handling_mode=2
 endif
+
+# Add support dual SIM mode
+PRODUCT_PROPERTY_OVERRIDES += \
+	persist.vendor.radio.multisim_switch_support=true
+
+PRODUCT_COPY_FILES += \
+	device/google/$(TARGET_BOARD_PLATFORM)/conf/init.modem.rc:$(TARGET_COPY_OUT_VENDOR)/etc/init/init.modem.rc \
+	device/google/$(TARGET_BOARD_PLATFORM)/conf/fstab.modem:$(TARGET_COPY_OUT_VENDOR)/etc/fstab.modem \
 
 #GPS HAL
 include device/google/gs201/gnss/device-gnss.mk
+endif
 BOARD_VENDOR_SEPOLICY_DIRS += device/google/gs201-sepolicy/gps
 
 $(call inherit-product, $(SRC_TARGET_DIR)/product/core_64_bit_only.mk)
@@ -918,14 +967,7 @@ $(call inherit-product-if-exists, vendor/google/camera/devices/whi/device-vendor
 
 PRODUCT_COPY_FILES += \
 	device/google/gs201/default-permissions.xml:$(TARGET_COPY_OUT_PRODUCT)/etc/default-permissions/default-permissions.xml \
-	device/google/gs201/component-overrides.xml:$(TARGET_COPY_OUT_VENDOR)/etc/sysconfig/component-overrides.xml \
-	frameworks/native/data/etc/handheld_core_hardware.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/handheld_core_hardware.xml \
-
-# modem_svc_sit daemon
-PRODUCT_PACKAGES += modem_svc_sit
-
-# modem logging binary/configs
-PRODUCT_PACKAGES += modem_logging_control
+	device/google/gs201/component-overrides.xml:$(TARGET_COPY_OUT_VENDOR)/etc/sysconfig/component-overrides.xml
 
 # modem logging configs
 PRODUCT_COPY_FILES += \
@@ -977,6 +1019,7 @@ PRODUCT_PACKAGES += \
 	audio_fortemedia_aoc \
 	audio_bluenote_aoc \
 	audio_usb_aoc \
+	audio_cca_aoc \
 	libamcsextfile \
 	audio_amcs_ext \
 	audio.usb.default \
@@ -1017,6 +1060,7 @@ PRODUCT_SOONG_NAMESPACES += \
         vendor/google/whitechapel/aoc
 
 $(call soong_config_set,aoc,target_soc,$(TARGET_BOARD_PLATFORM))
+$(call soong_config_set,aoc,target_product,$(TARGET_PRODUCT))
 
 #
 ## Audio properties
@@ -1113,7 +1157,7 @@ include hardware/google/pixel/PixelLogger/PixelLogger.mk
 include hardware/google/pixel/sscoredump/device.mk
 
 # RadioExt Version
-USES_RADIOEXT_V1_4 = true
+USES_RADIOEXT_V1_5 = true
 
 # Wifi ext
 include hardware/google/pixel/wifi_ext/device.mk
@@ -1140,4 +1184,4 @@ PRODUCT_COPY_FILES += \
     frameworks/native/data/etc/android.hardware.device_unique_attestation.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.device_unique_attestation.xml
 
 # Call deleteAllKeys if vold detects a factory reset
-PRODUCT_VENDOR_PROPERTIES += ro.crypto.metadata_init_delete_all_keys.enabled=true
+PRODUCT_VENDOR_PROPERTIES += ro.crypto.metadata_init_delete_all_keys.enabled?=true

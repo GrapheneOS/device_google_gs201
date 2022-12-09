@@ -20,6 +20,9 @@ on init
     chown system system /d/maxfg/fg_model
     chown system system /d/maxfg/registers
     chown system system /d/maxfg_base/fg_model
+    chown system system /d/maxfg_base/registers
+    chown system system /d/maxfg_flip/registers
+    chown system system /d/maxfg_flip/nv_registers
 
 on property:vendor.debug.ramdump.force_crash=true
     write /sys/kernel/pixel_debug/trigger "null"
@@ -33,4 +36,5 @@ on property:power.battery_input.suspended=false
 # Bluetooth
 on post-fs-data
     chown bluetooth system /dev/logbuffer_btlpm
+    chown bluetooth system /dev/logbuffer_btpower
     chown bluetooth system /dev/logbuffer_tty18
