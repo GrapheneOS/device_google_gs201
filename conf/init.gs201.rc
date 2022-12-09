@@ -212,26 +212,6 @@ on init
     chown system system /dev/nanohub
     chown system system /dev/nanohub_comms
 
-    # logbuffer
-    chown system system /dev/logbuffer_maxfg
-    chown system system /dev/logbuffer_maxfg_base
-    chown system system /dev/logbuffer_maxfg_flip
-    chown system system /dev/logbuffer_maxfg_monitor
-    chown system system /dev/logbuffer_maxfg_base_monitor
-    chown system system /dev/logbuffer_maxfg_flip_monitor
-    chown system system /dev/logbuffer_maxq
-    chown system system /dev/logbuffer_google,cpm
-    chown system system /dev/logbuffer_rtx
-    chown system system /dev/logbuffer_ssoc
-    chown system system /dev/logbuffer_ttf
-    chown system system /dev/logbuffer_tcpm
-    chown system system /dev/logbuffer_usbpd
-    chown system system /dev/logbuffer_pogo_transport
-    chown system system /dev/logbuffer_wireless
-    chown system system /dev/logbuffer_pca9468
-    chown system system /dev/logbuffer_cpm
-    chown system system /dev/logbuffer_bd
-
     # Dump maxfg
     chown system system /sys/class/power_supply/maxfg/m5_model_state
     chown system system /sys/class/power_supply/maxfg_base/m5_model_state
@@ -469,6 +449,25 @@ on early-boot
     # Dump Battery EEPROM history for pixelstats
     chown system system /dev/battery_history
     chmod 0644 /dev/battery_history
+
+    # Permission for logbuffer
+    chown system system /dev/logbuffer_maxfg
+    chown system system /dev/logbuffer_maxfg_base
+    chown system system /dev/logbuffer_maxfg_flip
+    chown system system /dev/logbuffer_maxfg_monitor
+    chown system system /dev/logbuffer_maxfg_base_monitor
+    chown system system /dev/logbuffer_maxfg_flip_monitor
+    chown system system /dev/logbuffer_maxq
+    chown system system /dev/logbuffer_rtx
+    chown system system /dev/logbuffer_ssoc
+    chown system system /dev/logbuffer_ttf
+    chown system system /dev/logbuffer_tcpm
+    chown system system /dev/logbuffer_usbpd
+    chown system system /dev/logbuffer_pogo_transport
+    chown system system /dev/logbuffer_wireless
+    chown system system /dev/logbuffer_pca9468
+    chown system system /dev/logbuffer_cpm
+    chown system system /dev/logbuffer_bd
 
 on boot
 
