@@ -590,8 +590,14 @@ void Dumpstate::dumpDisplaySection(int fd) {
     DumpFileToFd(fd, "Secondary panel name", "/sys/devices/platform/exynos-drm/secondary-panel/panel_name");
     DumpFileToFd(fd, "Secondary panel extra info", "/sys/devices/platform/exynos-drm/secondary-panel/panel_extinfo");
     if (!PropertiesHelper::IsUserBuild()) {
-        DumpFileToFd(fd, "HWC Fence State", "/data/vendor/log/hwc/hwc_fence_state.txt");
-        DumpFileToFd(fd, "HWC Error Log", "/data/vendor/log/hwc/hwc_error_log.txt");
+        RunCommandToFd(fd, "HWC Fence States", {"/vendor/bin/sh", "-c",
+                           "for f in $(ls /data/vendor/log/hwc/*_hwc_fence_state*.txt); do "
+                           "echo $f ; cat $f ; done"},
+                           CommandOptions::WithTimeout(2).Build());
+        RunCommandToFd(fd, "HWC Error Logs", {"/vendor/bin/sh", "-c",
+                           "for f in $(ls /data/vendor/log/hwc/*_hwc_error_log*.txt); do "
+                           "echo $f ; cat $f ; done"},
+                           CommandOptions::WithTimeout(2).Build());
         RunCommandToFd(fd, "HWC Debug Dumps", {"/vendor/bin/sh", "-c",
                            "for f in $(ls /data/vendor/log/hwc/*_hwc_debug*.dump); do "
                            "echo $f ; cat $f ; done"},
