@@ -287,9 +287,7 @@ on init
     chown system system /sys/devices/platform/google,cpm/dc_ctl
     # Important to include dd_state as it's used in battery defender in charger mode
     chown system system /sys/devices/platform/google,charger/dd_state
-    # Disable dock-defend by default
     chown system system /sys/devices/platform/google,charger/dd_settings
-    write /sys/devices/platform/google,charger/dd_settings -1
 
     # Power Stats HAL
     chown system system /dev/bbd_pwrstat
