@@ -530,6 +530,8 @@ void Dumpstate::dumpTouchSection(int fd) {
                                       "/proc/fts/driver_test",
                                       "/sys/class/spi_master/spi6/spi6.0",
                                       "/proc/fts_ext/driver_test"};
+    const char fst2_cmd_path[2][50] = {"/sys/class/spi_master/spi0/spi0.0",
+                                       "/proc/fts/driver_test"};
     const char lsi_spi_path[] = "/sys/devices/virtual/sec/tsp";
     const char syna_cmd_path[] = "/sys/class/spi_master/spi0/spi0.0/synaptics_tcm.0/sysfs";
     const char focaltech_cmd_path[] = "/proc/focaltech_touch";
@@ -537,6 +539,8 @@ void Dumpstate::dumpTouchSection(int fd) {
     char cmd[256];
 
     if (!access(focaltech_cmd_path, R_OK)) {
+        ::android::base::WriteStringToFd("\n<<<<<< FOCALTECH >>>>>>\n\n", fd);
+
         // Enable: force touch active
         snprintf(cmd, sizeof(cmd), "echo 21 > %s/force_active", focaltech_cmd_path);
         RunCommandToFd(fd, "Enable Force Touch Active", {"/vendor/bin/sh", "-c", cmd});
@@ -591,6 +595,8 @@ void Dumpstate::dumpTouchSection(int fd) {
     }
 
     if (!access(syna_cmd_path, R_OK)) {
+        ::android::base::WriteStringToFd("\n<<<<<< SYNA >>>>>>\n\n", fd);
+
         // Enable: force touch active
         snprintf(cmd, sizeof(cmd), "echo 21 > %s/force_active", syna_cmd_path);
         RunCommandToFd(fd, "Enable Force Touch Active", {"/vendor/bin/sh", "-c", cmd});
@@ -623,6 +629,8 @@ void Dumpstate::dumpTouchSection(int fd) {
         snprintf(cmd, sizeof(cmd), "%s", stm_cmd_path[i]);
         if (access(cmd, R_OK))
             continue;
+        ::android::base::WriteStringToFd("\n<<<<<< FTM5 >>>>>>\n\n", fd);
+
         snprintf(cmd, sizeof(cmd), "%s", stm_cmd_path[i + 1]);
         if (!access(cmd, R_OK)) {
             snprintf(cmd, sizeof(cmd), "echo A0 01 01 > %s", stm_cmd_path[i + 1]);
@@ -742,7 +750,36 @@ void Dumpstate::dumpTouchSection(int fd) {
         }
     }
 
+    for (int i = 0; i < 2; i += 2) {  // fst2
+        snprintf(cmd, sizeof(cmd), "%s", fst2_cmd_path[i]);
+        if (!access(cmd, R_OK)) {
+            ::android::base::WriteStringToFd("\n<<<<<< FST2 >>>>>>\n\n", fd);
+
+            snprintf(cmd, sizeof(cmd), "%s", fst2_cmd_path[i + 1]);
+            if (!access(cmd, R_OK)) {
+                // Enable: force touch active
+                snprintf(cmd, sizeof(cmd), "echo 21 01 > %s", fst2_cmd_path[i + 1]);
+                RunCommandToFd(fd, "Force Set AP as Bus Owner with Bugreport Flag",
+                               {"/vendor/bin/sh", "-c", cmd});
+
+                // Golden Mutual Raw Data
+                snprintf(cmd, sizeof(cmd), "echo 0B 00 23 40 > %s;"
+                         "echo 02 B7 00 10 04 E0 01 > %s ; cat %s;"
+                         "echo 02 B7 04 F0 04 E0 01 > %s ; cat %s;",
+                         fst2_cmd_path[i + 1], fst2_cmd_path[i + 1], fst2_cmd_path[i + 1],
+                         fst2_cmd_path[i + 1], fst2_cmd_path[i + 1]);
+                RunCommandToFd(fd, "Golden Mutual Raw Data", {"/vendor/bin/sh", "-c", cmd});
+
+                // Restore Bus Owner
+                snprintf(cmd, sizeof(cmd), "echo 21 00 > %s", fst2_cmd_path[i + 1]);
+                RunCommandToFd(fd, "Restore Bus Owner", {"/vendor/bin/sh", "-c", cmd});
+            }
+        }
+    }
+
     if (!access(lsi_spi_path, R_OK)) {
+        ::android::base::WriteStringToFd("\n<<<<<< LSI >>>>>>\n\n", fd);
+
         // Enable: force touch active
         snprintf(cmd, sizeof(cmd),
                  "echo %s > %s/cmd && cat %s/cmd_result",
@@ -830,6 +867,8 @@ void Dumpstate::dumpTouchSection(int fd) {
     }
 
     if (!access(gti0_cmd_path, R_OK)) {
+        ::android::base::WriteStringToFd("\n<<<<<< GTI0 >>>>>>\n\n", fd);
+
         // Enable: force touch active
         snprintf(cmd, sizeof(cmd), "echo 1 > %s/force_active", gti0_cmd_path);
         RunCommandToFd(fd, "Force Touch Active", {"/vendor/bin/sh", "-c", cmd});
