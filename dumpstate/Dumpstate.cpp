@@ -227,7 +227,6 @@ Dumpstate::Dumpstate()
         { "wlan", [this](int fd) { dumpWlanSection(fd); } },
         { "memory", [this](int fd) { dumpMemorySection(fd); } },
         { "Devfreq", [this](int fd) { dumpDevfreqSection(fd); } },
-        { "cpu", [this](int fd) { dumpCpuSection(fd); } },
         { "power", [this](int fd) { dumpPowerSection(fd); } },
         { "display", [this](int fd) { dumpDisplaySection(fd); } },
         { "misc", [this](int fd) { dumpMiscSection(fd); } },
@@ -505,26 +504,6 @@ void Dumpstate::dumpPowerSection(int fd) {
                         "a=${f/\\/sys\\/devices\\/virtual\\/pmic\\/mitigation\\/instruction\\//}; "
                         "echo \"$a=$val\" ; done"});
 
-}
-
-// Dump items related to CPUs
-void Dumpstate::dumpCpuSection(int fd) {
-    DumpFileToFd(fd, "CPU present", "/sys/devices/system/cpu/present");
-    DumpFileToFd(fd, "CPU online", "/sys/devices/system/cpu/online");
-    RunCommandToFd(fd, "CPU time-in-state", {"/vendor/bin/sh", "-c",
-                   "for cpu in /sys/devices/system/cpu/cpu*; do "
-                       "f=$cpu/cpufreq/stats/time_in_state; "
-                       "if [ ! -f $f ]; then continue; fi; "
-                       "echo $f:; cat $f; "
-                       "done"});
-    RunCommandToFd(fd, "CPU cpuidle", {"/vendor/bin/sh", "-c",
-                   "for cpu in /sys/devices/system/cpu/cpu*; do "
-                       "for d in $cpu/cpuidle/state*; do "
-                           "if [ ! -d $d ]; then continue; fi; "
-                           "echo \"$d: `cat $d/name` `cat $d/desc` `cat $d/time` `cat $d/usage`\"; "
-                           "done; "
-                       "done"});
-    DumpFileToFd(fd, "INTERRUPTS", "/proc/interrupts");
 }
 
 // Dump items related to Devfreq & BTS
