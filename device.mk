@@ -552,7 +552,6 @@ PRODUCT_PACKAGES += \
         battery_mitigation
 
 PRODUCT_PACKAGES_DEBUG += \
-	sg_write_buffer \
 	f2fs_io \
 	check_f2fs \
 	f2fsstat \
