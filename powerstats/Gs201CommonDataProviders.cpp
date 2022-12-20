@@ -601,6 +601,14 @@ void addPixelStateResidencyDataProvider(std::shared_ptr<PowerStats> p) {
     p->addStateResidencyDataProvider(std::move(pixelSdp));
 }
 
+void addCamera(std::shared_ptr<PowerStats> p) {
+    p->addEnergyConsumer(PowerStatsEnergyConsumer::createMeterConsumer(
+            p,
+            EnergyConsumerType::CAMERA,
+            "CAMERA",
+            {"VSYS_PWR_CAM"}));
+}
+
 void addGs201CommonDataProviders(std::shared_ptr<PowerStats> p) {
     setEnergyMeter(p);
 
@@ -618,6 +626,7 @@ void addGs201CommonDataProviders(std::shared_ptr<PowerStats> p) {
     addPowerDomains(p);
     addDevfreq(p);
     addTPU(p);
+    addCamera(p);
 }
 
 void addNFC(std::shared_ptr<PowerStats> p, const std::string& path) {
