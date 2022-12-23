@@ -536,6 +536,7 @@ void Dumpstate::dumpTouchSection(int fd) {
     const char syna_cmd_path[] = "/sys/class/spi_master/spi0/spi0.0/synaptics_tcm.0/sysfs";
     const char focaltech_cmd_path[] = "/proc/focaltech_touch";
     const char gti0_cmd_path[] = "/sys/devices/virtual/goog_touch_interface/gti.0";
+    const char gti0_procfs_path[] = "/proc/goog_touch_interface/gti.0";
     char cmd[256];
 
     if (!access(focaltech_cmd_path, R_OK)) {
@@ -867,6 +868,10 @@ void Dumpstate::dumpTouchSection(int fd) {
     }
 
     if (!access(gti0_cmd_path, R_OK)) {
+        const char *heatmap_path = gti0_cmd_path;
+
+        if (!access(gti0_procfs_path, R_OK))
+            heatmap_path = gti0_procfs_path;
         ::android::base::WriteStringToFd("\n<<<<<< GTI0 >>>>>>\n\n", fd);
 
         // Enable: force touch active
@@ -878,27 +883,27 @@ void Dumpstate::dumpTouchSection(int fd) {
         DumpFileToFd(fd, "Touch Firmware Version", cmd);
 
         // Get Mutual Sensing Data - Baseline
-        snprintf(cmd, sizeof(cmd), "cat %s/ms_base", gti0_cmd_path);
+        snprintf(cmd, sizeof(cmd), "cat %s/ms_base", heatmap_path);
         RunCommandToFd(fd, "Get Mutual Sensing Data - Baseline", {"/vendor/bin/sh", "-c", cmd});
 
         // Get Mutual Sensing Data - Delta
-        snprintf(cmd, sizeof(cmd), "cat %s/ms_diff", gti0_cmd_path);
+        snprintf(cmd, sizeof(cmd), "cat %s/ms_diff", heatmap_path);
         RunCommandToFd(fd, "Get Mutual Sensing Data - Delta", {"/vendor/bin/sh", "-c", cmd});
 
         // Get Mutual Sensing Data - Raw
-        snprintf(cmd, sizeof(cmd), "cat %s/ms_raw", gti0_cmd_path);
+        snprintf(cmd, sizeof(cmd), "cat %s/ms_raw", heatmap_path);
         RunCommandToFd(fd, "Get Mutual Sensing Data - Raw", {"/vendor/bin/sh", "-c", cmd});
 
         // Get Self Sensing Data - Baseline
-        snprintf(cmd, sizeof(cmd), "cat %s/ss_base", gti0_cmd_path);
+        snprintf(cmd, sizeof(cmd), "cat %s/ss_base", heatmap_path);
         RunCommandToFd(fd, "Get Self Sensing Data - Baseline", {"/vendor/bin/sh", "-c", cmd});
 
         // Get Self Sensing Data - Delta
-        snprintf(cmd, sizeof(cmd), "cat %s/ss_diff", gti0_cmd_path);
+        snprintf(cmd, sizeof(cmd), "cat %s/ss_diff", heatmap_path);
         RunCommandToFd(fd, "Get Self Sensing Data - Delta", {"/vendor/bin/sh", "-c", cmd});
 
         // Get Self Sensing Data - Raw
-        snprintf(cmd, sizeof(cmd), "cat %s/ss_raw", gti0_cmd_path);
+        snprintf(cmd, sizeof(cmd), "cat %s/ss_raw", heatmap_path);
         RunCommandToFd(fd, "Get Self Sensing Data - Raw", {"/vendor/bin/sh", "-c", cmd});
 
         // Self Test
