@@ -75,7 +75,6 @@ const struct SysfsCollector::SysfsPaths sysfs_paths = {
 
 const struct UeventListener::UeventPaths ueventPaths = {
         .AudioUevent = "/devices/virtual/amcs/amcs",
-        .WirelessChargerPtmcPath = "/sys/class/power_supply/wireless/device/ptmc_id",
         .TypeCPartnerUevent = "PRODUCT_TYPE="};
 
 int main() {
