@@ -105,7 +105,7 @@ endif
 PRODUCT_PROPERTY_OVERRIDES += \
 	ro.telephony.default_network=27 \
 	persist.vendor.ril.use.iccid_to_plmn=1 \
-	persist.vendor.ril.emergencynumber.mode=5
+	persist.vendor.ril.db_ecc.id.type=5
 	#rild.libpath=/system/lib64/libsec-ril.so \
 	#rild.libargs=-d /dev/umts_ipc0
 
