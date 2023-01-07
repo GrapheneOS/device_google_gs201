@@ -162,7 +162,7 @@ static bool DevInfoSync() {
         return false;
     }
 
-    android::base::unique_fd fd(open(DEVINFO_PATH, O_WRONLY));
+    android::base::unique_fd fd(open(DEVINFO_PATH, O_WRONLY | O_DSYNC));
     return android::base::WriteFully(fd, &devinfo, sizeof devinfo);
 }
 
@@ -270,13 +270,13 @@ Return<void> BootControl::setActiveBootSlot(uint32_t slot, setActiveBootSlot_cb 
 
     std::string boot_lun_path =
             std::string("/sys/devices/platform/") + boot_dev + "/pixel/boot_lun_enabled";
-    int fd = open(boot_lun_path.c_str(), O_RDWR);
+    int fd = open(boot_lun_path.c_str(), O_RDWR | O_DSYNC);
     if (fd < 0) {
         // Try old path for kernels < 5.4
         // TODO: remove once kernel 4.19 support is deprecated
         std::string boot_lun_path =
                 std::string("/sys/devices/platform/") + boot_dev + "/attributes/boot_lun_enabled";
-        fd = open(boot_lun_path.c_str(), O_RDWR);
+        fd = open(boot_lun_path.c_str(), O_RDWR | O_DSYNC);
         if (fd < 0) {
             _hidl_cb({false, "failed to open ufs attr boot_lun_enabled"});
             return Void();
