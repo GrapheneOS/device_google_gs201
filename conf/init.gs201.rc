@@ -651,6 +651,13 @@ on property:vendor.device.modules.ready=1
     chown system system /sys/devices/virtual/sec/tsp/cmd
     chown system system /sys/devices/virtual/sec/tsp/cmd_result
     chown system system /sys/devices/virtual/sec/tsp/status
+    chown system system /proc/goog_touch_interface/gti.0
+    chown system system /proc/goog_touch_interface/gti.0/ms_base
+    chown system system /proc/goog_touch_interface/gti.0/ms_diff
+    chown system system /proc/goog_touch_interface/gti.0/ms_raw
+    chown system system /proc/goog_touch_interface/gti.0/ss_base
+    chown system system /proc/goog_touch_interface/gti.0/ss_diff
+    chown system system /proc/goog_touch_interface/gti.0/ss_raw
     # Allow access to touch
     chown system input /dev/touch_offload
     chmod 660 /dev/touch_offload
