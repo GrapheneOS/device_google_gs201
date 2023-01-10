@@ -30,6 +30,7 @@
 #include "DumpstateUtil.h"
 
 #define MODEM_LOG_DIRECTORY "/data/vendor/radio/logs/always-on"
+#define MODEM_LOG_HISTORY_DIRECTORY "data/vendor/radio/logs/history"
 #define MODEM_EXTENDED_LOG_DIRECTORY "/data/vendor/radio/extended_logs"
 #define RIL_LOG_DIRECTORY "/data/vendor/radio"
 #define RIL_LOG_DIRECTORY_PROPERTY "persist.vendor.ril.log.base_dir"
@@ -240,6 +241,9 @@ Dumpstate::Dumpstate()
         { "misc", [this](int fd) { dumpMiscSection(fd); } },
         { "gsc", [this](int fd) { dumpGscSection(fd); } },
         { "trusty", [this](int fd) { dumpTrustySection(fd); } },
+        { "led", [this](int fd) { dumpLEDSection(fd); } },
+        { "pixel-trace", [this](int fd) { dumpPixelTraceSection(fd); } },
+        { "perf-metrics", [this](int fd) { dumpPerfMetricsSection(fd); } },
     },
   mLogSections{
         { "modem", [this](int fd, const std::string &destDir) { dumpModemLogs(fd, destDir); } },
@@ -283,11 +287,10 @@ void Dumpstate::dumpTextSection(int fd, const std::string &sectionName) {
 
 // Dump items related to wlan
 void Dumpstate::dumpWlanSection(int fd) {
-    RunCommandToFd(fd, "WLAN Debug Dump", {"/vendor/bin/sh", "-c",
-                   "cat /sys/wifi/dump_start"});
-
     // Dump firmware symbol table for firmware log decryption
     DumpFileToFd(fd, "WLAN FW Log Symbol Table", "/vendor/firmware/Data.msc");
+    RunCommandToFd(fd, "WLAN TWT Dump", {"/vendor/bin/sh", "-c",
+                    "cat /sys/wlan_ptracker/twt/*"});
 }
 
 // Dump items related to power and battery
@@ -375,6 +378,7 @@ void Dumpstate::dumpPowerSection(int fd) {
     DumpFileToFd(fd, "TTF stats", "/sys/class/power_supply/battery/ttf_stats");
     DumpFileToFd(fd, "aacr_state", "/sys/class/power_supply/battery/aacr_state");
     DumpFileToFd(fd, "maxq", "/dev/logbuffer_maxq");
+    DumpFileToFd(fd, "TEMP/DOCK-DEFEND", "/dev/logbuffer_bd");
 
     RunCommandToFd(fd, "TRICKLE-DEFEND Config", {"/vendor/bin/sh", "-c",
                         " cd /sys/devices/platform/google,battery/power_supply/battery/;"
@@ -517,6 +521,7 @@ void Dumpstate::dumpThermalSection(int fd) {
     DumpFileToFd(fd, "TMU_TOP fall thresholds:", "/sys/module/gs_thermal/parameters/tmu_top_reg_dump_fall_thres");
     DumpFileToFd(fd, "TMU_SUB rise thresholds:", "/sys/module/gs_thermal/parameters/tmu_sub_reg_dump_rise_thres");
     DumpFileToFd(fd, "TMU_SUB fall thresholds:", "/sys/module/gs_thermal/parameters/tmu_sub_reg_dump_fall_thres");
+    DumpFileToFd(fd, "Temperature Residency Metrics:", "/sys/kernel/metrics/temp_residency/temp_residency_all/stats");
 }
 
 // Dump items related to touch
@@ -525,12 +530,18 @@ void Dumpstate::dumpTouchSection(int fd) {
                                       "/proc/fts/driver_test",
                                       "/sys/class/spi_master/spi6/spi6.0",
                                       "/proc/fts_ext/driver_test"};
+    const char fst2_cmd_path[2][50] = {"/sys/class/spi_master/spi0/spi0.0",
+                                       "/proc/fts/driver_test"};
     const char lsi_spi_path[] = "/sys/devices/virtual/sec/tsp";
     const char syna_cmd_path[] = "/sys/class/spi_master/spi0/spi0.0/synaptics_tcm.0/sysfs";
     const char focaltech_cmd_path[] = "/proc/focaltech_touch";
+    const char gti0_cmd_path[] = "/sys/devices/virtual/goog_touch_interface/gti.0";
+    const char gti0_procfs_path[] = "/proc/goog_touch_interface/gti.0";
     char cmd[256];
 
     if (!access(focaltech_cmd_path, R_OK)) {
+        ::android::base::WriteStringToFd("\n<<<<<< FOCALTECH >>>>>>\n\n", fd);
+
         // Enable: force touch active
         snprintf(cmd, sizeof(cmd), "echo 21 > %s/force_active", focaltech_cmd_path);
         RunCommandToFd(fd, "Enable Force Touch Active", {"/vendor/bin/sh", "-c", cmd});
@@ -585,6 +596,8 @@ void Dumpstate::dumpTouchSection(int fd) {
     }
 
     if (!access(syna_cmd_path, R_OK)) {
+        ::android::base::WriteStringToFd("\n<<<<<< SYNA >>>>>>\n\n", fd);
+
         // Enable: force touch active
         snprintf(cmd, sizeof(cmd), "echo 21 > %s/force_active", syna_cmd_path);
         RunCommandToFd(fd, "Enable Force Touch Active", {"/vendor/bin/sh", "-c", cmd});
@@ -613,7 +626,12 @@ void Dumpstate::dumpTouchSection(int fd) {
         RunCommandToFd(fd, "Disable Force Touch Active", {"/vendor/bin/sh", "-c", cmd});
     }
 
-    for (int i = 0; i < 4; i+=2) {
+    for (int i = 0; i < 4; i += 2) {  // ftm5
+        snprintf(cmd, sizeof(cmd), "%s", stm_cmd_path[i]);
+        if (access(cmd, R_OK))
+            continue;
+        ::android::base::WriteStringToFd("\n<<<<<< FTM5 >>>>>>\n\n", fd);
+
         snprintf(cmd, sizeof(cmd), "%s", stm_cmd_path[i + 1]);
         if (!access(cmd, R_OK)) {
             snprintf(cmd, sizeof(cmd), "echo A0 01 01 > %s", stm_cmd_path[i + 1]);
@@ -733,7 +751,36 @@ void Dumpstate::dumpTouchSection(int fd) {
         }
     }
 
+    for (int i = 0; i < 2; i += 2) {  // fst2
+        snprintf(cmd, sizeof(cmd), "%s", fst2_cmd_path[i]);
+        if (!access(cmd, R_OK)) {
+            ::android::base::WriteStringToFd("\n<<<<<< FST2 >>>>>>\n\n", fd);
+
+            snprintf(cmd, sizeof(cmd), "%s", fst2_cmd_path[i + 1]);
+            if (!access(cmd, R_OK)) {
+                // Enable: force touch active
+                snprintf(cmd, sizeof(cmd), "echo 21 01 > %s", fst2_cmd_path[i + 1]);
+                RunCommandToFd(fd, "Force Set AP as Bus Owner with Bugreport Flag",
+                               {"/vendor/bin/sh", "-c", cmd});
+
+                // Golden Mutual Raw Data
+                snprintf(cmd, sizeof(cmd), "echo 0B 00 23 40 > %s;"
+                         "echo 02 B7 00 10 04 E0 01 > %s ; cat %s;"
+                         "echo 02 B7 04 F0 04 E0 01 > %s ; cat %s;",
+                         fst2_cmd_path[i + 1], fst2_cmd_path[i + 1], fst2_cmd_path[i + 1],
+                         fst2_cmd_path[i + 1], fst2_cmd_path[i + 1]);
+                RunCommandToFd(fd, "Golden Mutual Raw Data", {"/vendor/bin/sh", "-c", cmd});
+
+                // Restore Bus Owner
+                snprintf(cmd, sizeof(cmd), "echo 21 00 > %s", fst2_cmd_path[i + 1]);
+                RunCommandToFd(fd, "Restore Bus Owner", {"/vendor/bin/sh", "-c", cmd});
+            }
+        }
+    }
+
     if (!access(lsi_spi_path, R_OK)) {
+        ::android::base::WriteStringToFd("\n<<<<<< LSI >>>>>>\n\n", fd);
+
         // Enable: force touch active
         snprintf(cmd, sizeof(cmd),
                  "echo %s > %s/cmd && cat %s/cmd_result",
@@ -818,6 +865,54 @@ void Dumpstate::dumpTouchSection(int fd) {
                  "force_touch_active,0",
                  lsi_spi_path, lsi_spi_path);
         RunCommandToFd(fd, "Force Touch Active", {"/vendor/bin/sh", "-c", cmd});
+    }
+
+    if (!access(gti0_cmd_path, R_OK)) {
+        const char *heatmap_path = gti0_cmd_path;
+
+        if (!access(gti0_procfs_path, R_OK))
+            heatmap_path = gti0_procfs_path;
+        ::android::base::WriteStringToFd("\n<<<<<< GTI0 >>>>>>\n\n", fd);
+
+        // Enable: force touch active
+        snprintf(cmd, sizeof(cmd), "echo 1 > %s/force_active", gti0_cmd_path);
+        RunCommandToFd(fd, "Force Touch Active", {"/vendor/bin/sh", "-c", cmd});
+
+        // Touch Firmware Version
+        snprintf(cmd, sizeof(cmd), "%s/fw_ver", gti0_cmd_path);
+        DumpFileToFd(fd, "Touch Firmware Version", cmd);
+
+        // Get Mutual Sensing Data - Baseline
+        snprintf(cmd, sizeof(cmd), "cat %s/ms_base", heatmap_path);
+        RunCommandToFd(fd, "Get Mutual Sensing Data - Baseline", {"/vendor/bin/sh", "-c", cmd});
+
+        // Get Mutual Sensing Data - Delta
+        snprintf(cmd, sizeof(cmd), "cat %s/ms_diff", heatmap_path);
+        RunCommandToFd(fd, "Get Mutual Sensing Data - Delta", {"/vendor/bin/sh", "-c", cmd});
+
+        // Get Mutual Sensing Data - Raw
+        snprintf(cmd, sizeof(cmd), "cat %s/ms_raw", heatmap_path);
+        RunCommandToFd(fd, "Get Mutual Sensing Data - Raw", {"/vendor/bin/sh", "-c", cmd});
+
+        // Get Self Sensing Data - Baseline
+        snprintf(cmd, sizeof(cmd), "cat %s/ss_base", heatmap_path);
+        RunCommandToFd(fd, "Get Self Sensing Data - Baseline", {"/vendor/bin/sh", "-c", cmd});
+
+        // Get Self Sensing Data - Delta
+        snprintf(cmd, sizeof(cmd), "cat %s/ss_diff", heatmap_path);
+        RunCommandToFd(fd, "Get Self Sensing Data - Delta", {"/vendor/bin/sh", "-c", cmd});
+
+        // Get Self Sensing Data - Raw
+        snprintf(cmd, sizeof(cmd), "cat %s/ss_raw", heatmap_path);
+        RunCommandToFd(fd, "Get Self Sensing Data - Raw", {"/vendor/bin/sh", "-c", cmd});
+
+        // Self Test
+        snprintf(cmd, sizeof(cmd), "cat %s/self_test", gti0_cmd_path);
+        RunCommandToFd(fd, "Self Test", {"/vendor/bin/sh", "-c", cmd});
+
+        // Disable: force touch active
+        snprintf(cmd, sizeof(cmd), "echo 0 > %s/force_active", gti0_cmd_path);
+        RunCommandToFd(fd, "Disable Force Touch Active", {"/vendor/bin/sh", "-c", cmd});
     }
 }
 
@@ -989,9 +1084,16 @@ void Dumpstate::dumpAoCSection(int fd) {
     DumpFileToFd(fd, "AoC audio wake", "/sys/devices/platform/19000000.aoc/control/audio_wakeup");
     DumpFileToFd(fd, "AoC logging wake", "/sys/devices/platform/19000000.aoc/control/logging_wakeup");
     DumpFileToFd(fd, "AoC hotword wake", "/sys/devices/platform/19000000.aoc/control/hotword_wakeup");
-    RunCommandToFd(fd, "AoC memory exception wake", {"/vendor/bin/sh", "-c", "cat /sys/devices/platform/19000000.aoc/control/memory_exception"}, CommandOptions::WithTimeout(2).Build());
-    RunCommandToFd(fd, "AoC memory votes", {"/vendor/bin/sh", "-c", "cat /sys/devices/platform/19000000.aoc/control/memory_votes"}, CommandOptions::WithTimeout(2).Build());
-        RunCommandToFd(fd, "AoC Heap Stats (A32)",
+    RunCommandToFd(fd, "AoC memory exception wake",
+      {"/vendor/bin/sh", "-c", "cat /sys/devices/platform/19000000.aoc/control/memory_exception"},
+      CommandOptions::WithTimeout(2).Build());
+    RunCommandToFd(fd, "AoC memory votes A32",
+      {"/vendor/bin/sh", "-c", "cat /sys/devices/platform/19000000.aoc/control/memory_votes_a32"},
+      CommandOptions::WithTimeout(2).Build());
+    RunCommandToFd(fd, "AoC memory votes FF1",
+      {"/vendor/bin/sh", "-c", "cat /sys/devices/platform/19000000.aoc/control/memory_votes_ff1"},
+      CommandOptions::WithTimeout(2).Build());
+    RunCommandToFd(fd, "AoC Heap Stats (A32)",
       {"/vendor/bin/sh", "-c", "echo 'dbg heap -c 1' > /dev/acd-debug; timeout 0.1 cat /dev/acd-debug"},
       CommandOptions::WithTimeout(1).Build());
     RunCommandToFd(fd, "AoC Heap Stats (F1)",
@@ -1002,9 +1104,6 @@ void Dumpstate::dumpAoCSection(int fd) {
       CommandOptions::WithTimeout(1).Build());
     RunCommandToFd(fd, "AoC Heap Stats (HF1)",
       {"/vendor/bin/sh", "-c", "echo 'dbg heap -c 4' > /dev/acd-debug; timeout 0.1 cat /dev/acd-debug"},
-      CommandOptions::WithTimeout(1).Build());
-    RunCommandToFd(fd, "AoC MIF Stats",
-      {"/vendor/bin/sh", "-c", "echo 'mif details' > /dev/acd-debug; timeout 0.1 cat /dev/acd-debug"},
       CommandOptions::WithTimeout(1).Build());
 }
 
@@ -1022,6 +1121,9 @@ void Dumpstate::dumpSensorsUSFSection(int fd) {
             hwRev.find("DVT") != std::string::npos) {
             RunCommandToFd(fd, "USF Registry",
                            {"/vendor/bin/sh", "-c", "usf_reg_edit save -"},
+                           options);
+            RunCommandToFd(fd, "USF Last Stat Buffer",
+                           {"/vendor/bin/sh", "-c", "cat /data/vendor/sensors/debug/stats.history"},
                            options);
         }
     }
@@ -1077,6 +1179,21 @@ void Dumpstate::dumpTrustySection(int fd) {
     RunCommandToFd(fd, "Trusty TEE0 Logs", {"/vendor/bin/sh", "-c", "cat /dev/trusty-log0"}, CommandOptions::WithTimeout(1).Build());
 }
 
+// Dump items related to LED
+void Dumpstate::dumpLEDSection(int fd) {
+    struct stat buffer;
+
+    if (!PropertiesHelper::IsUserBuild()) {
+        if (!stat("/sys/class/leds/green", &buffer)) {
+            DumpFileToFd(fd, "Green LED Brightness", "/sys/class/leds/green/brightness");
+            DumpFileToFd(fd, "Green LED Max Brightness", "/sys/class/leds/green/max_brightness");
+        }
+        if (!stat("/mnt/vendor/persist/led/led_calibration_LUT.txt", &buffer)) {
+            DumpFileToFd(fd, "LED Calibration Data", "/mnt/vendor/persist/led/led_calibration_LUT.txt");
+        }
+    }
+}
+
 void Dumpstate::dumpModemSection(int fd) {
     DumpFileToFd(fd, "Modem Stat", "/data/vendor/modem_stat/debug.txt");
     RunCommandToFd(fd, "Modem SSR history", {"/vendor/bin/sh", "-c",
@@ -1091,8 +1208,10 @@ void Dumpstate::dumpModemSection(int fd) {
 
 void Dumpstate::dumpModemLogs(int fd, const std::string &destDir) {
     std::string extendedLogDir = MODEM_EXTENDED_LOG_DIRECTORY;
+    std::string modemLogHistoryDir = MODEM_LOG_HISTORY_DIRECTORY;
 
     dumpLogs(fd, extendedLogDir, destDir, 20, EXTENDED_LOG_PREFIX);
+    dumpLogs(fd, modemLogHistoryDir, destDir, 2, "Logging");
     dumpModemEFS(destDir);
 }
 
@@ -1240,6 +1359,15 @@ void Dumpstate::dumpLogSection(int fd, int fd_bin)
 
     RunCommandToFd(fd, "RM LOG DIR", { "/vendor/bin/rm", "-r", logAllDir.c_str()}, CommandOptions::WithTimeout(2).Build());
     RunCommandToFd(fd, "RM LOG", { "/vendor/bin/rm", logCombined.c_str()}, CommandOptions::WithTimeout(2).Build());
+}
+
+void Dumpstate::dumpPixelTraceSection(int fd) {
+    DumpFileToFd(fd, "Pixel trace", "/sys/kernel/tracing/instances/pixel/trace");
+}
+
+void Dumpstate::dumpPerfMetricsSection(int fd) {
+    DumpFileToFd(fd, "Long running IRQ metrics", "/sys/kernel/metrics/irq/long_irq_metrics");
+    DumpFileToFd(fd, "Resume latency metrics", "/sys/kernel/metrics/resume_latency/resume_latency_metrics");
 }
 
 ndk::ScopedAStatus Dumpstate::dumpstateBoard(const std::vector<::ndk::ScopedFileDescriptor>& in_fds,

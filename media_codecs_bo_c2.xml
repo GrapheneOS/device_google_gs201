@@ -15,6 +15,7 @@
 -->
 <MediaCodecs>
     <Include href="media_codecs_aosp_c2.xml" />
+    <Include href="media_codecs_dolby_c2.xml" />
     <Decoders>
         <MediaCodec name="c2.google.av1.decoder" type="video/av01">
           <Limit name="size" min="96x96" max="3840x2160" />
@@ -25,7 +26,8 @@
           <Limit name="bitrate" range="1-120000000" />
           <Limit name="frame-rate" range="1-120" />
           <Limit name="concurrent-instances" max="16" />
-          <Limit name="performance-point-1920x1080" value="200" />
+          <Limit name="performance-point-1920x1080" value="180" />
+          <Limit name="performance-point-1920x1079" value="120" />
           <Limit name="performance-point-3840x2160" value="60" />
           <!--Feature name="adaptive-playback" /-->
         </MediaCodec>
@@ -38,7 +40,8 @@
           <Limit name="bitrate" range="1-120000000" />
           <Limit name="frame-rate" range="1-120" />
           <Limit name="concurrent-instances" max="16" />
-          <Limit name="performance-point-1920x1080" value="200" />
+          <Limit name="performance-point-1920x1080" value="180" />
+          <Limit name="performance-point-1920x1079" value="120" />
           <Limit name="performance-point-3840x2160" value="60" />
           <!--Feature name="adaptive-playback" /-->
           <Feature name="secure-playback" required="true" />

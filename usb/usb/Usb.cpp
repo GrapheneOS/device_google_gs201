@@ -73,7 +73,7 @@ constexpr char kThermalZoneForTempReadPrimary[] = "usb_pwr_therm2";
 constexpr char kThermalZoneForTempReadSecondary1[] = "usb_pwr_therm";
 constexpr char kThermalZoneForTempReadSecondary2[] = "qi_therm";
 constexpr char kPogoUsbActive[] = "/sys/devices/platform/google,pogo/pogo_usb_active";
-constexpr char kPogoEnableUsb[] = "/sys/devices/platform/google,pogo/enable_usb";
+constexpr char KPogoMoveDataToUsb[] = "/sys/devices/platform/google,pogo/move_data_to_usb";
 constexpr char kPowerSupplyUsbType[] = "/sys/class/power_supply/usb/usb_type";
 constexpr int kSamplingIntervalSec = 5;
 void queryVersionHelper(android::hardware::usb::Usb *usb,
@@ -159,12 +159,12 @@ ScopedAStatus Usb::enableUsbDataWhileDocked(const string& in_portName,
     ALOGI("Userspace enableUsbDataWhileDocked  opID:%ld", in_transactionId);
 
     int flags = O_RDONLY;
-    ::android::base::unique_fd fd(TEMP_FAILURE_RETRY(open(kPogoEnableUsb, flags)));
+    ::android::base::unique_fd fd(TEMP_FAILURE_RETRY(open(KPogoMoveDataToUsb, flags)));
     if (fd != -1) {
         notSupported = false;
-        success = WriteStringToFile("1", kPogoEnableUsb);
+        success = WriteStringToFile("1", KPogoMoveDataToUsb);
         if (!success) {
-            ALOGE("Write to enable_usb failed");
+            ALOGE("Write to move_data_to_usb failed");
         }
     }
 
