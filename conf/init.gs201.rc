@@ -330,9 +330,6 @@ on init
     setprop vendor.device.modules.ready 1
 
 on late-fs
-    # Wait for keymaster HALs
-    exec_start wait_for_keymaster
-
     # Start bootanimation class before mount
     start bootanim
     class_start animation
