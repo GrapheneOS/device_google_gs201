@@ -295,15 +295,6 @@ void addCPUclusters(std::shared_ptr<PowerStats> p) {
     p->addStateResidencyDataProvider(std::make_unique<GenericStateResidencyDataProvider>(
             "/sys/devices/platform/acpm_stats/core_stats", cfgs));
 
-    p->addStateResidencyDataProvider(std::make_unique<DevfreqStateResidencyDataProvider>(
-            "CL0", "/sys/devices/system/cpu/cpufreq/policy0/stats"));
-
-    p->addStateResidencyDataProvider(std::make_unique<DevfreqStateResidencyDataProvider>(
-            "CL1", "/sys/devices/system/cpu/cpufreq/policy4/stats"));
-
-    p->addStateResidencyDataProvider(std::make_unique<DevfreqStateResidencyDataProvider>(
-            "CL2", "/sys/devices/system/cpu/cpufreq/policy6/stats"));
-
     p->addEnergyConsumer(PowerStatsEnergyConsumer::createMeterConsumer(p,
             EnergyConsumerType::CPU_CLUSTER, "CPUCL0", {"S4M_VDD_CPUCL0"}));
     p->addEnergyConsumer(PowerStatsEnergyConsumer::createMeterConsumer(p,
@@ -318,7 +309,6 @@ void addGPU(std::shared_ptr<PowerStats> p) {
 
     // TODO (b/197721618): Measuring the GPU power numbers
     stateCoeffs = {
-        {"151000",  642},
         {"202000",  890},
         {"251000", 1102},
         {"302000", 1308},
@@ -534,6 +524,18 @@ void addPowerDomains(std::shared_ptr<PowerStats> p) {
 
 void addDevfreq(std::shared_ptr<PowerStats> p) {
     p->addStateResidencyDataProvider(std::make_unique<DevfreqStateResidencyDataProvider>(
+            "CL0",
+            "/sys/devices/system/cpu/cpufreq/policy0/stats"));
+
+    p->addStateResidencyDataProvider(std::make_unique<DevfreqStateResidencyDataProvider>(
+            "CL1",
+            "/sys/devices/system/cpu/cpufreq/policy4/stats"));
+
+    p->addStateResidencyDataProvider(std::make_unique<DevfreqStateResidencyDataProvider>(
+            "CL2",
+            "/sys/devices/system/cpu/cpufreq/policy6/stats"));
+
+    p->addStateResidencyDataProvider(std::make_unique<DevfreqStateResidencyDataProvider>(
             "MIF",
             "/sys/devices/platform/17000010.devfreq_mif/devfreq/17000010.devfreq_mif"));
 
@@ -599,9 +601,10 @@ void addPixelStateResidencyDataProvider(std::shared_ptr<PowerStats> p) {
     p->addStateResidencyDataProvider(std::move(pixelSdp));
 }
 
-void addCommonDataProviders(std::shared_ptr<PowerStats> p) {
+void addGs201CommonDataProviders(std::shared_ptr<PowerStats> p) {
     setEnergyMeter(p);
 
+    addPixelStateResidencyDataProvider(p);
     addAoC(p);
     addDvfsStats(p);
     addSoC(p);
@@ -610,41 +613,11 @@ void addCommonDataProviders(std::shared_ptr<PowerStats> p) {
     addMobileRadio(p);
     addGNSS(p);
     addPCIe(p);
+    addWifi(p);
     addUfs(p);
     addPowerDomains(p);
     addDevfreq(p);
     addTPU(p);
-
-    // TODO (b/181070764) (b/182941084):
-    // Remove this when Wifi/BT energy consumption models are available or revert before ship
-    addPlaceholderEnergyConsumers(p);
-}
-
-void addGs201CommonDataProviders(std::shared_ptr<PowerStats> p) {
-    addCommonDataProviders(p);
-    addPixelStateResidencyDataProvider(p);
-    addWifi(p);
-}
-
-void addGs201CommonDataProvidersQc(std::shared_ptr<PowerStats> p) {
-    addCommonDataProviders(p);
-    addWlan(p);
-}
-
-void addGs201CommonDataProvidersBig(std::shared_ptr<PowerStats> p) {
-    setEnergyMeter(p);
-
-    addAoC(p);
-    addDvfsStats(p);
-    addSoC(p);
-    addCPUclusters(p);
-    addGPU(p);
-    addUfs(p);
-    addPowerDomains(p);
-    addDevfreq(p);
-    addTPU(p);
-    addPixelStateResidencyDataProvider(p);
-    addWifi(p);
 }
 
 void addNFC(std::shared_ptr<PowerStats> p, const std::string& path) {

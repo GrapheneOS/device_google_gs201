@@ -14,6 +14,9 @@ on init
     # CPU0 cannot be offline
     chmod 0444 /sys/devices/system/cpu/cpu0/online
 
+    # Set teo as cpu idle governor
+    write /sys/devices/system/cpu/cpuidle/current_governor teo
+
     # Boot time fs tuning
     write /sys/block/sda/queue/iostats 0
     write /sys/block/sda/queue/scheduler bfq
@@ -209,25 +212,6 @@ on init
     chown system system /dev/nanohub
     chown system system /dev/nanohub_comms
 
-    # logbuffer
-    chown system system /dev/logbuffer_maxfg
-    chown system system /dev/logbuffer_maxfg_base
-    chown system system /dev/logbuffer_maxfg_flip
-    chown system system /dev/logbuffer_maxfg_monitor
-    chown system system /dev/logbuffer_maxfg_base_monitor
-    chown system system /dev/logbuffer_maxfg_flip_monitor
-    chown system system /dev/logbuffer_maxq
-    chown system system /dev/logbuffer_google,cpm
-    chown system system /dev/logbuffer_rtx
-    chown system system /dev/logbuffer_ssoc
-    chown system system /dev/logbuffer_ttf
-    chown system system /dev/logbuffer_tcpm
-    chown system system /dev/logbuffer_usbpd
-    chown system system /dev/logbuffer_pogo_transport
-    chown system system /dev/logbuffer_wireless
-    chown system system /dev/logbuffer_pca9468
-    chown system system /dev/logbuffer_cpm
-
     # Dump maxfg
     chown system system /sys/class/power_supply/maxfg/m5_model_state
     chown system system /sys/class/power_supply/maxfg_base/m5_model_state
@@ -253,6 +237,9 @@ on init
 
     # Thermal Charge stats (write 0)
     chown system system /sys/devices/platform/google,charger/thermal_stats
+
+    # Google Charger stats (write 0)
+    chown system system /sys/devices/platform/google,charger/charge_stats
 
     # Permission for wireless charging fan
     chown system system /sys/devices/platform/google,charger/thermal_dc_fan_alarm
@@ -300,9 +287,7 @@ on init
     chown system system /sys/devices/platform/google,cpm/dc_ctl
     # Important to include dd_state as it's used in battery defender in charger mode
     chown system system /sys/devices/platform/google,charger/dd_state
-    # Disable dock-defend by default
     chown system system /sys/devices/platform/google,charger/dd_settings
-    write /sys/devices/platform/google,charger/dd_settings -1
 
     # Power Stats HAL
     chown system system /dev/bbd_pwrstat
@@ -374,6 +359,7 @@ on post-fs-data
 
     # Permissions Camera
     mkdir /data/vendor/camera 0770 system camera
+    mkdir /data/vendor/camera/catpipe 0770 system camera
     mkdir /data/vendor/camera/video_bokeh_node 0770 system camera
     chmod 0755 /sys/kernel/debug/tracing
     restorecon /sys/kernel/debug/tracing/trace_marker
@@ -459,6 +445,25 @@ on early-boot
     chown system system /dev/battery_history
     chmod 0644 /dev/battery_history
 
+    # Permission for logbuffer
+    chown system system /dev/logbuffer_maxfg
+    chown system system /dev/logbuffer_maxfg_base
+    chown system system /dev/logbuffer_maxfg_flip
+    chown system system /dev/logbuffer_maxfg_monitor
+    chown system system /dev/logbuffer_maxfg_base_monitor
+    chown system system /dev/logbuffer_maxfg_flip_monitor
+    chown system system /dev/logbuffer_maxq
+    chown system system /dev/logbuffer_rtx
+    chown system system /dev/logbuffer_ssoc
+    chown system system /dev/logbuffer_ttf
+    chown system system /dev/logbuffer_tcpm
+    chown system system /dev/logbuffer_usbpd
+    chown system system /dev/logbuffer_pogo_transport
+    chown system system /dev/logbuffer_wireless
+    chown system system /dev/logbuffer_pca9468
+    chown system system /dev/logbuffer_cpm
+    chown system system /dev/logbuffer_bd
+
 on boot
 
     # Allow to access debugfs for system:system
@@ -512,6 +517,13 @@ on property:persist.vendor.radio.no_modem_board=1
 
 on fs
     mount_all --early
+
+    # for battery defender
+    mkdir /mnt/vendor/persist/battery 0700 system system
+
+    # for battery defender
+    mkdir /mnt/vendor/persist/battery 0700 system system
+
     restorecon_recursive /mnt/vendor/persist
     restorecon_recursive /mnt/vendor/persist/aoc
     restorecon_recursive /mnt/vendor/persist/audio
@@ -653,12 +665,12 @@ on property:init.svc.vendor.charger=running
     setprop sys.usb.configfs 1
     setprop vendor.setup.power 1
 
-    # keep one little and one big
+    # keep one little and one mid core
     write /sys/devices/system/cpu/cpu1/online 0
     write /sys/devices/system/cpu/cpu2/online 0
     write /sys/devices/system/cpu/cpu3/online 0
-    write /sys/devices/system/cpu/cpu4/online 0
     write /sys/devices/system/cpu/cpu5/online 0
+    write /sys/devices/system/cpu/cpu6/online 0
     write /sys/devices/system/cpu/cpu7/online 0
 
 on property:sys.boot_completed=1
@@ -681,6 +693,9 @@ on property:sys.boot_completed=1
     swapon_all /vendor/etc/fstab.${ro.board.platform}
     write /proc/sys/vm/swappiness 100
 
+    # Adjust watermark level
+    write /proc/sys/vm/watermark_scale_factor 200
+
     # Back to default VM settings
     write /proc/sys/vm/dirty_expire_centisecs 3000
     write /proc/sys/vm/dirty_background_ratio 10
@@ -702,7 +717,6 @@ on property:sys.boot_completed=1
     setprop vendor.powerhal.init 1
 
     # Setup final cpu.uclamp
-    write /proc/vendor_sched/uclamp_threshold 8
     write /proc/vendor_sched/ta_uclamp_min 1
     write /proc/vendor_sched/fg_uclamp_min 0
     write /proc/vendor_sched/sys_prefer_idle 0
@@ -905,7 +919,7 @@ on post-fs-data
     mkdir /data/vendor/powerstats 0771 system system
     chown system system /data/vendor/powerstats
 
-on property:vendor.thermal.link_ready=1
+on property:vendor.brownout.mitigation.ready=1
     # BCL
     write /sys/devices/virtual/pmic/mitigation/clock_ratio/tpu_light_clk_ratio 0xfff041c1 #DFS
     write /sys/devices/virtual/pmic/mitigation/clock_ratio/cpu1_heavy_clk_ratio 0xfff041c1 #DFS
@@ -921,6 +935,9 @@ on property:vendor.thermal.link_ready=1
     write /sys/devices/virtual/pmic/mitigation/clock_div/tpu_clk_div 0x1
     write /sys/devices/virtual/pmic/mitigation/clock_div/gpu_clk_div 0x1
     write /sys/devices/virtual/pmic/mitigation/clock_div/cpu2_clk_div 0x1
+
+on property:vendor.thermal.link_ready=1
+    # BCL
     chown system system /dev/thermal/tz-by-name/soc/mode
     chown system system /dev/thermal/tz-by-name/vdroop2/trip_point_0_temp
     chown system system /dev/thermal/tz-by-name/vdroop2/trip_point_0_hyst
