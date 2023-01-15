@@ -804,7 +804,7 @@ ndk::ScopedAStatus Dumpstate::dumpstateBoard(const std::vector<::ndk::ScopedFile
                                                                     "Invalid mode");
     }
 
-    if (in_fds.size() < 1) {
+    if (in_fds.size() < 2) {
           ALOGE("no FD for dumpstate_board binary\n");
     } else {
           int fd_bin = in_fds[1].get();
