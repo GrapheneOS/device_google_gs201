@@ -345,12 +345,13 @@ void Dumpstate::dumpPowerSection(int fd) {
         DumpFileToFd(fd, "maxfg", "/dev/logbuffer_maxfg_monitor");
     } else {
         DumpFileToFd(fd, "Power supply property maxfg_base", "/sys/class/power_supply/maxfg_base/uevent");
-        DumpFileToFd(fd, "Power supply property maxfg_flip", "/sys/class/power_supply/maxfg_flip/uevent");
+        DumpFileToFd(fd, "Power supply property maxfg_secondary", "/sys/class/power_supply/maxfg_secondary/uevent");
         DumpFileToFd(fd, "m5_state", "/sys/class/power_supply/maxfg_base/m5_model_state");
         DumpFileToFd(fd, "maxfg_base", "/dev/logbuffer_maxfg_base");
-        DumpFileToFd(fd, "maxfg_flip", "/dev/logbuffer_maxfg_flip");
+        DumpFileToFd(fd, "maxfg_secondary", "/dev/logbuffer_maxfg_secondary");
         DumpFileToFd(fd, "maxfg_base", "/dev/logbuffer_maxfg_base_monitor");
-        DumpFileToFd(fd, "maxfg_flip", "/dev/logbuffer_maxfg_flip_monitor");
+        DumpFileToFd(fd, "maxfg_secondary", "/dev/logbuffer_maxfg_secondary_monitor");
+        DumpFileToFd(fd, "google_dual_batt", "/dev/logbuffer_dual_batt");
     }
 
     if (!stat("/dev/maxfg_history", &buffer)) {
