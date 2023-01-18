@@ -461,10 +461,10 @@ on early-boot
     # Permission for logbuffer
     chown system system /dev/logbuffer_maxfg
     chown system system /dev/logbuffer_maxfg_base
-    chown system system /dev/logbuffer_maxfg_flip
+    chown system system /dev/logbuffer_maxfg_secondary
     chown system system /dev/logbuffer_maxfg_monitor
     chown system system /dev/logbuffer_maxfg_base_monitor
-    chown system system /dev/logbuffer_maxfg_flip_monitor
+    chown system system /dev/logbuffer_maxfg_secondary_monitor
     chown system system /dev/logbuffer_maxq
     chown system system /dev/logbuffer_rtx
     chown system system /dev/logbuffer_ssoc
@@ -476,6 +476,7 @@ on early-boot
     chown system system /dev/logbuffer_pca9468
     chown system system /dev/logbuffer_cpm
     chown system system /dev/logbuffer_bd
+    chown system system /dev/logbuffer_dual_batt
 
 on boot
 
