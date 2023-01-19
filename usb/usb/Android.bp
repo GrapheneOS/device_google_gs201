@@ -45,6 +45,7 @@ cc_binary {
         "libhardware",
         "android.hardware.thermal@1.0",
         "android.hardware.thermal@2.0",
+        "android.hardware.thermal-V1-ndk",
         "android.hardware.usb.gadget@1.0",
         "android.hardware.usb-V1-ndk",
         "android.hardware.usb.gadget-V1-ndk",
@@ -52,11 +53,11 @@ cc_binary {
         "android.frameworks.stats-V1-ndk",
         "pixelatoms-cpp",
         "libbinder_ndk",
-
     ],
     static_libs: [
         "libpixelusb-aidl",
         "libpixelstats",
+        "libpixelthermalwrapper",
     ],
     export_shared_lib_headers: [
         "android.frameworks.stats-V1-ndk",
