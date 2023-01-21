@@ -1125,7 +1125,6 @@ $(call soong_config_set,edgetpu_config,chip,janeiro)
 # TPU firmware
 PRODUCT_PACKAGES += edgetpu-janeiro.fw
 
-
 # Connectivity Thermal Power Manager
 PRODUCT_PACKAGES += \
 	ConnectivityThermalPowerManager

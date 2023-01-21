@@ -97,6 +97,14 @@
         </interface>
     </hal>
     <hal format="aidl" optional="true">
+        <name>com.google.edgetpu.dba</name>
+        <version>1</version>
+        <interface>
+            <name>IDevice</name>
+            <instance>default</instance>
+        </interface>
+    </hal>
+    <hal format="aidl" optional="true">
       <name>com.google.hardware.pixel.display</name>
         <version>8</version>
         <interface>
