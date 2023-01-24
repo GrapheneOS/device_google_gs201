@@ -244,6 +244,7 @@ Dumpstate::Dumpstate()
         { "led", [this](int fd) { dumpLEDSection(fd); } },
         { "pixel-trace", [this](int fd) { dumpPixelTraceSection(fd); } },
         { "perf-metrics", [this](int fd) { dumpPerfMetricsSection(fd); } },
+        { "pcie", [this](int fd) { dumpPCIeSection(fd); } },
     },
   mLogSections{
         { "modem", [this](int fd, const std::string &destDir) { dumpModemLogs(fd, destDir); } },
@@ -1195,6 +1196,11 @@ void Dumpstate::dumpLEDSection(int fd) {
             DumpFileToFd(fd, "LED Calibration Data", "/mnt/vendor/persist/led/led_calibration_LUT.txt");
         }
     }
+}
+
+void Dumpstate::dumpPCIeSection(int fd) {
+    DumpFileToFd(fd, "PCIe0 Logs", "/dev/logbuffer_pcie0");
+    DumpFileToFd(fd, "PCIe1 Logs", "/dev/logbuffer_pcie1");
 }
 
 void Dumpstate::dumpModemSection(int fd) {
