@@ -257,6 +257,11 @@ PRODUCT_VENDOR_PROPERTIES += \
 	ro.hardware.egl = mali
 endif
 
+# Configure EGL blobcache
+PRODUCT_VENDOR_PROPERTIES += \
+	ro.egl.blobcache.multifile=true \
+	ro.egl.blobcache.multifile_limit=134217728 \
+
 PRODUCT_VENDOR_PROPERTIES += \
 	ro.opengles.version=196610 \
 	graphics.gpu.profiler.support=true \
