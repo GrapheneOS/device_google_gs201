@@ -29,19 +29,21 @@ cc_binary {
     vintf_fragments: [
         "android.hardware.usb.gadget-service.xml",
     ],
+    vendor: true,
     srcs: ["service_gadget.cpp", "UsbGadget.cpp"],
     cflags: ["-Wall", "-Werror"],
     shared_libs: [
         "libbase",
-        "libhidlbase",
         "liblog",
         "libutils",
-        "libhardware",
-        "android.hardware.usb.gadget@1.0",
-        "android.hardware.usb.gadget@1.1",
-        "android.hardware.usb.gadget@1.2",
+        "android.frameworks.stats-V1-ndk",
+        "android.hardware.usb.gadget-V1-ndk",
         "libcutils",
+        "libbinder_ndk",
     ],
-    static_libs: ["libpixelusb"],
+    static_libs: ["libpixelusb-aidl"],
     proprietary: true,
+    export_shared_lib_headers: [
+        "android.frameworks.stats-V1-ndk",
+    ],
 }
