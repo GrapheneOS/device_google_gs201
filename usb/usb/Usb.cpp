@@ -39,7 +39,7 @@
 #include "Usb.h"
 
 #include <aidl/android/frameworks/stats/IStats.h>
-#include <pixelusb/UsbGadgetCommon.h>
+#include <pixelusb/UsbGadgetAidlCommon.h>
 #include <pixelstats/StatsHelper.h>
 
 using aidl::android::frameworks::stats::IStats;
