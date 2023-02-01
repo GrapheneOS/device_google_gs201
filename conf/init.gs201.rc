@@ -442,6 +442,20 @@ on early-boot
     chown system system /dev/sys/block/bootdevice/slowio_unmap_cnt
     chown system system /dev/sys/block/bootdevice/slowio_sync_cnt
 
+    # PCIe link stats for pixelstats
+    chown system system /sys/devices/platform/11920000.pcie/link_stats/complete_timeout_irqs
+    chown system system /sys/devices/platform/11920000.pcie/link_stats/link_down_irqs
+    chown system system /sys/devices/platform/11920000.pcie/link_stats/link_recovery_failures
+    chown system system /sys/devices/platform/11920000.pcie/link_stats/link_up_average
+    chown system system /sys/devices/platform/11920000.pcie/link_stats/link_up_failures
+    chown system system /sys/devices/platform/11920000.pcie/link_stats/pll_lock_average
+    chown system system /sys/devices/platform/14520000.pcie/link_stats/complete_timeout_irqs
+    chown system system /sys/devices/platform/14520000.pcie/link_stats/link_down_irqs
+    chown system system /sys/devices/platform/14520000.pcie/link_stats/link_recovery_failures
+    chown system system /sys/devices/platform/14520000.pcie/link_stats/link_up_average
+    chown system system /sys/devices/platform/14520000.pcie/link_stats/link_up_failures
+    chown system system /sys/devices/platform/14520000.pcie/link_stats/pll_lock_average
+
     # Dump Battery EEPROM history for pixelstats
     chown system system /dev/battery_history
     chmod 0644 /dev/battery_history
