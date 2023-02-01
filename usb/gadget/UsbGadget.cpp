@@ -550,9 +550,7 @@ ScopedAStatus UsbGadget::setCurrentUsbFunctions(long functions,
     }
 
     ALOGI("Usb Gadget setcurrent functions called successfully");
-    return ScopedAStatus::fromServiceSpecificErrorWithMessage(
-                -1, "Usb Gadget setcurrent functions called successfully");
-
+    return ScopedAStatus::ok();
 
 error:
     ALOGI("Usb Gadget setcurrent functions failed");
