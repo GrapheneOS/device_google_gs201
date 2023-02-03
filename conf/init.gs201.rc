@@ -261,6 +261,9 @@ on init
     # Adaptive charge
     chown system system /sys/class/power_supply/battery/charge_deadline
 
+    # Charging policy
+    chown system system /sys/class/power_supply/battery/charging_policy
+
     # Battery Defender
     chown system system /sys/devices/platform/google,battery/power_supply/battery/bd_trickle_cnt
     chown system system /sys/devices/platform/google,battery/power_supply/battery/bd_trickle_dry_run
