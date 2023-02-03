@@ -479,6 +479,8 @@ on early-boot
     chown system system /dev/logbuffer_cpm
     chown system system /dev/logbuffer_bd
     chown system system /dev/logbuffer_dual_batt
+    chown system system /dev/logbuffer_pcie0
+    chown system system /dev/logbuffer_pcie1
 
 on boot
 
