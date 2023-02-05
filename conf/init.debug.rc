@@ -41,3 +41,8 @@ on property:ro.revision=PROTO1.1
     setprop debug.hypervisor.metrics_tag "hwrev_a0"
 on property:ro.revision=EVT1.0
     setprop debug.hypervisor.metrics_tag "hwrev_a0"
+
+# Enable etm/etm2dram when ramdump is enabled.
+on property:ro.boot.ramdump=enabled
+    write /sys/devices/platform/exynos-etm/etm_on 1
+    write /sys/devices/platform/etm2dram/arm 1
