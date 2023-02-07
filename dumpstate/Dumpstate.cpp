@@ -1210,6 +1210,10 @@ void Dumpstate::dumpLEDSection(int fd) {
 void Dumpstate::dumpPCIeSection(int fd) {
     DumpFileToFd(fd, "PCIe0 Logs", "/dev/logbuffer_pcie0");
     DumpFileToFd(fd, "PCIe1 Logs", "/dev/logbuffer_pcie1");
+    RunCommandToFd(fd, "PCIe Link Statistics", {"/vendor/bin/sh", "-c",
+        "for f in ls /sys/devices/platform/14520000.pcie/link_stats/* "
+        "            /sys/devices/platform/11920000.pcie/link_stats/*; do "
+        "                  echo \"$f: `cat $f`\"; done"});
 }
 
 void Dumpstate::dumpModemSection(int fd) {
