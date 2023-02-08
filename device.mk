@@ -929,6 +929,8 @@ SUPPORT_NR := true
 SUPPORT_NR_DS := true
 # Using IRadio 2.0
 USE_RADIO_HAL_2_0 := true
+# Support SecureElement HAL for HIDL
+USE_SE_HIDL := true
 # Using Early Send Device Info
 USE_EARLY_SEND_DEVICE_INFO := true
 
