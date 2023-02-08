@@ -26,6 +26,8 @@
 #include <sys/types.h>
 #include <unistd.h>
 
+#include <android-base/properties.h>
+
 #include <aidl/android/frameworks/stats/IStats.h>
 
 namespace aidl {
@@ -33,6 +35,9 @@ namespace android {
 namespace hardware {
 namespace usb {
 namespace gadget {
+
+using ::android::base::GetBoolProperty;
+using ::android::hardware::google::pixel::usb::kUvcEnabled;
 
 string enabledPath;
 constexpr char kHsi2cPath[] = "/sys/devices/platform/10d60000.hsi2c";
@@ -302,6 +307,28 @@ static Status validateAndSetVidPid(uint64_t functions) {
                 ret = Status(setVidPid("0x18d1", "0x4eec"));
             }
             break;
+        case GadgetFunction::UVC:
+            if (!(vendorFunctions == "user" || vendorFunctions == "")) {
+                ALOGE("Invalid vendorFunctions set: %s", vendorFunctions.c_str());
+                ret = Status::CONFIGURATION_NOT_SUPPORTED;
+            } else if (!GetBoolProperty(kUvcEnabled, false)) {
+                ALOGE("UVC function not enabled by config");
+                ret = Status::CONFIGURATION_NOT_SUPPORTED;
+            } else {
+                ret = Status(setVidPid("0x18d1", "0x4eed"));
+            }
+            break;
+        case GadgetFunction::ADB | GadgetFunction::UVC:
+            if (!(vendorFunctions == "user" || vendorFunctions == "")) {
+                ALOGE("Invalid vendorFunctions set: %s", vendorFunctions.c_str());
+                ret = Status::CONFIGURATION_NOT_SUPPORTED;
+            } else if (!GetBoolProperty(kUvcEnabled, false)) {
+                ALOGE("UVC function not enabled by config");
+                ret = Status::CONFIGURATION_NOT_SUPPORTED;
+            } else {
+                ret = Status(setVidPid("0x18d1", "0x4eee"));
+            }
+            break;
         default:
             ALOGE("Combination not supported");
             ret = Status::CONFIGURATION_NOT_SUPPORTED;
@@ -523,9 +550,7 @@ ScopedAStatus UsbGadget::setCurrentUsbFunctions(long functions,
     }
 
     ALOGI("Usb Gadget setcurrent functions called successfully");
-    return ScopedAStatus::fromServiceSpecificErrorWithMessage(
-                -1, "Usb Gadget setcurrent functions called successfully");
-
+    return ScopedAStatus::ok();
 
 error:
     ALOGI("Usb Gadget setcurrent functions failed");
