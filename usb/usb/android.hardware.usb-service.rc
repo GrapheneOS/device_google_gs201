@@ -1,7 +1,7 @@
 service vendor.usb /vendor/bin/hw/android.hardware.usb-service
     class hal
     user system
-    group system shell wakelock
+    group system shell wakelock usb
     capabilities WAKE_ALARM BLOCK_SUSPEND
 
 on post-fs

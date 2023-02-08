@@ -40,6 +40,7 @@ cc_binary {
         "libbinder",
         "libhidlbase",
         "liblog",
+        "libusbhost",
         "libutils",
         "libhardware",
         "android.hardware.thermal@1.0",
