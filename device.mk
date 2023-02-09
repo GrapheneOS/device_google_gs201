@@ -201,8 +201,8 @@ USES_GAUDIO := true
 # Must match BOARD_USES_SWIFTSHADER in BoardConfig.mk
 USE_SWIFTSHADER := false
 
-# Must match BOARD_USES_ANGLE in BoardConfig.mk
-USE_ANGLE := false
+# by default, USE_ANGLE is false
+USE_ANGLE ?= false
 
 # HWUI
 TARGET_USES_VULKAN = true
