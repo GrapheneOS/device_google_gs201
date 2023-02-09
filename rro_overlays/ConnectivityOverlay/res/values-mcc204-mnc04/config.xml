@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
 /*
- * Copyright (C) 2021 The Android Open Source Project
+ * Copyright (C) 2022 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,14 +17,12 @@
  */
 -->
 <resources>
-    <!-- If the hardware supports specially marking packets that caused a wakeup of the
-         main CPU, set this value to the mark used. -->
-    <integer translatable="false" name="config_networkWakeupPacketMark">0x80000000</integer>
-
-    <!-- Mask to use when checking skb mark defined in config_networkWakeupPacketMark above. -->
-    <integer translatable="false" name="config_networkWakeupPacketMask">0x80000000</integer>
+    <!-- Whether the device should automatically switch away from Wi-Fi networks that lose
+         Internet access. Actual device behaviour is controlled by
+         Settings.Global.NETWORK_AVOID_BAD_WIFI. This is the default value of that setting. -->
+    <integer translatable="false" name="config_networkAvoidBadWifi">0</integer>
 
     <!-- Whether the device should actively prefer bad wifi to good cell on Android 12/13
          for configurations where config_avoidBadWifi=0. -->
-    <integer translatable="false" name="config_activelyPreferBadWifi">1</integer>
+    <integer translatable="false" name="config_activelyPreferBadWifi">0</integer>
 </resources>
