@@ -107,7 +107,8 @@ struct UsbGadget : public BnUsbGadget {
     ScopedAStatus getCurrentUsbFunctions(const shared_ptr<IUsbGadgetCallback> &callback,
 	    int64_t in_transactionId) override;
 
-    ScopedAStatus reset() override;
+    ScopedAStatus reset(const shared_ptr<IUsbGadgetCallback> &callback,
+	    int64_t in_transactionId) override;
 
     ScopedAStatus getUsbSpeed(const shared_ptr<IUsbGadgetCallback> &callback,
 	    int64_t in_transactionId) override;

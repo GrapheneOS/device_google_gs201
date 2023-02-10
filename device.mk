@@ -257,11 +257,6 @@ PRODUCT_VENDOR_PROPERTIES += \
 	ro.hardware.egl = mali
 endif
 
-# Configure EGL blobcache
-PRODUCT_VENDOR_PROPERTIES += \
-	ro.egl.blobcache.multifile=true \
-	ro.egl.blobcache.multifile_limit=134217728 \
-
 PRODUCT_VENDOR_PROPERTIES += \
 	ro.opengles.version=196610 \
 	graphics.gpu.profiler.support=true \
@@ -929,6 +924,8 @@ SUPPORT_NR := true
 SUPPORT_NR_DS := true
 # Using IRadio 2.0
 USE_RADIO_HAL_2_0 := true
+# Support SecureElement HAL for HIDL
+USE_SE_HIDL := true
 # Using Early Send Device Info
 USE_EARLY_SEND_DEVICE_INFO := true
 
