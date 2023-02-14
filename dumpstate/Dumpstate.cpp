@@ -520,18 +520,6 @@ void Dumpstate::dumpDevfreqSection(int fd) {
 
 // Dump items related to memory
 void Dumpstate::dumpMemorySection(int fd) {
-    RunCommandToFd(fd, "ION HEAPS", {"/vendor/bin/sh", "-c",
-                   "for d in $(ls -d /d/ion/*); do "
-                       "if [ -f $d ]; then "
-                           "echo --- $d; cat $d; "
-                       "else "
-                           "for f in $(ls $d); do "
-                               "echo --- $d/$f; cat $d/$f; "
-                               "done; "
-                        "fi; "
-                        "done"});
-    DumpFileToFd(fd, "dmabuf info", "/d/dma_buf/bufinfo");
-    DumpFileToFd(fd, "Page Pinner - longterm pin", "/sys/kernel/debug/page_pinner/buffer");
     RunCommandToFd(fd, "CMA info", {"/vendor/bin/sh", "-c",
                        "for d in $(ls -d /d/cma/*); do "
                          "echo --- $d;"
