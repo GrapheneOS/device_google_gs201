@@ -143,6 +143,9 @@
 # AoC
 /dev/aoc                 0660   system     system
 
+# AoC stats (UmfwStat)
+/dev/acd-com.google.umfw_stat           0660   system     system
+
 # Sensors (USF)
 /dev/acd-com.google.usf  		0660   system     system
 /dev/acd-com.google.usf.non_wake_up  	0660   system     system
