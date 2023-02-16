@@ -258,11 +258,6 @@ PRODUCT_VENDOR_PROPERTIES += \
 	ro.hardware.egl = mali
 endif
 
-# Configure EGL blobcache
-PRODUCT_VENDOR_PROPERTIES += \
-	ro.egl.blobcache.multifile=true \
-	ro.egl.blobcache.multifile_limit=134217728 \
-
 PRODUCT_VENDOR_PROPERTIES += \
 	ro.opengles.version=196610 \
 	graphics.gpu.profiler.support=true \
@@ -635,7 +630,6 @@ PRODUCT_COPY_FILES += \
 	frameworks/native/data/etc/android.hardware.camera.full.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.camera.full.xml\
 	frameworks/native/data/etc/android.hardware.camera.raw.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.camera.raw.xml\
 	vendor/google/services/LyricCameraHAL/src/vendor.android.hardware.camera.preview-dis.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/vendor.android.hardware.camera.preview-dis.xml\
-	vendor/google/services/LyricCameraHAL/src/vendor.android.hardware.camera.stream-usecase.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/vendor.android.hardware.camera.stream-usecase.xml\
 
 #PRODUCT_COPY_FILES += \
 	frameworks/native/data/etc/handheld_core_hardware.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/handheld_core_hardware.xml \
