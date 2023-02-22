@@ -323,6 +323,12 @@ Status queryNonCompliantChargerStatus(std::vector<PortStatus> *currentPortStatus
                     continue;
                 }
             }
+            if ((*currentPortStatus)[i].complianceWarnings.size() > 0) {
+                (*currentPortStatus)[i].currentMode = PortMode::UFP;
+                (*currentPortStatus)[i].currentPowerRole = PortPowerRole::SINK;
+                (*currentPortStatus)[i].currentDataRole = PortDataRole::NONE;
+                (*currentPortStatus)[i].powerBrickStatus = PowerBrickStatus::CONNECTED;
+            }
         }
     }
     return Status::SUCCESS;
