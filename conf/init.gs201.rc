@@ -311,6 +311,9 @@ on init
     chown system system /sys/devices/platform/google,charger/dd_state
     chown system system /sys/devices/platform/google,charger/dd_settings
 
+    # Battery temperature filter
+    chown system system /sys/class/power_supply/battery/temp_filter_enable
+
     # Power Stats HAL
     chown system system /dev/bbd_pwrstat
 
