@@ -47,6 +47,7 @@
 
 using aidl::android::frameworks::stats::IStats;
 using android::base::GetProperty;
+using android::base::Tokenize;
 using android::base::Trim;
 using android::hardware::google::pixel::getStatsService;
 using android::hardware::google::pixel::PixelAtoms::VendorUsbPortOverheat;
@@ -64,6 +65,11 @@ volatile bool destroyThread;
 string enabledPath;
 constexpr char kHsi2cPath[] = "/sys/devices/platform/10d60000.hsi2c";
 constexpr char kI2CPath[] = "/sys/devices/platform/10d60000.hsi2c/i2c-";
+constexpr char kComplianceWarningsPath[] = "device/non_compliant_reasons";
+constexpr char kComplianceWarningBC12[] = "bc12";
+constexpr char kComplianceWarningDebugAccessory[] = "debug-accessory";
+constexpr char kComplianceWarningMissingRp[] = "missing_rp";
+constexpr char kComplianceWarningOther[] = "other";
 constexpr char kContaminantDetectionPath[] = "i2c-max77759tcpc/contaminant_detection";
 constexpr char kStatusPath[] = "i2c-max77759tcpc/contaminant_detection_status";
 constexpr char kSinkLimitEnable[] = "i2c-max77759tcpc/usb_limit_sink_enable";
@@ -283,6 +289,42 @@ Status queryMoistureDetectionStatus(std::vector<PortStatus> *currentPortStatus) 
             (*currentPortStatus)[0].contaminantDetectionStatus,
             (*currentPortStatus)[0].contaminantProtectionStatus);
 
+    return Status::SUCCESS;
+}
+
+Status queryNonCompliantChargerStatus(std::vector<PortStatus> *currentPortStatus) {
+    string reasons, path;
+
+    for (int i = 0; i < currentPortStatus->size(); i++) {
+        (*currentPortStatus)[i].supportsComplianceWarnings = true;
+        path = string(kTypecPath) + "/" + (*currentPortStatus)[i].portName + "/" +
+                string(kComplianceWarningsPath);
+        if (ReadFileToString(path.c_str(), &reasons)) {
+            std::vector<string> reasonsList = Tokenize(reasons.c_str(), "[], \n\0");
+            for (string reason : reasonsList) {
+                if (!strncmp(reason.c_str(), kComplianceWarningDebugAccessory,
+                            strlen(kComplianceWarningDebugAccessory))) {
+                    (*currentPortStatus)[i].complianceWarnings.push_back(ComplianceWarning::DEBUG_ACCESSORY);
+                    continue;
+                }
+                if (!strncmp(reason.c_str(), kComplianceWarningBC12,
+                            strlen(kComplianceWarningBC12))) {
+                    (*currentPortStatus)[i].complianceWarnings.push_back(ComplianceWarning::BC_1_2);
+                    continue;
+                }
+                if (!strncmp(reason.c_str(), kComplianceWarningMissingRp,
+                            strlen(kComplianceWarningMissingRp))) {
+                    (*currentPortStatus)[i].complianceWarnings.push_back(ComplianceWarning::MISSING_RP);
+                    continue;
+                }
+                if (!strncmp(reason.c_str(), kComplianceWarningOther,
+                            strlen(kComplianceWarningOther))) {
+                    (*currentPortStatus)[i].complianceWarnings.push_back(ComplianceWarning::OTHER);
+                    continue;
+                }
+            }
+        }
+    }
     return Status::SUCCESS;
 }
 
@@ -783,6 +825,7 @@ void queryVersionHelper(android::hardware::usb::Usb *usb,
     status = getPortStatusHelper(usb, currentPortStatus);
     queryMoistureDetectionStatus(currentPortStatus);
     queryPowerTransferStatus(currentPortStatus);
+    queryNonCompliantChargerStatus(currentPortStatus);
     if (usb->mCallback != NULL) {
         ScopedAStatus ret = usb->mCallback->notifyPortStatusChange(*currentPortStatus,
             status);
