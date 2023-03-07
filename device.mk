@@ -1187,3 +1187,6 @@ PRODUCT_VENDOR_PROPERTIES += ro.crypto.metadata_init_delete_all_keys.enabled?=tr
 PRODUCT_PACKAGES += \
     extracted-carrierconfig \
     extracted-apns
+
+PRODUCT_PACKAGES += \
+    PixelNFCStub
