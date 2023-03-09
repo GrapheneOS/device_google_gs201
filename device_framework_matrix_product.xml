@@ -87,6 +87,10 @@
             <name>IDebugHost</name>
             <instance>default</instance>
         </interface>
+        <interface>
+            <name>IDebugManager</name>
+            <instance>default</instance>
+        </interface>
     </hal>
     <hal format="aidl" optional="true">
       <name>com.google.edgetpu</name>
