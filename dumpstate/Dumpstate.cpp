@@ -217,7 +217,6 @@ Dumpstate::Dumpstate()
         { "memory", [this](int fd) { dumpMemorySection(fd); } },
         { "Devfreq", [this](int fd) { dumpDevfreqSection(fd); } },
         { "power", [this](int fd) { dumpPowerSection(fd); } },
-        { "display", [this](int fd) { dumpDisplaySection(fd); } },
         { "pixel-trace", [this](int fd) { dumpPixelTraceSection(fd); } },
     },
   mLogSections{
@@ -527,49 +526,6 @@ void Dumpstate::dumpMemorySection(int fd) {
                          "echo --- used; cat $d/used; "
                          "echo --- bitmap; cat $d/bitmap; "
                        "done"});
-}
-
-// Dump items related to display
-void Dumpstate::dumpDisplaySection(int fd) {
-    // Dump counters for decon drivers
-    const std::string decon_device_sysfs_path("/sys/class/drm/card0/device/");
-    for(int i = 0; i <= 2; ++i){
-        const std::string decon_num_str = std::to_string(i);
-        const std::string decon_counter_path = decon_device_sysfs_path +
-                                              "decon" + decon_num_str +
-                                              "/counters";
-        if (access(decon_counter_path.c_str(), R_OK) == 0){
-            DumpFileToFd(fd, "DECON-" + decon_num_str + " counters",
-                         decon_counter_path);
-        }
-        else{
-            ::android::base::WriteStringToFd("No counters for DECON-" +
-                decon_num_str + " found at path (" + decon_counter_path + ")\n",
-                fd);
-        }
-    }
-    DumpFileToFd(fd, "CRTC-0 event log", "/sys/kernel/debug/dri/0/crtc-0/event");
-    DumpFileToFd(fd, "CRTC-1 event log", "/sys/kernel/debug/dri/0/crtc-1/event");
-    RunCommandToFd(fd, "libdisplaycolor", {"/vendor/bin/dumpsys", "displaycolor", "-v"},
-                   CommandOptions::WithTimeout(2).Build());
-    DumpFileToFd(fd, "Primary panel name", "/sys/devices/platform/exynos-drm/primary-panel/panel_name");
-    DumpFileToFd(fd, "Primary panel extra info", "/sys/devices/platform/exynos-drm/primary-panel/panel_extinfo");
-    DumpFileToFd(fd, "Secondary panel name", "/sys/devices/platform/exynos-drm/secondary-panel/panel_name");
-    DumpFileToFd(fd, "Secondary panel extra info", "/sys/devices/platform/exynos-drm/secondary-panel/panel_extinfo");
-    if (!PropertiesHelper::IsUserBuild()) {
-        RunCommandToFd(fd, "HWC Fence States", {"/vendor/bin/sh", "-c",
-                           "for f in $(ls /data/vendor/log/hwc/*_hwc_fence_state*.txt); do "
-                           "echo $f ; cat $f ; done"},
-                           CommandOptions::WithTimeout(2).Build());
-        RunCommandToFd(fd, "HWC Error Logs", {"/vendor/bin/sh", "-c",
-                           "for f in $(ls /data/vendor/log/hwc/*_hwc_error_log*.txt); do "
-                           "echo $f ; cat $f ; done"},
-                           CommandOptions::WithTimeout(2).Build());
-        RunCommandToFd(fd, "HWC Debug Dumps", {"/vendor/bin/sh", "-c",
-                           "for f in $(ls /data/vendor/log/hwc/*_hwc_debug*.dump); do "
-                           "echo $f ; cat $f ; done"},
-                           CommandOptions::WithTimeout(2).Build());
-    }
 }
 
 void Dumpstate::dumpModemLogs(int fd, const std::string &destDir) {

@@ -87,6 +87,10 @@
             <name>IDebugHost</name>
             <instance>default</instance>
         </interface>
+        <interface>
+            <name>IDebugManager</name>
+            <instance>default</instance>
+        </interface>
     </hal>
     <hal format="aidl" optional="true">
       <name>com.google.edgetpu</name>
@@ -151,14 +155,6 @@
             <instance>default</instance>
         </interface>
     </hal>
-    <hal format="hidl">
-       <name>vendor.google.whitechapel.audio.audioext</name>
-       <version>4.0</version>
-       <interface>
-           <name>IAudioExt</name>
-           <instance>default</instance>
-       </interface>
-    </hal>
     <hal format="aidl" optional="true">
         <name>vendor.google.wifi_ext</name>
         <version>1</version>
@@ -184,13 +180,5 @@
             <name>IOemSlsiRadioExternal</name>
             <instance>rilExternal</instance>
         </interface>
-    </hal>
-    <hal format="hidl">
-       <name>vendor.google.audiometricext</name>
-       <version>1.0</version>
-       <interface>
-           <name>IAudioMetricExt</name>
-           <instance>default</instance>
-       </interface>
     </hal>
 </compatibility-matrix>
