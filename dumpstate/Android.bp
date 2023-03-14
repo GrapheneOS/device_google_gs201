@@ -20,6 +20,7 @@ cc_binary {
         "libcutils",
         "libdumpstateutil",
         "liblog",
+        "libdump",
         "libutils",
         "android.hardware.dumpstate-V1-ndk",
     ],
