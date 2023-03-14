@@ -26,22 +26,15 @@
 #include <cutils/trace.h>
 #include <log/log.h>
 #include <sys/stat.h>
+#include <dump/pixel_dump.h>
 
 #include "Dumpstate.h"
 
 #include "DumpstateUtil.h"
 
-#define MODEM_LOG_DIRECTORY "/data/vendor/radio/logs/always-on"
-#define MODEM_LOG_HISTORY_DIRECTORY "data/vendor/radio/logs/history"
-#define MODEM_EXTENDED_LOG_DIRECTORY "/data/vendor/radio/extended_logs"
 #define RIL_LOG_DIRECTORY "/data/vendor/radio"
 #define RIL_LOG_DIRECTORY_PROPERTY "persist.vendor.ril.log.base_dir"
 #define RIL_LOG_NUMBER_PROPERTY "persist.vendor.ril.log.num_file"
-#define MODEM_LOGGING_PERSIST_PROPERTY "persist.vendor.sys.modem.logging.enable"
-#define MODEM_LOGGING_PROPERTY "vendor.sys.modem.logging.enable"
-#define MODEM_LOGGING_STATUS_PROPERTY "vendor.sys.modem.logging.status"
-#define MODEM_LOGGING_NUMBER_BUGREPORT_PROPERTY "persist.vendor.sys.modem.logging.br_num"
-#define MODEM_LOGGING_PATH_PROPERTY "vendor.sys.modem.logging.log_path"
 #define GPS_LOG_DIRECTORY "/data/vendor/gps/logs"
 #define GPS_LOG_NUMBER_PROPERTY "persist.vendor.gps.aol.log_num"
 #define GPS_LOGGING_STATUS_PROPERTY "vendor.gps.aol.enabled"
@@ -62,7 +55,6 @@ namespace dumpstate {
 
 #define GPS_LOG_PREFIX "gl-"
 #define GPS_MCU_LOG_PREFIX "esw-"
-#define MODEM_LOG_PREFIX "sbuff_"
 #define EXTENDED_LOG_PREFIX "extended_log_"
 #define RIL_LOG_PREFIX "rild.log."
 #define BUFSIZE 65536
@@ -176,19 +168,6 @@ void dumpNetmgrLogs(std::string destDir) {
     }
 }
 
-/** Dumps last synced NV data into bugreports */
-void dumpModemEFS(std::string destDir) {
-    const std::string EFS_DIRECTORY = "/mnt/vendor/efs/";
-    const std::vector <std::string> nv_files
-        {
-            EFS_DIRECTORY+"nv_normal.bin",
-            EFS_DIRECTORY+"nv_protected.bin",
-        };
-    for (const auto& logFile : nv_files) {
-        copyFile(logFile, destDir + "/" + basename(logFile.c_str()));
-    }
-}
-
 timepoint_t startSection(int fd, const std::string &sectionName) {
     ATRACE_BEGIN(sectionName.c_str());
     ::android::base::WriteStringToFd(
@@ -220,7 +199,6 @@ Dumpstate::Dumpstate()
         { "pixel-trace", [this](int fd) { dumpPixelTraceSection(fd); } },
     },
   mLogSections{
-        { "modem", [this](int fd, const std::string &destDir) { dumpModemLogs(fd, destDir); } },
         { "radio", [this](int fd, const std::string &destDir) { dumpRadioLogs(fd, destDir); } },
         { "camera", [this](int fd, const std::string &destDir) { dumpCameraLogs(fd, destDir); } },
         { "gps", [this](int fd, const std::string &destDir) { dumpGpsLogs(fd, destDir); } },
@@ -263,7 +241,7 @@ void Dumpstate::dumpTextSection(int fd, const std::string &sectionName) {
         dumpFiles = dumpFiles + " " + bin;
         if (dumpAll || sectionName == bin) {
             auto startTime = startSection(fd, bin);
-            RunCommandToFd(fd, "/vendor/bin/dump/"+bin, {"/vendor/bin/dump/"+bin});
+            RunCommandToFd(fd, "/vendor/bin/dump/"+bin, {"/vendor/bin/dump/"+bin}, CommandOptions::WithTimeout(15).Build());
             endSection(fd, bin, startTime);
             if (!dumpAll) {
                 return;
@@ -528,15 +506,6 @@ void Dumpstate::dumpMemorySection(int fd) {
                        "done"});
 }
 
-void Dumpstate::dumpModemLogs(int fd, const std::string &destDir) {
-    std::string extendedLogDir = MODEM_EXTENDED_LOG_DIRECTORY;
-    std::string modemLogHistoryDir = MODEM_LOG_HISTORY_DIRECTORY;
-
-    dumpLogs(fd, extendedLogDir, destDir, 20, EXTENDED_LOG_PREFIX);
-    dumpLogs(fd, modemLogHistoryDir, destDir, 2, "Logging");
-    dumpModemEFS(destDir);
-}
-
 void Dumpstate::dumpRadioLogs(int fd, const std::string &destDir) {
     std::string tcpdumpLogDir = TCPDUMP_LOG_DIRECTORY;
     bool tcpdumpEnabled = ::android::base::GetBoolProperty(TCPDUMP_PERSIST_PROPERTY, false);
@@ -612,37 +581,7 @@ void Dumpstate::dumpLogSection(int fd, int fd_bin)
 
     RunCommandToFd(fd, "MKDIR LOG", {"/vendor/bin/mkdir", "-p", logAllDir.c_str()}, CommandOptions::WithTimeout(2).Build());
 
-    static const std::string sectionName = "modem DM log";
-    auto startTime = startSection(fd, sectionName);
-    bool modemLogEnabled = ::android::base::GetBoolProperty(MODEM_LOGGING_PERSIST_PROPERTY, false);
-    if (modemLogEnabled && ::android::base::GetProperty(MODEM_LOGGING_PATH_PROPERTY, "") == MODEM_LOG_DIRECTORY) {
-        bool modemLogStarted = ::android::base::GetBoolProperty(MODEM_LOGGING_STATUS_PROPERTY, false);
-        int maxFileNum = ::android::base::GetIntProperty(MODEM_LOGGING_NUMBER_BUGREPORT_PROPERTY, 100);
-
-        if (modemLogStarted) {
-            ::android::base::SetProperty(MODEM_LOGGING_PROPERTY, "false");
-            ALOGD("Stopping modem logging...\n");
-        } else {
-            ALOGD("modem logging is not running\n");
-        }
-
-        for (int i = 0; i < 15; i++) {
-            if (!::android::base::GetBoolProperty(MODEM_LOGGING_STATUS_PROPERTY, false)) {
-                ALOGD("modem logging stopped\n");
-                sleep(1);
-                break;
-            }
-            sleep(1);
-        }
-
-        dumpLogs(fd, logDir, logAllDir, maxFileNum, MODEM_LOG_PREFIX);
-
-        if (modemLogStarted) {
-            ALOGD("Restarting modem logging...\n");
-            ::android::base::SetProperty(MODEM_LOGGING_PROPERTY, "true");
-        }
-    }
-    endSection(fd, sectionName, startTime);
+    dumpTextSection(fd, kAllSections);
 
     // Dump all module logs
     if (!PropertiesHelper::IsUserBuild()) {
@@ -724,8 +663,6 @@ ndk::ScopedAStatus Dumpstate::dumpstateBoard(const std::vector<::ndk::ScopedFile
           int fd_bin = in_fds[1].get();
           dumpLogSection(fd, fd_bin);
     }
-
-    dumpTextSection(fd, kAllSections);
 
     ATRACE_END();
     return ndk::ScopedAStatus::ok();
