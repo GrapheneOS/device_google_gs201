@@ -61,10 +61,47 @@ const struct MitigationConfig::Config cfg = {
         "voltage_now", "current_now",
     },
     .LogFilePath = "/data/vendor/mitigation/thismeal.txt",
+    .TimestampFormat = "%Y-%m-%d %H:%M:%S",
 };
 
+const char kReadyFilePath[] = "/sys/devices/virtual/pmic/mitigation/instruction/ready";
+const char kReadyProperty[] = "vendor.brownout.mitigation.ready";
+const char kLastMealPath[] = "/data/vendor/mitigation/lastmeal.txt";
+const char kBRRequestedProperty[] = "vendor.brownout_reason";
+const std::regex kTimestampRegex("^\\S+\\s[0-9]+:[0-9]+:[0-9]+\\S+$");
+
 int main(int /*argc*/, char ** /*argv*/) {
+    auto batteryMitigationStartTime = std::chrono::system_clock::now();
     bmSp = new BatteryMitigation(cfg);
+    if (!bmSp) {
+        return 0;
+    }
+    bool mitigationLogTimeValid = bmSp->isMitigationLogTimeValid(batteryMitigationStartTime,
+                                                                 cfg.LogFilePath,
+                                                                 cfg.TimestampFormat,
+                                                                 kTimestampRegex);
+    std::string reason = android::base::GetProperty(kBRRequestedProperty, "");
+    if (!reason.empty() && mitigationLogTimeValid) {
+        std::ifstream src(cfg.LogFilePath, std::ios::in);
+        std::ofstream dst(kLastMealPath, std::ios::out);
+        dst << src.rdbuf();
+    }
+    bool isBatteryMitigationReady = false;
+    std::string ready_str;
+    int val = 0;
+    while (!isBatteryMitigationReady) {
+        if (!android::base::ReadFileToString(kReadyFilePath, &ready_str)) {
+            continue;
+        }
+        ready_str = android::base::Trim(ready_str);
+        if (!android::base::ParseInt(ready_str, &val)) {
+            continue;
+        }
+        if (val == 1) {
+            isBatteryMitigationReady = true;
+        }
+    }
+    android::base::SetProperty(kReadyProperty, "1");
     while (true) {
         pause();
     }

@@ -23,4 +23,8 @@
 
     <!-- Mask to use when checking skb mark defined in config_networkWakeupPacketMark above. -->
     <integer translatable="false" name="config_networkWakeupPacketMask">0x80000000</integer>
+
+    <!-- Whether the device should actively prefer bad wifi to good cell on Android 12/13
+         for configurations where config_avoidBadWifi=0. -->
+    <integer translatable="false" name="config_activelyPreferBadWifi">1</integer>
 </resources>

@@ -58,6 +58,7 @@ const struct SysfsCollector::SysfsPaths sysfs_paths = {
     },
     .BlockStatsLength = BLOCK_STATS_LENGTH,
     .AmsRatePath = "/sys/devices/platform/audiometrics/ams_rate_read_once",
+    .MitigationPath = "/sys/devices/virtual/pmic/mitigation",
     .ThermalStatsPaths = {
         "/sys/devices/platform/100a0000.BIG/trip_counter",
         "/sys/devices/platform/100a0000.MID/trip_counter",
@@ -65,7 +66,11 @@ const struct SysfsCollector::SysfsPaths sysfs_paths = {
         "/sys/devices/platform/100b0000.G3D/trip_counter",
         "/sys/devices/platform/100b0000.TPU/trip_counter",
         "/sys/devices/platform/100b0000.AUR/trip_counter",
-    }
+    },
+    .CCARatePath = "/sys/devices/platform/audiometrics/cca_rate_read_once",
+    .TempResidencyPath = "/sys/kernel/metrics/temp_residency/temp_residency_all/stats",
+    .ResumeLatencyMetricsPath = "/sys/kernel/metrics/resume_latency/resume_latency_metrics",
+    .LongIRQMetricsPath = "/sys/kernel/metrics/irq/long_irq_metrics"
 };
 
 const struct UeventListener::UeventPaths ueventPaths = {
