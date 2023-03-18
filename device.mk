@@ -269,15 +269,8 @@ PRODUCT_VENDOR_PROPERTIES += \
 
 PRODUCT_VENDOR_PROPERTIES += \
 	ro.opengles.version=196610 \
-	graphics.gpu.profiler.support=true
-# Enable SkiaVk for RenderEngine on Cheetah
-ifneq (,$(filter %cheetah, $(TARGET_PRODUCT)))
-PRODUCT_VENDOR_PROPERTIES += \
+	graphics.gpu.profiler.support=true \
 	debug.renderengine.backend=skiavkthreaded
-else
-PRODUCT_VENDOR_PROPERTIES += \
-	debug.renderengine.backend=skiaglthreaded
-endif
 
 # GRAPHICS - GPU (end)
 # ####################
