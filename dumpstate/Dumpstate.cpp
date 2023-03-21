@@ -199,7 +199,6 @@ Dumpstate::Dumpstate()
   mLogSections{
         { "radio", [this](int fd, const std::string &destDir) { dumpRadioLogs(fd, destDir); } },
         { "gps", [this](int fd, const std::string &destDir) { dumpGpsLogs(fd, destDir); } },
-        { "gxp", [this](int fd, const std::string &destDir) { dumpGxpLogs(fd, destDir); } },
   } {
 }
 
@@ -500,22 +499,6 @@ void Dumpstate::dumpGpsLogs(int fd, const std::string &destDir) {
     dumpLogs(fd, gpsTmpLogDir, gpsDestDir, 1, GPS_LOG_PREFIX);
     dumpLogs(fd, gpsLogDir, gpsDestDir, 3, GPS_MCU_LOG_PREFIX);
     dumpLogs(fd, gpsLogDir, gpsDestDir, maxFileNum, GPS_LOG_PREFIX);
-}
-
-void Dumpstate::dumpGxpLogs(int fd, const std::string &destDir) {
-    bool gxpDumpEnabled = ::android::base::GetBoolProperty("vendor.gxp.attach_to_bugreport", false);
-
-    if (gxpDumpEnabled) {
-        const int maxGxpDebugDumps = 8;
-        const std::string gxpCoredumpOutputDir = destDir + "/gxp_ssrdump";
-        const std::string gxpCoredumpInputDir = "/data/vendor/ssrdump";
-
-        RunCommandToFd(fd, "MKDIR GXP COREDUMP", {"/vendor/bin/mkdir", "-p", gxpCoredumpOutputDir}, CommandOptions::WithTimeout(2).Build());
-
-        // Copy GXP coredumps and crashinfo to the output directory.
-        dumpLogs(fd, gxpCoredumpInputDir + "/coredump", gxpCoredumpOutputDir, maxGxpDebugDumps, "coredump_gxp_platform");
-        dumpLogs(fd, gxpCoredumpInputDir, gxpCoredumpOutputDir, maxGxpDebugDumps, "crashinfo_gxp_platform");
-    }
 }
 
 void Dumpstate::dumpLogSection(int fd, int fd_bin)
