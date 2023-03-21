@@ -26,6 +26,7 @@ include device/google/gs-common/pixel_metrics/pixel_metrics.mk
 include device/google/gs-common/performance/perf.mk
 include device/google/gs-common/display/dump.mk
 include device/google/gs-common/camera/dump.mk
+include device/google/gs-common/gxp/dump.mk
 include device/google/gs-common/umfw_stat/umfw_stat.mk
 
 TARGET_BOARD_PLATFORM := gs201
