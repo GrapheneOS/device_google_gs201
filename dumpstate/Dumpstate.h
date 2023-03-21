@@ -60,7 +60,6 @@ class Dumpstate : public BnDumpstateDevice {
 
     // Log sections to be dumped individually into dumpstate_board.bin
     void dumpRadioLogs(int fd, const std::string &destDir);
-    void dumpCameraLogs(int fd, const std::string &destDir);
     void dumpGpsLogs(int fd, const std::string &destDir);
     void dumpGxpLogs(int fd, const std::string &destDir);
 
