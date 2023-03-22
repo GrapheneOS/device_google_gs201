@@ -198,9 +198,7 @@ Dumpstate::Dumpstate()
     },
   mLogSections{
         { "radio", [this](int fd, const std::string &destDir) { dumpRadioLogs(fd, destDir); } },
-        { "camera", [this](int fd, const std::string &destDir) { dumpCameraLogs(fd, destDir); } },
         { "gps", [this](int fd, const std::string &destDir) { dumpGpsLogs(fd, destDir); } },
-        { "gxp", [this](int fd, const std::string &destDir) { dumpGxpLogs(fd, destDir); } },
   } {
 }
 
@@ -501,42 +499,6 @@ void Dumpstate::dumpGpsLogs(int fd, const std::string &destDir) {
     dumpLogs(fd, gpsTmpLogDir, gpsDestDir, 1, GPS_LOG_PREFIX);
     dumpLogs(fd, gpsLogDir, gpsDestDir, 3, GPS_MCU_LOG_PREFIX);
     dumpLogs(fd, gpsLogDir, gpsDestDir, maxFileNum, GPS_LOG_PREFIX);
-}
-
-void Dumpstate::dumpCameraLogs(int fd, const std::string &destDir) {
-    bool cameraLogsEnabled = ::android::base::GetBoolProperty(
-            "vendor.camera.debug.camera_performance_analyzer.attach_to_bugreport", true);
-    if (!cameraLogsEnabled) {
-        return;
-    }
-
-    static const std::string kCameraLogDir = "/data/vendor/camera/profiler";
-    const std::string cameraDestDir = destDir + "/camera";
-
-    RunCommandToFd(fd, "MKDIR CAMERA LOG", {"/vendor/bin/mkdir", "-p", cameraDestDir.c_str()},
-                   CommandOptions::WithTimeout(2).Build());
-    // Attach multiple latest sessions (in case the user is running concurrent
-    // sessions or starts a new session after the one with performance issues).
-    dumpLogs(fd, kCameraLogDir, cameraDestDir, 10, "session-ended-");
-    dumpLogs(fd, kCameraLogDir, cameraDestDir, 5, "high-drop-rate-");
-    dumpLogs(fd, kCameraLogDir, cameraDestDir, 5, "watchdog-");
-    dumpLogs(fd, kCameraLogDir, cameraDestDir, 5, "camera-ended-");
-}
-
-void Dumpstate::dumpGxpLogs(int fd, const std::string &destDir) {
-    bool gxpDumpEnabled = ::android::base::GetBoolProperty("vendor.gxp.attach_to_bugreport", false);
-
-    if (gxpDumpEnabled) {
-        const int maxGxpDebugDumps = 8;
-        const std::string gxpCoredumpOutputDir = destDir + "/gxp_ssrdump";
-        const std::string gxpCoredumpInputDir = "/data/vendor/ssrdump";
-
-        RunCommandToFd(fd, "MKDIR GXP COREDUMP", {"/vendor/bin/mkdir", "-p", gxpCoredumpOutputDir}, CommandOptions::WithTimeout(2).Build());
-
-        // Copy GXP coredumps and crashinfo to the output directory.
-        dumpLogs(fd, gxpCoredumpInputDir + "/coredump", gxpCoredumpOutputDir, maxGxpDebugDumps, "coredump_gxp_platform");
-        dumpLogs(fd, gxpCoredumpInputDir, gxpCoredumpOutputDir, maxGxpDebugDumps, "crashinfo_gxp_platform");
-    }
 }
 
 void Dumpstate::dumpLogSection(int fd, int fd_bin)
