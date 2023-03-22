@@ -26,6 +26,7 @@ include device/google/gs-common/pixel_metrics/pixel_metrics.mk
 include device/google/gs-common/performance/perf.mk
 include device/google/gs-common/display/dump.mk
 include device/google/gs-common/camera/dump.mk
+include device/google/gs-common/gxp/dump.mk
 include device/google/gs-common/umfw_stat/umfw_stat.mk
 
 TARGET_BOARD_PLATFORM := gs201
@@ -228,6 +229,13 @@ PRODUCT_PACKAGES += \
 
 PRODUCT_VENDOR_PROPERTIES += \
 	ro.hardware.vulkan=mali
+
+# Mali Configuration Properties
+# b/221255664 prevents setting PROTECTED_MAX_CORE_COUNT=2
+PRODUCT_VENDOR_PROPERTIES += \
+      	vendor.mali.base_protected_max_core_count=1 \
+	vendor.mali.base_protected_tls_max=67108864 \
+	vendor.mali.platform_agt_frequency_khz=24576
 
 ifeq ($(USE_SWIFTSHADER),true)
 PRODUCT_PACKAGES += \
