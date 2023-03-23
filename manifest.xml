@@ -24,6 +24,13 @@
         <fqname>@1.3::IDevice/google-armnn</fqname>
     </hal>
     <hal format="aidl">
+        <name>com.google.input.algos.spd</name>
+        <interface>
+            <name>IScreenProtectorDetectorService</name>
+            <instance>default</instance>
+        </interface>
+    </hal>
+    <hal format="aidl">
         <name>com.google.input</name>
         <interface>
             <name>ITouchContextService</name>
