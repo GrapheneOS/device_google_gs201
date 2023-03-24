@@ -60,7 +60,6 @@ class Dumpstate : public BnDumpstateDevice {
 
     // Log sections to be dumped individually into dumpstate_board.bin
     void dumpRadioLogs(int fd, const std::string &destDir);
-    void dumpGpsLogs(int fd, const std::string &destDir);
 
     // Hybrid and binary sections that require an additional file descriptor
     void dumpRilLogs(int fd, std::string destDir);
