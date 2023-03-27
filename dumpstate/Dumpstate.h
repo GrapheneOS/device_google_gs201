@@ -43,10 +43,6 @@ class Dumpstate : public BnDumpstateDevice {
     const std::string kAllSections = "all";
 
     std::vector<std::pair<std::string, std::function<void(int)>>> mTextSections;
-    std::vector<std::pair<std::string, std::function<void(int, const std::string &)>>> mLogSections;
-
-    void dumpLogs(int fd, std::string srcDir, std::string destDir, int maxFileNum,
-                  const char *logPrefix);
 
     void dumpTextSection(int fd, std::string const& sectionName);
 
@@ -57,12 +53,6 @@ class Dumpstate : public BnDumpstateDevice {
     void dumpPixelTraceSection(int fd);
 
     void dumpLogSection(int fd, int fdModem);
-
-    // Log sections to be dumped individually into dumpstate_board.bin
-    void dumpRadioLogs(int fd, const std::string &destDir);
-
-    // Hybrid and binary sections that require an additional file descriptor
-    void dumpRilLogs(int fd, std::string destDir);
 
     //bool getVerboseLoggingEnabledImpl();
     //::ndk::ScopedAStatus dumpstateBoardImpl(const int fd, const bool full);
