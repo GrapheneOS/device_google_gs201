@@ -393,7 +393,10 @@ ndk::ScopedAStatus Dumpstate::dumpstateBoard(const std::vector<::ndk::ScopedFile
     ATRACE_BEGIN("dumpstateBoard");
     // Unused arguments.
     (void) in_timeoutMillis;
-    (void) in_mode;
+    if (in_mode < IDumpstateDevice::DumpstateMode::FULL || in_mode > IDumpstateDevice::DumpstateMode::PROTO) {
+        ALOGE("Invalid mode: %d\n", in_mode);
+        return ndk::ScopedAStatus::fromExceptionCodeWithMessage(EX_ILLEGAL_ARGUMENT, "Invalid mode");
+    }
 
     if (in_fds.size() < 1) {
         ALOGE("no FDs\n");
@@ -410,6 +413,7 @@ ndk::ScopedAStatus Dumpstate::dumpstateBoard(const std::vector<::ndk::ScopedFile
 
     if (in_fds.size() < 2) {
           ALOGE("no FD for dumpstate_board binary\n");
+          dumpTextSection(fd, "");
     } else {
           int fd_bin = in_fds[1].get();
           dumpLogSection(fd, fd_bin);
