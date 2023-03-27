@@ -777,7 +777,13 @@ Status getPortStatusHelper(android::hardware::usb::Usb *usb,
             string pogoUsbActive = "0";
             if (ReadFileToString(string(kPogoUsbActive), &pogoUsbActive) &&
                 stoi(Trim(pogoUsbActive)) == 1) {
-                (*currentPortStatus)[i].usbDataStatus.push_back(UsbDataStatus::DISABLED_DOCK);
+                /*
+                 * Always signal USB device mode disabled irrespective of hub enabled while docked.
+                 * Hub gets automatically enabled as needed. Signalling DISABLED_DOCK_HOST_MODE &
+                 * DEVICE_MODE during pogo direct can cause notifications to show for brief windows
+                 * when the state machine is still moving to steady state.
+                 */
+                (*currentPortStatus)[i].usbDataStatus.push_back(UsbDataStatus::DISABLED_DOCK_DEVICE_MODE);
                 dataEnabled = false;
             }
             if (!usb->mUsbDataEnabled) {
