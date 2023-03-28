@@ -32,14 +32,6 @@
 
 #include "DumpstateUtil.h"
 
-#define RIL_LOG_DIRECTORY "/data/vendor/radio"
-#define RIL_LOG_DIRECTORY_PROPERTY "persist.vendor.ril.log.base_dir"
-#define RIL_LOG_NUMBER_PROPERTY "persist.vendor.ril.log.num_file"
-
-#define TCPDUMP_LOG_DIRECTORY "/data/vendor/tcpdump_logger/logs"
-#define TCPDUMP_NUMBER_BUGREPORT "persist.vendor.tcpdump.log.br_num"
-#define TCPDUMP_PERSIST_PROPERTY "persist.vendor.tcpdump.log.alwayson"
-
 using android::os::dumpstate::CommandOptions;
 using android::os::dumpstate::DumpFileToFd;
 using android::os::dumpstate::PropertiesHelper;
@@ -50,118 +42,9 @@ namespace android {
 namespace hardware {
 namespace dumpstate {
 
-#define EXTENDED_LOG_PREFIX "extended_log_"
-#define RIL_LOG_PREFIX "rild.log."
-#define BUFSIZE 65536
-#define TCPDUMP_LOG_PREFIX "tcpdump"
-
 typedef std::chrono::time_point<std::chrono::steady_clock> timepoint_t;
 
 const char kVerboseLoggingProperty[] = "persist.vendor.verbose_logging_enabled";
-
-void Dumpstate::dumpLogs(int fd, std::string srcDir, std::string destDir, int maxFileNum,
-                               const char *logPrefix) {
-    struct dirent **dirent_list = NULL;
-    int num_entries = scandir(srcDir.c_str(),
-                              &dirent_list,
-                              0,
-                              (int (*)(const struct dirent **, const struct dirent **)) alphasort);
-    if (!dirent_list) {
-        return;
-    } else if (num_entries <= 0) {
-        return;
-    }
-
-    int copiedFiles = 0;
-
-    for (int i = num_entries - 1; i >= 0; i--) {
-        ALOGD("Found %s\n", dirent_list[i]->d_name);
-
-        if (0 != strncmp(dirent_list[i]->d_name, logPrefix, strlen(logPrefix))) {
-            continue;
-        }
-
-        if ((copiedFiles >= maxFileNum) && (maxFileNum != -1)) {
-            ALOGD("Skipped %s\n", dirent_list[i]->d_name);
-            continue;
-        }
-
-        copiedFiles++;
-
-        CommandOptions options = CommandOptions::WithTimeout(120).Build();
-        std::string srcLogFile = srcDir + "/" + dirent_list[i]->d_name;
-        std::string destLogFile = destDir + "/" + dirent_list[i]->d_name;
-
-        std::string copyCmd = "/vendor/bin/cp " + srcLogFile + " " + destLogFile;
-
-        ALOGD("Copying %s to %s\n", srcLogFile.c_str(), destLogFile.c_str());
-        RunCommandToFd(fd, "CP LOGS", { "/vendor/bin/sh", "-c", copyCmd.c_str() }, options);
-    }
-
-    while (num_entries--) {
-        free(dirent_list[num_entries]);
-    }
-
-    free(dirent_list);
-}
-
-void Dumpstate::dumpRilLogs(int fd, std::string destDir) {
-    std::string rilLogDir =
-            ::android::base::GetProperty(RIL_LOG_DIRECTORY_PROPERTY, RIL_LOG_DIRECTORY);
-
-    int maxFileNum = ::android::base::GetIntProperty(RIL_LOG_NUMBER_PROPERTY, 50);
-
-    const std::string currentLogDir = rilLogDir + "/cur";
-    const std::string previousLogDir = rilLogDir + "/prev";
-    const std::string currentDestDir = destDir + "/cur";
-    const std::string previousDestDir = destDir + "/prev";
-
-    RunCommandToFd(fd, "MKDIR RIL CUR LOG", {"/vendor/bin/mkdir", "-p", currentDestDir.c_str()},
-                   CommandOptions::WithTimeout(2).Build());
-    RunCommandToFd(fd, "MKDIR RIL PREV LOG", {"/vendor/bin/mkdir", "-p", previousDestDir.c_str()},
-                   CommandOptions::WithTimeout(2).Build());
-
-    dumpLogs(fd, currentLogDir, currentDestDir, maxFileNum, RIL_LOG_PREFIX);
-    dumpLogs(fd, previousLogDir, previousDestDir, maxFileNum, RIL_LOG_PREFIX);
-}
-
-void copyFile(std::string srcFile, std::string destFile) {
-    uint8_t buffer[BUFSIZE];
-    ssize_t size;
-
-    int fdSrc = open(srcFile.c_str(), O_RDONLY);
-    if (fdSrc < 0) {
-        ALOGD("Failed to open source file %s\n", srcFile.c_str());
-        return;
-    }
-
-    int fdDest = open(destFile.c_str(), O_WRONLY | O_CREAT, 0666);
-    if (fdDest < 0) {
-        ALOGD("Failed to open destination file %s\n", destFile.c_str());
-        close(fdSrc);
-        return;
-    }
-
-    ALOGD("Copying %s to %s\n", srcFile.c_str(), destFile.c_str());
-    while ((size = TEMP_FAILURE_RETRY(read(fdSrc, buffer, BUFSIZE))) > 0) {
-        TEMP_FAILURE_RETRY(write(fdDest, buffer, size));
-    }
-
-    close(fdDest);
-    close(fdSrc);
-}
-
-void dumpNetmgrLogs(std::string destDir) {
-    const std::vector <std::string> netmgrLogs
-        {
-            "/data/vendor/radio/metrics_data",
-            "/data/vendor/radio/omadm_logs.txt",
-            "/data/vendor/radio/power_anomaly_data.txt",
-        };
-    for (const auto& logFile : netmgrLogs) {
-        copyFile(logFile, destDir + "/" + basename(logFile.c_str()));
-    }
-}
 
 timepoint_t startSection(int fd, const std::string &sectionName) {
     ATRACE_BEGIN(sectionName.c_str());
@@ -190,11 +73,7 @@ Dumpstate::Dumpstate()
         { "wlan", [this](int fd) { dumpWlanSection(fd); } },
         { "power", [this](int fd) { dumpPowerSection(fd); } },
         { "pixel-trace", [this](int fd) { dumpPixelTraceSection(fd); } },
-    },
-  mLogSections{
-        { "radio", [this](int fd, const std::string &destDir) { dumpRadioLogs(fd, destDir); } },
-  } {
-}
+    } {}
 
 // Dump data requested by an argument to the "dump" interface, or help info
 // if the specified section is not supported.
@@ -464,17 +343,6 @@ void Dumpstate::dumpPowerSection(int fd) {
 
 }
 
-void Dumpstate::dumpRadioLogs(int fd, const std::string &destDir) {
-    std::string tcpdumpLogDir = TCPDUMP_LOG_DIRECTORY;
-    bool tcpdumpEnabled = ::android::base::GetBoolProperty(TCPDUMP_PERSIST_PROPERTY, false);
-
-    if (tcpdumpEnabled) {
-        dumpLogs(fd, tcpdumpLogDir, destDir, ::android::base::GetIntProperty(TCPDUMP_NUMBER_BUGREPORT, 5), TCPDUMP_LOG_PREFIX);
-    }
-    dumpRilLogs(fd, destDir);
-    dumpNetmgrLogs(destDir);
-}
-
 void Dumpstate::dumpLogSection(int fd, int fd_bin)
 {
     std::string logDir = MODEM_LOG_DIRECTORY;
@@ -484,15 +352,6 @@ void Dumpstate::dumpLogSection(int fd, int fd_bin)
     RunCommandToFd(fd, "MKDIR LOG", {"/vendor/bin/mkdir", "-p", logAllDir.c_str()}, CommandOptions::WithTimeout(2).Build());
 
     dumpTextSection(fd, kAllSections);
-
-    // Dump all module logs
-    if (!PropertiesHelper::IsUserBuild()) {
-        for (const auto &section : mLogSections) {
-            auto startTime = startSection(fd, section.first);
-            section.second(fd, logAllDir);
-            endSection(fd, section.first, startTime);
-        }
-    }
 
     RunCommandToFd(fd, "TAR LOG", {"/vendor/bin/tar", "cvf", logCombined.c_str(), "-C", logAllDir.c_str(), "."}, CommandOptions::WithTimeout(20).Build());
     RunCommandToFd(fd, "CHG PERM", {"/vendor/bin/chmod", "a+w", logCombined.c_str()}, CommandOptions::WithTimeout(2).Build());
@@ -534,7 +393,10 @@ ndk::ScopedAStatus Dumpstate::dumpstateBoard(const std::vector<::ndk::ScopedFile
     ATRACE_BEGIN("dumpstateBoard");
     // Unused arguments.
     (void) in_timeoutMillis;
-    (void) in_mode;
+    if (in_mode < IDumpstateDevice::DumpstateMode::FULL || in_mode > IDumpstateDevice::DumpstateMode::PROTO) {
+        ALOGE("Invalid mode: %d\n", in_mode);
+        return ndk::ScopedAStatus::fromExceptionCodeWithMessage(EX_ILLEGAL_ARGUMENT, "Invalid mode");
+    }
 
     if (in_fds.size() < 1) {
         ALOGE("no FDs\n");
@@ -551,6 +413,7 @@ ndk::ScopedAStatus Dumpstate::dumpstateBoard(const std::vector<::ndk::ScopedFile
 
     if (in_fds.size() < 2) {
           ALOGE("no FD for dumpstate_board binary\n");
+          dumpTextSection(fd, "");
     } else {
           int fd_bin = in_fds[1].get();
           dumpLogSection(fd, fd_bin);
