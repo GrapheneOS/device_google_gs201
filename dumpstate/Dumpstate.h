@@ -50,7 +50,6 @@ class Dumpstate : public BnDumpstateDevice {
     // addition to being included in full dumps
     void dumpWlanSection(int fd);
     void dumpPowerSection(int fd);
-    void dumpPixelTraceSection(int fd);
 
     void dumpLogSection(int fd, int fdModem);
 
