@@ -72,7 +72,6 @@ Dumpstate::Dumpstate()
   : mTextSections{
         { "wlan", [this](int fd) { dumpWlanSection(fd); } },
         { "power", [this](int fd) { dumpPowerSection(fd); } },
-        { "pixel-trace", [this](int fd) { dumpPixelTraceSection(fd); } },
     } {}
 
 // Dump data requested by an argument to the "dump" interface, or help info
@@ -381,10 +380,6 @@ void Dumpstate::dumpLogSection(int fd, int fd_bin)
 
     RunCommandToFd(fd, "RM LOG DIR", { "/vendor/bin/rm", "-r", logAllDir.c_str()}, CommandOptions::WithTimeout(2).Build());
     RunCommandToFd(fd, "RM LOG", { "/vendor/bin/rm", logCombined.c_str()}, CommandOptions::WithTimeout(2).Build());
-}
-
-void Dumpstate::dumpPixelTraceSection(int fd) {
-    DumpFileToFd(fd, "Pixel trace", "/sys/kernel/tracing/instances/pixel/trace");
 }
 
 ndk::ScopedAStatus Dumpstate::dumpstateBoard(const std::vector<::ndk::ScopedFileDescriptor>& in_fds,
