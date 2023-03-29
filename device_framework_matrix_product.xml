@@ -125,7 +125,6 @@
     </hal>
     <hal format="aidl" optional="true">
         <name>com.google.input</name>
-        <version>2</version>
         <interface>
             <name>ITouchContextService</name>
             <instance>default</instance>
