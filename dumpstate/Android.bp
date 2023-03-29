@@ -3,6 +3,21 @@ package {
 }
 
 cc_binary {
+    name: "dump_gs201",
+    srcs: ["dump_gs201.cpp"],
+    cflags: [
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+    ],
+    shared_libs: [
+	"libdump",
+    ],
+    vendor: true,
+    relative_install_path: "dump",
+}
+
+cc_binary {
     name: "android.hardware.dumpstate-service.gs201",
     srcs: [
         "Dumpstate.cpp",
