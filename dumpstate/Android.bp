@@ -2,6 +2,13 @@ package {
     default_applicable_licenses: ["Android-Apache-2.0"],
 }
 
+sh_binary {
+    name: "dump_power_gs201.sh",
+    src: "dump_power_gs201.sh",
+    vendor: true,
+    sub_dir: "dump",
+}
+
 cc_binary {
     name: "dump_gs201",
     srcs: ["dump_gs201.cpp"],
