@@ -283,6 +283,9 @@ on init
     # Charging policy
     chown system system /sys/class/power_supply/battery/charging_policy
 
+    # BatteryHealthData
+    chown system system /sys/class/power_supply/battery/first_usage_date
+
     # Battery Defender
     chown system system /sys/devices/platform/google,battery/power_supply/battery/bd_trickle_cnt
     chown system system /sys/devices/platform/google,battery/power_supply/battery/bd_trickle_dry_run
