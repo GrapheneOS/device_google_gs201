@@ -328,4 +328,5 @@
     <string name="config_systemTelephonyPackage" translatable="false">com.shannon.imsservice</string>
 
     <bool name="config_Google_apps_can_have_special_access_to_accelerators">true</bool>
+    <bool name="config_GoogleCamera_needs_seinfo_for_access_to_accelerators">true</bool>
 </resources>
