@@ -68,28 +68,11 @@ void endSection(int fd, const std::string &sectionName, timepoint_t startTime) {
             "\n", fd);
 }
 
-Dumpstate::Dumpstate()
-  : mTextSections{
-        { "wlan", [this](int fd) { dumpWlanSection(fd); } },
-    } {}
-
 // Dump data requested by an argument to the "dump" interface, or help info
 // if the specified section is not supported.
 void Dumpstate::dumpTextSection(int fd, const std::string &sectionName) {
     bool dumpAll = (sectionName == kAllSections);
     std::string dumpFiles;
-
-    for (const auto &section : mTextSections) {
-        if (dumpAll || sectionName == section.first) {
-            auto startTime = startSection(fd, section.first);
-            section.second(fd);
-            endSection(fd, section.first, startTime);
-
-            if (!dumpAll) {
-                return;
-            }
-        }
-    }
 
     // Execute all or designated programs under vendor/bin/dump/
     std::unique_ptr<DIR, decltype(&closedir)> dir(opendir("/vendor/bin/dump"), closedir);
@@ -124,20 +107,9 @@ void Dumpstate::dumpTextSection(int fd, const std::string &sectionName) {
     // An unsupported section was requested on the command line
     ::android::base::WriteStringToFd("Unrecognized text section: " + sectionName + "\n", fd);
     ::android::base::WriteStringToFd("Try \"" + kAllSections + "\" or one of the following:", fd);
-    for (const auto &section : mTextSections) {
-        ::android::base::WriteStringToFd(" " + section.first, fd);
-    }
     ::android::base::WriteStringToFd(dumpFiles, fd);
     ::android::base::WriteStringToFd("\nNote: sections with attachments (e.g. modem) are"
                                    "not avalable from the command line.\n", fd);
-}
-
-// Dump items related to wlan
-void Dumpstate::dumpWlanSection(int fd) {
-    // Dump firmware symbol table for firmware log decryption
-    DumpFileToFd(fd, "WLAN FW Log Symbol Table", "/vendor/firmware/Data.msc");
-    RunCommandToFd(fd, "WLAN TWT Dump", {"/vendor/bin/sh", "-c",
-                    "cat /sys/wlan_ptracker/twt/*"});
 }
 
 void Dumpstate::dumpLogSection(int fd, int fd_bin)
