@@ -93,8 +93,12 @@ struct Usb : public BnUsb {
     float mPluggedTemperatureCelsius;
     // Usb Data status
     bool mUsbDataEnabled;
+    // Usb hub vendor command settings for JK level tuning
+    int mUsbHubVendorCmdValue;
+    int mUsbHubVendorCmdIndex;
   private:
     pthread_t mPoll;
+    pthread_t mUsbHost;
 };
 
 } // namespace usb
