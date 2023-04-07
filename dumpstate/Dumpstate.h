@@ -27,8 +27,6 @@ namespace dumpstate {
 
 class Dumpstate : public BnDumpstateDevice {
   public:
-    Dumpstate();
-
     ::ndk::ScopedAStatus dumpstateBoard(const std::vector<::ndk::ScopedFileDescriptor>& in_fds,
                                         IDumpstateDevice::DumpstateMode in_mode,
                                         int64_t in_timeoutMillis) override;
@@ -42,13 +40,7 @@ class Dumpstate : public BnDumpstateDevice {
   private:
     const std::string kAllSections = "all";
 
-    std::vector<std::pair<std::string, std::function<void(int)>>> mTextSections;
-
     void dumpTextSection(int fd, std::string const& sectionName);
-
-    // Text sections that can be dumped individually on the command line in
-    // addition to being included in full dumps
-    void dumpWlanSection(int fd);
 
     void dumpLogSection(int fd, int fdModem);
 
