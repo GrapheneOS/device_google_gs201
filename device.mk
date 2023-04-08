@@ -826,8 +826,10 @@ $(call inherit-product, system/core/trusty/trusty-base.mk)
 include device/google/gs-common/trusty/trusty.mk
 
 # Trusty unit test tool
-PRODUCT_PACKAGES_DEBUG += trusty-ut-ctrl \
-   tipc-test
+PRODUCT_PACKAGES_DEBUG += \
+   trusty-ut-ctrl \
+   tipc-test \
+   trusty_stats_test \
 
 include device/google/gs101/confirmationui/confirmationui.mk
 
