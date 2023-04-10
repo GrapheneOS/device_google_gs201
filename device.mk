@@ -30,6 +30,7 @@ include device/google/gs-common/gxp/dump.mk
 include device/google/gs-common/gps/dump/log.mk
 include device/google/gs-common/radio/dump.mk
 include device/google/gs-common/umfw_stat/umfw_stat.mk
+include device/google/gs-common/gear/dumpstate/aidl.mk
 
 TARGET_BOARD_PLATFORM := gs201
 
@@ -471,9 +472,6 @@ include hardware/google/pixel/rebalance_interrupts/rebalance_interrupts.mk
 PRODUCT_PACKAGES += \
 	android.hardware.power.stats-service.pixel
 
-# dumpstate HAL
-PRODUCT_PACKAGES += \
-	android.hardware.dumpstate-service.gs201
 #
 # Audio HALs
 #
