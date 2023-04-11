@@ -24,28 +24,3 @@ cc_binary {
     relative_install_path: "dump",
 }
 
-cc_binary {
-    name: "android.hardware.dumpstate-service.gs201",
-    srcs: [
-        "Dumpstate.cpp",
-        "service.cpp",
-    ],
-    init_rc: ["android.hardware.dumpstate@1.1-service.gs201.rc"],
-    vintf_fragments: ["android.hardware.dumpstate-service.gs201.xml"],
-    cflags: [
-        "-Wall",
-        "-Werror",
-    ],
-    shared_libs: [
-        "libbase",
-        "libbinder_ndk",
-        "libcutils",
-        "libdumpstateutil",
-        "liblog",
-        "libdump",
-        "libutils",
-        "android.hardware.dumpstate-V1-ndk",
-    ],
-    vendor: true,
-    relative_install_path: "hw",
-}
