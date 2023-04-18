@@ -220,6 +220,7 @@ on init
     # Dump eeprom
     chown system system /sys/devices/platform/10970000.hsi2c/i2c-5/5-0050/eeprom
     chown system system /sys/devices/platform/10970000.hsi2c/i2c-4/4-0050/eeprom
+    chown system system /sys/devices/platform/10da0000.hsi2c/i2c-5/5-0050/eeprom
     chown system system /sys/devices/platform/10da0000.hsi2c/i2c-6/6-0050/eeprom
     chown system system /sys/devices/platform/10da0000.hsi2c/i2c-7/7-0050/eeprom
 
@@ -294,6 +295,9 @@ on init
     # Important to include dd_state as it's used in battery defender in charger mode
     chown system system /sys/devices/platform/google,charger/dd_state
     chown system system /sys/devices/platform/google,charger/dd_settings
+
+    # Battery temperature filter
+    chown system system /sys/class/power_supply/battery/temp_filter_enable
 
     # Power Stats HAL
     chown system system /dev/bbd_pwrstat
@@ -447,6 +451,20 @@ on early-boot
     chown system system /dev/sys/block/bootdevice/slowio_unmap_cnt
     chown system system /dev/sys/block/bootdevice/slowio_sync_cnt
 
+    # PCIe link stats for pixelstats
+    chown system system /sys/devices/platform/11920000.pcie/link_stats/complete_timeout_irqs
+    chown system system /sys/devices/platform/11920000.pcie/link_stats/link_down_irqs
+    chown system system /sys/devices/platform/11920000.pcie/link_stats/link_recovery_failures
+    chown system system /sys/devices/platform/11920000.pcie/link_stats/link_up_average
+    chown system system /sys/devices/platform/11920000.pcie/link_stats/link_up_failures
+    chown system system /sys/devices/platform/11920000.pcie/link_stats/pll_lock_average
+    chown system system /sys/devices/platform/14520000.pcie/link_stats/complete_timeout_irqs
+    chown system system /sys/devices/platform/14520000.pcie/link_stats/link_down_irqs
+    chown system system /sys/devices/platform/14520000.pcie/link_stats/link_recovery_failures
+    chown system system /sys/devices/platform/14520000.pcie/link_stats/link_up_average
+    chown system system /sys/devices/platform/14520000.pcie/link_stats/link_up_failures
+    chown system system /sys/devices/platform/14520000.pcie/link_stats/pll_lock_average
+
     # Dump Battery EEPROM history for pixelstats
     chown system system /dev/battery_history
     chmod 0644 /dev/battery_history
@@ -454,10 +472,10 @@ on early-boot
     # Permission for logbuffer
     chown system system /dev/logbuffer_maxfg
     chown system system /dev/logbuffer_maxfg_base
-    chown system system /dev/logbuffer_maxfg_flip
+    chown system system /dev/logbuffer_maxfg_secondary
     chown system system /dev/logbuffer_maxfg_monitor
     chown system system /dev/logbuffer_maxfg_base_monitor
-    chown system system /dev/logbuffer_maxfg_flip_monitor
+    chown system system /dev/logbuffer_maxfg_secondary_monitor
     chown system system /dev/logbuffer_maxq
     chown system system /dev/logbuffer_rtx
     chown system system /dev/logbuffer_ssoc
@@ -469,6 +487,9 @@ on early-boot
     chown system system /dev/logbuffer_pca9468
     chown system system /dev/logbuffer_cpm
     chown system system /dev/logbuffer_bd
+    chown system system /dev/logbuffer_dual_batt
+    chown system system /dev/logbuffer_pcie0
+    chown system system /dev/logbuffer_pcie1
 
 on boot
 
@@ -654,6 +675,13 @@ on property:vendor.device.modules.ready=1
     chown system system /sys/devices/virtual/sec/tsp/cmd
     chown system system /sys/devices/virtual/sec/tsp/cmd_result
     chown system system /sys/devices/virtual/sec/tsp/status
+    chown system system /proc/goog_touch_interface/gti.0
+    chown system system /proc/goog_touch_interface/gti.0/ms_base
+    chown system system /proc/goog_touch_interface/gti.0/ms_diff
+    chown system system /proc/goog_touch_interface/gti.0/ms_raw
+    chown system system /proc/goog_touch_interface/gti.0/ss_base
+    chown system system /proc/goog_touch_interface/gti.0/ss_diff
+    chown system system /proc/goog_touch_interface/gti.0/ss_raw
     # Allow access to touch
     chown system input /dev/touch_offload
     chmod 660 /dev/touch_offload
