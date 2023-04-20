@@ -155,16 +155,11 @@
             <Limit name="measured-frame-rate-1920x1080" range="75-112" />
         </MediaCodec>
         <MediaCodec name="c2.google.av1.decoder" type="video/av01" update="true">
-            <!-- measured 90%:295-301 med:296 N=2 -->
-            <Limit name="measured-frame-rate-352x288" range="295-298" /> <!-- v90%=1.0 -->
-            <!-- measured 90%:196-207 med:196 N=2 -->
-            <Limit name="measured-frame-rate-640x360" range="196-201" /> <!-- v90%=1.0 -->
-            <!-- measured 90%:177-180 med:178 N=2 -->
-            <Limit name="measured-frame-rate-720x480" range="177-178" /> <!-- v90%=1.0 -->
-            <!-- measured 90%:81-82 med:82 N=2 -->
-            <Limit name="measured-frame-rate-1280x720" range="81-82" /> <!-- v90%=1.0 -->
-            <!-- measured 90%:45-47 med:46 N=2 -->
-            <Limit name="measured-frame-rate-1920x1080" range="45-46" /> <!-- v90%=1.0 -->
+            <Limit name="measured-frame-rate-352x288" range="630-748" />
+            <Limit name="measured-frame-rate-640x360" range="586-700" />
+            <Limit name="measured-frame-rate-720x480" range="575-690" />
+            <Limit name="measured-frame-rate-1280x720" range="247-460" />
+            <Limit name="measured-frame-rate-1920x1080" range="219-252" />
         </MediaCodec>
         <MediaCodec name="c2.google.av1.decoder.secure" type="video/av01" update="true">
             <!-- measured 90%:295-301 med:296 N=2 -->
@@ -178,6 +173,12 @@
             <!-- measured 90%:45-47 med:46 N=2 -->
             <Limit name="measured-frame-rate-1920x1080" range="45-46" /> <!-- v90%=1.0 -->
         </MediaCodec>
+        <MediaCodec name="c2.android.av1.decoder" type="video/av01" update="true">
+            <Limit name="measured-frame-rate-352x288" range="358-383" />
+            <Limit name="measured-frame-rate-640x360" range="207-221" />
+            <Limit name="measured-frame-rate-720x480" range="106-148" />
+            <Limit name="measured-frame-rate-1280x720" range="65-71" />
+         </MediaCodec>
     </Decoders>
 
     <Encoders>
