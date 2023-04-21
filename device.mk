@@ -218,7 +218,11 @@ USES_GAUDIO := true
 USE_SWIFTSHADER := false
 
 # HWUI
-TARGET_USES_VULKAN = true
+ifeq ($(USE_SWIFTSHADER),true)
+	TARGET_USES_VULKAN = false
+else
+	TARGET_USES_VULKAN = true
+endif
 
 PRODUCT_SOONG_NAMESPACES += \
 	vendor/arm/mali/valhall
@@ -233,9 +237,6 @@ PRODUCT_PACKAGES += \
 	libOpenCL \
 	libgpudataproducer \
 
-PRODUCT_VENDOR_PROPERTIES += \
-	ro.hardware.vulkan=mali
-
 # Mali Configuration Properties
 # b/221255664 prevents setting PROTECTED_MAX_CORE_COUNT=2
 PRODUCT_VENDOR_PROPERTIES += \
@@ -244,13 +245,6 @@ PRODUCT_VENDOR_PROPERTIES += \
       	vendor.mali.base_protected_max_core_count=1 \
 	vendor.mali.base_protected_tls_max=67108864 \
 	vendor.mali.platform_agt_frequency_khz=24576
-
-ifeq ($(USE_SWIFTSHADER),true)
-PRODUCT_PACKAGES += \
-   libGLESv1_CM_swiftshader \
-   libEGL_swiftshader \
-   libGLESv2_swiftshader
-endif
 
 PRODUCT_COPY_FILES += \
 	frameworks/native/data/etc/android.hardware.opengles.aep.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.opengles.aep.xml \
@@ -261,11 +255,19 @@ PRODUCT_COPY_FILES += \
 	frameworks/native/data/etc/android.software.opengles.deqp.level-2023-03-01.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.software.opengles.deqp.level.xml
 
 ifeq ($(USE_SWIFTSHADER),true)
+PRODUCT_PACKAGES += \
+	vulkan.pastel
+endif
+
+ifeq ($(USE_SWIFTSHADER),true)
 PRODUCT_VENDOR_PROPERTIES += \
-	ro.hardware.egl = swiftshader
+	ro.hardware.egl = mali \
+	persist.graphics.egl = angle \
+	ro.hardware.vulkan = pastel
 else
 PRODUCT_VENDOR_PROPERTIES += \
-	ro.hardware.egl = mali
+	ro.hardware.egl = mali \
+	ro.hardware.vulkan = mali
 endif
 
 # Configure EGL blobcache
