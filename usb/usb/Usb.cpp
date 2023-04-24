@@ -902,7 +902,9 @@ void queryVersionHelper(android::hardware::usb::Usb *usb,
     status = getPortStatusHelper(usb, currentPortStatus);
     queryMoistureDetectionStatus(currentPortStatus);
     queryPowerTransferStatus(currentPortStatus);
+#if 0 /* b/278018111 disable compliance warning; revert it after fixing the issue */
     queryNonCompliantChargerStatus(currentPortStatus);
+#endif
     if (usb->mCallback != NULL) {
         ScopedAStatus ret = usb->mCallback->notifyPortStatusChange(*currentPortStatus,
             status);
