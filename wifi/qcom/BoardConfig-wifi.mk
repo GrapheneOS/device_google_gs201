@@ -46,3 +46,6 @@ BOARD_HOSTAPD_CONFIG_80211W_MFP_OPTIONAL := true
 PRODUCT_COPY_FILES += \
     $(LOCAL_WIFI_PATH)/wpa_supplicant_overlay.conf:$(TARGET_COPY_OUT_VENDOR)/etc/wifi/wpa_supplicant_overlay.conf \
     $(LOCAL_WIFI_PATH)/p2p_supplicant_overlay.conf:$(TARGET_COPY_OUT_VENDOR)/etc/wifi/p2p_supplicant_overlay.conf
+
+# Add BOARD_WLAN_CHIP to soong_config
+$(call soong_config_set,qcom_wifi,board_wlan_chip,wcn6740)

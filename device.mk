@@ -282,7 +282,7 @@ PRODUCT_VENDOR_PROPERTIES += \
 PRODUCT_VENDOR_PROPERTIES += \
 	ro.opengles.version=196610 \
 	graphics.gpu.profiler.support=true \
-	debug.renderengine.backend=skiavkthreaded
+	debug.renderengine.backend=skiaglthreaded
 
 # GRAPHICS - GPU (end)
 # ####################
@@ -1176,3 +1176,6 @@ PRODUCT_VENDOR_PROPERTIES += ro.crypto.metadata_init_delete_all_keys.enabled?=tr
 
 # Hardware Info
 include hardware/google/pixel/HardwareInfo/HardwareInfo.mk
+
+# UFS: the script is used to select the corresponding firmware to run FFU.
+PRODUCT_PACKAGES += ufs_firmware_update.sh
