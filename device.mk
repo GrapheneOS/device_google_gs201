@@ -31,6 +31,7 @@ include device/google/gs-common/gps/dump/log.mk
 include device/google/gs-common/radio/dump.mk
 include device/google/gs-common/umfw_stat/umfw_stat.mk
 include device/google/gs-common/gear/dumpstate/aidl.mk
+include device/google/gs-common/widevine/widevine.mk
 
 TARGET_BOARD_PLATFORM := gs201
 
@@ -236,6 +237,8 @@ PRODUCT_VENDOR_PROPERTIES += \
 # Mali Configuration Properties
 # b/221255664 prevents setting PROTECTED_MAX_CORE_COUNT=2
 PRODUCT_VENDOR_PROPERTIES += \
+	vendor.mali.platform.config=/vendor/etc/mali/platform.config \
+	vendor.mali.debug.config=/vendor/etc/mali/debug.config \
       	vendor.mali.base_protected_max_core_count=1 \
 	vendor.mali.base_protected_tls_max=67108864 \
 	vendor.mali.platform_agt_frequency_khz=24576
