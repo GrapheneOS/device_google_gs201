@@ -726,15 +726,9 @@ on property:sys.boot_completed=1
     write /proc/vendor_sched/ta_uclamp_min 1
     write /proc/vendor_sched/fg_uclamp_min 0
     write /proc/vendor_sched/sys_prefer_idle 0
-    # cfs_rq clamp is using tg->uclamp setting
-    # align it with the vendor_group setting
-    write /proc/vendor_sched/bg_uclamp_max 512
-    write /dev/cpuctl/background/cpu.uclamp.max 50
-    write /proc/vendor_sched/sysbg_uclamp_max 512
-    write /dev/cpuctl/system-background/cpu.uclamp.max 50
-    write /proc/vendor_sched/dex2oat_uclamp_max 615
-    write /dev/cpuctl/dex2oat/cpu.uclamp.max 60
-    write /proc/vendor_sched/ota_uclamp_max 410
+
+    # Set bg group throttle
+    write /proc/vendor_sched/vug_bg_group_throttle 308
 
     # Set PMU freq limit parameters
     write /sys/devices/system/cpu/cpufreq/policy0/sched_pixel/lcpi_threshold 2
