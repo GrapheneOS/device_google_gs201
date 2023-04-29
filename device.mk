@@ -31,6 +31,7 @@ include device/google/gs-common/gps/dump/log.mk
 include device/google/gs-common/radio/dump.mk
 include device/google/gs-common/umfw_stat/umfw_stat.mk
 include device/google/gs-common/gear/dumpstate/aidl.mk
+include device/google/gs-common/widevine/widevine.mk
 
 TARGET_BOARD_PLATFORM := gs201
 
