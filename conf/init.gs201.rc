@@ -716,7 +716,7 @@ on property:sys.boot_completed=1
     # Setup final cpuset
     write /dev/cpuset/top-app/cpus ${persist.device_config.vendor_system_native.top-app_cpuset:-0-7}
     write /dev/cpuset/foreground/cpus ${persist.device_config.vendor_system_native.foreground_cpuset:-0-3,4-5}
-    write /dev/cpuset/background/cpus ${persist.device_config.vendor_system_native.background_cpuset:-0-1}
+    write /dev/cpuset/background/cpus ${persist.device_config.vendor_system_native.background_cpuset:-0-3}
     write /dev/cpuset/system-background/cpus ${persist.device_config.vendor_system_native.system-background_cpuset:-0-3}
     write /dev/cpuset/restricted/cpus ${persist.device_config.vendor_system_native.restricted_cpuset:-0-3}
     write /dev/cpuset/camera-daemon/cpus ${persist.device_config.vendor_system_native.camera-daemon_cpuset:-0-7}
@@ -1046,7 +1046,7 @@ on property:persist.device_config.vendor_system_native.top-app_cpuset=*
 on property:persist.device_config.vendor_system_native.foreground_cpuset=*
     write /dev/cpuset/foreground/cpus ${persist.device_config.vendor_system_native.foreground_cpuset:-0-3,4-5}
 on property:persist.device_config.vendor_system_native.background_cpuset=*
-    write /dev/cpuset/background/cpus ${persist.device_config.vendor_system_native.background_cpuset:-0-1}
+    write /dev/cpuset/background/cpus ${persist.device_config.vendor_system_native.background_cpuset:-0-3}
 on property:persist.device_config.vendor_system_native.system-background_cpuset=*
     write /dev/cpuset/system-background/cpus ${persist.device_config.vendor_system_native.system-background_cpuset:-0-3}
 on property:persist.device_config.vendor_system_native.restricted_cpuset=*
