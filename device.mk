@@ -559,18 +559,10 @@ else
         LOCAL_TARGET_PRODUCT := slider
 endif
 
-$(call soong_config_set,google3a_config,soc,gs201)
-$(call soong_config_set,google3a_config,gcam_awb,true)
-$(call soong_config_set,google3a_config,ghawb_truetone,true)
-
-ifneq ($(wildcard vendor/google/services/LyricCameraHAL/src),)
+# Lyric Camera HAL settings
+include device/google/gs-common/camera/lyric.mk
 $(call soong_config_set,lyric,soc,gs201)
-$(call soong_config_set,lyric,use_lyric_camera_hal,true)
-# lyric::tuning_product is set in device-specific makefiles,
-# such as device/google/${DEVICE}/device-${DEVICE}.mk
-
-$(call soong_config_set,gch,hwl_library,lyric)
-endif
+$(call soong_config_set,google3a_config,soc,gs201)
 
 # WiFi
 PRODUCT_PACKAGES += \
@@ -650,7 +642,6 @@ PRODUCT_COPY_FILES += \
 	frameworks/native/data/etc/android.hardware.camera.concurrent.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.camera.concurrent.xml \
 	frameworks/native/data/etc/android.hardware.camera.full.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.camera.full.xml\
 	frameworks/native/data/etc/android.hardware.camera.raw.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.camera.raw.xml\
-	vendor/google/services/LyricCameraHAL/src/vendor.android.hardware.camera.preview-dis.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/vendor.android.hardware.camera.preview-dis.xml\
 
 #PRODUCT_COPY_FILES += \
 	frameworks/native/data/etc/handheld_core_hardware.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/handheld_core_hardware.xml \
@@ -1000,8 +991,6 @@ $(call inherit-product, $(SRC_TARGET_DIR)/product/core_64_bit_only.mk)
 #$(call inherit-product-if-exists, vendor/google_devices/common/exynos-vendor.mk)
 #$(call inherit-product-if-exists, hardware/broadcom/wlan/bcmdhd/firmware/bcm4375/device-bcm.mk)
 include device/google/gs-common/sensors/sensors.mk
-$(call inherit-product-if-exists, vendor/google/services/LyricCameraHAL/src/build/device-vendor.mk)
-$(call inherit-product-if-exists, vendor/google/camera/devices/whi/device-vendor.mk)
 
 PRODUCT_COPY_FILES += \
 	device/google/gs201/default-permissions.xml:$(TARGET_COPY_OUT_PRODUCT)/etc/default-permissions/default-permissions.xml \
