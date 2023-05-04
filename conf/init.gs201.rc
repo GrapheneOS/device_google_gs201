@@ -342,6 +342,9 @@ on init
     write /sys/class/devfreq/gs_memlat_devfreq:devfreq_mif_cpu6_memlat@17000010/mem_latency/ratio_ceil 3200
     write /sys/class/devfreq/gs_memlat_devfreq:devfreq_mif_cpu7_memlat@17000010/mem_latency/ratio_ceil 3200
 
+    # Set boost_adpf_prio, -1 by default
+    write /proc/vendor_sched/boost_adpf_prio ${persist.device_config.vendor_system_native_boot.boost_adpf_prio:--1}
+
 on late-fs
     # Start bootanimation class before mount
     start bootanim
