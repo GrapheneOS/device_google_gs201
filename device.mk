@@ -986,7 +986,7 @@ PRODUCT_COPY_FILES += \
 	device/google/$(TARGET_BOARD_PLATFORM)/radio/config/Pixel_stability.nprf:$(TARGET_COPY_OUT_VENDOR)/etc/modem/Pixel_stability.nprf \
 
 # ARM NN files
-ARMNN_COMPUTE_CL_ENABLE := 1
+ARM_COMPUTE_CL_ENABLE := 1
 
 # Vibrator Diag
 PRODUCT_PACKAGES_DEBUG += \
