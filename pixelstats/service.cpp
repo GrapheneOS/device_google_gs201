@@ -80,6 +80,8 @@ const struct SysfsCollector::SysfsPaths sysfs_paths = {
     },
     .ResumeLatencyMetricsPath = "/sys/kernel/metrics/resume_latency/resume_latency_metrics",
     .LongIRQMetricsPath = "/sys/kernel/metrics/irq/long_irq_metrics",
+    .StormIRQMetricsPath = "/sys/kernel/metrics/irq/storm_irq_metrics",
+    .IRQStatsResetPath = "/sys/kernel/metrics/irq/stats_reset",
     .ModemPcieLinkStatsPath = "/sys/devices/platform/11920000.pcie/link_stats",
     .WifiPcieLinkStatsPath = "/sys/devices/platform/14520000.pcie/link_stats"
 };
