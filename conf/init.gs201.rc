@@ -735,6 +735,7 @@ on property:sys.boot_completed=1
     write /proc/vendor_sched/sys_ug 0
     write /proc/vendor_sched/ota_ug 0
     write /proc/vendor_sched/dex2oat_ug 1
+    write /proc/vendor_sched/ta_ug 1
 
     # Set bg group throttle
     write /proc/vendor_sched/ug_bg_group_throttle 308
