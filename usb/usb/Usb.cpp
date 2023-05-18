@@ -327,7 +327,8 @@ Status queryNonCompliantChargerStatus(std::vector<PortStatus> *currentPortStatus
                     continue;
                 }
             }
-            if ((*currentPortStatus)[i].complianceWarnings.size() > 0) {
+            if ((*currentPortStatus)[i].complianceWarnings.size() > 0 &&
+                 (*currentPortStatus)[i].currentPowerRole == PortPowerRole::NONE) {
                 (*currentPortStatus)[i].currentMode = PortMode::UFP;
                 (*currentPortStatus)[i].currentPowerRole = PortPowerRole::SINK;
                 (*currentPortStatus)[i].currentDataRole = PortDataRole::NONE;
