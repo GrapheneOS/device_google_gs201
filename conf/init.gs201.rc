@@ -740,6 +740,12 @@ on property:sys.boot_completed=1
     # Set bg group throttle
     write /proc/vendor_sched/ug_bg_group_throttle 308
 
+    # Set uclamp.max for some groups, which could indicate cpu importance used in scheduling
+    write /proc/vendor_sched/bg_uclamp_max 512
+    write /proc/vendor_sched/sysbg_uclamp_max 512
+    write /proc/vendor_sched/ota_uclamp_max 512
+    write /proc/vendor_sched/dex2oat_uclamp_max 615
+
     # Set PMU freq limit parameters
     write /sys/devices/system/cpu/cpufreq/policy0/sched_pixel/lcpi_threshold 2
     write /sys/devices/system/cpu/cpufreq/policy0/sched_pixel/spc_threshold 70
