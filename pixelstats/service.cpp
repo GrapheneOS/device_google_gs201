@@ -68,9 +68,15 @@ const struct SysfsCollector::SysfsPaths sysfs_paths = {
         "/sys/devices/platform/100b0000.AUR/trip_counter",
     },
     .CCARatePath = "/sys/devices/platform/audiometrics/cca_rate_read_once",
-    .TempResidencyPaths = {
+    .TempResidencyAndResetPaths = {
+        {
             "/sys/kernel/metrics/thermal/tr_by_group/tmu/stats",
+            "/sys/kernel/metrics/thermal/tr_by_group/tmu/stats_reset"
+        },
+        {
             "/sys/kernel/metrics/thermal/tr_by_group/spmic/stats",
+            "/sys/kernel/metrics/thermal/tr_by_group/spmic/stats_reset"
+        }
     },
     .ResumeLatencyMetricsPath = "/sys/kernel/metrics/resume_latency/resume_latency_metrics",
     .LongIRQMetricsPath = "/sys/kernel/metrics/irq/long_irq_metrics",
