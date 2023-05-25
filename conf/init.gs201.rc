@@ -929,6 +929,9 @@ on post-fs-data
 on post-fs-data
     mkdir /data/vendor/powerstats 0771 system system
     chown system system /data/vendor/powerstats
+    # Thermal Residency Stats (write 1 to reset)
+    chown system system /sys/kernel/metrics/thermal/tr_by_group/tmu/stats_reset
+    chown system system /sys/kernel/metrics/thermal/tr_by_group/spmic/stats_reset
 
 on property:vendor.brownout.mitigation.ready=1
     # BCL
