@@ -16,6 +16,7 @@
 
 #include <PowerStatsAidl.h>
 #include <Gs201CommonDataProviders.h>
+#include <AdaptiveDvfsStateResidencyDataProvider.h>
 #include <AocTimedStateResidencyDataProvider.h>
 #include <DevfreqStateResidencyDataProvider.h>
 #include <DvfsStateResidencyDataProvider.h>
@@ -33,6 +34,7 @@
 #include <android/binder_process.h>
 #include <log/log.h>
 
+using aidl::android::hardware::power::stats::AdaptiveDvfsStateResidencyDataProvider;
 using aidl::android::hardware::power::stats::AocTimedStateResidencyDataProvider;
 using aidl::android::hardware::power::stats::DevfreqStateResidencyDataProvider;
 using aidl::android::hardware::power::stats::DvfsStateResidencyDataProvider;
@@ -166,6 +168,15 @@ void addAoC(std::shared_ptr<PowerStats> p) {
 void addDvfsStats(std::shared_ptr<PowerStats> p) {
     // A constant to represent the number of nanoseconds in one millisecond
     const int NS_TO_MS = 1000000;
+    std::string path = "/sys/devices/platform/acpm_stats/fvp_stats";
+
+    std::vector<std::pair<std::string, std::string>> adpCfgs = {
+        std::make_pair("CL0", "/sys/devices/system/cpu/cpufreq/policy0/stats"),
+        std::make_pair("CL1", "/sys/devices/system/cpu/cpufreq/policy4/stats"),
+        std::make_pair("CL2", "/sys/devices/system/cpu/cpufreq/policy6/stats")
+    };
+    p->addStateResidencyDataProvider(std::make_unique<AdaptiveDvfsStateResidencyDataProvider>(
+            path, NS_TO_MS, adpCfgs));
 
     std::vector<DvfsStateResidencyDataProvider::Config> cfgs;
 
@@ -187,7 +198,7 @@ void addDvfsStats(std::shared_ptr<PowerStats> p) {
     }});
 
     p->addStateResidencyDataProvider(std::make_unique<DvfsStateResidencyDataProvider>(
-            "/sys/devices/platform/acpm_stats/fvp_stats", NS_TO_MS, cfgs));
+            path, NS_TO_MS, cfgs));
 }
 
 void addSoC(std::shared_ptr<PowerStats> p) {
@@ -523,18 +534,6 @@ void addPowerDomains(std::shared_ptr<PowerStats> p) {
 }
 
 void addDevfreq(std::shared_ptr<PowerStats> p) {
-    p->addStateResidencyDataProvider(std::make_unique<DevfreqStateResidencyDataProvider>(
-            "CL0",
-            "/sys/devices/system/cpu/cpufreq/policy0/stats"));
-
-    p->addStateResidencyDataProvider(std::make_unique<DevfreqStateResidencyDataProvider>(
-            "CL1",
-            "/sys/devices/system/cpu/cpufreq/policy4/stats"));
-
-    p->addStateResidencyDataProvider(std::make_unique<DevfreqStateResidencyDataProvider>(
-            "CL2",
-            "/sys/devices/system/cpu/cpufreq/policy6/stats"));
-
     p->addStateResidencyDataProvider(std::make_unique<DevfreqStateResidencyDataProvider>(
             "MIF",
             "/sys/devices/platform/17000010.devfreq_mif/devfreq/17000010.devfreq_mif"));
