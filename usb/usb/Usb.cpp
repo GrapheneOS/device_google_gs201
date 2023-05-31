@@ -87,10 +87,15 @@ constexpr char kThermalZoneForTempReadSecondary2[] = "qi_therm";
 constexpr char kPogoUsbActive[] = "/sys/devices/platform/google,pogo/pogo_usb_active";
 constexpr char KPogoMoveDataToUsb[] = "/sys/devices/platform/google,pogo/move_data_to_usb";
 constexpr char kPowerSupplyUsbType[] = "/sys/class/power_supply/usb/usb_type";
+constexpr char kUdcState[] = "/sys/devices/platform/11210000.usb/11210000.dwc3/udc/11210000.dwc3/state";
+// xhci-hcd-exynos and usb device numbering could vary on different platforms
+constexpr char kHostUeventRegex[] = "^(bind|unbind)@(/devices/platform/11210000\\.usb/11210000\\.dwc3/xhci-hcd-exynos\\.[0-9]\\.auto/)usb([0-9])/[0-9]-0:1\\.0";
+
 constexpr int kSamplingIntervalSec = 5;
 void queryVersionHelper(android::hardware::usb::Usb *usb,
                         std::vector<PortStatus> *currentPortStatus);
 
+#define USB_STATE_MAX_LEN 20
 #define CTRL_TRANSFER_TIMEOUT_MSEC 1000
 #define GL852G_VENDOR_ID 0x05e3
 #define GL852G_PRODUCT_ID1 0x0608
@@ -990,17 +995,113 @@ void report_overheat_event(android::hardware::usb::Usb *usb) {
     }
 }
 
-struct data {
-    int uevent_fd;
-    ::aidl::android::hardware::usb::Usb *usb;
-};
+static void unregisterEpollEntry(Usb *usb, std::string name) {
+    std::map<std::string, struct Usb::epollEntry> *map;
+    int fd;
 
-static void uevent_event(uint32_t /*epevents*/, struct data *payload) {
+    map = &usb->mEpollEntries;
+    auto it = map->find(name);
+    if (it != map->end()) {
+        ALOGI("epoll unregister %s", name.c_str());
+        fd = it->second.payload.fd;
+        epoll_ctl(usb->mEpollFd, EPOLL_CTL_DEL, fd, NULL);
+        close(fd);
+        map->erase(it);
+    }
+}
+
+static void unregisterEpollEntries(Usb *usb) {
+    std::map<std::string, struct Usb::epollEntry> *map;
+    std::string name;
+
+    map = &usb->mEpollEntries;
+    for (auto it = map->begin(); it != map->end();) {
+        name = it->first;
+        it++;
+        unregisterEpollEntry(usb, name);
+    }
+}
+
+static int registerEpollEntry(Usb *usb, std::string name, int fd, int flags,
+                              void (*func)(uint32_t, struct Usb::payload*)) {
+    std::map<std::string, struct Usb::epollEntry> *map;
+    struct Usb::epollEntry *entry;
+    struct epoll_event ev;
+
+    map = &usb->mEpollEntries;
+    if (map->find(name) != map->end()) {
+        ALOGE("%s already registered", name.c_str());
+        unregisterEpollEntry(usb, name);
+    }
+
+    entry = &(*map)[name];
+    entry->payload.fd = fd;
+    entry->payload.name = name;
+    entry->payload.usb = usb;
+    entry->cb = std::bind(func, std::placeholders::_1, &entry->payload);
+
+    ev.events = flags;
+    ev.data.ptr = (void *)&entry->cb;
+
+    if (epoll_ctl(usb->mEpollFd, EPOLL_CTL_ADD, fd, &ev) != 0) {
+        ALOGE("epoll_ctl failed; errno=%d", errno);
+        unregisterEpollEntry(usb, name);
+        return -1;
+    }
+
+    ALOGI("epoll register %s", name.c_str());
+
+    return 0;
+}
+
+static int registerEpollEntryByFile(Usb *usb, std::string name, int flags,
+                              void (*func)(uint32_t, struct Usb::payload*)) {
+    int fd;
+
+    fd = open(name.c_str(), O_RDONLY);
+    if (fd < 0) {
+        ALOGE("Cannot open %s", name.c_str());
+        return -1;
+    }
+
+    return registerEpollEntry(usb, name, fd, flags, func);
+}
+
+static void clearUsbDeviceState(struct Usb::usbDeviceState *device) {
+    device->latestState.clear();
+    device->portResetCount = 0;
+}
+
+static void updateUsbDeviceState(struct Usb::usbDeviceState *device, char *state) {
+    ALOGI("Update USB device state: %s", state);
+
+    device->latestState = state;
+
+    if (!std::strcmp(state, "configured\n")) {
+        device->portResetCount = 0;
+    } else if (!std::strcmp(state, "default\n")) {
+        device->portResetCount++;
+    }
+}
+
+static void host_event(uint32_t /*epevents*/, struct Usb::payload *payload) {
+    int n;
+    char state[USB_STATE_MAX_LEN] = {0};
+    struct Usb::usbDeviceState *device;
+
+    lseek(payload->fd, 0, SEEK_SET);
+    n = read(payload->fd, &state, USB_STATE_MAX_LEN);
+
+    updateUsbDeviceState(&payload->usb->mHostStateMap[payload->name], state);
+}
+
+static void uevent_event(uint32_t /*epevents*/, struct Usb::payload *payload) {
     char msg[UEVENT_MSG_LEN + 2];
     char *cp;
     int n;
+    std::cmatch match;
 
-    n = uevent_kernel_multicast_recv(payload->uevent_fd, msg, UEVENT_MSG_LEN);
+    n = uevent_kernel_multicast_recv(payload->fd, msg, UEVENT_MSG_LEN);
     if (n <= 0)
         return;
     if (n >= UEVENT_MSG_LEN) /* overflow -- discard */
@@ -1046,6 +1147,29 @@ static void uevent_event(uint32_t /*epevents*/, struct data *payload) {
         } else if (!strncmp(cp, kOverheatStatsDev, strlen(kOverheatStatsDev))) {
             ALOGV("Overheat Cooling device suez update");
             report_overheat_event(payload->usb);
+        } else if (std::regex_match(cp, match, std::regex(kHostUeventRegex))) {
+            /*
+             * Matched strings:
+             * 1st: entire string
+             * 2nd: uevent action, either "bind" or "unbind"
+             * 3rd: xhci device path, e.g. devices/platform/11210000.usb/11210000.dwc3/xhci-hcd-exynos.4.auto
+             * 4th: usb device number, e.g. 1 for usb1
+             *
+             * The strings are used to composed usb device state path, e.g.
+             * /sys/devices/platform/11210000.usb/11210000.dwc3/xhci-hcd-exynos.4.auto/usb2/2-0:1.0/usb2-port1/state
+             */
+            if (match.size() == 4) {
+                std::string action = match[1].str();
+                std::string id = match[3].str();
+                std::string path = "/sys" + match[2].str() + "usb" + id + "/" +
+                                   id + "-0:1.0/usb" + id + "-port1/state";
+                if (action == "bind") {
+                    registerEpollEntryByFile(payload->usb, path, EPOLLPRI, host_event);
+                } else if (action == "unbind") {
+                    unregisterEpollEntry(payload->usb, path);
+                    clearUsbDeviceState(&payload->usb->mHostStateMap[path]);
+                }
+            }
         }
         /* advance to after the next \0 */
         while (*cp++) {
@@ -1053,37 +1177,46 @@ static void uevent_event(uint32_t /*epevents*/, struct data *payload) {
     }
 }
 
+static void udc_event(uint32_t /*epevents*/, struct Usb::payload *payload) {
+    int n;
+    char state[USB_STATE_MAX_LEN] = {0};
+
+    lseek(payload->fd, 0, SEEK_SET);
+    n = read(payload->fd, &state, USB_STATE_MAX_LEN);
+
+    updateUsbDeviceState(&payload->usb->mDeviceState, state);
+}
+
 void *work(void *param) {
     int epoll_fd, uevent_fd;
-    struct epoll_event ev;
     int nevents = 0;
-    struct data payload;
+    Usb *usb = (Usb *)param;
 
     ALOGE("creating thread");
-
-    uevent_fd = uevent_open_socket(64 * 1024, true);
-
-    if (uevent_fd < 0) {
-        ALOGE("uevent_init: uevent_open_socket failed\n");
-        return NULL;
-    }
-
-    payload.uevent_fd = uevent_fd;
-    payload.usb = (::aidl::android::hardware::usb::Usb *)param;
-
-    fcntl(uevent_fd, F_SETFL, O_NONBLOCK);
-
-    ev.events = EPOLLIN;
-    ev.data.ptr = (void *)uevent_event;
 
     epoll_fd = epoll_create(64);
     if (epoll_fd == -1) {
         ALOGE("epoll_create failed; errno=%d", errno);
+        return NULL;
+    }
+    usb->mEpollFd = epoll_fd;
+
+    // Monitor uevent
+    uevent_fd = uevent_open_socket(64 * 1024, true);
+    if (uevent_fd < 0) {
+        ALOGE("uevent_init: uevent_open_socket failed");
+        goto error;
+    }
+    fcntl(uevent_fd, F_SETFL, O_NONBLOCK);
+
+    if (registerEpollEntry(usb, "uevent", uevent_fd, EPOLLIN, uevent_event)) {
+        ALOGE("failed to monitor uevent");
         goto error;
     }
 
-    if (epoll_ctl(epoll_fd, EPOLL_CTL_ADD, uevent_fd, &ev) == -1) {
-        ALOGE("epoll_ctl failed; errno=%d", errno);
+    // Monitor udc state
+    if (registerEpollEntryByFile(usb, kUdcState, EPOLLPRI, udc_event)) {
+        ALOGE("failed to monitor udc state");
         goto error;
     }
 
@@ -1100,14 +1233,15 @@ void *work(void *param) {
 
         for (int n = 0; n < nevents; ++n) {
             if (events[n].data.ptr)
-                (*(void (*)(int, struct data *payload))events[n].data.ptr)(events[n].events,
-                                                                           &payload);
+                (*(std::function<void(uint32_t)>*)events[n].data.ptr)(events[n].events);
         }
     }
 
     ALOGI("exiting worker thread");
 error:
-    close(uevent_fd);
+    unregisterEpollEntries(usb);
+
+    usb->mEpollFd = -1;
 
     if (epoll_fd >= 0)
         close(epoll_fd);

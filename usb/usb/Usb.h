@@ -96,6 +96,29 @@ struct Usb : public BnUsb {
     // Usb hub vendor command settings for JK level tuning
     int mUsbHubVendorCmdValue;
     int mUsbHubVendorCmdIndex;
+
+    // USB device state monitoring
+    struct usbDeviceState {
+        std::string latestState;
+        int portResetCount;
+    };
+    struct usbDeviceState mDeviceState;
+    // Map host device path name to usbDeviceState
+    std::map<std::string, struct usbDeviceState> mHostStateMap;
+
+    // File monitoring through epoll
+    int mEpollFd;
+    struct payload {
+        int fd;
+        std::string name;
+        Usb *usb;
+     };
+    struct epollEntry {
+         struct payload payload;
+         std::function<void(uint32_t)> cb;
+    };
+    std::map<std::string, struct epollEntry> mEpollEntries;
+
   private:
     pthread_t mPoll;
     pthread_t mUsbHost;
