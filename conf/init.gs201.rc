@@ -241,6 +241,7 @@ on init
     chown system system /sys/devices/platform/10da0000.hsi2c/i2c-5/5-0050/eeprom
     chown system system /sys/devices/platform/10da0000.hsi2c/i2c-6/6-0050/eeprom
     chown system system /sys/devices/platform/10da0000.hsi2c/i2c-7/7-0050/eeprom
+    chown system system /sys/devices/platform/10da0000.hsi2c/i2c-9/9-0050/eeprom
 
     # Loading common kernel modules in background
     start init_display
