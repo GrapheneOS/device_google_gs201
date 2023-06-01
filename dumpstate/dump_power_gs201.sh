@@ -51,7 +51,7 @@ then
   cat "/sys/class/power_supply/maxfg/m5_model_state"
   echo "\n------ maxfg ------"
   cat "/dev/logbuffer_maxfg"
-  echo "\n------ maxfg ------"
+  echo "\n------ maxfg_monitor ------"
   cat "/dev/logbuffer_maxfg_monitor"
 else
   echo "\n------ Power supply property maxfg_base ------"
@@ -64,9 +64,9 @@ else
   cat "/dev/logbuffer_maxfg_base"
   echo "\n------ maxfg_secondary ------"
   cat "/dev/logbuffer_maxfg_secondary"
-  echo "\n------ maxfg_base ------"
+  echo "\n------ maxfg_base_monitor ------"
   cat "/dev/logbuffer_maxfg_base_monitor"
-  echo "\n------ maxfg_secondary ------"
+  echo "\n------ maxfg_secondary_monitor ------"
   cat "/dev/logbuffer_maxfg_secondary_monitor"
   echo "\n------ google_dual_batt ------"
   cat "/dev/logbuffer_dual_batt"
@@ -75,7 +75,7 @@ fi
 if [ -e "/dev/maxfg_history" ]
 then
   echo "\n------ Maxim FG History ------"
-  cat "/dev/maxfg_history"
+  xxd "/dev/maxfg_history"
 fi
 
 if [ -d "/sys/class/power_supply/dock" ]
@@ -241,6 +241,11 @@ fi
 if [ -e "/sys/devices/platform/10da0000.hsi2c/i2c-7/7-0050/eeprom" ]
 then
   xxd /sys/devices/platform/10da0000.hsi2c/i2c-7/7-0050/eeprom
+fi
+
+if [ -e "/sys/devices/platform/10da0000.hsi2c/i2c-9/9-0050/eeprom" ]
+then
+  xxd /sys/devices/platform/10da0000.hsi2c/i2c-9/9-0050/eeprom
 fi
 
 echo "\n------ Charger Stats ------"
