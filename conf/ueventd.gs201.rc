@@ -94,6 +94,7 @@
 /dev/acd-debug                  0660   system     audio
 /dev/acd-audio_tap*             0660   system     audio
 /dev/acd-audio_dcdoff_ref       0660   system     audio
+/dev/acd-mel_processor          0660   system     audio
 /dev/amcs                       0660   system     audio
 /dev/acd-audio_rtp_*            0660   system     radio
 
