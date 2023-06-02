@@ -780,10 +780,6 @@ on property:sys.boot_completed=1
     write /sys/devices/platform/18062080.pd-hsi0/power/async "enabled"
     write /sys/devices/platform/14460000.pinctrl/power/async "enabled"
 
-    # Setup groups for SF (RT used for SF RE, SF used for SF main)
-    write /proc/vendor_sched/rt_prefer_idle 1
-    write /proc/vendor_sched/sf_prefer_idle 1
-
     # Setup cpu.shares to throttle background groups (bg ~ 5% sysbg ~ 5% dex2oat ~2.5%)
     write /dev/cpuctl/background/cpu.shares 1024
     write /dev/cpuctl/system-background/cpu.shares 1024
