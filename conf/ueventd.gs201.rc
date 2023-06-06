@@ -76,7 +76,7 @@
 
 # jpeg
 /dev/m2m1shot_jpeg	      0660   media      media
-/dev/video12              0660   system     system
+/dev/video12              0666   system     system
 
 # audio
 /dev/seiren                     0660   system     audio
