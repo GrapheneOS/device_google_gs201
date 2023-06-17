@@ -739,7 +739,7 @@ on property:sys.boot_completed=1
     write /proc/vendor_sched/ta_ug 1
 
     # Set bg group throttle
-    write /proc/vendor_sched/ug_bg_group_throttle 308
+    write /proc/vendor_sched/ug_bg_group_throttle ${persist.device_config.vendor_system_native.ug_bg_group_throttle:-308}
 
     # Set uclamp.max for some groups, which could indicate cpu importance used in scheduling
     write /proc/vendor_sched/bg_uclamp_max 512
