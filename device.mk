@@ -1195,6 +1195,8 @@ PRODUCT_COPY_FILES += \
 # Call deleteAllKeys if vold detects a factory reset
 PRODUCT_VENDOR_PROPERTIES += ro.crypto.metadata_init_delete_all_keys.enabled?=true
 
-PRODUCT_PACKAGES += \
-    extracted-carrierconfig \
-    extracted-apns
+ifneq ($(BOARD_WITHOUT_RADIO),true)
+    PRODUCT_PACKAGES += \
+        extracted-carrierconfig \
+        extracted-apns
+endif
