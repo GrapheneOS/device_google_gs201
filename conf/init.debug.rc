@@ -38,3 +38,8 @@ on post-fs-data
     chown bluetooth system /dev/logbuffer_btlpm
     chown bluetooth system /dev/logbuffer_btpower
     chown bluetooth system /dev/logbuffer_tty18
+
+# Enable etm/etm2dram when ramdump is enabled.
+on property:ro.boot.ramdump=enabled
+    write /sys/devices/platform/exynos-etm/etm_on 1
+    write /sys/devices/platform/etm2dram/arm 1

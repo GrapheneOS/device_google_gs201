@@ -244,6 +244,7 @@ Dumpstate::Dumpstate()
         { "led", [this](int fd) { dumpLEDSection(fd); } },
         { "pixel-trace", [this](int fd) { dumpPixelTraceSection(fd); } },
         { "perf-metrics", [this](int fd) { dumpPerfMetricsSection(fd); } },
+        { "pcie", [this](int fd) { dumpPCIeSection(fd); } },
     },
   mLogSections{
         { "modem", [this](int fd, const std::string &destDir) { dumpModemLogs(fd, destDir); } },
@@ -330,12 +331,13 @@ void Dumpstate::dumpPowerSection(int fd) {
         DumpFileToFd(fd, "maxfg", "/dev/logbuffer_maxfg_monitor");
     } else {
         DumpFileToFd(fd, "Power supply property maxfg_base", "/sys/class/power_supply/maxfg_base/uevent");
-        DumpFileToFd(fd, "Power supply property maxfg_flip", "/sys/class/power_supply/maxfg_flip/uevent");
+        DumpFileToFd(fd, "Power supply property maxfg_secondary", "/sys/class/power_supply/maxfg_secondary/uevent");
         DumpFileToFd(fd, "m5_state", "/sys/class/power_supply/maxfg_base/m5_model_state");
         DumpFileToFd(fd, "maxfg_base", "/dev/logbuffer_maxfg_base");
-        DumpFileToFd(fd, "maxfg_flip", "/dev/logbuffer_maxfg_flip");
+        DumpFileToFd(fd, "maxfg_secondary", "/dev/logbuffer_maxfg_secondary");
         DumpFileToFd(fd, "maxfg_base", "/dev/logbuffer_maxfg_base_monitor");
-        DumpFileToFd(fd, "maxfg_flip", "/dev/logbuffer_maxfg_flip_monitor");
+        DumpFileToFd(fd, "maxfg_secondary", "/dev/logbuffer_maxfg_secondary_monitor");
+        DumpFileToFd(fd, "google_dual_batt", "/dev/logbuffer_dual_batt");
     }
 
     if (!stat("/dev/maxfg_history", &buffer)) {
@@ -430,6 +432,8 @@ void Dumpstate::dumpPowerSection(int fd) {
         RunCommandToFd(fd, "Battery EEPROM", {"/vendor/bin/sh", "-c", "xxd /sys/devices/platform/10970000.hsi2c/i2c-4/4-0050/eeprom"});
     } else if (!stat("/sys/devices/platform/10970000.hsi2c/i2c-5/5-0050/eeprom", &buffer)) {
         RunCommandToFd(fd, "Battery EEPROM", {"/vendor/bin/sh", "-c", "xxd /sys/devices/platform/10970000.hsi2c/i2c-5/5-0050/eeprom"});
+    } else if (!stat("/sys/devices/platform/10da0000.hsi2c/i2c-5/5-0050/eeprom", &buffer)) {
+        RunCommandToFd(fd, "Battery EEPROM", {"/vendor/bin/sh", "-c", "xxd /sys/devices/platform/10da0000.hsi2c/i2c-5/5-0050/eeprom"});
     } else if (!stat("/sys/devices/platform/10da0000.hsi2c/i2c-6/6-0050/eeprom", &buffer)) {
         RunCommandToFd(fd, "Battery EEPROM", {"/vendor/bin/sh", "-c", "xxd /sys/devices/platform/10da0000.hsi2c/i2c-6/6-0050/eeprom"});
     } else if (!stat("/sys/devices/platform/10da0000.hsi2c/i2c-7/7-0050/eeprom", &buffer)) {
@@ -536,6 +540,7 @@ void Dumpstate::dumpTouchSection(int fd) {
     const char syna_cmd_path[] = "/sys/class/spi_master/spi0/spi0.0/synaptics_tcm.0/sysfs";
     const char focaltech_cmd_path[] = "/proc/focaltech_touch";
     const char gti0_cmd_path[] = "/sys/devices/virtual/goog_touch_interface/gti.0";
+    const char gti0_procfs_path[] = "/proc/goog_touch_interface/gti.0";
     char cmd[256];
 
     if (!access(focaltech_cmd_path, R_OK)) {
@@ -867,6 +872,10 @@ void Dumpstate::dumpTouchSection(int fd) {
     }
 
     if (!access(gti0_cmd_path, R_OK)) {
+        const char *heatmap_path = gti0_cmd_path;
+
+        if (!access(gti0_procfs_path, R_OK))
+            heatmap_path = gti0_procfs_path;
         ::android::base::WriteStringToFd("\n<<<<<< GTI0 >>>>>>\n\n", fd);
 
         // Enable: force touch active
@@ -878,27 +887,27 @@ void Dumpstate::dumpTouchSection(int fd) {
         DumpFileToFd(fd, "Touch Firmware Version", cmd);
 
         // Get Mutual Sensing Data - Baseline
-        snprintf(cmd, sizeof(cmd), "cat %s/ms_base", gti0_cmd_path);
+        snprintf(cmd, sizeof(cmd), "cat %s/ms_base", heatmap_path);
         RunCommandToFd(fd, "Get Mutual Sensing Data - Baseline", {"/vendor/bin/sh", "-c", cmd});
 
         // Get Mutual Sensing Data - Delta
-        snprintf(cmd, sizeof(cmd), "cat %s/ms_diff", gti0_cmd_path);
+        snprintf(cmd, sizeof(cmd), "cat %s/ms_diff", heatmap_path);
         RunCommandToFd(fd, "Get Mutual Sensing Data - Delta", {"/vendor/bin/sh", "-c", cmd});
 
         // Get Mutual Sensing Data - Raw
-        snprintf(cmd, sizeof(cmd), "cat %s/ms_raw", gti0_cmd_path);
+        snprintf(cmd, sizeof(cmd), "cat %s/ms_raw", heatmap_path);
         RunCommandToFd(fd, "Get Mutual Sensing Data - Raw", {"/vendor/bin/sh", "-c", cmd});
 
         // Get Self Sensing Data - Baseline
-        snprintf(cmd, sizeof(cmd), "cat %s/ss_base", gti0_cmd_path);
+        snprintf(cmd, sizeof(cmd), "cat %s/ss_base", heatmap_path);
         RunCommandToFd(fd, "Get Self Sensing Data - Baseline", {"/vendor/bin/sh", "-c", cmd});
 
         // Get Self Sensing Data - Delta
-        snprintf(cmd, sizeof(cmd), "cat %s/ss_diff", gti0_cmd_path);
+        snprintf(cmd, sizeof(cmd), "cat %s/ss_diff", heatmap_path);
         RunCommandToFd(fd, "Get Self Sensing Data - Delta", {"/vendor/bin/sh", "-c", cmd});
 
         // Get Self Sensing Data - Raw
-        snprintf(cmd, sizeof(cmd), "cat %s/ss_raw", gti0_cmd_path);
+        snprintf(cmd, sizeof(cmd), "cat %s/ss_raw", heatmap_path);
         RunCommandToFd(fd, "Get Self Sensing Data - Raw", {"/vendor/bin/sh", "-c", cmd});
 
         // Self Test
@@ -1050,15 +1059,24 @@ void Dumpstate::dumpStorageSection(int fd) {
 
 // Dump items related to display
 void Dumpstate::dumpDisplaySection(int fd) {
-    DumpFileToFd(fd, "CRTC-0 underrun count", "/sys/kernel/debug/dri/0/crtc-0/underrun_cnt");
-    DumpFileToFd(fd, "CRTC-0 crc count", "/sys/kernel/debug/dri/0/crtc-0/crc_cnt");
-    DumpFileToFd(fd, "CRTC-0 ecc count", "/sys/kernel/debug/dri/0/crtc-0/ecc_cnt");
-    DumpFileToFd(fd, "CRTC-0 idma err count", "/sys/kernel/debug/dri/0/crtc-0/idma_err_cnt");
+    // Dump counters for decon drivers
+    const std::string decon_device_sysfs_path("/sys/class/drm/card0/device/");
+    for(int i = 0; i <= 2; ++i){
+        const std::string decon_num_str = std::to_string(i);
+        const std::string decon_counter_path = decon_device_sysfs_path +
+                                              "decon" + decon_num_str +
+                                              "/counters";
+        if (access(decon_counter_path.c_str(), R_OK) == 0){
+            DumpFileToFd(fd, "DECON-" + decon_num_str + " counters",
+                         decon_counter_path);
+        }
+        else{
+            ::android::base::WriteStringToFd("No counters for DECON-" +
+                decon_num_str + " found at path (" + decon_counter_path + ")\n",
+                fd);
+        }
+    }
     DumpFileToFd(fd, "CRTC-0 event log", "/sys/kernel/debug/dri/0/crtc-0/event");
-    DumpFileToFd(fd, "CRTC-1 underrun count", "/sys/kernel/debug/dri/0/crtc-1/underrun_cnt");
-    DumpFileToFd(fd, "CRTC-1 crc count", "/sys/kernel/debug/dri/0/crtc-1/crc_cnt");
-    DumpFileToFd(fd, "CRTC-1 ecc count", "/sys/kernel/debug/dri/0/crtc-1/ecc_cnt");
-    DumpFileToFd(fd, "CRTC-1 idma err count", "/sys/kernel/debug/dri/0/crtc-1/idma_err_cnt");
     DumpFileToFd(fd, "CRTC-1 event log", "/sys/kernel/debug/dri/0/crtc-1/event");
     RunCommandToFd(fd, "libdisplaycolor", {"/vendor/bin/dumpsys", "displaycolor", "-v"},
                    CommandOptions::WithTimeout(2).Build());
@@ -1187,6 +1205,15 @@ void Dumpstate::dumpLEDSection(int fd) {
             DumpFileToFd(fd, "LED Calibration Data", "/mnt/vendor/persist/led/led_calibration_LUT.txt");
         }
     }
+}
+
+void Dumpstate::dumpPCIeSection(int fd) {
+    DumpFileToFd(fd, "PCIe0 Logs", "/dev/logbuffer_pcie0");
+    DumpFileToFd(fd, "PCIe1 Logs", "/dev/logbuffer_pcie1");
+    RunCommandToFd(fd, "PCIe Link Statistics", {"/vendor/bin/sh", "-c",
+        "for f in ls /sys/devices/platform/14520000.pcie/link_stats/* "
+        "            /sys/devices/platform/11920000.pcie/link_stats/*; do "
+        "                  echo \"$f: `cat $f`\"; done"});
 }
 
 void Dumpstate::dumpModemSection(int fd) {
@@ -1395,7 +1422,7 @@ ndk::ScopedAStatus Dumpstate::dumpstateBoard(const std::vector<::ndk::ScopedFile
                                                                     "Invalid mode");
     }
 
-    if (in_fds.size() < 1) {
+    if (in_fds.size() < 2) {
           ALOGE("no FD for dumpstate_board binary\n");
     } else {
           int fd_bin = in_fds[1].get();

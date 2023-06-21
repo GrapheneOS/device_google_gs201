@@ -72,6 +72,7 @@ class Dumpstate : public BnDumpstateDevice {
     void dumpLEDSection(int fd);
     void dumpPixelTraceSection(int fd);
     void dumpPerfMetricsSection(int fd);
+    void dumpPCIeSection(int fd);
 
     void dumpLogSection(int fd, int fdModem);
 
