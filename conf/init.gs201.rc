@@ -921,6 +921,7 @@ on post-fs-data
     chown bluetooth system /proc/bluetooth/sleep/btwake
     chown bluetooth system /proc/bluetooth/sleep/lpm
     chown bluetooth system /proc/bluetooth/sleep/btwrite
+    mkdir /data/vendor/bluetooth 0770 bluetooth system
 
 on post-fs-data
     mkdir /data/vendor/powerstats 0771 system system
