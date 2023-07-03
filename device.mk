@@ -374,6 +374,7 @@ PRODUCT_COPY_FILES += \
 
 ## Enable the CHRE Daemon
 CHRE_USF_DAEMON_ENABLED := true
+CHRE_DEDICATED_TRANSPORT_CHANNEL_ENABLED := true
 PRODUCT_PACKAGES += \
 	chre \
 	preloaded_nanoapps.json
