@@ -151,6 +151,10 @@
 /dev/acd-com.google.usf  		0660   system     system
 /dev/acd-com.google.usf.non_wake_up  	0660   system     system
 
+# CHRE
+/dev/acd-com.google.chre  		0660   system     system
+/dev/acd-com.google.chre.non_wake_up  	0660   system     system
+
 # LWIS
 /dev/lwis*               0660   system     system
 
