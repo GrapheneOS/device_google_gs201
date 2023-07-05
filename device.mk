@@ -33,6 +33,7 @@ include device/google/gs-common/umfw_stat/umfw_stat.mk
 include device/google/gs-common/gear/dumpstate/aidl.mk
 include device/google/gs-common/widevine/widevine.mk
 include device/google/gs-common/sota_app/factoryota.mk
+include device/google/gs-common/misc_writer/misc_writer.mk
 
 TARGET_BOARD_PLATFORM := gs201
 
