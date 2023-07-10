@@ -49,3 +49,6 @@ PRODUCT_COPY_FILES += \
 
 # Add BOARD_WLAN_CHIP to soong_config
 $(call soong_config_set,qcom_wifi,board_wlan_chip,wcn6740)
+
+# Add WIFI_FEATURE_IMU_DETECTION to soong_config
+$(call soong_config_set,wifi,feature_imu_detection,$(WIFI_FEATURE_IMU_DETECTION))
