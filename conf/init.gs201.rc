@@ -1021,6 +1021,29 @@ on charger
     mkdir /dev/thermal/cdev-by-name 0750 system system
     start vendor.thermal.symlinks
 
+    # Runtime fs tuning
+    write /sys/block/sda/queue/nr_requests 128
+    write /sys/block/sda/queue/iostats 1
+    write /sys/block/sda/queue/iosched/slice_idle 0
+    write /dev/sys/fs/by-name/userdata/data_io_flag 8
+    write /dev/sys/fs/by-name/userdata/node_io_flag 8
+
+    # Enable UFS powersaving
+    write /dev/sys/block/bootdevice/clkgate_enable 1
+
+    # Cancel boot devfreq and uclamp
+    write /sys/devices/platform/17000010.devfreq_mif/devfreq/17000010.devfreq_mif/exynos_data/cancel_boot_freq 1
+    write /sys/devices/platform/17000020.devfreq_int/devfreq/17000020.devfreq_int/exynos_data/cancel_boot_freq 1
+    write /proc/vendor_sched/ta_uclamp_min 0
+    write /proc/vendor_sched/ta_prefer_idle 0
+    write /proc/vendor_sched/fg_uclamp_min 0
+    write /proc/vendor_sched/fg_prefer_idle 0
+    write /proc/vendor_sched/sys_uclamp_min 0
+    write /proc/vendor_sched/sys_prefer_idle 0
+
+    # Enable SICD
+    write /sys/devices/system/cpu/cpupm/cpupm/sicd 1
+
 on property:vendor.disable.bcl.control=1
     write /sys/devices/virtual/pmic/mitigation/instruction/enable_mitigation 0
 
