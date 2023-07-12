@@ -102,7 +102,7 @@
     </hal>
     <hal format="aidl" optional="true">
         <name>com.google.edgetpu.dba</name>
-        <version>2</version>
+        <version>1</version>
         <interface>
             <name>IDevice</name>
             <instance>default</instance>
