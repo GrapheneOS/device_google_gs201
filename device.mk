@@ -272,7 +272,7 @@ endif
 # Configure EGL blobcache
 PRODUCT_VENDOR_PROPERTIES += \
 	ro.egl.blobcache.multifile=true \
-	ro.egl.blobcache.multifile_limit=134217728 \
+	ro.egl.blobcache.multifile_limit=33554432 \
 
 PRODUCT_VENDOR_PROPERTIES += \
 	ro.opengles.version=196610 \
