@@ -352,16 +352,6 @@ BOARD_VNDK_VERSION := current
 # H/W align restriction of MM IPs
 BOARD_EXYNOS_S10B_FORMAT_ALIGN := 64
 
-# NeuralNetworks
-GPU_SOURCE_PRESENT := $(wildcard vendor/arm/mali/valhall)
-GPU_PREBUILD_PRESENT := $(wildcard vendor/google_devices/zebu/prebuilts/libs)
-ifneq (,$(strip $(GPU_SOURCE_PRESENT) $(GPU_PREBUILD_PRESENT)))
-ARMNN_COMPUTE_CL_ENABLE := 1
-else
-ARMNN_COMPUTE_CL_ENABLE := 0
-endif
-ARMNN_COMPUTE_NEON_ENABLE := 1
-
 # Boot.img
 BOARD_RAMDISK_USE_LZ4     := true
 #BOARD_KERNEL_BASE        := 0x80000000
