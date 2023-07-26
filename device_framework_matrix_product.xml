@@ -117,13 +117,6 @@
         </interface>
     </hal>
     <hal format="aidl" optional="true">
-        <name>com.google.input.algos.spd</name>
-        <interface>
-            <name>IScreenProtectorDetectorService</name>
-            <instance>default</instance>
-        </interface>
-    </hal>
-    <hal format="aidl" optional="true">
         <name>com.google.input</name>
         <version>2</version>
         <interface>
