@@ -21,7 +21,7 @@ include device/google/gs-common/soc/soc.mk
 include device/google/gs-common/soc/freq.mk
 include device/google/gs-common/modem/modem.mk
 include device/google/gs-common/aoc/aoc.mk
-include device/google/gs-common/thermal/thermal.mk
+include device/google/gs-common/thermal/dump/thermal.mk
 include device/google/gs-common/pixel_metrics/pixel_metrics.mk
 include device/google/gs-common/performance/perf.mk
 include device/google/gs-common/display/dump.mk
