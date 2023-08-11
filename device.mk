@@ -910,10 +910,8 @@ $(call inherit-product-if-exists, vendor/samsung_slsi/telephony/$(BOARD_USES_SHA
 
 PRODUCT_PACKAGES += ShannonIms
 
-#RCS Test Messaging App
 PRODUCT_PACKAGES_DEBUG += \
-	preinstalled-packages-product-gs201-device-debug.xml \
-	TestRcsApp
+	preinstalled-packages-product-gs201-device-debug.xml
 
 PRODUCT_PACKAGES += ShannonRcs
 endif
