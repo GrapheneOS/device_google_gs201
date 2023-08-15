@@ -75,8 +75,8 @@
 /dev/hdcp2                0660   media      media
 
 # jpeg
-/dev/m2m1shot_jpeg	      0660   media          media
-/dev/video12              0660   cameraserver   media
+/dev/m2m1shot_jpeg	      0660   media      media
+/dev/video12              0660   system     system
 
 # audio
 /dev/seiren                     0660   system     audio
@@ -94,7 +94,9 @@
 /dev/acd-debug                  0660   system     audio
 /dev/acd-audio_tap*             0660   system     audio
 /dev/acd-audio_dcdoff_ref       0660   system     audio
+/dev/acd-mel_processor          0660   system     audio
 /dev/amcs                       0660   system     audio
+/dev/acd-audio_rtp_*            0660   system     radio
 
 # Secure MEM driver
 /dev/s5p-smem             0660   drm        drmrpc
@@ -141,6 +143,9 @@
 
 # AoC
 /dev/aoc                 0660   system     system
+
+# AoC stats (UmfwStat)
+/dev/acd-com.google.umfw_stat           0660   system     system
 
 # Sensors (USF)
 /dev/acd-com.google.usf  		0660   system     system
@@ -222,3 +227,9 @@
 
 # ODPM
 /sys/bus/iio/devices/iio:device*  enabled_rails 0660 system system
+
+# sysfs LED nodes for external USB devices
+/sys/devices/platform/11210000.usb/11210000.dwc3/xhci-hcd-exynos.5.auto/usb2/2-1* brightness 0664 system system
+/sys/devices/platform/11210000.usb/11210000.dwc3/xhci-hcd-exynos.5.auto/usb2/2-1* multi_intensity 0664 system system
+/sys/devices/platform/11210000.usb/11210000.dwc3/xhci-hcd-exynos.4.auto/usb2/2-1* brightness 0664 system system
+/sys/devices/platform/11210000.usb/11210000.dwc3/xhci-hcd-exynos.4.auto/usb2/2-1* multi_intensity 0664 system system

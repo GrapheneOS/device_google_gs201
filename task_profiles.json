@@ -287,7 +287,7 @@
     },
     {
       "Name": "OtaProfiles",
-      "Profiles": [ "OtaPerformance", "ServiceCapacityLow", "LowIoPriority", "TimerSlackHigh" ]
+      "Profiles": [ "OtaPerformance", "ProcessCapacityNormal", "LowIoPriority", "TimerSlackHigh" ]
     }
   ]
 }
