@@ -658,7 +658,8 @@ endif
 PRODUCT_PROPERTY_OVERRIDES += \
 	debug.sf.disable_backpressure=0 \
 	debug.sf.enable_gl_backpressure=1 \
-	debug.sf.enable_sdr_dimming=1
+	debug.sf.enable_sdr_dimming=1 \
+	debug.sf.dim_in_gamma_in_enhanced_screenshots=1
 
 PRODUCT_DEFAULT_PROPERTY_OVERRIDES += debug.sf.use_phase_offsets_as_durations=1
 PRODUCT_DEFAULT_PROPERTY_OVERRIDES += debug.sf.late.sf.duration=10500000
