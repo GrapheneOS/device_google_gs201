@@ -69,6 +69,14 @@
         </interface>
     </hal>
     <hal format="aidl" optional="true">
+        <name>com.google.edgetpu.tachyon</name>
+        <version>1</version>
+        <interface>
+            <name>IComputeService</name>
+            <instance>default</instance>
+        </interface>
+    </hal>
+    <hal format="aidl" optional="true">
       <name>com.google.hardware.pixel.display</name>
         <version>9</version>
         <interface>
