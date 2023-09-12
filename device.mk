@@ -1162,6 +1162,10 @@ PRODUCT_COPY_FILES += \
 # Call deleteAllKeys if vold detects a factory reset
 PRODUCT_VENDOR_PROPERTIES += ro.crypto.metadata_init_delete_all_keys.enabled?=true
 
+# Increase lmkd aggressiveness
+PRODUCT_PROPERTY_OVERRIDES += \
+    ro.lmk.swap_free_low_percentage=100
+
 # Hardware Info
 include hardware/google/pixel/HardwareInfo/HardwareInfo.mk
 
