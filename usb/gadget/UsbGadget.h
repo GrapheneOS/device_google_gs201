@@ -115,6 +115,10 @@ struct UsbGadget : public BnUsbGadget {
 
     ScopedAStatus setVidPid(const char *vid,const char *pid);
 
+    // Indicates to the kernel that the gadget service is ready and the kernel can
+    // set SDP timeout to a lower value.
+    void updateSdpEnumTimeout();
+
   private:
     Status tearDownGadget();
     Status getUsbGadgetIrqPath();
