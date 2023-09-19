@@ -291,5 +291,5 @@
     </string-array>
 
     <!-- Enable variable refresh rate when typing. -->
-    <bool name="config_variableRefreshRateTypingSupported">true</bool>
+    <bool name="config_variableRefreshRateTypingSupported">false</bool>
 </resources>
