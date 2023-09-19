@@ -16,6 +16,8 @@ on init
 
     # Set teo as cpu idle governor
     write /sys/devices/system/cpu/cpuidle/current_governor teo
+    # Disable util-awareness
+    write /proc/vendor_sched/teo_util_threshold "1024 1024 1024"
 
     # Boot time fs tuning
     write /sys/block/sda/queue/iostats 0
