@@ -44,6 +44,30 @@ constexpr char kHsi2cPath[] = "/sys/devices/platform/10d60000.hsi2c";
 constexpr char kI2CPath[] = "/sys/devices/platform/10d60000.hsi2c/i2c-";
 constexpr char kAccessoryLimitCurrent[] = "i2c-max77759tcpc/usb_limit_accessory_current";
 constexpr char kAccessoryLimitCurrentEnable[] = "i2c-max77759tcpc/usb_limit_accessory_enable";
+constexpr char kUpdateSdpEnumTimeout[] = "i2c-max77759tcpc/update_sdp_enum_timeout";
+
+Status getI2cBusHelper(string *name) {
+    DIR *dp;
+
+    dp = opendir(kHsi2cPath);
+    if (dp != NULL) {
+        struct dirent *ep;
+
+        while ((ep = readdir(dp))) {
+            if (ep->d_type == DT_DIR) {
+                if (string::npos != string(ep->d_name).find("i2c-")) {
+                    std::strtok(ep->d_name, "-");
+                    *name = std::strtok(NULL, "-");
+                }
+            }
+        }
+        closedir(dp);
+        return Status::SUCCESS;
+    }
+
+    ALOGE("Failed to open %s", kHsi2cPath);
+    return Status::ERROR;
+}
 
 UsbGadget::UsbGadget() : mGadgetIrqPath("") {
     if (access(OS_DESC_PATH, R_OK) != 0) {
@@ -97,6 +121,7 @@ Status UsbGadget::getUsbGadgetIrqPath() {
 void currentFunctionsAppliedCallback(bool functionsApplied, void *payload) {
     UsbGadget *gadget = (UsbGadget *)payload;
     gadget->mCurrentUsbFunctionsApplied = functionsApplied;
+    gadget->updateSdpEnumTimeout();
 }
 
 ScopedAStatus UsbGadget::getCurrentUsbFunctions(const shared_ptr<IUsbGadgetCallback> &callback,
@@ -363,6 +388,22 @@ ScopedAStatus UsbGadget::reset(const shared_ptr<IUsbGadgetCallback> &callback,
     return ScopedAStatus::ok();
 }
 
+void UsbGadget::updateSdpEnumTimeout() {
+    string i2c_node, update_sdp_enum_timeout_path;
+
+    Status status = getI2cBusHelper(&i2c_node);
+    if (status != Status::SUCCESS) {
+        ALOGE("%s: Unable to locate i2c bus node", __func__);
+    }
+
+    update_sdp_enum_timeout_path = kI2CPath + i2c_node + "/" + kUpdateSdpEnumTimeout;
+    if (!WriteStringToFile("1", update_sdp_enum_timeout_path)) {
+        ALOGE("%s: Unable to write to %s.", __func__, update_sdp_enum_timeout_path.c_str());
+    } else {
+        ALOGI("%s: Updated SDP enumeration timeout value.", __func__);
+    }
+}
+
 Status UsbGadget::setupFunctions(long functions,
         const shared_ptr<IUsbGadgetCallback> &callback, uint64_t timeout,
         int64_t in_transactionId) {
@@ -421,6 +462,7 @@ Status UsbGadget::setupFunctions(long functions,
         mCurrentUsbFunctionsApplied = true;
         if (callback)
             callback->setCurrentUsbFunctionsCb(functions, Status::SUCCESS, in_transactionId);
+        updateSdpEnumTimeout();
         return Status::SUCCESS;
     }
 
@@ -443,29 +485,6 @@ Status UsbGadget::setupFunctions(long functions,
         }
     }
     return Status::SUCCESS;
-}
-
-Status getI2cBusHelper(string *name) {
-    DIR *dp;
-
-    dp = opendir(kHsi2cPath);
-    if (dp != NULL) {
-        struct dirent *ep;
-
-        while ((ep = readdir(dp))) {
-            if (ep->d_type == DT_DIR) {
-                if (string::npos != string(ep->d_name).find("i2c-")) {
-                    std::strtok(ep->d_name, "-");
-                    *name = std::strtok(NULL, "-");
-                }
-            }
-        }
-        closedir(dp);
-        return Status::SUCCESS;
-    }
-
-    ALOGE("Failed to open %s", kHsi2cPath);
-    return Status::ERROR;
 }
 
 ScopedAStatus UsbGadget::setCurrentUsbFunctions(long functions,
