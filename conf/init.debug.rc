@@ -39,7 +39,13 @@ on property:ro.revision=PROTO1.1
 on property:ro.revision=EVT1.0
     setprop debug.hypervisor.metrics_tag "hwrev_a0"
 
-# Enable etm/etm2dram when ramdump is enabled.
-on property:ro.boot.ramdump=enabled
+service vendor.check_ap_pd_auth_sh /vendor/bin/init.check_ap_pd_auth.sh
+    class main
+    user root
+    group root system
+    oneshot
+
+# Enable etm/etm2dram when ramdump is enabled, and ap-sjtag is unlocked.
+on property:ro.boot.ramdump=enabled && property:ro.vendor.sjtag_ap_is_unlocked=true
     write /sys/devices/platform/exynos-etm/etm_on 1
     write /sys/devices/platform/etm2dram/arm 1

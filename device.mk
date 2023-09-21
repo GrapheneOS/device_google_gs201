@@ -35,6 +35,7 @@ include device/google/gs-common/gear/dumpstate/aidl.mk
 include device/google/gs-common/widevine/widevine.mk
 include device/google/gs-common/sota_app/factoryota.mk
 include device/google/gs-common/misc_writer/misc_writer.mk
+include device/google/gs-common/gyotaku_app/gyotaku.mk
 
 TARGET_BOARD_PLATFORM := gs201
 
@@ -329,7 +330,8 @@ PRODUCT_COPY_FILES += \
 
 ifneq (,$(filter userdebug eng, $(TARGET_BUILD_VARIANT)))
 PRODUCT_COPY_FILES += \
-	device/google/gs201/conf/init.debug.rc:$(TARGET_COPY_OUT_VENDOR)/etc/init/init.debug.rc
+	device/google/gs201/conf/init.debug.rc:$(TARGET_COPY_OUT_VENDOR)/etc/init/init.debug.rc \
+	device/google/gs201/conf/init.check_ap_pd_auth.sh:$(TARGET_COPY_OUT_VENDOR)/bin/init.check_ap_pd_auth.sh
 endif
 
 # Recovery files
@@ -662,7 +664,8 @@ endif
 PRODUCT_PROPERTY_OVERRIDES += \
 	debug.sf.disable_backpressure=0 \
 	debug.sf.enable_gl_backpressure=1 \
-	debug.sf.enable_sdr_dimming=1
+	debug.sf.enable_sdr_dimming=1 \
+	debug.sf.dim_in_gamma_in_enhanced_screenshots=1
 
 PRODUCT_DEFAULT_PROPERTY_OVERRIDES += debug.sf.use_phase_offsets_as_durations=1
 PRODUCT_DEFAULT_PROPERTY_OVERRIDES += debug.sf.late.sf.duration=10500000
@@ -909,10 +912,8 @@ $(call inherit-product-if-exists, vendor/samsung_slsi/telephony/$(BOARD_USES_SHA
 
 PRODUCT_PACKAGES += ShannonIms
 
-#RCS Test Messaging App
 PRODUCT_PACKAGES_DEBUG += \
-	preinstalled-packages-product-gs201-device-debug.xml \
-	TestRcsApp
+	preinstalled-packages-product-gs201-device-debug.xml
 
 PRODUCT_PACKAGES += ShannonRcs
 endif
@@ -986,6 +987,7 @@ $(call inherit-product, $(SRC_TARGET_DIR)/product/core_64_bit_only.mk)
 #$(call inherit-product-if-exists, vendor/google_devices/common/exynos-vendor.mk)
 #$(call inherit-product-if-exists, hardware/broadcom/wlan/bcmdhd/firmware/bcm4375/device-bcm.mk)
 include device/google/gs-common/sensors/sensors.mk
+$(call soong_config_set,usf,target_soc,gs201)
 
 PRODUCT_COPY_FILES += \
 	device/google/gs201/default-permissions.xml:$(TARGET_COPY_OUT_PRODUCT)/etc/default-permissions/default-permissions.xml \
@@ -1112,7 +1114,9 @@ PRODUCT_PROPERTY_OVERRIDES += \
 
 # Suspend properties
 PRODUCT_PROPERTY_OVERRIDES += \
-    suspend.short_suspend_threshold_millis=2000
+    suspend.short_suspend_threshold_millis=2000 \
+    suspend.max_sleep_time_millis=40000 \
+    suspend.short_suspend_backoff_enabled=true
 
 # Enable Incremental on the device
 PRODUCT_PROPERTY_OVERRIDES += \
@@ -1157,6 +1161,10 @@ PRODUCT_COPY_FILES += \
 
 # Call deleteAllKeys if vold detects a factory reset
 PRODUCT_VENDOR_PROPERTIES += ro.crypto.metadata_init_delete_all_keys.enabled?=true
+
+# Increase lmkd aggressiveness
+PRODUCT_PROPERTY_OVERRIDES += \
+    ro.lmk.swap_free_low_percentage=100
 
 # Hardware Info
 include hardware/google/pixel/HardwareInfo/HardwareInfo.mk
