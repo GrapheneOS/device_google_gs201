@@ -815,11 +815,12 @@ $(call inherit-product, system/core/trusty/trusty-base.mk)
 # Trusty dump
 include device/google/gs-common/trusty/trusty.mk
 
-# Trusty unit test tool
+# Trusty unit test and code coverage tool
 PRODUCT_PACKAGES_DEBUG += \
    trusty-ut-ctrl \
    tipc-test \
    trusty_stats_test \
+   trusty-coverage-controller \
 
 include device/google/gs101/confirmationui/confirmationui.mk
 
