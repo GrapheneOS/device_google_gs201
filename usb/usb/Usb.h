@@ -19,6 +19,7 @@
 #include <android-base/file.h>
 #include <aidl/android/hardware/usb/BnUsb.h>
 #include <aidl/android/hardware/usb/BnUsbCallback.h>
+#include <chrono>
 #include <pixelusb/UsbOverheatEvent.h>
 #include <utils/Log.h>
 
@@ -99,12 +100,20 @@ struct Usb : public BnUsb {
 
     // USB device state monitoring
     struct usbDeviceState {
-        std::string latestState;
+        // Usb device state raw strings read from sysfs
+        std::vector<std::string> states;
+        // Timestamps of when the usb device states were captured
+        std::vector<std::chrono::steady_clock::time_point> timestamps;
         int portResetCount;
     };
     struct usbDeviceState mDeviceState;
     // Map host device path name to usbDeviceState
     std::map<std::string, struct usbDeviceState> mHostStateMap;
+    // Cache relevant info for USB data session metrics collection when a session starts, including
+    // the data role, power brick status and the time when the session starts.
+    PortDataRole mDataRole;
+    bool mIsPowerBrickConnected;
+    std::chrono::steady_clock::time_point mDataSessionStart;
 
     // File monitoring through epoll
     int mEpollFd;
