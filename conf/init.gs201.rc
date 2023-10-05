@@ -65,6 +65,14 @@ on init
     chown system system /sys/devices/system/cpu/cpufreq/policy6/sched_pixel/spc_threshold
     chown system system /sys/devices/system/cpu/cpufreq/policy6/sched_pixel/limit_frequency
     chown system system /sys/devices/system/cpu/cpufreq/policy6/sched_pixel/pmu_limit_enable
+    chown system system /sys/class/devfreq/gs_memlat_devfreq:devfreq_mif_cpu0_memlat@17000010/memlat_cpuidle_state_aware
+    chown system system /sys/class/devfreq/gs_memlat_devfreq:devfreq_mif_cpu1_memlat@17000010/memlat_cpuidle_state_aware
+    chown system system /sys/class/devfreq/gs_memlat_devfreq:devfreq_mif_cpu2_memlat@17000010/memlat_cpuidle_state_aware
+    chown system system /sys/class/devfreq/gs_memlat_devfreq:devfreq_mif_cpu3_memlat@17000010/memlat_cpuidle_state_aware
+    chown system system /sys/class/devfreq/gs_memlat_devfreq:devfreq_mif_cpu4_memlat@17000010/memlat_cpuidle_state_aware
+    chown system system /sys/class/devfreq/gs_memlat_devfreq:devfreq_mif_cpu5_memlat@17000010/memlat_cpuidle_state_aware
+    chown system system /sys/class/devfreq/gs_memlat_devfreq:devfreq_mif_cpu6_memlat@17000010/memlat_cpuidle_state_aware
+    chown system system /sys/class/devfreq/gs_memlat_devfreq:devfreq_mif_cpu7_memlat@17000010/memlat_cpuidle_state_aware
 
     chmod 0220 /proc/vendor_sched/set_task_group_bg
     chmod 0220 /proc/vendor_sched/set_task_group_cam
@@ -124,7 +132,7 @@ on init
     symlink /data/app /factory
 
     # Apply network parameters for high data performance.
-    write /proc/sys/net/core/rmem_default 327680
+    write /proc/sys/net/core/rmem_default 1310720
     write /proc/sys/net/core/rmem_max 8388608
     write /proc/sys/net/core/wmem_default 327680
     write /proc/sys/net/core/wmem_max 8388608
@@ -173,6 +181,16 @@ on init
     write /sys/devices/system/cpu/cpu6/cpufreq/scaling_governor sched_pixel
     write /sys/devices/system/cpu/cpu6/cpufreq/sched_pixel/up_rate_limit_us 500
     write /sys/devices/system/cpu/cpu6/cpufreq/sched_pixel/down_rate_limit_us 20000
+
+    # memlat cpuidle awareness setting
+    write /sys/class/devfreq/gs_memlat_devfreq:devfreq_mif_cpu0_memlat@17000010/memlat_cpuidle_state_aware 2
+    write /sys/class/devfreq/gs_memlat_devfreq:devfreq_mif_cpu1_memlat@17000010/memlat_cpuidle_state_aware 2
+    write /sys/class/devfreq/gs_memlat_devfreq:devfreq_mif_cpu2_memlat@17000010/memlat_cpuidle_state_aware 2
+    write /sys/class/devfreq/gs_memlat_devfreq:devfreq_mif_cpu3_memlat@17000010/memlat_cpuidle_state_aware 2
+    write /sys/class/devfreq/gs_memlat_devfreq:devfreq_mif_cpu4_memlat@17000010/memlat_cpuidle_state_aware 2
+    write /sys/class/devfreq/gs_memlat_devfreq:devfreq_mif_cpu5_memlat@17000010/memlat_cpuidle_state_aware 2
+    write /sys/class/devfreq/gs_memlat_devfreq:devfreq_mif_cpu6_memlat@17000010/memlat_cpuidle_state_aware 2
+    write /sys/class/devfreq/gs_memlat_devfreq:devfreq_mif_cpu7_memlat@17000010/memlat_cpuidle_state_aware 2
 
     # RT uclamp setting
     write /proc/sys/kernel/sched_util_clamp_min_rt_default 0
@@ -223,9 +241,10 @@ on init
     chown system system /sys/devices/platform/10da0000.hsi2c/i2c-5/5-0050/eeprom
     chown system system /sys/devices/platform/10da0000.hsi2c/i2c-6/6-0050/eeprom
     chown system system /sys/devices/platform/10da0000.hsi2c/i2c-7/7-0050/eeprom
+    chown system system /sys/devices/platform/10da0000.hsi2c/i2c-9/9-0050/eeprom
 
     # Loading common kernel modules in background
-    start insmod_sh_common
+    start init_display
 
     # Charge stats (write 0)
     chown system system /sys/class/power_supply/battery/charge_stats
@@ -302,9 +321,6 @@ on init
     # Power Stats HAL
     chown system system /dev/bbd_pwrstat
 
-    # start watchdogd
-    start watchdogd
-
     # Add a boost for NNAPI HAL
     write /proc/vendor_sched/nnapi_prefer_idle 0
     write /proc/vendor_sched/nnapi_uclamp_min 512
@@ -326,6 +342,9 @@ on init
     write /sys/class/devfreq/gs_memlat_devfreq:devfreq_mif_cpu5_memlat@17000010/mem_latency/ratio_ceil 2700
     write /sys/class/devfreq/gs_memlat_devfreq:devfreq_mif_cpu6_memlat@17000010/mem_latency/ratio_ceil 3200
     write /sys/class/devfreq/gs_memlat_devfreq:devfreq_mif_cpu7_memlat@17000010/mem_latency/ratio_ceil 3200
+
+    # Set boost_adpf_prio, -1 by default
+    write /proc/vendor_sched/boost_adpf_prio ${persist.device_config.vendor_system_native_boot.boost_adpf_prio:--1}
 
 on late-fs
     # Start bootanimation class before mount
@@ -360,8 +379,6 @@ on post-fs-data
     chown system system /sys/devices/platform/1c2d0000.drmdsim/hs_clock
     chmod 0664 /sys/devices/platform/1c2c0000.drmdsim/hs_clock
     chmod 0664 /sys/devices/platform/1c2d0000.drmdsim/hs_clock
-
-    setprop vold.post_fs_data_done 1
 
     # IPSEC PIDDIR for VoWiFi
     mkdir /data/vendor/misc 0771 root system
@@ -488,8 +505,6 @@ on early-boot
     chown system system /dev/logbuffer_cpm
     chown system system /dev/logbuffer_bd
     chown system system /dev/logbuffer_dual_batt
-    chown system system /dev/logbuffer_pcie0
-    chown system system /dev/logbuffer_pcie1
 
 on boot
 
@@ -626,38 +641,6 @@ service abox /vendor/bin/main_abox 17c50000.abox
     group audioserver
     seclabel u:r:abox:s0
 
-# GPS
-service lhd /vendor/bin/hw/lhd /vendor/etc/gnss/lhd.conf
-    class main
-    user gps
-    group system inet net_raw sdcard_rw
-    ioprio be 0
-
-service gpsd /vendor/bin/hw/gpsd -c /vendor/etc/gnss/gps.xml
-    class main
-    user gps
-    group system gps radio inet wakelock sdcard_rw net_raw
-    ioprio be 0
-
-service scd /vendor/bin/hw/scd /vendor/etc/gnss/scd.conf
-    class main
-    user gps
-    group system inet net_raw wakelock
-    ioprio be 0
-
-service gnss_service /vendor/bin/hw/android.hardware.gnss@2.1-service-brcm
-    class hal
-    user gps
-    group system gps radio
-    ioprio be 0
-    priority -1
-
-# disable gps service if no gps h/w
-on property:vendor.ril.cbd.svc=0
-    stop gpsd
-    stop lhd
-    stop scd
-
 # on userdebug and eng builds, enable kgdb on the serial console
 on property:ro.debuggable=1
     write /sys/module/kgdboc/parameters/kgdboc ttyFIQ1
@@ -675,13 +658,6 @@ on property:vendor.device.modules.ready=1
     chown system system /sys/devices/virtual/sec/tsp/cmd
     chown system system /sys/devices/virtual/sec/tsp/cmd_result
     chown system system /sys/devices/virtual/sec/tsp/status
-    chown system system /proc/goog_touch_interface/gti.0
-    chown system system /proc/goog_touch_interface/gti.0/ms_base
-    chown system system /proc/goog_touch_interface/gti.0/ms_diff
-    chown system system /proc/goog_touch_interface/gti.0/ms_raw
-    chown system system /proc/goog_touch_interface/gti.0/ss_base
-    chown system system /proc/goog_touch_interface/gti.0/ss_diff
-    chown system system /proc/goog_touch_interface/gti.0/ss_raw
     # Allow access to touch
     chown system input /dev/touch_offload
     chmod 660 /dev/touch_offload
@@ -744,7 +720,7 @@ on property:sys.boot_completed=1
     # Setup final cpuset
     write /dev/cpuset/top-app/cpus ${persist.device_config.vendor_system_native.top-app_cpuset:-0-7}
     write /dev/cpuset/foreground/cpus ${persist.device_config.vendor_system_native.foreground_cpuset:-0-3,4-5}
-    write /dev/cpuset/background/cpus ${persist.device_config.vendor_system_native.background_cpuset:-0-1}
+    write /dev/cpuset/background/cpus ${persist.device_config.vendor_system_native.background_cpuset:-0-3}
     write /dev/cpuset/system-background/cpus ${persist.device_config.vendor_system_native.system-background_cpuset:-0-3}
     write /dev/cpuset/restricted/cpus ${persist.device_config.vendor_system_native.restricted_cpuset:-0-3}
     write /dev/cpuset/camera-daemon/cpus ${persist.device_config.vendor_system_native.camera-daemon_cpuset:-0-7}
@@ -754,15 +730,22 @@ on property:sys.boot_completed=1
     write /proc/vendor_sched/ta_uclamp_min 1
     write /proc/vendor_sched/fg_uclamp_min 0
     write /proc/vendor_sched/sys_prefer_idle 0
-    # cfs_rq clamp is using tg->uclamp setting
-    # align it with the vendor_group setting
+
+    # Set ug group
+    write /proc/vendor_sched/bg_ug 0
+    write /proc/vendor_sched/sysbg_ug 0
+    write /proc/vendor_sched/ota_ug 0
+    write /proc/vendor_sched/dex2oat_ug 1
+    write /proc/vendor_sched/ta_ug 1
+
+    # Set bg group throttle
+    write /proc/vendor_sched/ug_bg_group_throttle ${persist.device_config.vendor_system_native.ug_bg_group_throttle:-308}
+
+    # Set uclamp.max for some groups, which could indicate cpu importance used in scheduling
     write /proc/vendor_sched/bg_uclamp_max 512
-    write /dev/cpuctl/background/cpu.uclamp.max 50
     write /proc/vendor_sched/sysbg_uclamp_max 512
-    write /dev/cpuctl/system-background/cpu.uclamp.max 50
+    write /proc/vendor_sched/ota_uclamp_max 512
     write /proc/vendor_sched/dex2oat_uclamp_max 615
-    write /dev/cpuctl/dex2oat/cpu.uclamp.max 60
-    write /proc/vendor_sched/ota_uclamp_max 410
 
     # Set PMU freq limit parameters
     write /sys/devices/system/cpu/cpufreq/policy0/sched_pixel/lcpi_threshold 2
@@ -796,12 +779,6 @@ on property:sys.boot_completed=1
     write /sys/devices/platform/10840000.pinctrl/power/async "enabled"
     write /sys/devices/platform/18062080.pd-hsi0/power/async "enabled"
     write /sys/devices/platform/14460000.pinctrl/power/async "enabled"
-
-    # Setup groups for SF (RT used for SF RE, SF used for SF main)
-    write /proc/vendor_sched/rt_uclamp_min 236
-    write /proc/vendor_sched/rt_prefer_idle 1
-    write /proc/vendor_sched/sf_uclamp_min 39
-    write /proc/vendor_sched/sf_prefer_idle 1
 
     # Setup cpu.shares to throttle background groups (bg ~ 5% sysbg ~ 5% dex2oat ~2.5%)
     write /dev/cpuctl/background/cpu.shares 1024
@@ -899,18 +876,12 @@ on  property:persist.sys.test_harness=1 && property:persist.vendor.testing_batte
 on property:ro.debuggable=1
     write /sys/module/scsi_mod/parameters/scsi_logging_level 63
 
-service insmod_sh_common /vendor/bin/init.insmod.sh /vendor/etc/init.insmod.gs201.cfg
+service init_display /vendor/bin/init.display.sh
     class main
     user root
     group root system
     disabled
     oneshot
-
-# Set watchdog timer to 30 seconds and pet it every 10 seconds to get a 20 second margin
-service watchdogd /system/bin/watchdogd 10 20
-    class core
-    oneshot
-    seclabel u:r:watchdogd:s0
 
 # bugreport is triggered by holding down volume down, volume up and power
 service bugreport /system/bin/dumpstate -d -p -z
@@ -928,13 +899,15 @@ on post-fs-data
     symlink /mnt/vendor/persist/ss /data/vendor/ss/persist
     chown root system /data/vendor/ss/persist
     chmod 0770 /data/vendor/ss/persist
+    chown system system /data/vendor/ss/persist/nsp
 
     restart storageproxyd
 
 service storageproxyd /vendor/bin/storageproxyd -d /dev/trusty-ipc-dev0 \
         -r /dev/sg1 -p /data/vendor/ss -t ufs
     class early_hal
-    user root
+    user system
+    group system
 
 # Write build info to kdebuginfo
 on property:ro.build.fingerprint=*
@@ -952,6 +925,9 @@ on post-fs-data
 on post-fs-data
     mkdir /data/vendor/powerstats 0771 system system
     chown system system /data/vendor/powerstats
+    # Thermal Residency Stats (write 1 to reset)
+    chown system system /sys/kernel/metrics/thermal/tr_by_group/tmu/stats_reset
+    chown system system /sys/kernel/metrics/thermal/tr_by_group/spmic/stats_reset
 
 on property:vendor.brownout.mitigation.ready=1
     # BCL
@@ -1010,16 +986,26 @@ on property:vendor.thermal.link_ready=1
     chown system system /dev/thermal/tz-by-name/usb_pwr_therm2/trip_point_0_hyst
     chown system system /dev/thermal/tz-by-name/usb_pwr_therm/trip_point_0_temp
     chown system system /dev/thermal/tz-by-name/usb_pwr_therm/trip_point_0_hyst
+    chmod 664 /dev/thermal/cdev-by-name/thermal-cpufreq-0/user_vote
     chown system system /dev/thermal/cdev-by-name/thermal-cpufreq-0/user_vote
+    chmod 664 /dev/thermal/cdev-by-name/thermal-cpufreq-1/user_vote
     chown system system /dev/thermal/cdev-by-name/thermal-cpufreq-1/user_vote
+    chmod 664 /dev/thermal/cdev-by-name/thermal-cpufreq-2/user_vote
     chown system system /dev/thermal/cdev-by-name/thermal-cpufreq-2/user_vote
+    chmod 664 /dev/thermal/cdev-by-name/thermal-gpufreq-0/user_vote
     chown system system /dev/thermal/cdev-by-name/thermal-gpufreq-0/user_vote
+    chmod 664 /dev/thermal/cdev-by-name/tpu_cooling/user_vote
     chown system system /dev/thermal/cdev-by-name/gxp-cooling/user_vote
     chown system system /dev/thermal/cdev-by-name/tpu_cooling/user_vote
+    chmod 664 /dev/thermal/cdev-by-name/fcc/cur_state
     chown system system /dev/thermal/cdev-by-name/fcc/cur_state
+    chmod 664 /dev/thermal/cdev-by-name/dc_icl/cur_state
     chown system system /dev/thermal/cdev-by-name/dc_icl/cur_state
+    chmod 664 /dev/thermal/cdev-by-name/wlc_fcc/cur_state
     chown system system /dev/thermal/cdev-by-name/wlc_fcc/cur_state
+    chmod 664 /dev/thermal/cdev-by-name/chg_mdis/cur_state
     chown system system /dev/thermal/cdev-by-name/chg_mdis/cur_state
+    chmod 664 /dev/thermal/cdev-by-name/usbc-port/cur_state
     chown system system /dev/thermal/cdev-by-name/usbc-port/cur_state
 
 on charger
@@ -1075,7 +1061,7 @@ on property:persist.device_config.vendor_system_native.top-app_cpuset=*
 on property:persist.device_config.vendor_system_native.foreground_cpuset=*
     write /dev/cpuset/foreground/cpus ${persist.device_config.vendor_system_native.foreground_cpuset:-0-3,4-5}
 on property:persist.device_config.vendor_system_native.background_cpuset=*
-    write /dev/cpuset/background/cpus ${persist.device_config.vendor_system_native.background_cpuset:-0-1}
+    write /dev/cpuset/background/cpus ${persist.device_config.vendor_system_native.background_cpuset:-0-3}
 on property:persist.device_config.vendor_system_native.system-background_cpuset=*
     write /dev/cpuset/system-background/cpus ${persist.device_config.vendor_system_native.system-background_cpuset:-0-3}
 on property:persist.device_config.vendor_system_native.restricted_cpuset=*

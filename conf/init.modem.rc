@@ -16,6 +16,9 @@ on post-fs-data
     # Modem MDS log folder
     mkdir /data/vendor/radio/mds 0771 radio system
 
+    # Modem OTA UECap folder
+    mkdir /data/vendor/radio/ota_uecap 0773 radio system
+
     # Unzipped modem images folder
     mkdir /data/vendor/radio/image 0771 radio system
 

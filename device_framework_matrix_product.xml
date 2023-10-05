@@ -47,6 +47,10 @@
             <name>IDebugHost</name>
             <instance>default</instance>
         </interface>
+        <interface>
+            <name>IDebugManager</name>
+            <instance>default</instance>
+        </interface>
     </hal>
     <hal format="aidl" optional="true">
       <name>com.google.edgetpu</name>
@@ -57,8 +61,16 @@
         </interface>
     </hal>
     <hal format="aidl" optional="true">
+        <name>com.google.edgetpu.dba</name>
+        <version>1</version>
+        <interface>
+            <name>IDevice</name>
+            <instance>default</instance>
+        </interface>
+    </hal>
+    <hal format="aidl" optional="true">
       <name>com.google.hardware.pixel.display</name>
-        <version>7</version>
+        <version>8</version>
         <interface>
             <name>IDisplay</name>
             <instance>default</instance>
@@ -66,6 +78,7 @@
     </hal>
     <hal format="aidl" optional="true">
         <name>com.google.input</name>
+        <version>2</version>
         <interface>
             <name>ITouchContextService</name>
             <instance>default</instance>
@@ -87,38 +100,6 @@
             <instance>default</instance>
         </interface>
     </hal>
-    <hal format="hidl">
-        <name>hardware.google.bluetooth.bt_channel_avoidance</name>
-        <version>1.0</version>
-        <interface>
-            <name>IBTChannelAvoidance</name>
-            <instance>default</instance>
-        </interface>
-    </hal>
-    <hal format="hidl">
-        <name>hardware.google.bluetooth.sar</name>
-        <version>1.1</version>
-        <interface>
-            <name>IBluetoothSar</name>
-            <instance>default</instance>
-        </interface>
-    </hal>
-    <hal format="hidl" optional="true">
-        <name>hardware.google.bluetooth.ext</name>
-        <version>1.0</version>
-        <interface>
-            <name>IBluetoothExt</name>
-            <instance>default</instance>
-        </interface>
-    </hal>
-    <hal format="hidl" optional="true">
-        <name>hardware.google.bluetooth.ewp</name>
-        <version>1.0</version>
-        <interface>
-            <name>IBluetoothEwp</name>
-            <instance>default</instance>
-        </interface>
-    </hal>
     <hal format="aidl" optional="true">
         <name>vendor.google.google_battery</name>
         <version>2</version>
@@ -135,27 +116,11 @@
             <instance>default</instance>
         </interface>
     </hal>
-    <hal format="hidl">
-       <name>vendor.google.whitechapel.audio.audioext</name>
-       <version>4.0</version>
-       <interface>
-           <name>IAudioExt</name>
-           <instance>default</instance>
-       </interface>
-    </hal>
-    <hal format="hidl" optional="true">
+    <hal format="aidl" optional="true">
         <name>vendor.google.wifi_ext</name>
-        <version>1.3</version>
+        <version>1</version>
         <interface>
             <name>IWifiExt</name>
-            <instance>default</instance>
-        </interface>
-    </hal>
-    <hal format="hidl" optional="true">
-        <name>vendor.google.wireless_charger</name>
-        <version>1.3</version>
-        <interface>
-            <name>IWirelessCharger</name>
             <instance>default</instance>
         </interface>
     </hal>
@@ -176,13 +141,5 @@
             <name>IOemSlsiRadioExternal</name>
             <instance>rilExternal</instance>
         </interface>
-    </hal>
-    <hal format="hidl">
-       <name>vendor.google.audiometricext</name>
-       <version>1.0</version>
-       <interface>
-           <name>IAudioMetricExt</name>
-           <instance>default</instance>
-       </interface>
     </hal>
 </compatibility-matrix>
