@@ -53,6 +53,7 @@ cc_binary {
         "android.frameworks.stats-V2-ndk",
         "pixelatoms-cpp",
         "libbinder_ndk",
+	"libprotobuf-cpp-lite",
     ],
     static_libs: [
         "libpixelusb-aidl",
