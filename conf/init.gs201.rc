@@ -16,6 +16,8 @@ on init
 
     # Set teo as cpu idle governor
     write /sys/devices/system/cpu/cpuidle/current_governor teo
+    # Disable util-awareness
+    write /proc/vendor_sched/teo_util_threshold "1024 1024 1024"
 
     # Boot time fs tuning
     write /sys/block/sda/queue/iostats 0
@@ -163,11 +165,11 @@ on init
     mkdir /dev/socket/pdx/system/vr/sensors 0775 system system
 
     # Boot time 183626384
-    write /proc/vendor_sched/ta_uclamp_min 1024
+    write /proc/vendor_sched/ta_uclamp_min 159
     write /proc/vendor_sched/ta_prefer_idle 1
-    write /proc/vendor_sched/fg_uclamp_min 1024
+    write /proc/vendor_sched/fg_uclamp_min 159
     write /proc/vendor_sched/fg_prefer_idle 1
-    write /proc/vendor_sched/sys_uclamp_min 1024
+    write /proc/vendor_sched/sys_uclamp_min 159
     write /proc/vendor_sched/sys_prefer_idle 1
 
     # governor setting
@@ -701,7 +703,7 @@ on property:sys.boot_completed=1
 
     # Enable ZRAM on boot_complete
     swapon_all /vendor/etc/fstab.${ro.board.platform}
-    write /proc/sys/vm/swappiness 100
+    write /proc/sys/vm/swappiness 60
 
     # Adjust watermark level
     write /proc/sys/vm/watermark_scale_factor 200
@@ -944,6 +946,7 @@ on property:vendor.brownout.mitigation.ready=1
     write /sys/devices/virtual/pmic/mitigation/triggered_lvl/soft_ocp_cpu2_lvl 12000
     write /sys/devices/virtual/pmic/mitigation/clock_div/tpu_clk_div 0x1
     write /sys/devices/virtual/pmic/mitigation/clock_div/gpu_clk_div 0x1
+    write /sys/devices/virtual/pmic/mitigation/clock_div/cpu1_clk_div 0x381
     write /sys/devices/virtual/pmic/mitigation/clock_div/cpu2_clk_div 0x1
 
 on property:vendor.thermal.link_ready=1
@@ -1020,6 +1023,29 @@ on charger
     mkdir /dev/thermal/tz-by-name 0750 system system
     mkdir /dev/thermal/cdev-by-name 0750 system system
     start vendor.thermal.symlinks
+
+    # Runtime fs tuning
+    write /sys/block/sda/queue/nr_requests 128
+    write /sys/block/sda/queue/iostats 1
+    write /sys/block/sda/queue/iosched/slice_idle 0
+    write /dev/sys/fs/by-name/userdata/data_io_flag 8
+    write /dev/sys/fs/by-name/userdata/node_io_flag 8
+
+    # Enable UFS powersaving
+    write /dev/sys/block/bootdevice/clkgate_enable 1
+
+    # Cancel boot devfreq and uclamp
+    write /sys/devices/platform/17000010.devfreq_mif/devfreq/17000010.devfreq_mif/exynos_data/cancel_boot_freq 1
+    write /sys/devices/platform/17000020.devfreq_int/devfreq/17000020.devfreq_int/exynos_data/cancel_boot_freq 1
+    write /proc/vendor_sched/ta_uclamp_min 0
+    write /proc/vendor_sched/ta_prefer_idle 0
+    write /proc/vendor_sched/fg_uclamp_min 0
+    write /proc/vendor_sched/fg_prefer_idle 0
+    write /proc/vendor_sched/sys_uclamp_min 0
+    write /proc/vendor_sched/sys_prefer_idle 0
+
+    # Enable SICD
+    write /sys/devices/system/cpu/cpupm/cpupm/sicd 1
 
 on property:vendor.disable.bcl.control=1
     write /sys/devices/virtual/pmic/mitigation/instruction/enable_mitigation 0

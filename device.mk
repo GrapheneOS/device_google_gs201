@@ -32,6 +32,9 @@ include device/google/gs-common/radio/dump.mk
 include device/google/gs-common/umfw_stat/umfw_stat.mk
 include device/google/gs-common/gear/dumpstate/aidl.mk
 include device/google/gs-common/widevine/widevine.mk
+include device/google/gs-common/sota_app/factoryota.mk
+include device/google/gs-common/misc_writer/misc_writer.mk
+include device/google/gs-common/gyotaku_app/gyotaku.mk
 
 TARGET_BOARD_PLATFORM := gs201
 
@@ -223,8 +226,6 @@ PRODUCT_SOONG_NAMESPACES += \
 
 $(call soong_config_set,pixel_mali,soc,$(TARGET_BOARD_PLATFORM))
 
-include device/google/gs101/neuralnetwork/neuralnetwork.mk
-
 PRODUCT_PACKAGES += \
 	csffw_image_prebuilt__firmware_prebuilt_todx_mali_csffw.bin \
 	libGLES_mali \
@@ -372,6 +373,7 @@ PRODUCT_COPY_FILES += \
 
 ## Enable the CHRE Daemon
 CHRE_USF_DAEMON_ENABLED := true
+CHRE_DEDICATED_TRANSPORT_CHANNEL_ENABLED := true
 PRODUCT_PACKAGES += \
 	chre \
 	preloaded_nanoapps.json
@@ -549,18 +551,10 @@ else
         LOCAL_TARGET_PRODUCT := slider
 endif
 
-$(call soong_config_set,google3a_config,soc,gs201)
-$(call soong_config_set,google3a_config,gcam_awb,true)
-$(call soong_config_set,google3a_config,ghawb_truetone,true)
-
-ifneq ($(wildcard vendor/google/services/LyricCameraHAL/src),)
+# Lyric Camera HAL settings
+include device/google/gs-common/camera/lyric.mk
 $(call soong_config_set,lyric,soc,gs201)
-$(call soong_config_set,lyric,use_lyric_camera_hal,true)
-# lyric::tuning_product is set in device-specific makefiles,
-# such as device/google/${DEVICE}/device-${DEVICE}.mk
-
-$(call soong_config_set,gch,hwl_library,lyric)
-endif
+$(call soong_config_set,google3a_config,soc,gs201)
 
 # WiFi
 PRODUCT_PACKAGES += \
@@ -640,7 +634,6 @@ PRODUCT_COPY_FILES += \
 	frameworks/native/data/etc/android.hardware.camera.concurrent.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.camera.concurrent.xml \
 	frameworks/native/data/etc/android.hardware.camera.full.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.camera.full.xml\
 	frameworks/native/data/etc/android.hardware.camera.raw.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.camera.raw.xml\
-	vendor/google/services/LyricCameraHAL/src/vendor.android.hardware.camera.preview-dis.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/vendor.android.hardware.camera.preview-dis.xml\
 
 #PRODUCT_COPY_FILES += \
 	frameworks/native/data/etc/handheld_core_hardware.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/handheld_core_hardware.xml \
@@ -666,7 +659,8 @@ endif
 PRODUCT_PROPERTY_OVERRIDES += \
 	debug.sf.disable_backpressure=0 \
 	debug.sf.enable_gl_backpressure=1 \
-	debug.sf.enable_sdr_dimming=1
+	debug.sf.enable_sdr_dimming=1 \
+	debug.sf.dim_in_gamma_in_enhanced_screenshots=1
 
 PRODUCT_DEFAULT_PROPERTY_OVERRIDES += debug.sf.use_phase_offsets_as_durations=1
 PRODUCT_DEFAULT_PROPERTY_OVERRIDES += debug.sf.late.sf.duration=10500000
@@ -990,8 +984,7 @@ $(call inherit-product, $(SRC_TARGET_DIR)/product/core_64_bit_only.mk)
 #$(call inherit-product-if-exists, vendor/google_devices/common/exynos-vendor.mk)
 #$(call inherit-product-if-exists, hardware/broadcom/wlan/bcmdhd/firmware/bcm4375/device-bcm.mk)
 include device/google/gs-common/sensors/sensors.mk
-$(call inherit-product-if-exists, vendor/google/services/LyricCameraHAL/src/build/device-vendor.mk)
-$(call inherit-product-if-exists, vendor/google/camera/devices/whi/device-vendor.mk)
+$(call soong_config_set,usf,target_soc,gs201)
 
 PRODUCT_COPY_FILES += \
 	device/google/gs201/default-permissions.xml:$(TARGET_COPY_OUT_PRODUCT)/etc/default-permissions/default-permissions.xml \
@@ -1122,7 +1115,9 @@ PRODUCT_PROPERTY_OVERRIDES += \
 
 # Suspend properties
 PRODUCT_PROPERTY_OVERRIDES += \
-    suspend.short_suspend_threshold_millis=2000
+    suspend.short_suspend_threshold_millis=2000 \
+    suspend.max_sleep_time_millis=40000 \
+    suspend.short_suspend_backoff_enabled=true
 
 # Enable Incremental on the device
 PRODUCT_PROPERTY_OVERRIDES += \
@@ -1167,6 +1162,10 @@ PRODUCT_COPY_FILES += \
 
 # Call deleteAllKeys if vold detects a factory reset
 PRODUCT_VENDOR_PROPERTIES += ro.crypto.metadata_init_delete_all_keys.enabled?=true
+
+# Increase lmkd aggressiveness
+PRODUCT_PROPERTY_OVERRIDES += \
+    ro.lmk.swap_free_low_percentage=100
 
 # Hardware Info
 include hardware/google/pixel/HardwareInfo/HardwareInfo.mk

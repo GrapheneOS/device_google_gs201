@@ -1,6 +1,3 @@
-on early-init
-    mount debugfs /sys/kernel/debug /sys/kernel/debug
-
 # SJTAG
 on init
     chown system system /sys/devices/platform/sjtag_ap/interface/access_lvl

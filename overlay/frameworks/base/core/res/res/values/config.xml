@@ -289,4 +289,7 @@
         <item>"com.shannon.imsservice"</item>
         <item>"com.android.phone"</item>
     </string-array>
+
+    <!-- Enable variable refresh rate when typing. -->
+    <bool name="config_variableRefreshRateTypingSupported">false</bool>
 </resources>
