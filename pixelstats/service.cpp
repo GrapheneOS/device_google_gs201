@@ -83,7 +83,8 @@ const struct SysfsCollector::SysfsPaths sysfs_paths = {
     .StormIRQMetricsPath = "/sys/kernel/metrics/irq/storm_irq_metrics",
     .IRQStatsResetPath = "/sys/kernel/metrics/irq/stats_reset",
     .ModemPcieLinkStatsPath = "/sys/devices/platform/11920000.pcie/link_stats",
-    .WifiPcieLinkStatsPath = "/sys/devices/platform/14520000.pcie/link_stats"
+    .WifiPcieLinkStatsPath = "/sys/devices/platform/14520000.pcie/link_stats",
+    .GMSRPath = "/sys/class/power_supply/maxfg/gmsr"
 };
 
 const struct UeventListener::UeventPaths ueventPaths = {
