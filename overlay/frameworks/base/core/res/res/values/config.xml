@@ -298,7 +298,9 @@
          be between 0 to 1-->
     <string-array name="config_smallAreaDetectionAllowlist" translatable="false">
         <!-- Add packages:threshold here -->
-        <item>com.google.android.youtube:0.07</item>
+        <item>com.tencent.mm:0.07</item>
+        <item>com.facebook.katana:0.07</item>
+        <item>com.instagram.android:0.07</item>
         <item>com.spotify.music:0.05</item>
         <item>com.reddit.frontpage:0.07</item>
         <item>com.zhiliaoapp.musically:0.07</item>
