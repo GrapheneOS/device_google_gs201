@@ -19,9 +19,9 @@
 #include <android-base/file.h>
 #include <aidl/android/hardware/usb/BnUsb.h>
 #include <aidl/android/hardware/usb/BnUsbCallback.h>
-#include <chrono>
 #include <pixelusb/UsbOverheatEvent.h>
 #include <utils/Log.h>
+#include <UsbDataSessionMonitor.h>
 
 #define UEVENT_MSG_LEN 2048
 // The type-c stack waits for 4.5 - 5.5 secs before declaring a port non-pd.
@@ -88,6 +88,8 @@ struct Usb : public BnUsb {
     // Variable to signal partner coming back online after type switch
     bool mPartnerUp;
 
+    // Report usb data session event and data incompliance warnings
+    UsbDataSessionMonitor mUsbDataSessionMonitor;
     // Usb Overheat object for push suez event
     UsbOverheatEvent mOverheat;
     // Temperature when connected
@@ -97,36 +99,6 @@ struct Usb : public BnUsb {
     // Usb hub vendor command settings for JK level tuning
     int mUsbHubVendorCmdValue;
     int mUsbHubVendorCmdIndex;
-
-    // USB device state monitoring
-    struct usbDeviceState {
-        // Usb device state raw strings read from sysfs
-        std::vector<std::string> states;
-        // Timestamps of when the usb device states were captured
-        std::vector<std::chrono::steady_clock::time_point> timestamps;
-        int portResetCount;
-    };
-    struct usbDeviceState mDeviceState;
-    // Map host device path name to usbDeviceState
-    std::map<std::string, struct usbDeviceState> mHostStateMap;
-    // Cache relevant info for USB data session metrics collection when a session starts, including
-    // the data role, power brick status and the time when the session starts.
-    PortDataRole mDataRole;
-    bool mIsPowerBrickConnected;
-    std::chrono::steady_clock::time_point mDataSessionStart;
-
-    // File monitoring through epoll
-    int mEpollFd;
-    struct payload {
-        int fd;
-        std::string name;
-        Usb *usb;
-     };
-    struct epollEntry {
-         struct payload payload;
-         std::function<void(uint32_t)> cb;
-    };
-    std::map<std::string, struct epollEntry> mEpollEntries;
 
   private:
     pthread_t mPoll;
