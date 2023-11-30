@@ -215,7 +215,7 @@
 
     <!-- Default color temperature, in Kelvin, to tint the screen when night display is
          activated. -->
-    <integer name="config_nightDisplayColorTemperatureDefault">3339</integer>
+    <integer name="config_nightDisplayColorTemperatureDefault">4000</integer>
 
     <!-- Whether the device enable the standalone (SA) mode of 5G NR.-->
     <bool name="config_telephony5gStandalone">true</bool>
