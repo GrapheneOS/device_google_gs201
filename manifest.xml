@@ -8,10 +8,9 @@
             <instance>default</instance>
         </interface>
     </hal>
-    <hal format="hidl">
+    <hal format="aidl">
         <name>android.hardware.boot</name>
-        <transport>hwbinder</transport>
-        <fqname>@1.2::IBootControl/default</fqname>
+        <fqname>IBootControl/default</fqname>
     </hal>
     <hal format="aidl">
         <name>com.google.input</name>
