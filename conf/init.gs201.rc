@@ -934,13 +934,13 @@ on post-fs-data
 
 on property:vendor.brownout.mitigation.ready=1
     # BCL
-    write /sys/devices/virtual/pmic/mitigation/clock_ratio/tpu_light_clk_ratio 0xfff041c1 #DFS
-    write /sys/devices/virtual/pmic/mitigation/clock_ratio/cpu1_heavy_clk_ratio 0xfff041c1 #DFS
-    write /sys/devices/virtual/pmic/mitigation/clock_ratio/cpu2_heavy_clk_ratio 0xfff041c1 #DFS
-    write /sys/devices/virtual/pmic/mitigation/clock_ratio/gpu_light_clk_ratio 0xfff041c1 #DFS
+    write /sys/devices/virtual/pmic/mitigation/clock_ratio/tpu_light_clk_ratio 0x80041c3 #DFS
+    write /sys/devices/virtual/pmic/mitigation/clock_ratio/cpu1_heavy_clk_ratio 0xfff041c0 #DFS
+    write /sys/devices/virtual/pmic/mitigation/clock_ratio/cpu2_heavy_clk_ratio 0xfff041c0 #DFS
+    write /sys/devices/virtual/pmic/mitigation/clock_ratio/gpu_light_clk_ratio 0x80041c3 #DFS
     write /sys/devices/virtual/pmic/mitigation/clock_ratio/cpu2_light_clk_ratio 0xfff041c3 #OCP
-    write /sys/devices/virtual/pmic/mitigation/clock_ratio/gpu_heavy_clk_ratio 0xfff04385 #OCP
-    write /sys/devices/virtual/pmic/mitigation/clock_ratio/tpu_heavy_clk_ratio 0xfff041c3 #OCP
+    write /sys/devices/virtual/pmic/mitigation/clock_ratio/gpu_heavy_clk_ratio 0xfff04381 #OCP
+    write /sys/devices/virtual/pmic/mitigation/clock_ratio/tpu_heavy_clk_ratio 0xfff041c1 #OCP
     write /sys/devices/virtual/pmic/mitigation/triggered_lvl/uvlo1_lvl 3200
     write /sys/devices/virtual/pmic/mitigation/triggered_lvl/smpl_lvl 3100
     write /sys/devices/virtual/pmic/mitigation/triggered_lvl/uvlo2_lvl 3000

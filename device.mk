@@ -36,6 +36,7 @@ include device/google/gs-common/widevine/widevine.mk
 include device/google/gs-common/sota_app/factoryota.mk
 include device/google/gs-common/misc_writer/misc_writer.mk
 include device/google/gs-common/gyotaku_app/gyotaku.mk
+include device/google/gs-common/bootctrl/bootctrl_hidl_1.2.mk
 
 TARGET_BOARD_PLATFORM := gs201
 
@@ -921,11 +922,6 @@ PRODUCT_PACKAGES_DEBUG += \
 
 PRODUCT_PACKAGES += ShannonRcs
 endif
-
-# Boot Control HAL
-PRODUCT_PACKAGES += \
-	android.hardware.boot@1.2-impl-gs201 \
-	android.hardware.boot@1.2-service-gs201
 
 # Exynos RIL and telephony
 # Multi SIM(DSDS)
