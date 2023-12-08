@@ -352,16 +352,6 @@ BOARD_VNDK_VERSION := current
 # H/W align restriction of MM IPs
 BOARD_EXYNOS_S10B_FORMAT_ALIGN := 64
 
-# NeuralNetworks
-GPU_SOURCE_PRESENT := $(wildcard vendor/arm/mali/valhall)
-GPU_PREBUILD_PRESENT := $(wildcard vendor/google_devices/zebu/prebuilts/libs)
-ifneq (,$(strip $(GPU_SOURCE_PRESENT) $(GPU_PREBUILD_PRESENT)))
-ARMNN_COMPUTE_CL_ENABLE := 1
-else
-ARMNN_COMPUTE_CL_ENABLE := 0
-endif
-ARMNN_COMPUTE_NEON_ENABLE := 1
-
 # Boot.img
 BOARD_RAMDISK_USE_LZ4     := true
 #BOARD_KERNEL_BASE        := 0x80000000
@@ -411,7 +401,15 @@ BOARD_VENDOR_KERNEL_MODULES_LOAD := $(strip $(shell cat $(KERNEL_MODULE_DIR)/ven
 ifndef BOARD_VENDOR_KERNEL_MODULES_LOAD
 $(error vendor_dlkm.modules.load not found or empty)
 endif
+
+# staging kernels might have modules split between system/vendor_dlkm. If
+# the target defined modules on the system_dlkm image, honor the split.
+# Otherwise, assume all modules are stored on the vendor_dlkm image.
+ifneq ($(BOARD_SYSTEM_KERNEL_MODULES),)
+BOARD_VENDOR_KERNEL_MODULES := $(addprefix $(KERNEL_MODULE_DIR)/, $(notdir $(BOARD_VENDOR_KERNEL_MODULES_LOAD)))
+else
 BOARD_VENDOR_KERNEL_MODULES := $(KERNEL_MODULES)
+endif
 
 # Using BUILD_COPY_HEADERS
 BUILD_BROKEN_USES_BUILD_COPY_HEADERS := true

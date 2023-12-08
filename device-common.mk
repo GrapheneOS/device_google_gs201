@@ -30,9 +30,6 @@ endif
 PRODUCT_COPY_FILES += \
     frameworks/native/data/etc/android.software.verified_boot.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.software.verified_boot.xml
 
-# Factory OTA
--include vendor/unbundled_google/packages/FactoryOtaPrebuilt/factoryota.mk
-
 # Set system properties identifying the chipset
 PRODUCT_VENDOR_PROPERTIES += ro.soc.manufacturer=Google
 PRODUCT_VENDOR_PROPERTIES += ro.soc.model=GS201
@@ -51,3 +48,7 @@ PRODUCT_PRODUCT_PROPERTIES += \
 # Set thermal warm reset
 PRODUCT_PRODUCT_PROPERTIES += \
     ro.thermal_warmreset = true
+
+# Trigger fsck on upgrade (305658663)
+PRODUCT_PRODUCT_PROPERTIES += \
+    ro.preventative_fsck = 1
