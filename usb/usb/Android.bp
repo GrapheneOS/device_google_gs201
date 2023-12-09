@@ -34,6 +34,7 @@ cc_binary {
     srcs: [
         "service.cpp",
         "Usb.cpp",
+        "UsbDataSessionMonitor.cpp",
     ],
     shared_libs: [
         "libbase",
