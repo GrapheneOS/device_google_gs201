@@ -517,7 +517,7 @@ PRODUCT_PACKAGES += \
 
 PRODUCT_PACKAGES += \
 	android.hardware.graphics.mapper@4.0-impl \
-	android.hardware.graphics.allocator-V2-service
+	android.hardware.graphics.allocator-V1-service
 
 PRODUCT_PACKAGES += \
 	android.hardware.memtrack-service.pixel \
