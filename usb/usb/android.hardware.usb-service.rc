@@ -15,6 +15,8 @@ on post-fs
     chown root system /sys/devices/platform/10d60000.hsi2c/i2c-13/13-0025/usb_limit_sink_enable
     chown root system /sys/devices/platform/10d60000.hsi2c/i2c-13/13-0025/usb_limit_source_enable
     chown root system /sys/devices/platform/10d60000.hsi2c/i2c-13/13-0025/update_sdp_enum_timeout
+    chown root system /sys/devices/platform/10d60000.hsi2c/i2c-13/13-0025/cc_toggle_enable
+    chown root system /sys/devices/platform/10d60000.hsi2c/i2c-13/13-0025/data_path_enable
     chmod 664 /sys/class/typec/port0/power_role
     chmod 664 /sys/class/typec/port0/data_role
     chmod 664 /sys/class/typec/port0/port_type
@@ -25,3 +27,5 @@ on post-fs
     chmod 664 /sys/devices/platform/10d60000.hsi2c/i2c-13/13-0025/usb_limit_sink_enable
     chmod 664 /sys/devices/platform/10d60000.hsi2c/i2c-13/13-0025/usb_limit_source_enable
     chmod 664 /sys/devices/platform/10d60000.hsi2c/i2c-13/13-0025/update_sdp_enum_timeout
+    chmod 664 /sys/devices/platform/10d60000.hsi2c/i2c-13/13-0025/cc_toggle_enable
+    chmod 664 /sys/devices/platform/10d60000.hsi2c/i2c-13/13-0025/data_path_enable
