@@ -22,13 +22,20 @@
 #include "Usb.h"
 
 using ::aidl::android::hardware::usb::Usb;
+using ::aidl::android::hardware::usb::UsbExt;
 
 int main() {
     ABinderProcess_setThreadPoolMaxThreadCount(0);
     std::shared_ptr<Usb> usb = ndk::SharedRefBase::make<Usb>();
+    std::shared_ptr<UsbExt> usbExt = ndk::SharedRefBase::make<UsbExt>(usb);
+
+    auto usbBinder = usb->asBinder();
+    auto usbExtBinder = usbExt->asBinder();
+
+    CHECK(STATUS_OK == AIBinder_setExtension(usbBinder.get(), usbExtBinder.get()));
 
     const std::string instance = std::string() + Usb::descriptor + "/default";
-    binder_status_t status = AServiceManager_addService(usb->asBinder().get(), instance.c_str());
+    binder_status_t status = AServiceManager_addService(usbBinder.get(), instance.c_str());
     CHECK(status == STATUS_OK);
 
     ALOGV("AIDL USB HAL about to start");
