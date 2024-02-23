@@ -328,4 +328,6 @@
     <bool name="config_GoogleCamera_needs_seinfo_for_access_to_accelerators">true</bool>
 
     <string name="config_gnssPsdsType">broadcom</string>
+
+    <bool name="config_usbPortSecuritySupported">true</bool>
 </resources>
