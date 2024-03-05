@@ -252,9 +252,6 @@
     <!-- Should the pinner service pin the Home application? -->
     <bool name="config_pinnerHomeApp">true</bool>
 
-    <!-- Bytes that the PinnerService will pin for WebView -->
-    <integer name="config_pinnerWebviewPinBytes">20971520</integer>
-
     <!-- The default intensity level for alarm vibrations. See
          Settings.System.ALARM_VIBRATION_INTENSITY more details on the constant values and
          meanings. -->
