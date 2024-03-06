@@ -1,4 +1,5 @@
 <manifest version="1.0" type="device">
+    <!-- HIDL fragment -->
     <hal format="hidl">
         <name>android.hardware.media.c2</name>
         <transport>hwbinder</transport>
@@ -7,5 +8,11 @@
             <name>IComponentStore</name>
             <instance>default</instance>
         </interface>
+    </hal>
+    <!-- AIDL fragment -->
+    <hal format="aidl">
+      <name>android.hardware.media.c2</name>
+      <version>1</version>
+      <fqname>IComponentStore/default</fqname>
     </hal>
 </manifest>

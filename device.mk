@@ -37,7 +37,6 @@ include device/google/gs-common/sota_app/factoryota.mk
 include device/google/gs-common/misc_writer/misc_writer.mk
 include device/google/gs-common/gyotaku_app/gyotaku.mk
 include device/google/gs-common/bootctrl/bootctrl_aidl.mk
-include device/google/gs-common/betterbug/betterbug.mk
 ifneq ($(filter cheetah felix panther, $(TARGET_PRODUCT)),)
   include device/google/gs-common/bcmbt/dump/dumplog.mk
 endif
@@ -513,10 +512,6 @@ PRODUCT_PROPERTY_OVERRIDES += aaudio.hw_burst_min_usec=2000
 # Libs
 PRODUCT_PACKAGES += \
 	com.android.future.usb.accessory
-
-PRODUCT_PACKAGES += \
-	android.hardware.graphics.mapper@4.0-impl \
-	android.hardware.graphics.allocator-V1-service
 
 PRODUCT_PACKAGES += \
 	android.hardware.memtrack-service.pixel \
@@ -1159,3 +1154,4 @@ PRODUCT_PACKAGES += ufs_firmware_update.sh
 
 # Touch service
 include device/google/gs-common/touch/twoshay/aidl_gs101.mk
+include device/google/gs-common/touch/twoshay/twoshay.mk
