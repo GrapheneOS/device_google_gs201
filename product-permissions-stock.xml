@@ -2,6 +2,7 @@
 <permissions>
     <privapp-permissions package="com.google.android.euicc">
         <permission name="android.permission.CHANGE_COMPONENT_ENABLED_STATE"/>
+        <permission name="android.permission.CONNECTIVITY_USE_RESTRICTED_NETWORKS"/>
         <permission name="android.permission.MODIFY_PHONE_STATE"/>
         <permission name="android.permission.READ_PRIVILEGED_PHONE_STATE"/>
         <permission name="android.permission.REBOOT"/>
