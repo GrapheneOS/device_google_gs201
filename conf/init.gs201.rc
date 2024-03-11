@@ -876,10 +876,12 @@ on property:ro.build.fingerprint=*
     write /sys/module/debug_kinfo/parameters/build_info ${ro.build.fingerprint}
 
 # Bluetooth
-on post-fs-data
+on early-boot
     chown bluetooth system /sys/devices/platform/175b0000.serial/serial0/serial0-0/bluetooth/hci0/rfkill0/state
     chown bluetooth system /sys/devices/platform/odm/odm:btbcm/rfkill/rfkill0/state
     chown bluetooth system /sys/devices/platform/odm/odm:btbcm/rfkill/rfkill2/state
+
+on post-fs-data
     chown bluetooth system /proc/bluetooth/sleep/btwake
     chown bluetooth system /proc/bluetooth/sleep/lpm
     chown bluetooth system /proc/bluetooth/sleep/btwrite
