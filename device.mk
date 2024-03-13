@@ -37,6 +37,7 @@ include device/google/gs-common/sota_app/factoryota.mk
 include device/google/gs-common/misc_writer/misc_writer.mk
 include device/google/gs-common/gyotaku_app/gyotaku.mk
 include device/google/gs-common/bootctrl/bootctrl_aidl.mk
+include device/google/gs-common/betterbug/betterbug.mk
 ifneq ($(filter cheetah felix panther, $(TARGET_PRODUCT)),)
   include device/google/gs-common/bcmbt/dump/dumplog.mk
 endif
