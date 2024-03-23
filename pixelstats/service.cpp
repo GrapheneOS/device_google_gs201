@@ -100,7 +100,8 @@ const struct SysfsCollector::SysfsPaths sysfs_paths = {
         "/sys/class/power_supply/maxfg/m5_model_state",
         "/sys/class/power_supply/maxfg_base/m5_model_state"
     },
-    .TotalCallCountPath = "/sys/devices/platform/audiometrics/call_count"
+    .TotalCallCountPath = "/sys/devices/platform/audiometrics/call_count",
+    .FGLogBufferPath = "/dev/logbuffer_maxfg_monitor"
 };
 
 const struct UeventListener::UeventPaths ueventPaths = {
