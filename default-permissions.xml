@@ -41,6 +41,10 @@
     </exception>
     -->
 
+    <exception package="com.google.android.GoogleCamera">
+        <permission name="android.permission.POST_NOTIFICATIONS" fixed="false"/>
+    </exception>
+
     <exception
             package="com.google.android.apps.camera.services">
         <!-- Camera -->
