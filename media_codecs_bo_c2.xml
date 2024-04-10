@@ -19,7 +19,7 @@
     <Decoders>
         <MediaCodec name="c2.google.av1.decoder" type="video/av01">
           <Limit name="size" min="96x96" max="3840x2160" />
-          <Limit name="alignment" value="2x2" />
+          <Limit name="alignment" value="1x1" />
           <Limit name="block-size" value="16x16" />
           <Limit name="block-count" range="36-32400" />
           <Limit name="blocks-per-second" min="24" max="1944000" />
@@ -34,7 +34,7 @@
         </MediaCodec>
         <MediaCodec name="c2.google.av1.decoder.secure" type="video/av01">
           <Limit name="size" min="96x96" max="3840x2160" />
-          <Limit name="alignment" value="2x2" />
+          <Limit name="alignment" value="1x1" />
           <Limit name="block-size" value="16x16" />
           <Limit name="block-count" range="36-32400" />
           <Limit name="blocks-per-second" min="24" max="1944000" />
