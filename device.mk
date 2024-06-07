@@ -911,6 +911,7 @@ endif
 # Exynos RIL and telephony
 # Multi SIM(DSDS)
 SIM_COUNT := 2
+$(call soong_config_set,sim,sim_count,$(SIM_COUNT))
 SUPPORT_MULTI_SIM := true
 # Support NR
 SUPPORT_NR := true

@@ -848,6 +848,7 @@ service init_display /vendor/bin/init.display.sh
 # bugreport is triggered by holding down volume down, volume up and power
 service bugreport /system/bin/dumpstate -d -p -z
     class main
+    user root
     disabled
     oneshot
     keycodes 114 115 116
