@@ -56,6 +56,7 @@ cc_binary {
         "libbinder_ndk",
         "libprotobuf-cpp-lite",
         "server_configurable_flags",
+        "libaconfig_storage_read_api_cc",
     ],
     static_libs: [
         "libpixelusb-aidl",
