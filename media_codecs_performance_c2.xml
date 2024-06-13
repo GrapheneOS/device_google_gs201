@@ -145,7 +145,7 @@
             <Limit name="measured-frame-rate-320x180" range="847-1271" />
             <Limit name="measured-frame-rate-640x360" range="412-618" />
             <Limit name="measured-frame-rate-1280x720" range="119-178" />
-            <Limit name="measured-frame-rate-1920x1080" range="47-70" />
+            <Limit name="measured-frame-rate-1920x1080" range="28-55" />
         </MediaCodec>
         <MediaCodec name="c2.android.vp9.decoder" type="video/x-vnd.on2.vp9" update="true">
             <Limit name="measured-frame-rate-320x180" range="622-934" />

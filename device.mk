@@ -41,6 +41,7 @@ include device/google/gs-common/betterbug/betterbug.mk
 ifneq ($(filter cheetah felix panther, $(TARGET_PRODUCT)),)
   include device/google/gs-common/bcmbt/dump/dumplog.mk
 endif
+include device/google/gs-common/fingerprint/fingerprint.mk
 
 TARGET_BOARD_PLATFORM := gs201
 
@@ -81,6 +82,11 @@ PRODUCT_SOONG_NAMESPACES += \
 	vendor/google/camera
 
 LOCAL_KERNEL := $(TARGET_KERNEL_DIR)/Image.lz4
+
+ifeq ($(RELEASE_AVF_ENABLE_LLPVM_CHANGES),true)
+	# Set the environment variable to enable the Secretkeeper HAL service.
+	SECRETKEEPER_ENABLED := true
+endif
 
 # OEM Unlock reporting
 PRODUCT_DEFAULT_PROPERTY_OVERRIDES += \
@@ -255,7 +261,7 @@ PRODUCT_PACKAGES += \
 PRODUCT_VENDOR_PROPERTIES += \
 	vendor.mali.platform.config=/vendor/etc/mali/platform.config \
 	vendor.mali.debug.config=/vendor/etc/mali/debug.config \
-      	vendor.mali.base_protected_max_core_count=1 \
+	vendor.mali.base_protected_max_core_count=1 \
 	vendor.mali.base_protected_tls_max=67108864 \
 	vendor.mali.platform_agt_frequency_khz=24576
 
