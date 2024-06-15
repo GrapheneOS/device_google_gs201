@@ -602,6 +602,11 @@ ScopedAStatus Usb::switchRole(const string& in_portName, const PortRole& in_role
         fp = fopen(filename.c_str(), "w");
         if (fp != NULL) {
             int ret = fputs(convertRoletoString(in_role).c_str(), fp);
+            if (ret == EAGAIN) {
+                ALOGI("role switch busy, retry in %d ms", ROLE_SWAP_RETRY_MS);
+                std::this_thread::sleep_for(std::chrono::milliseconds(ROLE_SWAP_RETRY_MS));
+                ret = fputs(convertRoletoString(in_role).c_str(), fp);
+            }
             fclose(fp);
             if ((ret != EOF) && ReadFileToString(filename, &written)) {
                 written = Trim(written);

@@ -56,6 +56,8 @@ constexpr char kGadgetName[] = "11210000.dwc3";
 #define VBUS_PATH NEW_UDC_PATH "dwc3_exynos_otg_b_sess"
 #define USB_DATA_PATH NEW_UDC_PATH "usb_data_enabled"
 
+#define ROLE_SWAP_RETRY_MS 700
+
 struct Usb : public BnUsb {
     Usb();
 
