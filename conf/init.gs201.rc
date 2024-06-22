@@ -261,6 +261,7 @@ on init
     chown system system /sys/class/power_supply/wireless/device/version
     chown system system /sys/class/power_supply/wireless/device/features
     chown system system /sys/class/power_supply/wireless/device/authtype
+    chown system system /sys/class/power_supply/wireless/device/authstart
 
     # Adaptive charge
     chown system system /sys/class/power_supply/battery/charge_deadline
