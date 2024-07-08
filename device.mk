@@ -76,7 +76,6 @@ PRODUCT_SOONG_NAMESPACES += \
 	vendor/google_devices/common/chre/host/hal \
 	vendor/google/whitechapel/tools \
 	vendor/google/interfaces \
-	vendor/google_devices/common/proprietary/confirmatioui_hal \
 	vendor/google_nos/host/android \
 	vendor/google_nos/test/system-test-harness \
 	vendor/google/camera
@@ -816,8 +815,6 @@ PRODUCT_PACKAGES_DEBUG += \
    tipc-test \
    trusty_stats_test \
    trusty-coverage-controller \
-
-include device/google/gs101/confirmationui/confirmationui.mk
 
 # Trusty Secure DPU Daemon
 PRODUCT_PACKAGES += \
