@@ -252,8 +252,17 @@ PRODUCT_PACKAGES += \
 	csffw_image_prebuilt__firmware_prebuilt_todx_mali_csffw.bin \
 	libGLES_mali \
 	vulkan.mali \
-	libOpenCL \
 	libgpudataproducer \
+
+# Install the OpenCL ICD Loader
+PRODUCT_SOONG_NAMESPACES += external/OpenCL-ICD-Loader
+PRODUCT_PACKAGES += \
+       libOpenCL \
+       mali_icd__customer_pixel_opencl-icd_ARM.icd
+ifeq ($(DEVICE_IS_64BIT_ONLY),false)
+PRODUCT_PACKAGES += \
+	mali_icd__customer_pixel_opencl-icd_ARM32.icd
+endif
 
 # Mali Configuration Properties
 # b/221255664 prevents setting PROTECTED_MAX_CORE_COUNT=2

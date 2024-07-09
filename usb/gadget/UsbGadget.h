@@ -74,7 +74,7 @@ constexpr char kProcInterruptsPath[] = "/proc/interrupts";
 constexpr char kProcIrqPath[] = "/proc/irq/";
 constexpr char kSmpAffinityList[] = "/smp_affinity_list";
 #ifndef UDC_PATH
-#define UDC_PATH "/sys/class/udc/11210000.dwc3/"
+#define UDC_PATH "/sys/devices/platform/11210000.usb/11210000.dwc3/udc/11210000.dwc3/"
 #endif
 static MonitorFfs monitorFfs(kGadgetName);
 
