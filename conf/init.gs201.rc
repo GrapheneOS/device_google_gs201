@@ -689,6 +689,12 @@ on property:sys.boot_completed=1
     write /dev/cpuset/camera-daemon/cpus ${persist.device_config.vendor_system_native.camera-daemon_cpuset:-0-7}
     setprop vendor.powerhal.init 1
 
+    # Setup scheduler parameters
+    write /proc/vendor_sched/min_granularity_ns 1000000
+    write /proc/vendor_sched/latency_ns 8000000
+    write /proc/vendor_sched/max_load_balance_interval 1
+    write /proc/vendor_sched/enable_hrtick 1
+
     # Setup final cpu.uclamp
     write /proc/vendor_sched/groups/ta/uclamp_min 1
     write /proc/vendor_sched/groups/fg/uclamp_min 0
