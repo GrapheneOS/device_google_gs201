@@ -2,9 +2,19 @@ package {
     default_applicable_licenses: ["Android-Apache-2.0"],
 }
 
-sh_binary {
-    name: "dump_power_gs201.sh",
-    src: "dump_power_gs201.sh",
+cc_binary {
+    name: "dump_power",
+    srcs: ["dump_power.cpp"],
+    cflags: [
+        "-Wall",
+	"-Wextra",
+	"-Werror",
+    ],
+    shared_libs: [
+        "libbase",
+        "libdump",
+        "libdumpstateutil",
+    ],
     vendor: true,
-    sub_dir: "dump",
+    relative_install_path: "dump",
 }
