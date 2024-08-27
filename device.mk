@@ -387,9 +387,6 @@ include device/google/gs-common/insmod/insmod.mk
 PRODUCT_HOST_PACKAGES += \
 	mkdtimg
 
-PRODUCT_PACKAGES += \
-	messaging
-
 # CHRE
 ## tools
 ifneq (,$(filter userdebug eng, $(TARGET_BUILD_VARIANT)))
