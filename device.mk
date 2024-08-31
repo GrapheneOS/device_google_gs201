@@ -212,6 +212,7 @@ USE_LASSEN_OEMHOOK := true
 ifneq ($(BOARD_WITHOUT_RADIO),true)
     PRODUCT_SOONG_NAMESPACES += vendor/google/tools/power-anomaly-sitril
     $(call soong_config_set,sitril,use_lassen_oemhook_with_radio,true)
+    $(call soong_config_set,grilservice,use_google_qns,true)
 endif
 
 # Use for GRIL
