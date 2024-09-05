@@ -117,7 +117,6 @@ void dumpAcpmStats() {
 void dumpPowerSupplyStats() {
     const char* dumpList[][2] = {
             {"CPU PM stats", "/sys/devices/system/cpu/cpupm/cpupm/time_in_state"},
-            {"GENPD summary", "/d/pm_genpd/pm_genpd_summary"},
             {"Power supply property battery", "/sys/class/power_supply/battery/uevent"},
             {"Power supply property dc", "/sys/class/power_supply/dc/uevent"},
             {"Power supply property gcpm", "/sys/class/power_supply/gcpm/uevent"},
@@ -286,53 +285,6 @@ void dumpBatteryDefend() {
                 content = "\n";
             }
             printf("%s: %s", file.c_str(), content.c_str());
-            if (content.back() != '\n')
-                printf("\n");
-        }
-        files.clear();
-    }
-}
-void dumpChgUserDebug() {
-    std::vector<std::string> files;
-    struct dirent *entry;
-    std::string content;
-    const char *chgUserDebug [][2] {
-            {"DC_registers dump", "/sys/class/power_supply/dc-mains/device/registers_dump"},
-            {"max77759_chg registers dump", "/d/max77759_chg/registers"},
-            {"max77729_pmic registers dump", "/d/max77729_pmic/registers"},
-            {"Charging table dump", "/d/google_battery/chg_raw_profile"},
-    };
-    const std::string debugfs = "/d/";
-    const char *maxFgStrMatch = "maxfg";
-    const char *fgInfo [][2] {
-            {"fg_model", "fg_model"},
-            {"fg_alo_ver", "algo_ver"},
-            {"fg_model_ok", "model_ok"},
-            {"fg registers", "registers"},
-            {"Maxim FG NV RAM", "nv_registers"},
-    };
-    if (!isUserBuild())
-        return;
-    for (auto &row : chgUserDebug) {
-        dumpFileContent(row[0], row[1]);
-    }
-    for (auto &info : fgInfo) {
-        DIR *dir = opendir(debugfs.c_str());
-        if (dir == NULL)
-            return;
-        printTitle(info[0]);
-        while ((entry = readdir(dir)) != NULL)
-            if (std::string(entry->d_name).find(maxFgStrMatch) != std::string::npos)
-                files.push_back(entry->d_name);
-        closedir(dir);
-        sort(files.begin(), files.end());
-        for (auto &file : files) {
-            std::string fileDirectory = debugfs + file;
-            std::string fileLocation = fileDirectory + "/" + std::string(info[1]);
-            if (!android::base::ReadFileToString(fileLocation, &content)) {
-                content = "\n";
-            }
-            printf("%s:\n%s", fileDirectory.c_str(), content.c_str());
             if (content.back() != '\n')
                 printf("\n");
         }
@@ -710,7 +662,6 @@ int main() {
     dumpLn8411();
     dumpBatteryHealth();
     dumpBatteryDefend();
-    dumpChgUserDebug();
     dumpBatteryEeprom();
     dumpChargerStats();
     dumpWlcLogs();

@@ -356,6 +356,14 @@ PRODUCT_COPY_FILES += \
 PRODUCT_COPY_FILES += \
 	device/google/gs201/conf/init.gs201.rc:$(TARGET_COPY_OUT_VENDOR)/etc/init/hw/init.gs201.rc
 
+ifneq (,$(filter 5.%, $(TARGET_LINUX_KERNEL_VERSION)))
+PRODUCT_COPY_FILES += \
+	device/google/gs201/storage/5.10/init.gs201.storage.rc:$(TARGET_COPY_OUT_VENDOR)/etc/init/hw/init.gs201.storage.rc
+else
+PRODUCT_COPY_FILES += \
+	device/google/gs201/storage/6.1/init.gs201.storage.rc:$(TARGET_COPY_OUT_VENDOR)/etc/init/hw/init.gs201.storage.rc
+endif
+
 ifneq (,$(filter userdebug eng, $(TARGET_BUILD_VARIANT)))
 PRODUCT_COPY_FILES += \
 	device/google/gs201/conf/init.debug.rc:$(TARGET_COPY_OUT_VENDOR)/etc/init/init.debug.rc \
