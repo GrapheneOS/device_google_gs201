@@ -417,3 +417,7 @@ on property:ro.bootmode=usbuwb
 
 on property:vendor.usb.contaminantdisable=true
     exec /vendor/bin/hw/disable_contaminant_detection.sh
+
+# WAR for kernel 5.10 with CONFIG_USB_DUMMY_HCD enabled
+on property:sys.usb.controller=dummy_udc.0
+    setprop sys.usb.controller "11210000.dwc3"
