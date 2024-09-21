@@ -288,6 +288,10 @@
     {
       "Name": "OtaProfiles",
       "Profiles": [ "OtaPerformance", "ProcessCapacityNormal", "LowIoPriority", "TimerSlackHigh" ]
+    },
+    {
+      "Name": "InputPolicy",
+      "Profiles": [ "ResetUclampGrp" ]
     }
   ]
 }
