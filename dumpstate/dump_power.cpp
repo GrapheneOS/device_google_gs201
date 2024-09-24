@@ -221,8 +221,9 @@ void dumpTcpc() {
     }
 }
 void dumpPdEngine() {
-    const char* pdEngine [][2] {
-            {"PD Engine", "/dev/logbuffer_usbpd"},
+    const char* pdEngine [][3] {
+            {"TCPC logbuffer", "/dev/logbuffer_usbpd"},
+            {"pogo_transport logbuffer", "/dev/logbuffer_pogo_transport"},
             {"PPS-google_cpm", "/dev/logbuffer_cpm"},
             {"PPS-dc", "/dev/logbuffer_pca9468"},
     };
