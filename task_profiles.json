@@ -16,6 +16,21 @@
       ]
     },
     {
+      "Name": "PreferIdle",
+      "Actions": [
+        {
+          "Name": "WriteFile",
+          "Params":
+          {
+            "FilePath": "/proc/vendor_sched/prefer_idle_set",
+            "ProcFilePath": "/proc/vendor_sched/prefer_idle_set",
+            "Value": "<pid>",
+            "LogFailures": "false"
+          }
+        }
+      ]
+    },
+    {
       "Name": "CameraServicePerformance",
       "Actions": [
         {
@@ -291,7 +306,7 @@
     },
     {
       "Name": "InputPolicy",
-      "Profiles": [ "ResetUclampGrp" ]
+      "Profiles": [ "MaxPerformance", "ResetUclampGrp", "PreferIdle" ]
     }
   ]
 }
