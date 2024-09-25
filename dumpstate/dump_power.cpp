@@ -184,45 +184,49 @@ void dumpLogBufferTcpm() {
         printTitle(tcpmLogTitle);
 }
 void dumpTcpc() {
-    int ret;
-    const char* max77759TcpcHead = "TCPC";
-    const char* i2cSubDirMatch = "i2c-";
-    const char* directory = "/sys/devices/platform/10d60000.hsi2c/";
-    const char* max77759Tcpc [][2] {
-            {"registers:", "/i2c-max77759tcpc/registers"},
-            {"frs:", "/i2c-max77759tcpc/frs"},
-            {"auto_discharge:", "/i2c-max77759tcpc/auto_discharge"},
-            {"bcl2_enabled:", "/i2c-max77759tcpc/bcl2_enabled"},
-            {"cc_toggle_enable:", "/i2c-max77759tcpc/cc_toggle_enable"},
-            {"containment_detection:", "/i2c-max77759tcpc/containment_detection"},
-            {"containment_detection_status:", "/i2c-max77759tcpc/containment_detection_status"},
+    const char* max77759TcpcHead = "TCPC Device Attributes";
+    const char* directory = "/sys/class/typec/port0/device";
+    const char* max77759Tcpc [] {
+            "auto_discharge",
+            "bc12_enabled",
+            "cc_toggle_enable",
+            "contaminant_detection",
+            "contaminant_detection_status",
+            "frs",
+            "irq_hpd_count",
+            "manual_disable_vbus",
+            "non_compliant_reasons",
+            "sbu_pullup",
+            "update_sdp_enum_timeout",
+            "usb_limit_accessory_current",
+            "usb_limit_accessory_enable",
+            "usb_limit_sink_current",
+            "usb_limit_sink_enable",
+            "usb_limit_source_enable",
     };
-    std::vector<std::string> files;
+
     std::string content;
+    std::string tcpcRegistersPath(std::string(directory) + "/registers");
+
+    dumpFileContent("TCPC Registers", tcpcRegistersPath.c_str());
+
     printTitle(max77759TcpcHead);
-    ret = getFilesInDir(directory, &files);
-    if (ret < 0) {
-        for (auto &tcpcVal : max77759Tcpc)
-            printf("%s\n", tcpcVal[0]);
-        return;
+
+    for (auto& tcpcVal : max77759Tcpc) {
+        std::string filename = std::string(directory) + "/" + std::string(tcpcVal);
+        printf("%s: ", tcpcVal);
+        android::base::ReadFileToString(filename, &content);
+        if (!content.empty() && (content.back() == '\n' || content.back() == '\r'))
+            content.pop_back();
+        printf("%s\n", content.c_str());
     }
-    for (auto &file : files) {
-        for (auto &tcpcVal : max77759Tcpc) {
-            printf("%s ", tcpcVal[0]);
-            if (std::string::npos == std::string(file).find(i2cSubDirMatch)) {
-                continue;
-            }
-            std::string fileName = directory + file + "/" + std::string(tcpcVal[1]);
-            if (!android::base::ReadFileToString(fileName, &content)) {
-                continue;
-            }
-            printf("%s\n", content.c_str());
-        }
-    }
+    printf("\n");
 }
+
 void dumpPdEngine() {
-    const char* pdEngine [][2] {
-            {"PD Engine", "/dev/logbuffer_usbpd"},
+    const char* pdEngine [][3] {
+            {"TCPC logbuffer", "/dev/logbuffer_usbpd"},
+            {"pogo_transport logbuffer", "/dev/logbuffer_pogo_transport"},
             {"PPS-google_cpm", "/dev/logbuffer_cpm"},
             {"PPS-dc", "/dev/logbuffer_pca9468"},
     };
