@@ -20,10 +20,6 @@ on init
     # Disable util-awareness
     write /proc/vendor_sched/teo_util_threshold "1024 1024 1024"
 
-    # Boot time fs tuning
-    write /sys/block/sda/queue/scheduler bfq
-    write /sys/block/sda/queue/iosched/slice_idle 0
-
     chown system system /proc/vendor_sched/groups/bg/set_task_group
     chown system system /proc/vendor_sched/groups/cam/set_task_group
     chown system system /proc/vendor_sched/groups/fg/set_task_group
