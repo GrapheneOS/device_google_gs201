@@ -1335,7 +1335,7 @@ static const int MODE_CHARGING_ONLY_WHEN_LOCKED = 2;
 static const int MODE_CHARGING_ONLY_WHEN_LOCKED_AFU = 3;
 static const int MODE_ENABLED = 4;
 
-UsbExt::UsbExt(std::shared_ptr<Usb> usb) : mUsb(usb) {
+UsbExt::UsbExt(std::shared_ptr<Usb> usb) : mUsb(usb), mPortSecurityLock(PTHREAD_MUTEX_INITIALIZER) {
     int initialMode = ::android::base::GetIntProperty("persist.security.usb_mode", MODE_CHARGING_ONLY_WHEN_LOCKED);
     ALOGD("initial persist.security.usb_mode: %i", initialMode);
 
@@ -1357,7 +1357,9 @@ UsbExt::UsbExt(std::shared_ptr<Usb> usb) : mUsb(usb) {
 
 ScopedAStatus UsbExt::setPortSecurityState(const std::string& in_portName,
         PortSecurityState in_state, const shared_ptr<IPortSecurityStateCallback>& in_callback) {
+    pthread_mutex_lock(&mPortSecurityLock);
     int res = setPortSecurityStateInner(in_state);
+    pthread_mutex_unlock(&mPortSecurityLock);
     if (in_callback != nullptr) {
         in_callback->onSetPortSecurityStateCompleted(res, 0, "");
     }

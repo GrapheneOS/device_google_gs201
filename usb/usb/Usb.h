@@ -117,7 +117,9 @@ struct UsbExt : public ext::BnUsbExt {
             const shared_ptr<IPortSecurityStateCallback>& in_callback) override;
     int setPortSecurityStateInner(PortSecurityState in_state);
 
+private:
     std::shared_ptr<Usb> mUsb;
+    pthread_mutex_t mPortSecurityLock;
 };
 
 } // namespace usb
