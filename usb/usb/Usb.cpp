@@ -1287,15 +1287,9 @@ int UsbExt::setPortSecurityStateInner(PortSecurityState in_state) {
     string ccToggleEnablePath = mUsb->mI2cClientPath + kCcToggleEnable;
     string dataPathEnablePath = mUsb->mI2cClientPath + kDataPathEnable;
 
-    bool denyNewUsbWriteResult = SetProperty("security.deny_new_usb2",
-                                             in_state == PortSecurityState::ENABLED ? "0" : "1");
-    if (!denyNewUsbWriteResult) {
-        ALOGE("unable to update security.deny_new_usb2 sysprop");
-    }
-
     bool hasPogo = access(kPogoChargingOnly, F_OK) == 0;
 
-    // '&' is used instead of '&&' intentionally to disable short-circuit evaluation
+    // '&' is used instead of '&&' to avoid short-circuit evaluation
 
     switch (in_state) {
         case PortSecurityState::DISABLED: {
@@ -1331,11 +1325,6 @@ int UsbExt::setPortSecurityStateInner(PortSecurityState in_state) {
             return IUsbExt::ERROR_FILE_WRITE;
         }
     }
-
-    if (!denyNewUsbWriteResult) {
-        return IUsbExt::ERROR_DENY_NEW_USB_WRITE;
-    }
-
     return IUsbExt::NO_ERROR;
 }
 
@@ -1357,6 +1346,10 @@ UsbExt::UsbExt(std::shared_ptr<Usb> usb) : mUsb(usb) {
             break;
         case MODE_CHARGING_ONLY_WHEN_LOCKED_AFU:
         case MODE_ENABLED:
+            // deny_new_usb2 is enabled by init before loading the USB driver module
+            if (!SetProperty("security.deny_new_usb2", "0")) {
+                ALOGE("unable to set security.deny_new_usb2 sysprop");
+            }
             setPortSecurityStateInner(PortSecurityState::ENABLED);
             break;
     }
