@@ -267,6 +267,8 @@ BOARD_USES_EXYNOS_AFBC_FEATURE := true
 
 BOARD_LIBACRYL_DEFAULT_COMPOSITOR := fimg2d_gs201
 BOARD_LIBACRYL_G2D_HDR_PLUGIN := libacryl_hdr_plugin
+$(call soong_config_set,acryl,libacryl_g2d_hdr_plugin,//hardware/google/graphics/gs201/libacryl_plugins:libacryl_hdr_plugin)
+$(call soong_config_set,acryl,libacryl_c_include,hardware/google/graphics/$(TARGET_BOARD_PLATFORM)/libcap)
 
 # HWCServices
 BOARD_USES_HWC_SERVICES := true
