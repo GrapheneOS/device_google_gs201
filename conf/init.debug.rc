@@ -15,6 +15,15 @@ on init
     chown system system /sys/devices/platform/sjtag_gsa/interface/end
     chown system system /sys/devices/platform/sjtag_gsa/interface/pubkey
 
+# HSUM separated main user from the SYSTEM user, granting write permissions
+# for write only SJTAG sysfs files
+    chmod 220 /sys/devices/platform/sjtag_ap/interface/auth
+    chmod 220 /sys/devices/platform/sjtag_ap/interface/begin
+    chmod 220 /sys/devices/platform/sjtag_ap/interface/end
+    chmod 220 /sys/devices/platform/sjtag_gsa/interface/auth
+    chmod 220 /sys/devices/platform/sjtag_gsa/interface/begin
+    chmod 220 /sys/devices/platform/sjtag_gsa/interface/end
+
 on property:vendor.debug.ramdump.force_crash=true
     write /sys/kernel/pixel_debug/trigger "null"
 
