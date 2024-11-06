@@ -19,8 +19,9 @@ LOCAL_WIFI_PATH := device/google/gs201/wifi/qcom
 # wlan flags
 BOARD_WLAN_DEVICE := qcwcn
 BOARD_WLAN_CHIP := wcn6740
-BOARD_WPA_SUPPLICANT_PRIVATE_LIB := lib_driver_cmd_$(BOARD_WLAN_DEVICE)
-BOARD_HOSTAPD_PRIVATE_LIB := lib_driver_cmd_$(BOARD_WLAN_DEVICE)
+# Use full namespace path for both BOARD_WPA_SUPPLICANT_PRIVATE_LIB and BOARD_HOSTAPD_PRIVATE_LIB due to wlan module for sw5100 has its own namespace.
+BOARD_WPA_SUPPLICANT_PRIVATE_LIB := //hardware/qcom/wlan/wcn6740/qcwcn/wpa_supplicant_8_lib:lib_driver_cmd_$(BOARD_WLAN_DEVICE)
+BOARD_HOSTAPD_PRIVATE_LIB := //hardware/qcom/wlan/wcn6740/qcwcn/wpa_supplicant_8_lib:lib_driver_cmd_$(BOARD_WLAN_DEVICE)
 BOARD_WPA_SUPPLICANT_DRIVER := NL80211
 BOARD_HOSTAPD_DRIVER := NL80211
 WPA_SUPPLICANT_VERSION := VER_0_8_X
