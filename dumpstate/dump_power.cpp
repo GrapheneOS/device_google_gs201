@@ -143,23 +143,25 @@ void dumpPowerSupplyStats() {
 }
 void dumpMaxFg() {
     const char *maxfgLoc = "/sys/class/power_supply/maxfg";
+    const char *maxfgDualLoc = "/sys/class/power_supply/maxfg_base";
     const char *maxfg [][2] = {
             {"Power supply property maxfg", "/sys/class/power_supply/maxfg/uevent"},
             {"m5_state", "/sys/class/power_supply/maxfg/m5_model_state"},
             {"maxfg registers", "/sys/class/power_supply/maxfg/registers_dump"},
-            {"maxfg", "/dev/logbuffer_maxfg"},
-            {"maxfg", "/dev/logbuffer_maxfg_monitor"},
+            {"maxfg logbuffer", "/dev/logbuffer_maxfg"},
+            {"maxfg_monitor logbuffer", "/dev/logbuffer_maxfg_monitor"},
     };
-    const char *maxfgFlip [][2] = {
+    const char *maxfgDual [][2] = {
             {"Power supply property maxfg_base", "/sys/class/power_supply/maxfg_base/uevent"},
-            {"Power supply property maxfg_flip", "/sys/class/power_supply/maxfg_flip/uevent"},
+            {"Power supply property maxfg_secondary", "/sys/class/power_supply/maxfg_secondary/uevent"},
             {"maxfg_base registers", "/sys/class/power_supply/maxfg_base/registers_dump"},
             {"maxfg_secondary registers", "/sys/class/power_supply/maxfg_secondary/registers_dump"},
             {"m5_state", "/sys/class/power_supply/maxfg_base/m5_model_state"},
-            {"maxfg_base", "/dev/logbuffer_maxfg_base"},
-            {"maxfg_flip", "/dev/logbuffer_maxfg_flip"},
-            {"maxfg_base", "/dev/logbuffer_maxfg_base_monitor"},
-            {"maxfg_flip", "/dev/logbuffer_maxfg_flip_monitor"},
+            {"maxfg_base logbuffer", "/dev/logbuffer_maxfg_base"},
+            {"maxfg_secondary logbuffer", "/dev/logbuffer_maxfg_secondary"},
+            {"maxfg_base logbuffer", "/dev/logbuffer_maxfg_base_monitor"},
+            {"maxfg_secondary logbuffer", "/dev/logbuffer_maxfg_secondary_monitor"},
+            {"dual_batt logbuffer", "/dev/logbuffer_dual_batt"},
     };
     const char *maxfgHistoryName = "Maxim FG History";
     const char *maxfgHistoryDir = "/dev/maxfg_history";
@@ -168,13 +170,13 @@ void dumpMaxFg() {
         for (const auto &row : maxfg) {
             dumpFileContent(row[0], row[1]);
         }
-    } else {
-        for (const auto &row : maxfgFlip) {
+    } else if (isValidDir(maxfgDualLoc)){
+        for (const auto &row : maxfgDual) {
             dumpFileContent(row[0], row[1]);
         }
-    }
-    if (isValidFile(maxfgHistoryDir)) {
-        dumpFileContent(maxfgHistoryName, maxfgHistoryDir);
+        if (isValidFile(maxfgHistoryDir)) {
+            dumpFileContent(maxfgHistoryName, maxfgHistoryDir);
+        }
     }
 }
 void dumpPowerSupplyDock() {
@@ -240,8 +242,8 @@ void dumpPdEngine() {
     const char* pdEngine [][3] {
             {"TCPC logbuffer", "/dev/logbuffer_usbpd"},
             {"pogo_transport logbuffer", "/dev/logbuffer_pogo_transport"},
-            {"PPS-google_cpm", "/dev/logbuffer_cpm"},
-            {"PPS-dc", "/dev/logbuffer_pca9468"},
+            {"PPS-google_cpm logbuffer", "/dev/logbuffer_cpm"},
+            {"PPS-pca9468 logbuffer", "/dev/logbuffer_pca9468"},
     };
     for (const auto &row : pdEngine) {
         dumpFileContent(row[0], row[1]);
@@ -331,7 +333,7 @@ void printValuesOfDirectory(const char *directory, std::string debugfs, const ch
     files.clear();
 }
 void dumpChg() {
-    const std::string pmic_bus = "/sys/devices/platform/10cb0000.hsi2c/i2c-11/11-0066";
+    const std::string pmic_bus = "/sys/devices/platform/10d60000.hsi2c/i2c-13/13-0066";
     const char* chg_reg_dump_file = "/sys/class/power_supply/main-charger/device/registers_dump";
     const std::string chg_name_cmd = "/sys/class/power_supply/main-charger/device/name";
     const std::string pmic_name_cmd = pmic_bus + "/name";
@@ -371,17 +373,12 @@ void dumpChgUserDebug() {
     const std::string debugfs = "/d/";
     const char *maxFgDir = "/d/maxfg";
     const char *maxFgStrMatch = "maxfg";
-    const char *maxFg77779StrMatch = "max77779fg";
+    const char *maxBaseFgDir = "/d/maxfg_base";
+    const char *maxBaseFgStrMatch = "maxfg_base";
     const char *chgTblName = "Charging table dump";
     const char *chgTblDir = "/d/google_battery/chg_raw_profile";
 
     const char *maxFgInfo [] {
-            "fg_model",
-            "algo_ver",
-            "model_ok",
-    };
-
-    const char *max77779FgInfo [] {
             "fg_model",
             "algo_ver",
             "model_ok",
@@ -396,9 +393,9 @@ void dumpChgUserDebug() {
         for (auto & directory : maxFgInfo) {
             printValuesOfDirectory(directory, debugfs, maxFgStrMatch);
         }
-    } else {
-        for (auto & directory : max77779FgInfo) {
-            printValuesOfDirectory(directory, debugfs, maxFg77779StrMatch);
+    } else if (isValidDir(maxBaseFgDir)) {
+        for (auto & directory : maxFgInfo) {
+            printValuesOfDirectory(directory, debugfs, maxBaseFgStrMatch);
         }
     }
 }
