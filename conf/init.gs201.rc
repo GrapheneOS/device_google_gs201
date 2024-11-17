@@ -97,7 +97,7 @@ on init
     chmod 0220 /proc/vendor_sched/groups/ota/set_proc_group
     chmod 0220 /proc/vendor_sched/prefer_idle_set
     chmod 0220 /proc/vendor_sched/prefer_idle_clear
-    chmod 0220 /proc/vendor_sched/pmu_poll_enable
+    chmod 0660 /proc/vendor_sched/pmu_poll_enable
     chmod 0220 /proc/vendor_sched/pmu_poll_time
     chmod 0220 /proc/vendor_sched/uclamp_fork_reset_clear
     chmod 0220 /proc/vendor_sched/uclamp_fork_reset_set
