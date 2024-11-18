@@ -710,7 +710,7 @@ PRODUCT_DEFAULT_PROPERTY_OVERRIDES += ro.surface_flinger.protected_contents=true
 PRODUCT_DEFAULT_PROPERTY_OVERRIDES += ro.surface_flinger.display_update_imminent_timeout_ms=50
 
 PRODUCT_PROPERTY_OVERRIDES += \
-	persist.sys.sf.native_mode=2
+	persist.sys.sf.color_saturation=1.0
 PRODUCT_COPY_FILES += \
 	device/google/gs201/display/display_colordata_cal0.pb:$(TARGET_COPY_OUT_VENDOR)/etc/display_colordata_cal0.pb
 
