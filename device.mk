@@ -458,7 +458,7 @@ PRODUCT_PACKAGES += displaycolor_service
 endif
 
 PRODUCT_PROPERTY_OVERRIDES += \
-	persist.sys.sf.native_mode=2
+	persist.sys.sf.color_saturation=1.0
 
 PRODUCT_CHARACTERISTICS := nosdcard
 
