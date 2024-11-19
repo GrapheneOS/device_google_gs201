@@ -370,8 +370,8 @@ on post-fs-data
     restorecon /sys/kernel/debug/tracing/trace_marker
 
     # ranging sensor
-    chown system system /dev/stmvl53l1_ranging
-    chmod 0660 /dev/stmvl53l1_ranging
+    chown system system /dev/ispolin_ranging
+    chmod 0660 /dev/ispolin_ranging
 
     # Factory calibration files
     chmod 0771 /mnt/vendor/persist/camera
