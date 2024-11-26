@@ -198,7 +198,11 @@ BOARD_SUPPORT_MFC_ENC_BT2020 := true
 BOARD_SUPPORT_FLEXIBLE_P010 := true
 $(call soong_config_set,video_codec,target_soc_name,$(TARGET_SOC_NAME))
 $(call soong_config_set_bool,video_codec,board_use_codec2_hidl_1_2,$(BOARD_USE_CODEC2_HIDL_1_2))
+$(call soong_config_set_bool,video_codec,board_use_csc_filter,$(BOARD_USE_CSC_FILTER))
 $(call soong_config_set_bool,video_codec,board_use_dec_sw_csc,$(BOARD_USE_DEC_SW_CSC))
+$(call soong_config_set_bool,video_codec,board_use_enc_sw_csc,$(BOARD_USE_ENC_SW_CSC))
+$(call soong_config_set_bool,video_codec,board_support_mfc_enc_rgb,$(BOARD_SUPPORT_MFC_ENC_RGB))
+$(call soong_config_set_bool,video_codec,board_use_blob_allocator,$(BOARD_USE_BLOB_ALLOCATOR))
 $(call soong_config_set_bool,video_codec,board_support_mfc_enc_bt2020,$(BOARD_SUPPORT_MFC_ENC_BT2020))
 $(call soong_config_set_bool,video_codec,board_support_flexible_p010,$(BOARD_SUPPORT_FLEXIBLE_P010))
 $(call soong_config_set_bool,video_codec,board_use_codec2_aidl,$(if $(BOARD_USE_CODEC2_AIDL),true,false))
