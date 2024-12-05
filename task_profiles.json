@@ -16,21 +16,6 @@
       ]
     },
     {
-      "Name": "PreferIdle",
-      "Actions": [
-        {
-          "Name": "WriteFile",
-          "Params":
-          {
-            "FilePath": "/proc/vendor_sched/prefer_idle_set",
-            "ProcFilePath": "/proc/vendor_sched/prefer_idle_set",
-            "Value": "<pid>",
-            "LogFailures": "false"
-          }
-        }
-      ]
-    },
-    {
       "Name": "CameraServicePerformance",
       "Actions": [
         {
@@ -175,6 +160,21 @@
       ]
     },
     {
+      "Name": "HighPerformanceWI",
+      "Actions": [
+        {
+          "Name": "WriteFile",
+          "Params":
+          {
+            "FilePath": "/proc/vendor_sched/groups/fg_wi/set_task_group",
+            "ProcFilePath": "/proc/vendor_sched/groups/fg_wi/set_proc_group",
+            "Value": "<pid>",
+            "LogFailures": "false"
+          }
+        }
+      ]
+    },
+    {
       "Name": "RealtimePerformance",
       "Actions": [
         {
@@ -266,6 +266,202 @@
       ]
     },
     {
+      "Name": "AdpfSet",
+      "Actions": [
+        {
+          "Name": "WriteFile",
+          "Params":
+          {
+            "FilePath": "/proc/vendor_sched/sched_qos/adpf_set",
+            "Value": "<pid>",
+            "LogFailures": "false"
+          }
+        }
+      ]
+    },
+    {
+      "Name": "AdpfClear",
+      "Actions": [
+        {
+          "Name": "WriteFile",
+          "Params":
+          {
+            "FilePath": "/proc/vendor_sched/sched_qos/adpf_clear",
+            "Value": "<pid>",
+            "LogFailures": "false"
+          }
+        }
+      ]
+    },
+    {
+      "Name": "BoostPrioSet",
+      "Actions": [
+        {
+          "Name": "WriteFile",
+          "Params":
+          {
+            "FilePath": "/proc/vendor_sched/sched_qos/boost_prio_set",
+            "Value": "<pid>",
+            "LogFailures": "false"
+          }
+        }
+      ]
+    },
+    {
+      "Name": "BoostPrioClear",
+      "Actions": [
+        {
+          "Name": "WriteFile",
+          "Params":
+          {
+            "FilePath": "/proc/vendor_sched/sched_qos/boost_prio_clear",
+            "Value": "<pid>",
+            "LogFailures": "false"
+          }
+        }
+      ]
+    },
+    {
+      "Name": "PreemptWakeupSet",
+      "Actions": [
+        {
+          "Name": "WriteFile",
+          "Params":
+          {
+            "FilePath": "/proc/vendor_sched/sched_qos/preempt_wakeup_set",
+            "Value": "<pid>",
+            "LogFailures": "false"
+          }
+        }
+      ]
+    },
+    {
+      "Name": "PreemptWakeupClear",
+      "Actions": [
+        {
+          "Name": "WriteFile",
+          "Params":
+          {
+            "FilePath": "/proc/vendor_sched/sched_qos/preempt_wakeup_clear",
+            "Value": "<pid>",
+            "LogFailures": "false"
+          }
+        }
+      ]
+    },
+    {
+      "Name": "PreferFitSet",
+      "Actions": [
+        {
+          "Name": "WriteFile",
+          "Params":
+          {
+            "FilePath": "/proc/vendor_sched/sched_qos/prefer_fit_set",
+            "Value": "<pid>",
+            "LogFailures": "false"
+          }
+        }
+      ]
+    },
+    {
+      "Name": "PreferFitClear",
+      "Actions": [
+        {
+          "Name": "WriteFile",
+          "Params":
+          {
+            "FilePath": "/proc/vendor_sched/sched_qos/prefer_fit_clear",
+            "Value": "<pid>",
+            "LogFailures": "false"
+          }
+        }
+      ]
+    },
+    {
+      "Name": "PreferIdleSet",
+      "Actions": [
+        {
+          "Name": "WriteFile",
+          "Params":
+          {
+            "FilePath": "/proc/vendor_sched/sched_qos/prefer_idle_set",
+            "Value": "<pid>",
+            "LogFailures": "false"
+          }
+        }
+      ]
+    },
+    {
+      "Name": "PreferIdleClear",
+      "Actions": [
+        {
+          "Name": "WriteFile",
+          "Params":
+          {
+            "FilePath": "/proc/vendor_sched/sched_qos/prefer_idle_clear",
+            "Value": "<pid>",
+            "LogFailures": "false"
+          }
+        }
+      ]
+    },
+    {
+      "Name": "AutoUclampMaxSet",
+      "Actions": [
+        {
+          "Name": "WriteFile",
+          "Params":
+          {
+            "FilePath": "/proc/vendor_sched/sched_qos/auto_uclamp_max_set",
+            "Value": "<pid>",
+            "LogFailures": "false"
+          }
+        }
+      ]
+    },
+    {
+      "Name": "AutoUclampMaxClear",
+      "Actions": [
+        {
+          "Name": "WriteFile",
+          "Params":
+          {
+            "FilePath": "/proc/vendor_sched/sched_qos/auto_uclamp_max_clear",
+            "Value": "<pid>",
+            "LogFailures": "false"
+          }
+        }
+      ]
+    },
+    {
+      "Name": "PreferHighCapSet",
+      "Actions": [
+        {
+          "Name": "WriteFile",
+          "Params":
+          {
+            "FilePath": "/proc/vendor_sched/sched_qos/prefer_high_cap_set",
+            "Value": "<pid>",
+            "LogFailures": "false"
+          }
+        }
+      ]
+    },
+    {
+      "Name": "PreferHighCapClear",
+      "Actions": [
+        {
+          "Name": "WriteFile",
+          "Params":
+          {
+            "FilePath": "/proc/vendor_sched/sched_qos/prefer_high_cap_clear",
+            "Value": "<pid>",
+            "LogFailures": "false"
+          }
+        }
+      ]
+    },
+    {
       "Name": "ResetUclampGrp",
       "Actions": [
         {
@@ -302,11 +498,35 @@
     },
     {
       "Name": "OtaProfiles",
-      "Profiles": [ "OtaPerformance", "ProcessCapacityNormal", "LowIoPriority", "TimerSlackHigh" ]
+      "Profiles": [ "OtaPerformance", "ServiceCapacityLow", "LowIoPriority", "TimerSlackHigh" ]
+    },
+    {
+      "Name": "SCHED_QOS_SENSITIVE_EXTREME_SET",
+      "Profiles": [ "AdpfSet", "PreferIdleSet", "PreferFitSet", "BoostPrioSet", "PreemptWakeupSet" ]
+    },
+    {
+      "Name": "SCHED_QOS_SENSITIVE_EXTREME_CLEAR",
+      "Profiles": [ "AdpfClear", "PreferIdleClear", "PreferFitClear", "BoostPrioClear", "PreemptWakeupClear" ]
+    },
+    {
+      "Name": "SCHED_QOS_SENSITIVE_STANDARD_SET",
+      "Profiles": [ "AdpfSet", "PreferIdleSet", "PreferFitSet" ]
+    },
+    {
+      "Name": "SCHED_QOS_SENSITIVE_STANDARD_CLEAR",
+      "Profiles": [ "AdpfClear", "PreferIdleClear", "PreferFitClear" ]
+    },
+    {
+      "Name": "SCHED_QOS_POWER_EFFICIENCY_SET",
+      "Profiles": [ "AutoUclampMaxSet" ]
+    },
+    {
+      "Name": "SCHED_QOS_POWER_EFFICIENCY_CLEAR",
+      "Profiles": [ "AutoUclampMaxClear" ]
     },
     {
       "Name": "InputPolicy",
-      "Profiles": [ "MaxPerformance", "ResetUclampGrp", "PreferIdle" ]
+      "Profiles": [ "MaxPerformance", "SCHED_QOS_SENSITIVE_EXTREME_SET" ]
     }
   ]
 }
