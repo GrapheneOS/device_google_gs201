@@ -301,6 +301,48 @@ void dumpBatteryDefend() {
         files.clear();
     }
 }
+void dumpBatteryCaretaker() {
+    const char* aacpConfig [][3] {
+            {"AACP Version",
+                    "/sys/devices/platform/google,battery/power_supply/battery/", "aacp_"},
+            {"AACR Config",
+                    "/sys/devices/platform/google,battery/power_supply/battery/", "aacr_"},
+            {"AAFV Config",
+                    "/sys/devices/platform/google,battery/power_supply/battery/", "aafv_"},
+            {"AACT Config",
+                    "/sys/devices/platform/google,battery/power_supply/battery/", "aact_"},
+            {"AACC",
+                    "/sys/devices/platform/google,battery/power_supply/battery/", "aacc"},
+    };
+    std::vector<std::string> files;
+    struct dirent *entry;
+    std::string content;
+    std::string fileLocation;
+    for (auto &config : aacpConfig) {
+        DIR *dir = opendir(config[1]);
+        if (dir == NULL)
+            continue;
+        printTitle(config[0]);
+        while ((entry = readdir(dir)) != NULL) {
+            if (std::string(entry->d_name).find(config[2]) != std::string::npos &&
+                    strncmp(config[2], entry->d_name, strlen(config[2])) == 0) {
+                files.push_back(entry->d_name);
+            }
+        }
+        closedir(dir);
+        sort(files.begin(), files.end());
+        for (auto &file : files) {
+            fileLocation = std::string(config[1]) + std::string(file);
+            if (!android::base::ReadFileToString(fileLocation, &content) || content.empty()) {
+                content = "\n";
+            }
+            printf("%s: %s", file.c_str(), content.c_str());
+            if (content.back() != '\n')
+                printf("\n");
+        }
+        files.clear();
+    }
+}
 void printValuesOfDirectory(const char *directory, std::string debugfs, const char *strMatch) {
     std::vector<std::string> files;
     auto info = directory;
@@ -763,6 +805,7 @@ int main() {
     dumpPdEngine();
     dumpBatteryHealth();
     dumpBatteryDefend();
+    dumpBatteryCaretaker();
     dumpChg();
     dumpChgUserDebug();
     dumpBatteryEeprom();
