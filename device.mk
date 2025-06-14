@@ -610,9 +610,6 @@ USE_EARLY_SEND_DEVICE_INFO := true
 ifneq ($(BOARD_WITHOUT_RADIO),true)
 $(call inherit-product-if-exists, vendor/samsung_slsi/telephony/$(BOARD_USES_SHARED_VENDOR_TELEPHONY)/common/device-vendor.mk)
 
-# modem logging binary/configs
-PRODUCT_PACKAGES += modem_logging_control
-
 # CP Logging properties
 PRODUCT_PROPERTY_OVERRIDES += \
 	ro.vendor.sys.modem.logging.loc = /data/vendor/slog \
