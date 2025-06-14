@@ -506,26 +506,6 @@ include device/google/gs-common/mediacodec/common/mediacodec_common.mk
 # for Exynos C2 Hal
 include device/google/gs-common/mediacodec/samsung/mediacodec_samsung.mk
 
-PRODUCT_PROPERTY_OVERRIDES += \
-       debug.c2.use_dmabufheaps=1 \
-       media.c2.dmabuf.padding=512 \
-       debug.stagefright.ccodec_delayed_params=1 \
-       ro.vendor.gpu.dataspace=1
-
-ifneq ($(BOARD_USE_CODEC2_AIDL), )
-PRODUCT_PROPERTY_OVERRIDES += \
-        debug.stagefright.c2-poolmask=1507328
-else
-PRODUCT_PROPERTY_OVERRIDES += \
-        debug.stagefright.c2-poolmask=458752
-endif
-
-# Create input surface on the framework side
-PRODUCT_PROPERTY_OVERRIDES += \
-	debug.stagefright.c2inputsurface=-1 \
-
-PRODUCT_PROPERTY_OVERRIDES += media.c2.hal.selection=aidl
-
 # 2. OpenMAX IL
 PRODUCT_COPY_FILES += \
 	device/google/gs201/media_codecs.xml:$(TARGET_COPY_OUT_VENDOR)/etc/media_codecs.xml \
