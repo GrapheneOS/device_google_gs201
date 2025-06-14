@@ -662,9 +662,6 @@ endif
 ## Start packet router
 include device/google/gs101/telephony/pktrouter.mk
 
-# Thermal HAL
-PRODUCT_PROPERTY_OVERRIDES += persist.vendor.enable.thermal.genl=true
-
 # EdgeTPU
 include device/google/gs-common/edgetpu/edgetpu.mk
 # Config variables for TPU chip on device.
