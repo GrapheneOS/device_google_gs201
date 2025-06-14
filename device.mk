@@ -539,6 +539,7 @@ PRODUCT_PACKAGES_DEBUG += \
 PRODUCT_PACKAGES += \
 	securedpud.slider
 
+# TODO: Review this.
 $(call soong_config_set,google_displaycolor,displaycolor_platform,gs201)
 PRODUCT_PACKAGES += \
 	android.hardware.composer.hwc3-service.pixel \
