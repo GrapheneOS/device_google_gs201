@@ -157,12 +157,7 @@ include device/google/gs-common/gpu/gpu.mk
 # Install the OpenCL ICD Loader
 PRODUCT_SOONG_NAMESPACES += external/OpenCL-ICD-Loader
 PRODUCT_PACKAGES += \
-       libOpenCL \
-       mali_icd__customer_pixel_opencl-icd_ARM.icd
-ifeq ($(DEVICE_IS_64BIT_ONLY),false)
-PRODUCT_PACKAGES += \
-	mali_icd__customer_pixel_opencl-icd_ARM32.icd
-endif
+       libOpenCL
 
 # Mali Configuration Properties
 PRODUCT_VENDOR_PROPERTIES += \
