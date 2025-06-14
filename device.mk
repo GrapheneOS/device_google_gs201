@@ -219,10 +219,6 @@ PRODUCT_PACKAGES += \
 	fstab.gs201-fips \
 	fstab.gs201-fips.vendor_ramdisk
 
-# TODO: Review with above.
-PRODUCT_COPY_FILES += \
-	device/google/$(TARGET_BOARD_PLATFORM)/conf/fstab.persist:$(TARGET_COPY_OUT_VENDOR)/etc/fstab.persist \
-
 include device/google/gs-common/insmod/insmod.mk
 
 # Insmod config files
