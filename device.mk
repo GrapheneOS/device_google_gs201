@@ -210,12 +210,16 @@ PRODUCT_COPY_FILES += \
     device/google/gs201/conf/init.recovery.device.rc:$(TARGET_COPY_OUT_RECOVERY)/root/init.recovery.gs201.rc
 
 # Fstab files
+# TODO: Review this. fstab.gs201 and fstab.gs201-fips go into vendor partition so are probably defined
+# to leave for adevtool. The vendor_ramdisks probably aren't handled by adevtool. Unsure if these
+# files are needed by the build system.
 PRODUCT_PACKAGES += \
 	fstab.gs201 \
 	fstab.gs201.vendor_ramdisk \
 	fstab.gs201-fips \
 	fstab.gs201-fips.vendor_ramdisk
 
+# TODO: Review with above.
 PRODUCT_COPY_FILES += \
 	device/google/$(TARGET_BOARD_PLATFORM)/conf/fstab.persist:$(TARGET_COPY_OUT_VENDOR)/etc/fstab.persist \
 
