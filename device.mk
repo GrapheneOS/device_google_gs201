@@ -264,10 +264,6 @@ PRODUCT_PROPERTY_OVERRIDES += \
 	persist.vendor.verbose_logging_enabled=true
 endif
 
-# RPMB TA
-PRODUCT_PACKAGES += \
-	tlrpmb
-
 # Touch firmware
 #PRODUCT_COPY_FILES += \
 	device/google/gs201/firmware/touch/s6sy761.bin:$(TARGET_COPY_OUT_VENDOR)/firmware/s6sy761.fw
