@@ -63,6 +63,7 @@ ifeq ($(USE_PIXEL_GRALLOC),true)
 	PRODUCT_SOONG_NAMESPACES += hardware/google/gchips/GrallocHAL
 endif
 
+# TODO: Review hardware/google/av, hardware/google/gchips and hardware/google/graphics.
 PRODUCT_SOONG_NAMESPACES += \
 	hardware/google/av \
 	hardware/google/gchips \
