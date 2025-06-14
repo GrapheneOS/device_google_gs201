@@ -573,18 +573,6 @@ PRODUCT_ENFORCE_RRO_TARGETS := \
 # Dynamic Partitions
 PRODUCT_USE_DYNAMIC_PARTITIONS := true
 
-# Use FUSE passthrough
-PRODUCT_PRODUCT_PROPERTIES += \
-	persist.sys.fuse.passthrough.enable=true
-
-# Use FUSE BPF
-PRODUCT_PRODUCT_PROPERTIES += \
-	ro.fuse.bpf.enabled=true
-
-# Use /product/etc/fstab.postinstall to mount system_other
-PRODUCT_PRODUCT_PROPERTIES += \
-	ro.postinstall.fstab.prefix=/product
-
 PRODUCT_COPY_FILES += \
 	device/google/gs201/conf/fstab.postinstall:$(TARGET_COPY_OUT_PRODUCT)/etc/fstab.postinstall
 
