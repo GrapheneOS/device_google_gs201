@@ -677,10 +677,6 @@ include device/google/gs-common/edgetpu/edgetpu.mk
 # Config variables for TPU chip on device.
 $(call soong_config_set,edgetpu_config,chip,janeiro)
 
-# Connectivity Thermal Power Manager
-PRODUCT_PACKAGES += \
-	ConnectivityThermalPowerManager
-
 # A/B support
 PRODUCT_PACKAGES += \
 	otapreopt_script \
