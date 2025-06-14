@@ -666,16 +666,6 @@ include device/google/gs101/telephony/pktrouter.mk
 include device/google/gs-common/edgetpu/edgetpu.mk
 # Config variables for TPU chip on device.
 $(call soong_config_set,edgetpu_config,chip,janeiro)
-# Include the edgetpu targets defined the namespaces below into the final image.
-PRODUCT_SOONG_NAMESPACES += \
-	vendor/google_devices/gs201/proprietary/gchips/tpu/metrics \
-	vendor/google_devices/gs201/proprietary/gchips/tpu/tflite_delegate \
-	vendor/google_devices/gs201/proprietary/gchips/tpu/darwinn_logging_service \
-	vendor/google_devices/gs201/proprietary/gchips/tpu/nnapi_stable_aidl \
-	vendor/google_devices/gs201/proprietary/gchips/tpu/aidl \
-	vendor/google_devices/gs201/proprietary/gchips/tpu/hal \
-	vendor/google_devices/gs201/proprietary/gchips/tpu/tachyon/tachyon_apis \
-	vendor/google_devices/gs201/proprietary/gchips/tpu/tachyon/service
 # TPU firmware
 PRODUCT_PACKAGES += edgetpu-janeiro.fw
 
