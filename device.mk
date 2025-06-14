@@ -586,11 +586,6 @@ PRODUCT_PACKAGES += \
 PRODUCT_PACKAGES += \
 	Iwlan
 
-PRODUCT_PACKAGES += \
-	whitelist \
-	libstagefright_hdcp \
-	libskia_opt
-
 #PRODUCT_PACKAGES += \
 	mfc_fw.bin \
 	calliope_sram.bin \
