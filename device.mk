@@ -657,11 +657,6 @@ PRODUCT_PACKAGES += \
 	tinypcminfo \
 	tinyhostless \
 	cplay \
-	aoc_hal \
-	aoc_tuning_inft \
-	mahal_test \
-	ma_aoc_tuning_test \
-	crus_sp_cal
 endif
 
 PRODUCT_PACKAGES += \
