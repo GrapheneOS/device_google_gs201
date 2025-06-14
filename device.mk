@@ -203,30 +203,11 @@ PRODUCT_ENFORCE_PRODUCT_PARTITION_INTERFACE := true
 
 # Init files
 PRODUCT_COPY_FILES += \
-	$(LOCAL_KERNEL):kernel \
-	device/google/gs201/conf/init.gs201.usb.rc:$(TARGET_COPY_OUT_VENDOR)/etc/init/hw/init.gs201.usb.rc \
-	device/google/gs201/conf/ueventd.gs201.rc:$(TARGET_COPY_OUT_VENDOR)/etc/ueventd.rc
-
-PRODUCT_COPY_FILES += \
-	device/google/gs201/conf/init.gs201.rc:$(TARGET_COPY_OUT_VENDOR)/etc/init/hw/init.gs201.rc
-
-ifneq (,$(filter 5.%, $(TARGET_LINUX_KERNEL_VERSION)))
-PRODUCT_COPY_FILES += \
-	device/google/gs201/storage/5.10/init.gs201.storage.rc:$(TARGET_COPY_OUT_VENDOR)/etc/init/hw/init.gs201.storage.rc
-else
-PRODUCT_COPY_FILES += \
-	device/google/gs201/storage/6.1/init.gs201.storage.rc:$(TARGET_COPY_OUT_VENDOR)/etc/init/hw/init.gs201.storage.rc
-endif
-
-ifneq (,$(filter userdebug eng, $(TARGET_BUILD_VARIANT)))
-PRODUCT_COPY_FILES += \
-	device/google/gs201/conf/init.debug.rc:$(TARGET_COPY_OUT_VENDOR)/etc/init/init.debug.rc \
-	device/google/gs201/conf/init.check_ap_pd_auth.sh:$(TARGET_COPY_OUT_VENDOR)/bin/init.check_ap_pd_auth.sh
-endif
+	$(LOCAL_KERNEL):kernel
 
 # Recovery files
 PRODUCT_COPY_FILES += \
-	device/google/gs201/conf/init.recovery.device.rc:$(TARGET_COPY_OUT_RECOVERY)/root/init.recovery.gs201.rc
+    device/google/gs201/conf/init.recovery.device.rc:$(TARGET_COPY_OUT_RECOVERY)/root/init.recovery.gs201.rc
 
 # Fstab files
 PRODUCT_PACKAGES += \

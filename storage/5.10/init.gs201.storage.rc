@@ -1,3 +1,0 @@
-on init
-    write /sys/block/sda/queue/scheduler bfq
-    write /sys/block/sda/queue/iosched/slice_idle 0
