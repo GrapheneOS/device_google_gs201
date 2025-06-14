@@ -648,7 +648,7 @@ PRODUCT_PACKAGES += \
 	tinymix \
 	tinypcminfo \
 	tinyhostless \
-	cplay \
+	cplay
 endif
 
 ## Start packet router
