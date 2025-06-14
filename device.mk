@@ -351,6 +351,7 @@ PRODUCT_PACKAGES += \
 	android.hardware.memtrack-service.pixel \
 	libion
 
+# TODO: Review this.
 PRODUCT_PACKAGES += \
 	libhwjpeg
 
