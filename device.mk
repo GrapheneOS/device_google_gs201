@@ -71,8 +71,7 @@ PRODUCT_SOONG_NAMESPACES += \
 	hardware/google/graphics/gs201 \
 	hardware/google/interfaces \
 	hardware/google/pixel \
-	device/google/gs201 \
-	device/google/gs201/powerstats \
+	device/google/gs201
 
 LOCAL_KERNEL := $(TARGET_KERNEL_DIR)/Image.lz4
 
