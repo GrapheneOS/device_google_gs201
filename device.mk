@@ -716,9 +716,6 @@ PRODUCT_COPY_FILES += \
 # Hardware Info
 include hardware/google/pixel/HardwareInfo/HardwareInfo.mk
 
-# UFS: the script is used to select the corresponding firmware to run FFU.
-PRODUCT_PACKAGES += ufs_firmware_update.sh
-
 # Touch service
 include device/google/gs-common/touch/twoshay/aidl_gs101.mk
 include device/google/gs-common/touch/twoshay/twoshay.mk
