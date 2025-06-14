@@ -562,6 +562,7 @@ PRODUCT_PRODUCT_PROPERTIES += \
 	persist.bluetooth.bqr.min_interval_ms=500
 endif
 
+# TODO: Verify this.
 #VNDK
 PRODUCT_PACKAGES += \
 	vndk-libs
