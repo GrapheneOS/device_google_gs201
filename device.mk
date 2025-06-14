@@ -150,9 +150,6 @@ else
 	TARGET_USES_VULKAN = true
 endif
 
-PRODUCT_SOONG_NAMESPACES += \
-	vendor/arm/mali/valhall
-
 $(call soong_config_set,pixel_mali,soc,$(TARGET_BOARD_PLATFORM))
 
 include device/google/gs-common/gpu/gpu.mk
