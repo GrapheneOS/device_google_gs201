@@ -307,10 +307,6 @@ PRODUCT_PROPERTY_OVERRIDES += \
 	persist.vendor.usb.usbradio.config=dm
 endif
 
-
-PRODUCT_COPY_FILES += \
-	device/google/gs201/task_profiles.json:$(TARGET_COPY_OUT_VENDOR)/etc/task_profiles.json
-
 -include hardware/google/pixel/power-libperfmgr/aidl/device.mk
 
 # IRQ rebalancing.
