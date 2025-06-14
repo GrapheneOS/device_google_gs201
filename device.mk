@@ -544,6 +544,7 @@ PRODUCT_PACKAGES_DEBUG += \
    trusty_stats_test \
    trusty-coverage-controller \
 
+# TODO: Review this.
 # Trusty Secure DPU Daemon
 PRODUCT_PACKAGES += \
 	securedpud.slider
