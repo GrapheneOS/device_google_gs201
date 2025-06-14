@@ -97,6 +97,7 @@ PRODUCT_PROPERTY_OVERRIDES += log.tag.ShannonQNS-xcap=DEBUG
 PRODUCT_PROPERTY_OVERRIDES += log.tag.ShannonQNS-HC=DEBUG
 
 # Modem userdebug
+# TODO: Not sure about this.
 include device/google/gs201/modem/userdebug.mk
 endif
 
