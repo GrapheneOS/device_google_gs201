@@ -549,10 +549,6 @@ PRODUCT_PACKAGES_DEBUG += \
 PRODUCT_PACKAGES += \
 	securedpud.slider
 
-# Trusty Metrics Daemon
-PRODUCT_SOONG_NAMESPACES += \
-	vendor/google/trusty/common
-
 PRODUCT_PACKAGES += \
 	trusty_metricsd
 
