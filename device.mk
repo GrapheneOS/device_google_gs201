@@ -346,6 +346,7 @@ USE_XML_AUDIO_POLICY_CONF := 1
 PRODUCT_PACKAGES += \
 	com.android.future.usb.accessory
 
+# TODO: Review android.hardware.memtrack-service.pixel.
 PRODUCT_PACKAGES += \
 	android.hardware.memtrack-service.pixel \
 	libion
