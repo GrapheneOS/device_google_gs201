@@ -491,21 +491,6 @@ endif
 PRODUCT_PROPERTY_OVERRIDES += \
 	persist.sys.sf.native_mode=2
 
-# limit DPP downscale ratio
-PRODUCT_DEFAULT_PROPERTY_OVERRIDES += vendor.hwc.dpp.downscale=2
-
-# Cannot reference variables defined in BoardConfig.mk, uncomment this if
-# BOARD_USES_EXYNOS_DSS_FEATURE is true
-## set the dss enable status setup
-#PRODUCT_PROPERTY_OVERRIDES += \
-#        ro.exynos.dss=1
-
-# Cannot reference variables defined in BoardConfig.mk, uncomment this if
-# BOARD_USES_EXYNOS_AFBC_FEATURE is true
-# set the dss enable status setup
-PRODUCT_PROPERTY_OVERRIDES += \
-	ro.vendor.ddk.set.afbc=1
-
 PRODUCT_CHARACTERISTICS := nosdcard
 
 # WIFI COEX
