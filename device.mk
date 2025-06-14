@@ -659,15 +659,6 @@ PRODUCT_PACKAGES += \
 	cplay \
 endif
 
-PRODUCT_PACKAGES += \
-	google.hardware.media.c2@1.0-service \
-	libgc2_store \
-	libgc2_base \
-	libgc2_av1_dec \
-	libbo_av1 \
-	libgc2_cwl \
-	libgc2_utils
-
 ## Start packet router
 include device/google/gs101/telephony/pktrouter.mk
 
