@@ -355,10 +355,6 @@ PRODUCT_PACKAGES += \
 PRODUCT_PACKAGES += \
 	libhwjpeg
 
-# Video Editor
-PRODUCT_PACKAGES += \
-	VideoEditorGoogle
-
 # WideVine modules
 include device/google/gs201/widevine/device.mk
 PRODUCT_PACKAGES += \
