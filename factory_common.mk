@@ -63,9 +63,6 @@ PRODUCT_SET_DEBUGFS_RESTRICTIONS := false
 # Disable Bluetooth as default in factory build
 DEVICE_PACKAGE_OVERLAYS += device/google/gs201/overlay-factory
 
-PRODUCT_COPY_FILES += \
-    device/google/gs201/conf/init.factory.rc:$(TARGET_COPY_OUT_VENDOR)/etc/init/hw/init.factory.rc
-
 BOARD_SEPOLICY_DIRS += hardware/google/pixel-sepolicy/factory_boost
 
 # Add factory-friendly changes
