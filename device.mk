@@ -559,10 +559,6 @@ PRODUCT_PACKAGES += \
 # Dynamic Partitions
 PRODUCT_USE_DYNAMIC_PARTITIONS := true
 
-# TODO: Review this.
-PRODUCT_COPY_FILES += \
-	device/google/gs201/conf/fstab.postinstall:$(TARGET_COPY_OUT_PRODUCT)/etc/fstab.postinstall
-
 # fastbootd
 PRODUCT_PACKAGES += \
 	android.hardware.fastboot-service.pixel_recovery \
