@@ -634,7 +634,6 @@ PRODUCT_COPY_FILES += \
 	device/google/gs201/component-overrides.xml:$(TARGET_COPY_OUT_VENDOR)/etc/sysconfig/component-overrides.xml
 
 PRODUCT_PACKAGES += \
-	android.hardware.health-service.gs201 \
 	android.hardware.health-service.gs201_recovery \
 
 # Audio
