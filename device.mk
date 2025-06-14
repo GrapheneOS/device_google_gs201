@@ -616,12 +616,6 @@ PRODUCT_PROPERTY_OVERRIDES += \
 	persist.vendor.ril.crash_handling_mode=1
 endif
 
-PRODUCT_COPY_FILES += \
-	device/google/$(TARGET_BOARD_PLATFORM)/conf/init.modem.rc:$(TARGET_COPY_OUT_VENDOR)/etc/init/init.modem.rc \
-	device/google/$(TARGET_BOARD_PLATFORM)/conf/fstab.modem:$(TARGET_COPY_OUT_VENDOR)/etc/fstab.modem \
-	device/google/gs201/location/gps.cer:$(TARGET_COPY_OUT_VENDOR)/etc/gnss/gps.cer
-
-
 include device/google/gs-common/gps/brcm/device.mk
 endif
 
