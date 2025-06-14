@@ -173,29 +173,6 @@ PRODUCT_PACKAGES += \
 	vulkan.pastel
 endif
 
-ifeq ($(USE_SWIFTSHADER),true)
-PRODUCT_VENDOR_PROPERTIES += \
-	ro.hardware.egl = mali \
-	persist.graphics.egl = angle \
-	ro.hardware.vulkan = pastel
-else
-PRODUCT_VENDOR_PROPERTIES += \
-	ro.hardware.egl = mali \
-	ro.hardware.vulkan = mali
-endif
-
-# Configure EGL blobcache
-PRODUCT_VENDOR_PROPERTIES += \
-	ro.egl.blobcache.multifile=true \
-	ro.egl.blobcache.multifile_limit=33554432 \
-
-PRODUCT_VENDOR_PROPERTIES += \
-	ro.opengles.version=196610 \
-	graphics.gpu.profiler.support=true
-
-# b/295257834 Add HDR shaders to SurfaceFlinger's pre-warming cache
-PRODUCT_VENDOR_PROPERTIES += ro.surface_flinger.prime_shader_cache.ultrahdr=1
-
 # GRAPHICS - GPU (end)
 # ####################
 
