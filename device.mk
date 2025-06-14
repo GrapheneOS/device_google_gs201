@@ -357,8 +357,6 @@ PRODUCT_PACKAGES += \
 
 # WideVine modules
 include device/google/gs201/widevine/device.mk
-PRODUCT_PACKAGES += \
-	liboemcrypto \
 
 PANTHER_PRODUCT := %panther
 CHEETAH_PRODUCT := %cheetah
