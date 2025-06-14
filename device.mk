@@ -596,13 +596,6 @@ PRODUCT_PACKAGES += \
 ifneq ($(BOARD_WITHOUT_RADIO),true)
 # This will be called only if IMSService is building with source code for dev branches.
 $(call inherit-product-if-exists, vendor/samsung_slsi/telephony/$(BOARD_USES_SHARED_VENDOR_TELEPHONY)/shannon-ims/device-vendor.mk)
-
-PRODUCT_PACKAGES += ShannonIms
-
-PRODUCT_PACKAGES_DEBUG += \
-	preinstalled-packages-product-gs201-device-debug.xml
-
-PRODUCT_PACKAGES += ShannonRcs
 endif
 
 # Exynos RIL and telephony
