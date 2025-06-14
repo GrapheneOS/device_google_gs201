@@ -576,12 +576,6 @@ PRODUCT_PACKAGES += \
 PRODUCT_PACKAGES += \
 	Iwlan
 
-#Iwlan test app for userdebug/eng builds
-ifneq (,$(filter userdebug eng, $(TARGET_BUILD_VARIANT)))
-PRODUCT_PACKAGES += \
-	IwlanTestApp
-endif
-
 PRODUCT_PACKAGES += \
 	whitelist \
 	libstagefright_hdcp \
