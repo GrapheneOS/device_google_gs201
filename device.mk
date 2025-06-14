@@ -348,7 +348,6 @@ PRODUCT_PACKAGES += \
 
 PRODUCT_PACKAGES += \
 	android.hardware.memtrack-service.pixel \
-	libion_exynos \
 	libion
 
 PRODUCT_PACKAGES += \
