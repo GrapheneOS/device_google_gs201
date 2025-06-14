@@ -81,10 +81,6 @@ ifeq ($(RELEASE_AVF_ENABLE_LLPVM_CHANGES),true)
 	SECRETKEEPER_ENABLED := true
 endif
 
-# OEM Unlock reporting
-PRODUCT_DEFAULT_PROPERTY_OVERRIDES += \
-	ro.oem_unlock_supported=1
-
 ifneq ($(BOARD_WITHOUT_RADIO),true)
 # Include vendor telephony soong namespace
 PRODUCT_SOONG_NAMESPACES += \
