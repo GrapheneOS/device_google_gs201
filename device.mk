@@ -248,12 +248,6 @@ PRODUCT_PACKAGES += \
 PRODUCT_PACKAGES += \
 	checkpoint_gc
 
-# Vendor verbose logging default property
-ifneq (,$(filter userdebug eng, $(TARGET_BUILD_VARIANT)))
-PRODUCT_PROPERTY_OVERRIDES += \
-	persist.vendor.verbose_logging_enabled=true
-endif
-
 # Touch firmware
 #PRODUCT_COPY_FILES += \
 	device/google/gs201/firmware/touch/s6sy761.bin:$(TARGET_COPY_OUT_VENDOR)/firmware/s6sy761.fw
@@ -601,12 +595,6 @@ USE_EARLY_SEND_DEVICE_INFO := true
 
 ifneq ($(BOARD_WITHOUT_RADIO),true)
 $(call inherit-product-if-exists, vendor/samsung_slsi/telephony/$(BOARD_USES_SHARED_VENDOR_TELEPHONY)/common/device-vendor.mk)
-
-# Enable silent CP crash handling
-ifneq (,$(filter userdebug eng, $(TARGET_BUILD_VARIANT)))
-PRODUCT_PROPERTY_OVERRIDES += \
-	persist.vendor.ril.crash_handling_mode=1
-endif
 
 include device/google/gs-common/gps/brcm/device.mk
 endif
