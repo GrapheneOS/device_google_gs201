@@ -66,10 +66,6 @@ endif
 # TODO: Review hardware/google/av, hardware/google/gchips and hardware/google/graphics.
 PRODUCT_SOONG_NAMESPACES += \
 	hardware/google/av \
-	hardware/google/gchips \
-	hardware/google/gchips/gralloc4 \
-	hardware/google/graphics/common \
-	hardware/google/graphics/gs201 \
 	hardware/google/interfaces \
 	hardware/google/pixel \
 	device/google/gs201
@@ -536,7 +532,6 @@ PRODUCT_PACKAGES += \
 # TODO: Review this.
 $(call soong_config_set,google_displaycolor,displaycolor_platform,gs201)
 PRODUCT_PACKAGES += \
-	android.hardware.composer.hwc3-service.pixel \
 	libdisplaycolor
 
 # System props to enable Bluetooth Quality Report (BQR) feature

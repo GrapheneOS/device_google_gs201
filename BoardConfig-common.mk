@@ -265,24 +265,24 @@ $(call soong_config_set,haptics,actuator_model,$(ACTUATOR_MODEL))
 $(call soong_config_set,haptics,adaptive_haptics_feature,$(ADAPTIVE_HAPTICS_FEATURE))
 
 # HWComposer
-BOARD_HWC_VERSION := hwc3
-TARGET_RUNNING_WITHOUT_SYNC_FRAMEWORK := false
-BOARD_HDMI_INCAPABLE := true
-TARGET_USES_HWC2 := true
-HWC_SUPPORT_RENDER_INTENT := true
-HWC_SUPPORT_COLOR_TRANSFORM := true
+# BOARD_HWC_VERSION := hwc3
+# TARGET_RUNNING_WITHOUT_SYNC_FRAMEWORK := false
+# BOARD_HDMI_INCAPABLE := true
+# TARGET_USES_HWC2 := true
+# HWC_SUPPORT_RENDER_INTENT := true
+# HWC_SUPPORT_COLOR_TRANSFORM := true
 #BOARD_USES_DISPLAYPORT := true
 # if AFBC is enabled, must set ro.vendor.ddk.set.afbc=1
-BOARD_USES_EXYNOS_AFBC_FEATURE := true
+# BOARD_USES_EXYNOS_AFBC_FEATURE := true
 #BOARD_USES_HDRUI_GLES_CONVERSION := true
 
 BOARD_LIBACRYL_DEFAULT_COMPOSITOR := fimg2d_gs201
 BOARD_LIBACRYL_G2D_HDR_PLUGIN := libacryl_hdr_plugin
-$(call soong_config_set,acryl,libacryl_g2d_hdr_plugin,//hardware/google/graphics/gs201/libacryl_plugins:libacryl_hdr_plugin)
-$(call soong_config_set,acryl,libacryl_c_include,hardware/google/graphics/$(TARGET_BOARD_PLATFORM)/libcap)
+# $(call soong_config_set,acryl,libacryl_g2d_hdr_plugin,//hardware/google/graphics/gs201/libacryl_plugins:libacryl_hdr_plugin)
+# $(call soong_config_set,acryl,libacryl_c_include,hardware/google/graphics/$(TARGET_BOARD_PLATFORM)/libcap)
 
 # HWCServices
-BOARD_USES_HWC_SERVICES := true
+# BOARD_USES_HWC_SERVICES := true
 
 # WiFiDisplay
 # BOARD_USES_VIRTUAL_DISPLAY := true
