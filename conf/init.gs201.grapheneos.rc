@@ -1,0 +1,21 @@
+on post-fs
+    chown root system /sys/devices/platform/10d60000.hsi2c/i2c-13/13-0025/cc_toggle_enable
+    chown root system /sys/devices/platform/10d60000.hsi2c/i2c-13/13-0025/data_path_enable
+    chmod 664 /sys/devices/platform/10d60000.hsi2c/i2c-13/13-0025/cc_toggle_enable
+    chmod 664 /sys/devices/platform/10d60000.hsi2c/i2c-13/13-0025/data_path_enable
+
+on property:sys.port_security_mode=ports_disabled
+    write /sys/devices/platform/10d60000.hsi2c/i2c-13/13-0025/cc_toggle_enable 0
+    write /sys/devices/platform/10d60000.hsi2c/i2c-13/13-0025/data_path_enable 0
+
+on property:sys.port_security_mode=charging-only_immediate
+    write /sys/devices/platform/10d60000.hsi2c/i2c-13/13-0025/data_path_enable 0
+    write /sys/devices/platform/10d60000.hsi2c/i2c-13/13-0025/cc_toggle_enable 1
+
+on property:sys.port_security_mode=charging-only
+    write /sys/devices/platform/10d60000.hsi2c/i2c-13/13-0025/data_path_enable -1
+    write /sys/devices/platform/10d60000.hsi2c/i2c-13/13-0025/cc_toggle_enable 1
+
+on property:sys.port_security_mode=ports_enabled
+    write /sys/devices/platform/10d60000.hsi2c/i2c-13/13-0025/data_path_enable 1
+    write /sys/devices/platform/10d60000.hsi2c/i2c-13/13-0025/cc_toggle_enable 1
