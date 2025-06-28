@@ -190,6 +190,8 @@ DEVICE_MATRIX_FILE := \
 
 DEVICE_PACKAGE_OVERLAYS += device/google/gs201/overlay
 
+PRODUCT_PACKAGES += GosOverlay GosSettingsOverlay
+
 # This device is shipped with 33 (Android T)
 PRODUCT_SHIPPING_API_LEVEL := 33
 
