@@ -188,8 +188,6 @@ endif
 DEVICE_MATRIX_FILE := \
 	device/google/gs201/compatibility_matrix.xml
 
-DEVICE_PACKAGE_OVERLAYS += device/google/gs201/overlay
-
 # This device is shipped with 33 (Android T)
 PRODUCT_SHIPPING_API_LEVEL := 33
 
@@ -372,10 +370,6 @@ PRODUCT_PACKAGES += \
 	android.hardware.wifi-service \
 	wificond \
 	libwpa_client
-
-# Connectivity
-PRODUCT_PACKAGES += \
-        ConnectivityOverlay
 
 PRODUCT_PACKAGES_DEBUG += \
 	f2fs_io \
