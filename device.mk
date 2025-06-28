@@ -634,6 +634,9 @@ PRODUCT_PACKAGES += \
 	cplay
 endif
 
+## Start packet router
+include device/google/gs101/telephony/pktrouter.mk
+
 # EdgeTPU
 include device/google/gs-common/edgetpu/edgetpu.mk
 # Config variables for TPU chip on device.
