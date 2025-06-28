@@ -325,9 +325,6 @@
     <!-- Pre-scale volume at volume step 3 for Absolute Volume -->
     <fraction name="config_prescaleAbsoluteVolume_index3">100%</fraction>
 
-    <!-- Whether device supports increased touch sensitvity -->
-    <bool name="config_supportGloveMode">true</bool>
-
     <!-- Exempt ImsService from privacy (location) indicators -->
     <string name="config_systemTelephonyPackage" translatable="false">com.shannon.imsservice</string>
 
