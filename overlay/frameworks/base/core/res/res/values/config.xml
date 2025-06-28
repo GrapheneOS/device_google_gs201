@@ -324,7 +324,6 @@
     <!-- Pre-scale volume at volume step 3 for Absolute Volume -->
     <fraction name="config_prescaleAbsoluteVolume_index3">100%</fraction>
 
-    <string name="config_gnssPsdsType">broadcom</string>
 
     <bool name="config_usbPortSecuritySupported">true</bool>
 </resources>
