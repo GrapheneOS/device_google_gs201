@@ -1,0 +1,1 @@
+runtime_resource_overlay { name: "GosOverlay", product_specific: true, }
