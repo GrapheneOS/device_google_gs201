@@ -190,6 +190,8 @@ DEVICE_MATRIX_FILE := \
 
 PRODUCT_PACKAGES += GosOverlay GosSettingsOverlay
 
+PRODUCT_PACKAGES += init.gs201.grapheneos.rc
+
 # This device is shipped with 33 (Android T)
 PRODUCT_SHIPPING_API_LEVEL := 33
 
