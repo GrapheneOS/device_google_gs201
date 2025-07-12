@@ -2,6 +2,4 @@
 <resources>
     <!-- Whether to show Smooth Display feature in Settings Options -->
     <bool name="config_show_smooth_display">true</bool>
-
-    <integer name="config_vibration_supported_intensity_levels">3</integer>
 </resources>
